@@ -1,0 +1,23 @@
+{
+  "name": "balancer",
+  "version": "0.1.0",
+  "scripts": {
+    "create": "graph create balancer-labs/balancer-subgraph --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create balancer-labs/balancer-subgraph --node http://127.0.0.1:8020",
+    "codegen": "graph codegen --output-dir src/types/",
+    "build": "graph build",
+    "deploy": "graph deploy balancer-labs/balancer-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-local": "graph deploy balancer-labs/balancer-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.15.0",
+    "@graphprotocol/graph-ts": "^0.15.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
+    "truffle": "^5.0.4",
+    "truffle-contract": "^4.0.5",
+    "truffle-hdwallet-provider": "^1.0.4"
+  }
+}

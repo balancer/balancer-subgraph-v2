@@ -1,0 +1,78 @@
+type Balancer @entity {
+    id: ID!
+    color: String!                                      # Bronze, Silver, Gold
+    poolCount: Int!                                     # Number of pools
+    pools: [Pool!] @derivedFrom(field: "factoryID")             
+    txCount: BigInt!                                    # Number of txs
+}
+
+type Pool @entity {
+    id: ID!                                             # Pool address
+    controller: Bytes!                                  # Controller address
+    publicSwap: Boolean!                                # isPublicSwap
+    publicJoin: Boolean!                                # isPublicJoin
+    publicExit: Boolean!                                # isPublicExit
+    finalized: Boolean!                                 # isFinalized
+    swapFee: BigDecimal!                                # Swap Fees
+    exitFee: BigDecimal!                                # Exit Fees
+    totalShares: BigDecimal!                            # Total pool token shares
+    tokens: [PoolToken!] @derivedFrom(field: "poolId")
+    shares: [PoolShare!] @derivedFrom(field: "poolId")
+    createTime: Int!                                    # Block time pool was created
+    joinsCount: BigInt!                                 # Count the number of times liquidity has been added
+    exitsCount: BigInt!                                 # Count the number of times liquidity has been removed
+    swapsCount: BigInt!                                 # Count the number of times the tokens been sold
+    factoryID: Balancer!
+}
+
+type PoolToken @entity {
+    id: ID!
+    poolId: Pool!
+    address: Bytes!
+    balance: BigDecimal!
+    weight: BigDecimal!  
+}
+
+type PoolShare @entity {
+    id: ID!
+    userAddress: User!
+    poolId: Pool!
+    balance: BigDecimal!
+}
+
+type User @entity {
+    id: ID!
+    sharesOwned: [PoolShare!]!  @derivedFrom(field: "userAddress")
+    txs: [Transaction!]!  @derivedFrom(field: "userAddress")
+}
+
+type Swap @entity {
+    id: ID!                                 # 
+    caller: Bytes!                          #
+    tokenIn: Bytes!                         #
+    tokenOut: Bytes!                        #
+    amountIn: BigDecimal!                   #
+    amountOut: BigDecimal!                  #
+}
+
+type Transaction @entity {
+    id: ID!                         # Log ID
+    tx: Bytes!
+    event: String!
+    block: Int!
+    timestamp: Int!
+    poolAddress: Pool!
+    userAddress: User!
+    action: SwapType!
+    sender: Bytes!
+}
+
+enum SwapType {
+    swap_ExactAmountIn,
+    swap_ExactAmountOut,
+    swap_ExactMarginalPrice,
+    joinswap_ExternAmountIn,
+    joinswap_PoolAmountOut,
+    exitswap_PoolAmountIn,
+    exitswap_ExternAmountOut
+}
