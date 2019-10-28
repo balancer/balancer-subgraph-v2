@@ -26,15 +26,15 @@ type Pool @entity {
 }
 
 type PoolToken @entity {
-    id: ID!
+    id: ID!                                             # poolId + token address
     poolId: Pool!
-    address: Bytes!
+    address: String!
     balance: BigDecimal!
     weight: BigDecimal!  
 }
 
 type PoolShare @entity {
-    id: ID!
+    id: ID!                                             # poolId + userAddress
     userAddress: User!
     poolId: Pool!
     balance: BigDecimal!
@@ -42,8 +42,8 @@ type PoolShare @entity {
 
 type User @entity {
     id: ID!
-    sharesOwned: [PoolShare!]!  @derivedFrom(field: "userAddress")
-    txs: [Transaction!]!  @derivedFrom(field: "userAddress")
+    sharesOwned: [PoolShare!]  @derivedFrom(field: "userAddress")
+    txs: [Transaction!]  @derivedFrom(field: "userAddress")
 }
 
 type Swap @entity {
