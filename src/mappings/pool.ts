@@ -41,6 +41,7 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   poolToken.address = address
   poolToken.balance = BigDecimal.fromString('0')
   poolToken.weight = BigDecimal.fromString('0')
+  poolToken.save()
 }
 
 
@@ -120,14 +121,14 @@ export function handleFinalize(event: LOG_CALL): void {
 
 export function handleRebind(event: LOG_CALL): void {
   let poolId = event.address.toHex()
-  let address = Address.fromString(event.params.data.toHexString().slice(10,74))
+  let address = Address.fromString(event.params.data.toHexString().slice(34,74))
   let balance = hexToDecimal(event.params.data.toHexString().slice(74,138))
   let denorm = hexToDecimal(event.params.data.toHexString().slice(138))
   
-  let poolTokenId = poolId.concat('-').concat(address.toString())
+  let poolTokenId = poolId.concat('-').concat(address.toHexString())
   let poolToken = PoolToken.load(poolTokenId)
   if (poolToken == null) {
-    createPoolTokenEntity(poolTokenId, poolId, address.toString())
+    createPoolTokenEntity(poolTokenId, poolId, address.toHexString())
     poolToken = PoolToken.load(poolTokenId)
   }
   poolToken.balance = balance
