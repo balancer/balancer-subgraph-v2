@@ -1,5 +1,5 @@
-import { BigInt, BigDecimal, Address, Bytes, ByteArray, log } from '@graphprotocol/graph-ts'
-import { LOG_CALL } from '../types/templates/Pool/Pool'
+import { BigInt, BigDecimal, Address, Bytes, ByteArray, log, store } from '@graphprotocol/graph-ts'
+import { LOG_CALL, LOG_JOIN, LOG_EXIT } from '../types/templates/Pool/Pool'
 import {
   Balancer,
   Pool,
@@ -140,16 +140,39 @@ export function handleUnbind(event: LOG_CALL): void {
   let poolId = event.address.toHex()
   let address = Address.fromString(event.params.data.toHexString().slice(-40))
   let poolTokenId = poolId.concat('-').concat(address.toString())
-  let poolToken = PoolToken.load(poolTokenId)
-  poolToken.balance = BigDecimal.fromString('0')
-  poolToken.weight = BigDecimal.fromString('0')
-  poolToken.save()
+  store.remove('PoolToken', poolTokenId)
 }
 
 /************************************
  ********** JOINS & EXITS ***********
  ************************************/
 
-export function handleJoinPool(event: LOG_CALL): void {
+export function handleJoinPool(event: LOG_JOIN): void {
+  let poolId = event.address.toHex()
+  let pool = Pool.load(poolId)
+  pool.joinsCount += BigInt.fromI32(1)
+  pool.save()
 
+  let address = event.params.tokenIn.toHex()
+  let poolTokenId = poolId.concat('-').concat(address.toString())
+  let poolToken = PoolToken.load(poolTokenId)
+  let amountIn = event.params.amountIn.toBigDecimal().div(exponentToBigDecimal(18))
+  let newAmount = poolToken.balance.plus(amountIn)
+  poolToken.balance = newAmount 
+  poolToken.save()
+}
+
+export function handleExitPool(event: LOG_EXIT): void {
+  let poolId = event.address.toHex()
+  let pool = Pool.load(poolId)
+  pool.exitsCount += BigInt.fromI32(1)
+  pool.save()
+
+  let address = event.params.tokenOut.toHex()
+  let poolTokenId = poolId.concat('-').concat(address.toString())
+  let poolToken = PoolToken.load(poolTokenId)
+  let amountOut = event.params.amountOut.toBigDecimal().div(exponentToBigDecimal(18))
+  let newAmount = poolToken.balance.minus(amountOut)
+  poolToken.balance = newAmount 
+  poolToken.save()
 }

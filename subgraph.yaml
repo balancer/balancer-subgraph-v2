@@ -66,21 +66,7 @@ templates:
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
           topic0: "0xcf5e7bd300000000000000000000000000000000000000000000000000000000"
           handler: handleUnbind
-        # - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-        #   topic0: "0x34e7a19f00000000000000000000000000000000000000000000000000000000"
-        #   handler: handleJoinPool
-        # - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-        #   topic0: "0xbe1d24ad00000000000000000000000000000000000000000000000000000000"
-        #   handler: handleExitPool
-        # - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-        #   topic0: "0x483605e800000000000000000000000000000000000000000000000000000000"
-        #   handler: handleJoinSwapExternAmountIn
-        # - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-        #   topic0: "0x1ecc61bc00000000000000000000000000000000000000000000000000000000"
-        #   handler: handleJoinSwapPoolAmountOut
-        # - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-        #   topic0: "0xc83d529e00000000000000000000000000000000000000000000000000000000"
-        #   handler: handleExitSwapPoolAmountIn
-        # - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-        #   topic0: "0x4b0f9faa00000000000000000000000000000000000000000000000000000000"
-        #   handler: handleExitSwapExternAmountOut
+        - event: LOG_JOIN(indexed address,indexed address,uint256)
+          handler: handleJoinPool
+        - event: LOG_EXIT(indexed address,indexed address,uint256)
+          handler: handleExitPool
