@@ -104,6 +104,7 @@ GraphiQL interface can be accessed on a dev env at: http://127.0.0.1:8000/subgra
     finalized
     swapFee
     exitFee
+    totalWeight
     totalShares
     createTime
     joinsCount
@@ -116,7 +117,7 @@ GraphiQL interface can be accessed on a dev env at: http://127.0.0.1:8000/subgra
       }
       address
       balance
-      weight
+      denormWeight
     }
     shares {
       id
@@ -143,7 +144,7 @@ GraphiQL interface can be accessed on a dev env at: http://127.0.0.1:8000/subgra
       id
       address
       balance
-      weight
+      denormWeight
     }
   }
 }

@@ -40,7 +40,7 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   poolToken.poolId = pool
   poolToken.address = address
   poolToken.balance = BigDecimal.fromString('0')
-  poolToken.weight = BigDecimal.fromString('0')
+  poolToken.denormWeight = BigDecimal.fromString('0')
   poolToken.save()
 }
 
@@ -128,21 +128,31 @@ export function handleRebind(event: LOG_CALL): void {
     tokensList.push(tokenBytes)
   }
   pool.tokensList = tokensList
-  pool.save()
+  
 
   let address = Address.fromString(event.params.data.toHexString().slice(34,74))
   let balance = hexToDecimal(event.params.data.toHexString().slice(74,138))
-  let denorm = hexToDecimal(event.params.data.toHexString().slice(138))
-  
+  let denormWeight = hexToDecimal(event.params.data.toHexString().slice(138))
+
   let poolTokenId = poolId.concat('-').concat(address.toHexString())
   let poolToken = PoolToken.load(poolTokenId)
   if (poolToken == null) {
     createPoolTokenEntity(poolTokenId, poolId, address.toHexString())
     poolToken = PoolToken.load(poolTokenId)
+    pool.totalWeight += denormWeight
+  } else {
+    let oldWeight = poolToken.denormWeight
+    if (denormWeight > oldWeight) {
+      pool.totalWeight = pool.totalWeight + (denormWeight - oldWeight);
+    } else {
+      pool.totalWeight = pool.totalWeight - (oldWeight - denormWeight);
+    }   
   }
+
   poolToken.balance = balance
-  poolToken.weight = denorm
+  poolToken.denormWeight = denormWeight
   poolToken.save()
+  pool.save()
 }
 
 export function handleUnbind(event: LOG_CALL): void {
@@ -153,10 +163,13 @@ export function handleUnbind(event: LOG_CALL): void {
   let index = tokensList.indexOf(tokenBytes)
   tokensList.slice(index, 1)
   pool.tokensList = tokensList
-  pool.save()
+
 
   let address = Address.fromString(event.params.data.toHexString().slice(-40))
   let poolTokenId = poolId.concat('-').concat(address.toString())
+  let poolToken = PoolToken.load(poolTokenId)
+  pool.totalWeight -= poolToken.denormWeight
+  pool.save()
   store.remove('PoolToken', poolTokenId)
 }
 
