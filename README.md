@@ -88,3 +88,64 @@ yarn deploy-local
 Any updates can be made to this repo and re-running `yarn deploy-local` without needing to re-initialize the environment.
 
 
+## Queries
+
+GraphiQL interface can be accessed on a dev env at: http://127.0.0.1:8000/subgraphs/name/balancer-labs/balancer-subgraph
+
+**List of pools**
+```GraphQL
+{
+  pools {
+    id
+    controller
+    publicSwap
+    publicJoin
+    publicExit
+    finalized
+    swapFee
+    exitFee
+    totalWeight
+    totalShares
+    createTime
+    joinsCount
+    exitsCount
+    swapsCount
+    tokens {
+      id
+      poolId {
+        id
+      }
+      address
+      balance
+      denormWeight
+    }
+    shares {
+      id
+      poolId {
+        id
+      }
+      userAddress {
+        id
+      }
+    }
+  }
+}
+```
+
+**Pools with 2 tokens**
+```GraphQL
+{
+  pools (where: {tokensList_contains: ["0x5b1869d9a4c187f2eaa108f3062412ecf0526b24", "0xcfeb869f69431e42cdb54a4f4f105c19c080a601"]}) {
+    id
+    publicSwap
+    swapFee
+    tokensList
+    tokens {
+      id
+      address
+      balance
+      denormWeight
+    }
+  }
+}
+```

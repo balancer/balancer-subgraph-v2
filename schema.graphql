@@ -15,7 +15,9 @@ type Pool @entity {
     finalized: Boolean!                                 # isFinalized
     swapFee: BigDecimal!                                # Swap Fees
     exitFee: BigDecimal!                                # Exit Fees
+    totalWeight: BigDecimal!
     totalShares: BigDecimal!                            # Total pool token shares
+    tokensList: [Bytes!]                                # Temp workaround until graph supports filtering on derived field 
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
     shares: [PoolShare!] @derivedFrom(field: "poolId")
     createTime: Int!                                    # Block time pool was created
@@ -30,7 +32,7 @@ type PoolToken @entity {
     poolId: Pool!
     address: String!
     balance: BigDecimal!
-    weight: BigDecimal!  
+    denormWeight: BigDecimal!
 }
 
 type PoolShare @entity {

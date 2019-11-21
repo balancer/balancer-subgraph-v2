@@ -70,3 +70,5 @@ templates:
           handler: handleJoinPool
         - event: LOG_EXIT(indexed address,indexed address,uint256)
           handler: handleExitPool
+        - event: LOG_SWAP(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleSwap
