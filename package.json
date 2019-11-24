@@ -10,7 +10,7 @@
     "deploy-local": "graph deploy balancer-labs/balancer-subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.15.0",
+    "@graphprotocol/graph-cli": "^0.16.2",
     "@graphprotocol/graph-ts": "^0.16.0"
   },
   "dependencies": {
