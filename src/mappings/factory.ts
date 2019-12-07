@@ -18,12 +18,10 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
 
   let pool = new Pool(event.params.pool.toHexString())
   pool.controller = event.params.caller
-  pool.publicJoin = false
   pool.publicSwap = false
-  pool.publicExit = false
   pool.finalized = false
   pool.swapFee = BigDecimal.fromString('0')
-  pool.exitFee = BigDecimal.fromString('0')
+  pool.exitFee = BigDecimal.fromString('0.000001')
   pool.totalWeight = BigDecimal.fromString('0')
   pool.totalShares = BigDecimal.fromString('0')
   pool.createTime = event.block.timestamp.toI32()

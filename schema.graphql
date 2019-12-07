@@ -10,8 +10,6 @@ type Pool @entity {
     id: ID!                                             # Pool address
     controller: Bytes!                                  # Controller address
     publicSwap: Boolean!                                # isPublicSwap
-    publicJoin: Boolean!                                # isPublicJoin
-    publicExit: Boolean!                                # isPublicExit
     finalized: Boolean!                                 # isFinalized
     swapFee: BigDecimal!                                # Swap Fees
     exitFee: BigDecimal!                                # Exit Fees
@@ -21,9 +19,9 @@ type Pool @entity {
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
     shares: [PoolShare!] @derivedFrom(field: "poolId")
     createTime: Int!                                    # Block time pool was created
-    joinsCount: BigInt!                                 # Count the number of times liquidity has been added
-    exitsCount: BigInt!                                 # Count the number of times liquidity has been removed
-    swapsCount: BigInt!                                 # Count the number of times the tokens been sold
+    joinsCount: BigInt!                                 # liquidity has been added
+    exitsCount: BigInt!                                 # liquidity has been removed
+    swapsCount: BigInt!
     factoryID: Balancer!
 }
 

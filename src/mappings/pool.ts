@@ -75,22 +75,6 @@ export function handleSetPublicSwap(event: LOG_CALL): void {
   pool.save()
 }
 
-export function handleSetPublicJoin(event: LOG_CALL): void {
-  let poolId = event.address.toHex()
-  let pool = Pool.load(poolId)
-  let publicJoin = event.params.data.toHexString().slice(-1) == '1'
-  pool.publicJoin = publicJoin
-  pool.save()
-}
-
-export function handleSetPublicExit(event: LOG_CALL): void {
-  let poolId = event.address.toHex()
-  let pool = Pool.load(poolId)
-  let publicExit = event.params.data.toHexString().slice(-1) == '1'
-  pool.publicExit = publicExit
-  pool.save()
-}
-
 export function handleFinalize(event: LOG_CALL): void {
   let poolId = event.address.toHex()
   let pool = Pool.load(poolId)
