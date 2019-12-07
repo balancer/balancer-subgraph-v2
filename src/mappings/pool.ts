@@ -81,8 +81,6 @@ export function handleFinalize(event: LOG_CALL): void {
   let balance = hexToDecimal(event.params.data.toHexString().slice(-24))
   pool.finalized = true
   pool.publicSwap = true
-  pool.publicJoin = true
-  pool.publicExit = true
   pool.totalShares = balance
   pool.save()
   

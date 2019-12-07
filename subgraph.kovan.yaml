@@ -53,12 +53,6 @@ templates:
           topic0: "0x49b5955200000000000000000000000000000000000000000000000000000000"
           handler: handleSetPublicSwap
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0xf5ae625900000000000000000000000000000000000000000000000000000000"
-          handler: handleSetPublicJoin
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0xab48c9cf00000000000000000000000000000000000000000000000000000000"
-          handler: handleSetPublicExit
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
           topic0: "0x05261aea00000000000000000000000000000000000000000000000000000000"
           handler: handleFinalize
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)

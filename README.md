@@ -99,8 +99,6 @@ GraphiQL interface can be accessed on a dev env at: http://127.0.0.1:8000/subgra
     id
     controller
     publicSwap
-    publicJoin
-    publicExit
     finalized
     swapFee
     exitFee
