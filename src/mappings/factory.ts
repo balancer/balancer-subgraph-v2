@@ -20,8 +20,8 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.controller = event.params.caller
   pool.publicSwap = false
   pool.finalized = false
-  pool.swapFee = BigDecimal.fromString('0')
-  pool.exitFee = BigDecimal.fromString('0.000001')
+  pool.swapFee = BigDecimal.fromString('0.000001')
+  pool.exitFee = BigDecimal.fromString('0')
   pool.totalWeight = BigDecimal.fromString('0')
   pool.totalShares = BigDecimal.fromString('0')
   pool.createTime = event.block.timestamp.toI32()
