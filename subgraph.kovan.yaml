@@ -1,0 +1,75 @@
+specVersion: 0.0.2
+description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
+repository: https://github.com/balancer-labs/balancer-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: kovan
+    source:
+      address: "0x9C84391B443ea3a48788079a5f98e2EaD55c9309"
+      abi: Factory
+      startBlock: 15256819
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/factory.ts
+      entities:
+        - Balancer
+      abis:
+        - name: Factory
+          file: ./abis/BFactory.json
+      eventHandlers:
+        - event: LOG_NEW_POOL(indexed address,indexed address)
+          handler: handleNewPool
+templates:
+  - kind: ethereum/contract
+    name: Pool
+    network: kovan
+    source:
+      abi: Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/pool.ts
+      entities:
+        - Pool
+        - Balancer
+        - Swap
+      abis:
+        - name: Pool
+          file: ./abis/BPool.json
+      eventHandlers:
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0x0b78f9c000000000000000000000000000000000000000000000000000000000"
+          handler: handleSetFees
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0x92eefe9b00000000000000000000000000000000000000000000000000000000"
+          handler: handleSetController
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0x49b5955200000000000000000000000000000000000000000000000000000000"
+          handler: handleSetPublicSwap
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0xf5ae625900000000000000000000000000000000000000000000000000000000"
+          handler: handleSetPublicJoin
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0xab48c9cf00000000000000000000000000000000000000000000000000000000"
+          handler: handleSetPublicExit
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0x05261aea00000000000000000000000000000000000000000000000000000000"
+          handler: handleFinalize
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0xe4e1e53800000000000000000000000000000000000000000000000000000000"
+          handler: handleRebind
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0xcf5e7bd300000000000000000000000000000000000000000000000000000000"
+          handler: handleUnbind
+        - event: LOG_JOIN(indexed address,indexed address,uint256)
+          handler: handleJoinPool
+        - event: LOG_EXIT(indexed address,indexed address,uint256)
+          handler: handleExitPool
+        - event: LOG_SWAP(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleSwap
