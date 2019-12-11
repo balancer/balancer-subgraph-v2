@@ -168,8 +168,8 @@ export function handleJoinPool(event: LOG_JOIN): void {
   let address = event.params.tokenIn.toHex()
   let poolTokenId = poolId.concat('-').concat(address.toString())
   let poolToken = PoolToken.load(poolTokenId)
-  let amountIn = event.params.amountIn.toBigDecimal().div(exponentToBigDecimal(18))
-  let newAmount = poolToken.balance.plus(amountIn)
+  let tokenAmountIn = event.params.tokenAmountIn.toBigDecimal().div(exponentToBigDecimal(18))
+  let newAmount = poolToken.balance.plus(tokenAmountIn)
   poolToken.balance = newAmount 
   poolToken.save()
 }
@@ -183,8 +183,8 @@ export function handleExitPool(event: LOG_EXIT): void {
   let address = event.params.tokenOut.toHex()
   let poolTokenId = poolId.concat('-').concat(address.toString())
   let poolToken = PoolToken.load(poolTokenId)
-  let amountOut = event.params.amountOut.toBigDecimal().div(exponentToBigDecimal(18))
-  let newAmount = poolToken.balance.minus(amountOut)
+  let tokenAmountOut = event.params.tokenAmountOut.toBigDecimal().div(exponentToBigDecimal(18))
+  let newAmount = poolToken.balance.minus(tokenAmountOut)
   poolToken.balance = newAmount 
   poolToken.save()
 }
@@ -202,16 +202,16 @@ export function handleSwap(event: LOG_SWAP): void {
   let tokenIn = event.params.tokenIn.toHex()
   let poolTokenInId = poolId.concat('-').concat(tokenIn.toString())
   let poolTokenIn = PoolToken.load(poolTokenInId)
-  let amountIn = event.params.amountIn.toBigDecimal().div(exponentToBigDecimal(18))
-  let newAmountIn = poolTokenIn.balance.plus(amountIn)
+  let tokenAmountIn = event.params.tokenAmountIn.toBigDecimal().div(exponentToBigDecimal(18))
+  let newAmountIn = poolTokenIn.balance.plus(tokenAmountIn)
   poolTokenIn.balance = newAmountIn
   poolTokenIn.save()
 
   let tokenOut = event.params.tokenOut.toHex()
   let poolTokenOutId = poolId.concat('-').concat(tokenOut.toString())
   let poolTokenOut = PoolToken.load(poolTokenOutId)
-  let amountOut = event.params.amountOut.toBigDecimal().div(exponentToBigDecimal(18))
-  let newAmountOut = poolTokenOut.balance.minus(amountOut)
+  let tokenAmountOut = event.params.tokenAmountOut.toBigDecimal().div(exponentToBigDecimal(18))
+  let newAmountOut = poolTokenOut.balance.minus(tokenAmountOut)
   poolTokenOut.balance = newAmountOut
   poolTokenOut.save()
 }
