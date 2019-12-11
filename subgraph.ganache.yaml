@@ -8,7 +8,7 @@ dataSources:
     name: Factory
     network: ganache
     source:
-      address: "0xD86C8F0327494034F60e25074420BcCF560D5610"
+      address: "0x9561C133DD8580860B6b7E504bC5Aa500f0f06a7"
       abi: Factory
     mapping:
       kind: ethereum/events
