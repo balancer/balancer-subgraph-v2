@@ -99,6 +99,17 @@ export function handleFinalize(event: LOG_CALL): void {
   }
   poolShare.balance = balance
   poolShare.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'finalize'
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 export function handleRebind(event: LOG_CALL): void {

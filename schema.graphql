@@ -58,21 +58,20 @@ type Swap @entity {
 type Transaction @entity {
     id: ID!                         # Log ID
     tx: Bytes!
-    event: String!
+    event: String
     block: Int!
     timestamp: Int!
-    poolAddress: Pool!
-    userAddress: User!
-    action: SwapType!
-    sender: Bytes!
+    poolAddress: Pool
+    userAddress: User
+    action: SwapType
+    sender: Bytes
 }
 
 enum SwapType {
-    swap_ExactAmountIn,
-    swap_ExactAmountOut,
-    swap_ExactMarginalPrice,
-    joinswap_ExternAmountIn,
-    joinswap_PoolAmountOut,
-    exitswap_PoolAmountIn,
-    exitswap_ExternAmountOut
+    swapExactAmountIn,
+    swapExactAmountOut,
+    joinswapExternAmountIn,
+    joinswapPoolAmountOut,
+    exitswapPoolAmountIn,
+    exitswapExternAmountOut
 }
