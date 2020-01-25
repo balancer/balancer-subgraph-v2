@@ -12,7 +12,6 @@ type Pool @entity {
     publicSwap: Boolean!                                # isPublicSwap
     finalized: Boolean!                                 # isFinalized
     swapFee: BigDecimal!                                # Swap Fees
-    exitFee: BigDecimal!                                # Exit Fees
     totalWeight: BigDecimal!
     totalShares: BigDecimal!                            # Total pool token shares
     tokensList: [Bytes!]                                # Temp workaround until graph supports filtering on derived field 
