@@ -49,13 +49,11 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
  ********** Pool Controls ***********
  ************************************/
 
-export function handleSetFees(event: LOG_CALL): void {
+export function handleSetSwapFee(event: LOG_CALL): void {
   let poolId = event.address.toHex()
   let pool = Pool.load(poolId)
-  let swapFee = hexToDecimal(event.params.data.toHexString().slice(10,74))
-  let exitFee = hexToDecimal(event.params.data.toHexString().slice(74))
+  let swapFee = hexToDecimal(event.params.data.toHexString().slice(-40))
   pool.swapFee = swapFee
-  pool.exitFee = exitFee
   pool.save()
 }
 
@@ -78,7 +76,7 @@ export function handleSetPublicSwap(event: LOG_CALL): void {
 export function handleFinalize(event: LOG_CALL): void {
   let poolId = event.address.toHex()
   let pool = Pool.load(poolId)
-  let balance = hexToDecimal(event.params.data.toHexString().slice(-24))
+  let balance = BigDecimal.fromString('100')
   pool.finalized = true
   pool.publicSwap = true
   pool.totalShares = balance

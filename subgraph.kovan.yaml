@@ -8,9 +8,9 @@ dataSources:
     name: Factory
     network: kovan
     source:
-      address: "0x9C84391B443ea3a48788079a5f98e2EaD55c9309"
+      address: "0x8f7F78080219d4066A8036ccD30D588B416a40DB"
       abi: Factory
-      startBlock: 15256819
+      startBlock: 16337546
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -44,8 +44,8 @@ templates:
           file: ./abis/BPool.json
       eventHandlers:
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0x0b78f9c000000000000000000000000000000000000000000000000000000000"
-          handler: handleSetFees
+          topic0: "0x34e1990700000000000000000000000000000000000000000000000000000000"
+          handler: handleSetSwapFee
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
           topic0: "0x92eefe9b00000000000000000000000000000000000000000000000000000000"
           handler: handleSetController
@@ -53,7 +53,7 @@ templates:
           topic0: "0x49b5955200000000000000000000000000000000000000000000000000000000"
           handler: handleSetPublicSwap
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0x05261aea00000000000000000000000000000000000000000000000000000000"
+          topic0: "0x4bb278f300000000000000000000000000000000000000000000000000000000"
           handler: handleFinalize
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
           topic0: "0xe4e1e53800000000000000000000000000000000000000000000000000000000"
