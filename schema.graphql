@@ -27,6 +27,9 @@ type Pool @entity {
 type PoolToken @entity {
     id: ID!                                             # poolId + token address
     poolId: Pool!
+    symbol: String
+    name: String
+    decimals: Int!
     address: String!
     balance: BigDecimal!
     denormWeight: BigDecimal!

@@ -1,5 +1,6 @@
 import { BigInt, BigDecimal, Address, Bytes, ByteArray, log, store } from '@graphprotocol/graph-ts'
 import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP } from '../types/templates/Pool/Pool'
+import { BToken } from '../types/templates/Pool/BToken'
 import {
   Balancer,
   Pool,
@@ -13,18 +14,16 @@ import {
  ********** Helpers ***********
  ************************************/
 
-function hexToDecimal(hexString: string): BigDecimal {
+function hexToDecimal(hexString: String, decimals: i32): BigDecimal {
   let bytes = Bytes.fromHexString(hexString).reverse() as Bytes
-  let bd = BigInt.fromUnsignedBytes(bytes).toBigDecimal()
-  return bd.div(exponentToBigDecimal(18))
+  let bi = BigInt.fromUnsignedBytes(bytes)
+  let scale = BigInt.fromI32(10).pow(decimals as u8).toBigDecimal()
+  return bi.divDecimal(scale)
 }
 
-function exponentToBigDecimal(decimals: i32): BigDecimal {
-  let bd = BigDecimal.fromString('1')
-  for (let i = 0; i < decimals; i++) {
-    bd = bd.times(BigDecimal.fromString('10'))
-  }
-  return bd
+function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
+  let scale = BigInt.fromI32(10).pow(decimals as u8).toBigDecimal()
+  return amount.div(scale)
 }
 
 function createPoolShareEntity(id: string, pool: String, user: String): void {
@@ -36,9 +35,29 @@ function createPoolShareEntity(id: string, pool: String, user: String): void {
 }
 
 function createPoolTokenEntity(id: string, pool: String, address: String): void {
+  let token = BToken.bind(Address.fromString(address))
+  let symbol = ''
+  let name = ''
+  let decimals = 18
+  let symbolCall = token.try_symbol()
+  let nameCall = token.try_name()
+  let decimalCall = token.try_decimals()
+
+  if (!symbolCall.reverted) {
+    symbol = symbolCall.value
+  }
+  if (!nameCall.reverted) {
+    name = nameCall.value
+  }
+  if (!decimalCall.reverted) {
+    decimals = decimalCall.value
+  }
   let poolToken = new PoolToken(id)
   poolToken.poolId = pool
   poolToken.address = address
+  poolToken.name = name
+  poolToken.symbol = symbol
+  poolToken.decimals = decimals
   poolToken.balance = BigDecimal.fromString('0')
   poolToken.denormWeight = BigDecimal.fromString('0')
   poolToken.save()
@@ -52,7 +71,7 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
 export function handleSetSwapFee(event: LOG_CALL): void {
   let poolId = event.address.toHex()
   let pool = Pool.load(poolId)
-  let swapFee = hexToDecimal(event.params.data.toHexString().slice(-40))
+  let swapFee = hexToDecimal(event.params.data.toHexString().slice(-40), 18)
   pool.swapFee = swapFee
   pool.save()
 }
@@ -122,8 +141,7 @@ export function handleRebind(event: LOG_CALL): void {
   
 
   let address = Address.fromString(event.params.data.toHexString().slice(34,74))
-  let balance = hexToDecimal(event.params.data.toHexString().slice(74,138))
-  let denormWeight = hexToDecimal(event.params.data.toHexString().slice(138))
+  let denormWeight = hexToDecimal(event.params.data.toHexString().slice(138), 18)
 
   let poolTokenId = poolId.concat('-').concat(address.toHexString())
   let poolToken = PoolToken.load(poolTokenId)
@@ -139,6 +157,8 @@ export function handleRebind(event: LOG_CALL): void {
       pool.totalWeight = pool.totalWeight - (oldWeight - denormWeight);
     }   
   }
+
+  let balance = hexToDecimal(event.params.data.toHexString().slice(74,138), poolToken.decimals)
 
   poolToken.balance = balance
   poolToken.denormWeight = denormWeight
@@ -177,7 +197,7 @@ export function handleJoinPool(event: LOG_JOIN): void {
   let address = event.params.tokenIn.toHex()
   let poolTokenId = poolId.concat('-').concat(address.toString())
   let poolToken = PoolToken.load(poolTokenId)
-  let tokenAmountIn = event.params.tokenAmountIn.toBigDecimal().div(exponentToBigDecimal(18))
+  let tokenAmountIn = tokenToDecimal(event.params.tokenAmountIn.toBigDecimal(), poolToken.decimals)
   let newAmount = poolToken.balance.plus(tokenAmountIn)
   poolToken.balance = newAmount 
   poolToken.save()
@@ -192,7 +212,7 @@ export function handleExitPool(event: LOG_EXIT): void {
   let address = event.params.tokenOut.toHex()
   let poolTokenId = poolId.concat('-').concat(address.toString())
   let poolToken = PoolToken.load(poolTokenId)
-  let tokenAmountOut = event.params.tokenAmountOut.toBigDecimal().div(exponentToBigDecimal(18))
+  let tokenAmountOut = tokenToDecimal(event.params.tokenAmountOut.toBigDecimal(), poolToken.decimals)
   let newAmount = poolToken.balance.minus(tokenAmountOut)
   poolToken.balance = newAmount 
   poolToken.save()
@@ -211,7 +231,7 @@ export function handleSwap(event: LOG_SWAP): void {
   let tokenIn = event.params.tokenIn.toHex()
   let poolTokenInId = poolId.concat('-').concat(tokenIn.toString())
   let poolTokenIn = PoolToken.load(poolTokenInId)
-  let tokenAmountIn = event.params.tokenAmountIn.toBigDecimal().div(exponentToBigDecimal(18))
+  let tokenAmountIn = tokenToDecimal(event.params.tokenAmountIn.toBigDecimal(), poolTokenIn.decimals)
   let newAmountIn = poolTokenIn.balance.plus(tokenAmountIn)
   poolTokenIn.balance = newAmountIn
   poolTokenIn.save()
@@ -219,7 +239,7 @@ export function handleSwap(event: LOG_SWAP): void {
   let tokenOut = event.params.tokenOut.toHex()
   let poolTokenOutId = poolId.concat('-').concat(tokenOut.toString())
   let poolTokenOut = PoolToken.load(poolTokenOutId)
-  let tokenAmountOut = event.params.tokenAmountOut.toBigDecimal().div(exponentToBigDecimal(18))
+  let tokenAmountOut = tokenToDecimal(event.params.tokenAmountOut.toBigDecimal(), poolTokenOut.decimals)
   let newAmountOut = poolTokenOut.balance.minus(tokenAmountOut)
   poolTokenOut.balance = newAmountOut
   poolTokenOut.save()
