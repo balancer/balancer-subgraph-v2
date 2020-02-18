@@ -7,7 +7,8 @@ import {
   User,
   PoolToken,
   PoolShare,
-  Transaction
+  Transaction,
+  Swap
 } from '../types/schema'
 
 /************************************
@@ -74,6 +75,21 @@ export function handleSetSwapFee(event: LOG_CALL): void {
   let swapFee = hexToDecimal(event.params.data.toHexString().slice(-40), 18)
   pool.swapFee = swapFee
   pool.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'setSwapFee'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 export function handleSetController(event: LOG_CALL): void {
@@ -82,6 +98,21 @@ export function handleSetController(event: LOG_CALL): void {
   let controller = Address.fromString(event.params.data.toHexString().slice(-40))
   pool.controller = controller
   pool.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'setController'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 export function handleSetPublicSwap(event: LOG_CALL): void {
@@ -90,6 +121,21 @@ export function handleSetPublicSwap(event: LOG_CALL): void {
   let publicSwap = event.params.data.toHexString().slice(-1) == '1'
   pool.publicSwap = publicSwap
   pool.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'setPublicSwap'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 export function handleFinalize(event: LOG_CALL): void {
@@ -123,6 +169,10 @@ export function handleFinalize(event: LOG_CALL): void {
     transaction = new Transaction(tx)
   }
   transaction.event = 'finalize'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -164,6 +214,21 @@ export function handleRebind(event: LOG_CALL): void {
   poolToken.denormWeight = denormWeight
   poolToken.save()
   pool.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'rebind'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 export function handleUnbind(event: LOG_CALL): void {
@@ -182,6 +247,21 @@ export function handleUnbind(event: LOG_CALL): void {
   pool.totalWeight -= poolToken.denormWeight
   pool.save()
   store.remove('PoolToken', poolTokenId)
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'unbind'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 /************************************
@@ -201,6 +281,21 @@ export function handleJoinPool(event: LOG_JOIN): void {
   let newAmount = poolToken.balance.plus(tokenAmountIn)
   poolToken.balance = newAmount 
   poolToken.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'join'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 export function handleExitPool(event: LOG_EXIT): void {
@@ -216,6 +311,21 @@ export function handleExitPool(event: LOG_EXIT): void {
   let newAmount = poolToken.balance.minus(tokenAmountOut)
   poolToken.balance = newAmount 
   poolToken.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'exit'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
 
 /************************************
@@ -243,4 +353,28 @@ export function handleSwap(event: LOG_SWAP): void {
   let newAmountOut = poolTokenOut.balance.minus(tokenAmountOut)
   poolTokenOut.balance = newAmountOut
   poolTokenOut.save()
+
+  let swapId = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let swap = Swap.load(swapId)
+  swap.caller = event.params.caller
+  swap.tokenIn = event.params.tokenIn
+  swap.tokenOut = event.params.tokenOut
+  swap.tokenAmountIn = tokenAmountIn
+  swap.tokenAmountOut = tokenAmountOut
+  swap.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'swap'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toI32()
+  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
 }
