@@ -84,8 +84,8 @@ export function handleSetSwapFee(event: LOG_CALL): void {
   transaction.event = 'setSwapFee'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -107,8 +107,8 @@ export function handleSetController(event: LOG_CALL): void {
   transaction.event = 'setController'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -130,8 +130,8 @@ export function handleSetPublicSwap(event: LOG_CALL): void {
   transaction.event = 'setPublicSwap'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -171,8 +171,8 @@ export function handleFinalize(event: LOG_CALL): void {
   transaction.event = 'finalize'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -223,8 +223,8 @@ export function handleRebind(event: LOG_CALL): void {
   transaction.event = 'rebind'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -256,8 +256,8 @@ export function handleUnbind(event: LOG_CALL): void {
   transaction.event = 'unbind'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -290,8 +290,8 @@ export function handleJoinPool(event: LOG_JOIN): void {
   transaction.event = 'join'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -320,8 +320,8 @@ export function handleExitPool(event: LOG_EXIT): void {
   transaction.event = 'exit'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
@@ -356,6 +356,9 @@ export function handleSwap(event: LOG_SWAP): void {
 
   let swapId = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let swap = Swap.load(swapId)
+  if (swap == null) {
+    swap = new Swap(swapId)
+  }
   swap.caller = event.params.caller
   swap.tokenIn = event.params.tokenIn
   swap.tokenOut = event.params.tokenOut
@@ -371,8 +374,8 @@ export function handleSwap(event: LOG_SWAP): void {
   transaction.event = 'swap'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
-  transaction.gasUsed = event.transaction.gasUsed.toI32()
-  transaction.gasPrice = event.transaction.gasPrice.toI32()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
