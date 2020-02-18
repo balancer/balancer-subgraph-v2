@@ -63,8 +63,8 @@ type Transaction @entity {
     event: String
     block: Int!
     timestamp: Int!
-    gasUsed: Int!
-    gasPrice: Int!
+    gasUsed: BigDecimal!
+    gasPrice: BigDecimal!
     poolAddress: Pool
     userAddress: User
     action: SwapType
