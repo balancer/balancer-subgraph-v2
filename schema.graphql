@@ -53,8 +53,8 @@ type Swap @entity {
     caller: Bytes!                          #
     tokenIn: Bytes!                         #
     tokenOut: Bytes!                        #
-    amountIn: BigDecimal!                   #
-    amountOut: BigDecimal!                  #
+    tokenAmountIn: BigDecimal!              #
+    tokenAmountOut: BigDecimal!             #
 }
 
 type Transaction @entity {
@@ -63,6 +63,8 @@ type Transaction @entity {
     event: String
     block: Int!
     timestamp: Int!
+    gasUsed: Int!
+    gasPrice: Int!
     poolAddress: Pool
     userAddress: User
     action: SwapType
