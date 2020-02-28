@@ -1,8 +1,6 @@
 # Balancer Subgraph
 
-**Note:** This is an exploratory project and does not necessarily mean Balancer plans to use Graph Protocol as a data layer.
-
-The graphql schema is a first draft and will likely have major breaking changes.
+The graphql schema is still under heavy development and will likely have major breaking changes.
 
 Only the factory address is needed in subgraph.yaml, new pool addresses are automatically picked up using Graph Protocol's data source templates.
 
