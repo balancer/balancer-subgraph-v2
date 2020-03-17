@@ -1,5 +1,5 @@
 import { BigInt, BigDecimal, Address, Bytes, ByteArray, log, store } from '@graphprotocol/graph-ts'
-import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer } from '../types/templates/Pool/Pool'
+import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP } from '../types/templates/Pool/Pool'
 import { BToken } from '../types/templates/Pool/BToken'
 import {
   Balancer,
@@ -141,10 +141,10 @@ export function handleSetPublicSwap(event: LOG_CALL): void {
 export function handleFinalize(event: LOG_CALL): void {
   let poolId = event.address.toHex()
   let pool = Pool.load(poolId)
-  // let balance = BigDecimal.fromString('100')
+  let balance = BigDecimal.fromString('100')
   pool.finalized = true
   pool.publicSwap = true
-  // pool.totalShares = balance
+  pool.totalShares = balance
   pool.save()
   
   let userId = event.params.caller.toHex()
@@ -154,14 +154,14 @@ export function handleFinalize(event: LOG_CALL): void {
     user.save()
   }
 
-  // let poolShareId = poolId.concat('-').concat(event.params.caller.toHex())
-  // let poolShare = PoolShare.load(poolShareId)
-  // if (poolShare == null) {
-  //   createPoolShareEntity(poolShareId, poolId, event.params.caller.toHex())
-  //   poolShare = PoolShare.load(poolShareId)
-  // }
-  // poolShare.balance = balance
-  // poolShare.save()
+  let poolShareId = poolId.concat('-').concat(event.params.caller.toHex())
+  let poolShare = PoolShare.load(poolShareId)
+  if (poolShare == null) {
+    createPoolShareEntity(poolShareId, poolId, event.params.caller.toHex())
+    poolShare = PoolShare.load(poolShareId)
+  }
+  poolShare.balance = balance
+  poolShare.save()
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
@@ -381,61 +381,3 @@ export function handleSwap(event: LOG_SWAP): void {
   transaction.block = event.block.number.toI32()
   transaction.save()
 }
-
-
-/************************************
- *********** POOL SHARES ************
- ************************************/
-
-export function handleTransfer(event: Transfer): void {
-
-  let poolId = event.address.toHex()
-
-  const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
-  let isMint = event.params.src.toHex() == ZERO_ADDRESS
-  let isBurn = event.params.dst.toHex() == ZERO_ADDRESS
-
-  let poolShareFromId = poolId.concat('-').concat(event.params.src.toHex())
-  let poolShareFrom = PoolShare.load(poolShareFromId)
-
-  let poolShareToId = poolId.concat('-').concat(event.params.dst.toHex())
-  let poolShareTo = PoolShare.load(poolShareToId)
-
-  let pool = Pool.load(poolId)
-
-  if (isMint) {
-    if (poolShareTo == null) {
-      createPoolShareEntity(poolShareToId, poolId, event.params.dst.toHex())
-      poolShareTo = PoolShare.load(poolShareToId)
-    }
-    poolShareTo.balance += tokenToDecimal(event.params.amt.toBigDecimal(), 18)
-    poolShareTo.save()
-    pool.totalShares += tokenToDecimal(event.params.amt.toBigDecimal(), 18)
-  } else if (isBurn) {
-    if (poolShareFrom == null) {
-      createPoolShareEntity(poolShareFromId, poolId, event.params.src.toHex())
-      poolShareFrom = PoolShare.load(poolShareFromId)
-    }
-    poolShareFrom.balance -= tokenToDecimal(event.params.amt.toBigDecimal(), 18)
-    poolShareFrom.save()
-    pool.totalShares -= tokenToDecimal(event.params.amt.toBigDecimal(), 18)
-  } else {
-    if (poolShareTo == null) {
-      createPoolShareEntity(poolShareToId, poolId, event.params.dst.toHex())
-      poolShareTo = PoolShare.load(poolShareToId)
-    }
-    poolShareTo.balance += tokenToDecimal(event.params.amt.toBigDecimal(), 18)
-    poolShareTo.save()
-    
-    if (poolShareFrom == null) {
-      createPoolShareEntity(poolShareFromId, poolId, event.params.src.toHex())
-      poolShareFrom = PoolShare.load(poolShareFromId)
-    }
-    poolShareFrom.balance -= tokenToDecimal(event.params.amt.toBigDecimal(), 18)
-    poolShareFrom.save()
-  }
-
-  pool.save()
-}
-
