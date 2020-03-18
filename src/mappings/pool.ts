@@ -1,6 +1,8 @@
 import { BigInt, BigDecimal, Address, Bytes, ByteArray, log, store } from '@graphprotocol/graph-ts'
 import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP } from '../types/templates/Pool/Pool'
 import { BToken } from '../types/templates/Pool/BToken'
+import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
+
 import {
   Balancer,
   Pool,
@@ -37,6 +39,7 @@ function createPoolShareEntity(id: string, pool: String, user: String): void {
 
 function createPoolTokenEntity(id: string, pool: String, address: String): void {
   let token = BToken.bind(Address.fromString(address))
+  let tokenBytes = BTokenBytes.bind(Address.fromString(address))
   let symbol = ''
   let name = ''
   let decimals = 18
@@ -44,15 +47,28 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   let nameCall = token.try_name()
   let decimalCall = token.try_decimals()
 
-  if (!symbolCall.reverted) {
+  if (symbolCall.reverted) {
+    let symbolBytesCall = tokenBytes.try_symbol()
+    if (!symbolBytesCall.reverted) {
+      symbol = symbolBytesCall.value.toString()
+    }
+  } else {
     symbol = symbolCall.value
   }
-  if (!nameCall.reverted) {
+
+  if (nameCall.reverted) {
+    let nameBytesCall = tokenBytes.try_name()
+    if (!nameBytesCall.reverted) {
+      name = nameBytesCall.value.toString()
+    }
+  } else {
     name = nameCall.value
   }
+
   if (!decimalCall.reverted) {
     decimals = decimalCall.value
   }
+
   let poolToken = new PoolToken(id)
   poolToken.poolId = pool
   poolToken.address = address

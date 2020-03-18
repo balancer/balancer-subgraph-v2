@@ -44,6 +44,8 @@ templates:
           file: ./abis/BPool.json
         - name: BToken
           file: ./abis/BToken.json
+        - name: BTokenBytes
+          file: ./abis/BTokenBytes32.json
       eventHandlers:
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
           topic0: "0x34e1990700000000000000000000000000000000000000000000000000000000"
