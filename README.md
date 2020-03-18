@@ -74,16 +74,54 @@ yarn codegen
 Create local node
 
 ```
-yarn create-local
+yarn create:local
 ```
 
 Deploy locally
 
 ```
-yarn deploy-local
+yarn deploy:local
 ```
 
-Any updates can be made to this repo and re-running `yarn deploy-local` without needing to re-initialize the environment.
+Any updates can be made to this repo and re-running `yarn deploy:local` without needing to re-initialize the environment.
+
+## Running Locally With Parity Kovan Node
+
+Start Parity:
+
+```
+parity --chain=kovan --jsonrpc-interface=0.0.0.0
+```
+
+Update ethereum value in docker-compose.yml to `kovan:http://host.docker.internal:8545`
+
+Comment out try_ functions in pool.ts LN52-64
+
+```
+cd graph-node/docker
+```
+
+```
+docker-compose up
+```
+
+Create local node
+
+```
+yarn create:local
+```
+
+Deploy locally
+
+```
+yarn deploy:local
+```
+
+To blow away graph-node settings
+
+```
+docker-compose kill && docker-compose rm -f && rm -rf data
+```
 
 
 ## Queries
