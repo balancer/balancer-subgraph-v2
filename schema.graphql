@@ -2,7 +2,7 @@ type Balancer @entity {
     id: ID!
     color: String!                                      # Bronze, Silver, Gold
     poolCount: Int!                                     # Number of pools
-    pools: [Pool!] @derivedFrom(field: "factoryID")             
+    pools: [Pool!] @derivedFrom(field: "factoryID")
     txCount: BigInt!                                    # Number of txs
 }
 
@@ -14,7 +14,7 @@ type Pool @entity {
     swapFee: BigDecimal!                                # Swap Fees
     totalWeight: BigDecimal!
     totalShares: BigDecimal!                            # Total pool token shares
-    tokensList: [Bytes!]                                # Temp workaround until graph supports filtering on derived field 
+    tokensList: [Bytes!]                                # Temp workaround until graph supports filtering on derived field
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
     shares: [PoolShare!] @derivedFrom(field: "poolId")
     createTime: Int!                                    # Block time pool was created
@@ -49,12 +49,14 @@ type User @entity {
 }
 
 type Swap @entity {
-    id: ID!                                 # 
+    id: ID!                                 #
     caller: Bytes!                          #
     tokenIn: Bytes!                         #
     tokenOut: Bytes!                        #
     tokenAmountIn: BigDecimal!              #
     tokenAmountOut: BigDecimal!             #
+    poolAddress: Pool!
+    timestamp: Int!
 }
 
 type Transaction @entity {

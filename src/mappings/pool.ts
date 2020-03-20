@@ -52,6 +52,7 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   let decimals = 18
 
   // COMMENT THE LINES BELOW OUT FOR LOCAL DEV ON KOVAN
+  /*
   let symbolCall = token.try_symbol()
   let nameCall = token.try_name()
   let decimalCall = token.try_decimals()
@@ -77,6 +78,7 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   if (!decimalCall.reverted) {
     decimals = decimalCall.value
   }
+  */
   // COMMENT THE LINES ABOVE OUT FOR LOCAL DEV ON KOVAN
 
   let poolToken = new PoolToken(id)
@@ -391,6 +393,8 @@ export function handleSwap(event: LOG_SWAP): void {
   swap.tokenOut = event.params.tokenOut
   swap.tokenAmountIn = tokenAmountIn
   swap.tokenAmountOut = tokenAmountOut
+  swap.poolAddress = event.address.toHex()
+  swap.timestamp = event.block.timestamp.toI32()
   swap.save()
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
