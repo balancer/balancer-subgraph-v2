@@ -52,7 +52,9 @@ type Swap @entity {
     id: ID!                                 #
     caller: Bytes!                          #
     tokenIn: Bytes!                         #
+    tokenInSym: String!                     #
     tokenOut: Bytes!                        #
+    tokenOutSym: String!                    #
     tokenAmountIn: BigDecimal!              #
     tokenAmountOut: BigDecimal!             #
     poolAddress: Pool!
