@@ -52,6 +52,7 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   let decimals = 18
 
   // COMMENT THE LINES BELOW OUT FOR LOCAL DEV ON KOVAN
+
   let symbolCall = token.try_symbol()
   let nameCall = token.try_name()
   let decimalCall = token.try_decimals()
@@ -77,9 +78,10 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   if (!decimalCall.reverted) {
     decimals = decimalCall.value
   }
+
   // COMMENT THE LINES ABOVE OUT FOR LOCAL DEV ON KOVAN
 
-  // !!! COMMENT THE LINES ABOVE OUT FOR NON-LOCAL DEPLOYMENT
+  // !!! COMMENT THE LINES BELOW OUT FOR NON-LOCAL DEPLOYMENT
   // This code allows Symbols to be added when testing on local Kovan
   /*
   if(address == '0xd0a1e359811322d97991e03f863a0c30c2cf029c')
