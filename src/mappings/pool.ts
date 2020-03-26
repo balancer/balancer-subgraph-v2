@@ -52,6 +52,7 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   let decimals = 18
 
   // COMMENT THE LINES BELOW OUT FOR LOCAL DEV ON KOVAN
+
   let symbolCall = token.try_symbol()
   let nameCall = token.try_name()
   let decimalCall = token.try_decimals()
@@ -77,7 +78,28 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   if (!decimalCall.reverted) {
     decimals = decimalCall.value
   }
+
   // COMMENT THE LINES ABOVE OUT FOR LOCAL DEV ON KOVAN
+
+  // !!! COMMENT THE LINES BELOW OUT FOR NON-LOCAL DEPLOYMENT
+  // This code allows Symbols to be added when testing on local Kovan
+  /*
+  if(address == '0xd0a1e359811322d97991e03f863a0c30c2cf029c')
+    symbol = 'WETH';
+  else if(address == '0x1528f3fcc26d13f7079325fb78d9442607781c8c')
+    symbol = 'DAI'
+  else if(address == '0xef13c0c8abcaf5767160018d268f9697ae4f5375')
+    symbol = 'MKR'
+  else if(address == '0x2f375e94fc336cdec2dc0ccb5277fe59cbf1cae5')
+    symbol = 'USDC'
+  else if(address == '0x1f1f156e0317167c11aa412e3d1435ea29dc3cce')
+    symbol = 'BAT'
+  else if(address == '0x86436bce20258a6dcfe48c9512d4d49a30c4d8c4')
+    symbol = 'SNX'
+  else if(address == '0x8c9e6c40d3402480ace624730524facc5482798c')
+    symbol = 'REP'
+  */
+  // !!! COMMENT THE LINES ABOVE OUT FOR NON-LOCAL DEPLOYMENT
 
   let poolToken = new PoolToken(id)
   poolToken.poolId = pool
@@ -388,9 +410,13 @@ export function handleSwap(event: LOG_SWAP): void {
   }
   swap.caller = event.params.caller
   swap.tokenIn = event.params.tokenIn
+  swap.tokenInSym = poolTokenIn.symbol
   swap.tokenOut = event.params.tokenOut
+  swap.tokenOutSym = poolTokenOut.symbol;
   swap.tokenAmountIn = tokenAmountIn
   swap.tokenAmountOut = tokenAmountOut
+  swap.poolAddress = event.address.toHex()
+  swap.timestamp = event.block.timestamp.toI32()
   swap.save()
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
