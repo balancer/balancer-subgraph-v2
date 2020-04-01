@@ -60,6 +60,9 @@ templates:
           topic0: "0x4bb278f300000000000000000000000000000000000000000000000000000000"
           handler: handleFinalize
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0x3fdddaa200000000000000000000000000000000000000000000000000000000"
+          handler: handleRebind
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
           topic0: "0xe4e1e53800000000000000000000000000000000000000000000000000000000"
           handler: handleRebind
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
