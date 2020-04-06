@@ -291,7 +291,7 @@ export function handleUnbind(event: LOG_CALL): void {
 
 
   let address = Address.fromString(event.params.data.toHexString().slice(-40))
-  let poolTokenId = poolId.concat('-').concat(address.toString())
+  let poolTokenId = poolId.concat('-').concat(address.toHexString())
   let poolToken = PoolToken.load(poolTokenId)
   pool.totalWeight -= poolToken.denormWeight
   pool.save()
