@@ -8,6 +8,7 @@
     "build": "graph build",
     "deploy": "graph deploy balancer-labs/balancer --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:kovan": "graph deploy balancer-labs/balancer-kovan subgraph.kovan.yaml --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy:ropsten": "graph deploy balancer-labs/balancer-ropsten subgraph.ropsten.yaml --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/balancer-subgraph subgraph.kovan.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "devDependencies": {
