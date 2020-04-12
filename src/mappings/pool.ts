@@ -286,7 +286,7 @@ export function handleUnbind(event: LOG_CALL): void {
   let tokenBytes = Bytes.fromHexString(event.params.data.toHexString().slice(-40)) as Bytes
   let tokensList = pool.tokensList || []
   let index = tokensList.indexOf(tokenBytes)
-  tokensList.slice(index, 1)
+  tokensList.splice(index, 1)
   pool.tokensList = tokensList
 
 
