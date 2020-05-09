@@ -24,6 +24,11 @@ function hexToDecimal(hexString: String, decimals: i32): BigDecimal {
   return bi.divDecimal(scale)
 }
 
+function bigIntToDecimal(amount: BigInt, decimals: i32): BigDecimal {
+  let scale = BigInt.fromI32(10).pow(decimals as u8).toBigDecimal()
+  return amount.toBigDecimal().div(scale)
+}
+
 function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
   let scale = BigInt.fromI32(10).pow(decimals as u8).toBigDecimal()
   return amount.div(scale)
@@ -303,6 +308,41 @@ export function handleUnbind(event: LOG_CALL): void {
     transaction = new Transaction(tx)
   }
   transaction.event = 'unbind'
+  transaction.poolAddress = event.address.toHex()
+  transaction.userAddress = event.transaction.from.toHex()
+  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
+  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
+  transaction.tx = event.transaction.hash
+  transaction.timestamp = event.block.timestamp.toI32()
+  transaction.block = event.block.number.toI32()
+  transaction.save()
+}
+
+export function handleGulp(event: LOG_CALL): void {
+  let poolId = event.address.toHex()
+  let pool = Pool.load(poolId)
+
+  let address = Address.fromString(event.params.data.toHexString().slice(-40))
+
+  let token = BToken.bind(address)
+  let balanceCall = token.try_balanceOf(Address.fromString(poolId))
+
+  let poolTokenId = poolId.concat('-').concat(address.toHexString())
+  let poolToken = PoolToken.load(poolTokenId)
+
+  let balance = poolToken.balance
+  if (!balanceCall.reverted) {
+    balance = bigIntToDecimal(balanceCall.value, poolToken.decimals)
+  }
+  poolToken.balance = balance
+  poolToken.save()
+
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
+  let transaction = Transaction.load(tx)
+  if (transaction == null) {
+    transaction = new Transaction(tx)
+  }
+  transaction.event = 'gulp'
   transaction.poolAddress = event.address.toHex()
   transaction.userAddress = event.transaction.from.toHex()
   transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
