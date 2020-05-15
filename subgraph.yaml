@@ -68,6 +68,9 @@ templates:
         - event: LOG_CALL(indexed bytes4,indexed address,bytes)
           topic0: "0xcf5e7bd300000000000000000000000000000000000000000000000000000000"
           handler: handleUnbind
+        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
+          topic0: "0x8c28cbe800000000000000000000000000000000000000000000000000000000"
+          handler: handleGulp
         - event: LOG_JOIN(indexed address,indexed address,uint256)
           handler: handleJoinPool
         - event: LOG_EXIT(indexed address,indexed address,uint256)
