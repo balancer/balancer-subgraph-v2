@@ -116,7 +116,18 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   poolToken.denormWeight = BigDecimal.fromString('0')
   poolToken.save()
 }
-
+function updatePoolTotalEthValue(id: string): void {
+  let pool = Pool.load(id)
+  let tokensList: Array<Bytes> = pool.tokensList
+  if (!tokensList) return
+  const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+  if (tokensList.includes(Address.fromString(WETH))) {
+    let wethPoolTokenId = id.concat('-').concat(WETH)
+    let wethPoolToken = PoolToken.load(wethPoolTokenId)
+    pool.totalEthValue = wethPoolToken.balance.div(wethPoolToken.denormWeight).times(pool.totalWeight)
+    pool.save()
+  }
+}
 
 /************************************
  ********** Pool Controls ***********
@@ -273,6 +284,8 @@ export function handleRebind(event: LOG_CALL): void {
   poolToken.save()
   pool.save()
 
+  updatePoolTotalEthValue(poolId)
+
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
   if (transaction == null) {
@@ -341,6 +354,8 @@ export function handleGulp(event: LOG_CALL): void {
   poolToken.balance = balance
   poolToken.save()
 
+  updatePoolTotalEthValue(poolId)
+
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
   if (transaction == null) {
@@ -375,6 +390,8 @@ export function handleJoinPool(event: LOG_JOIN): void {
   poolToken.balance = newAmount
   poolToken.save()
 
+  updatePoolTotalEthValue(poolId)
+
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
   if (transaction == null) {
@@ -404,6 +421,8 @@ export function handleExitPool(event: LOG_EXIT): void {
   let newAmount = poolToken.balance.minus(tokenAmountOut)
   poolToken.balance = newAmount
   poolToken.save()
+
+  updatePoolTotalEthValue(poolId)
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
@@ -446,6 +465,8 @@ export function handleSwap(event: LOG_SWAP): void {
   let newAmountOut = poolTokenOut.balance.minus(tokenAmountOut)
   poolTokenOut.balance = newAmountOut
   poolTokenOut.save()
+
+  updatePoolTotalEthValue(poolId)
 
   let swapId = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let swap = Swap.load(swapId)
