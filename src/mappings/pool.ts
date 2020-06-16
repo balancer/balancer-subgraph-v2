@@ -217,6 +217,10 @@ export function handleFinalize(event: LOG_CALL): void {
   poolShare.save()
   */
 
+  let factory = Balancer.load('1')
+  factory.finalizedPoolCount = factory.finalizedPoolCount + 1
+  factory.save()
+
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
   if (transaction == null) {

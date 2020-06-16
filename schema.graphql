@@ -2,6 +2,7 @@ type Balancer @entity {
     id: ID!
     color: String!                                      # Bronze, Silver, Gold
     poolCount: Int!                                     # Number of pools
+    finalizedPoolCount: Int!                            # Number of finalized pools
     pools: [Pool!] @derivedFrom(field: "factoryID")
     txCount: BigInt!                                    # Number of txs
 }

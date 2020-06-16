@@ -11,6 +11,7 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
     factory = new Balancer('1')
     factory.color = 'Bronze'
     factory.poolCount = 0
+    factory.finalizedPoolCount = 0
     factory.txCount = BigInt.fromI32(0)
   }
   factory.poolCount = factory.poolCount + 1
