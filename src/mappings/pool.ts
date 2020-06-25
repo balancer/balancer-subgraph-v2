@@ -10,7 +10,8 @@ import {
   PoolToken,
   PoolShare,
   Transaction,
-  Swap
+  Swap,
+  Token
 } from '../types/schema'
 
 /************************************
@@ -116,17 +117,52 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
   poolToken.denormWeight = BigDecimal.fromString('0')
   poolToken.save()
 }
-function updatePoolTotalEthValue(id: string): void {
+
+function updatePoolLiquidity(id: string): void {
+  // let WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' // mainnet
+  let WETH = '0xd0a1e359811322d97991e03f863a0c30c2cf029c' // kovan
+  let liquidity = BigDecimal.fromString('0')
+
   let pool = Pool.load(id)
   let tokensList: Array<Bytes> = pool.tokensList
   if (!tokensList) return
-  const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+
   if (tokensList.includes(Address.fromString(WETH))) {
     let wethPoolTokenId = id.concat('-').concat(WETH)
     let wethPoolToken = PoolToken.load(wethPoolTokenId)
-    pool.totalEthValue = wethPoolToken.balance.div(wethPoolToken.denormWeight).times(pool.totalWeight)
-    pool.save()
+    liquidity = wethPoolToken.balance.div(wethPoolToken.denormWeight).times(pool.totalWeight)
+
+    if (!pool.publicSwap) return
+
+    for (let i: i32 = 0; i < tokensList.length; i++) {
+      let tokenId = tokensList[i].toHexString()
+      let token = Token.load(tokenId)
+      if (token == null) {
+        token = new Token(tokenId)
+        token.poolLiquidity = BigDecimal.fromString('0')
+      }
+      let poolTokenId = id.concat('-').concat(tokenId)
+      let poolToken = PoolToken.load(poolTokenId)
+
+      if (token.poolTokenId !== poolTokenId && token.poolLiquidity.gt(liquidity)) return
+
+      token.price = liquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance)
+      token.poolLiquidity = liquidity
+      token.poolTokenId = poolTokenId
+      token.save()
+    }
   }
+  for (let i: i32 = 0; i < tokensList.length; i++) {
+    let tokenId = tokensList[i].toHexString()
+    let token = Token.load(tokenId)
+    if (token !== null) {
+      let poolTokenId = id.concat('-').concat(tokenId)
+      let poolToken = PoolToken.load(poolTokenId)
+      liquidity = token.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
+    }
+  }
+  pool.liquidity = liquidity
+  pool.save()
 }
 
 /************************************
@@ -284,7 +320,7 @@ export function handleRebind(event: LOG_CALL): void {
   poolToken.save()
   pool.save()
 
-  updatePoolTotalEthValue(poolId)
+  updatePoolLiquidity(poolId)
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
@@ -354,7 +390,7 @@ export function handleGulp(event: LOG_CALL): void {
   poolToken.balance = balance
   poolToken.save()
 
-  updatePoolTotalEthValue(poolId)
+  updatePoolLiquidity(poolId)
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
@@ -390,7 +426,7 @@ export function handleJoinPool(event: LOG_JOIN): void {
   poolToken.balance = newAmount
   poolToken.save()
 
-  updatePoolTotalEthValue(poolId)
+  updatePoolLiquidity(poolId)
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
@@ -422,7 +458,7 @@ export function handleExitPool(event: LOG_EXIT): void {
   poolToken.balance = newAmount
   poolToken.save()
 
-  updatePoolTotalEthValue(poolId)
+  updatePoolLiquidity(poolId)
 
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let transaction = Transaction.load(tx)
@@ -466,7 +502,7 @@ export function handleSwap(event: LOG_SWAP): void {
   poolTokenOut.balance = newAmountOut
   poolTokenOut.save()
 
-  updatePoolTotalEthValue(poolId)
+  updatePoolLiquidity(poolId)
 
   let swapId = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let swap = Swap.load(swapId)

@@ -24,7 +24,7 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.swapFee = BigDecimal.fromString('0.000001')
   pool.totalWeight = BigDecimal.fromString('0')
   pool.totalShares = BigDecimal.fromString('0')
-  pool.totalEthValue = BigDecimal.fromString('0')
+  pool.liquidity = BigDecimal.fromString('0')
   pool.createTime = event.block.timestamp.toI32()
   pool.joinsCount = BigInt.fromI32(0)
   pool.exitsCount = BigInt.fromI32(0)
