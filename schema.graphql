@@ -78,7 +78,7 @@ type Transaction @entity {
     sender: Bytes
 }
 
-type Token @entity {
+type TokenPrice @entity {
     id: ID!
     price: BigDecimal!
     poolLiquidity: BigDecimal!
