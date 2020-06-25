@@ -149,8 +149,8 @@ function updatePoolLiquidity(id: string): void {
 
       if (tokenPrice.poolTokenId !== poolTokenId && tokenPrice.poolLiquidity.gt(liquidity)) return
 
-      tokenPrice.price = liquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance)
-      tokenPrice.poolLiquidity = liquidity
+      tokenPrice.price = liquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance).truncate(18)
+      tokenPrice.poolLiquidity = liquidity.truncate(18)
       tokenPrice.poolTokenId = poolTokenId
       tokenPrice.save()
     }
@@ -164,7 +164,7 @@ function updatePoolLiquidity(id: string): void {
       liquidity = tokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
     }
   }
-  pool.liquidity = liquidity
+  pool.liquidity = liquidity.truncate(18)
   pool.save()
 }
 
