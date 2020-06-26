@@ -80,6 +80,7 @@ type Transaction @entity {
 
 type TokenPrice @entity {
     id: ID!
+    symbol: String
     price: BigDecimal!
     poolLiquidity: BigDecimal!
     poolTokenId: String
