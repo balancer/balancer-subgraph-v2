@@ -149,7 +149,9 @@ function updatePoolLiquidity(id: string): void {
 
       if (tokenPrice.poolTokenId !== poolTokenId && tokenPrice.poolLiquidity.gt(liquidity)) return
 
-      tokenPrice.price = liquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance).truncate(18)
+      if (poolToken.balance.gt(BigDecimal.fromString('0'))) {
+        tokenPrice.price = liquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance).truncate(18)
+      }
       tokenPrice.poolLiquidity = liquidity.truncate(18)
       tokenPrice.poolTokenId = poolTokenId
       tokenPrice.save()
