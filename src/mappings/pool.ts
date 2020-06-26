@@ -124,50 +124,68 @@ function createPoolTokenEntity(id: string, pool: String, address: String): void 
 }
 
 function updatePoolLiquidity(id: string): void {
-  let liquidity = BigDecimal.fromString('0')
-
   let pool = Pool.load(id)
   let tokensList: Array<Bytes> = pool.tokensList
-  if (!tokensList) return
+
+  if (!tokensList || !pool.publicSwap) return
+
+  /* Create or update token price */
 
   if (tokensList.includes(Address.fromString(WETH))) {
     let wethPoolTokenId = id.concat('-').concat(WETH)
     let wethPoolToken = PoolToken.load(wethPoolTokenId)
-    liquidity = wethPoolToken.balance.div(wethPoolToken.denormWeight).times(pool.totalWeight)
-
-    if (!pool.publicSwap) return
+    let poolLiquidity = wethPoolToken.balance.div(wethPoolToken.denormWeight).times(pool.totalWeight)
 
     for (let i: i32 = 0; i < tokensList.length; i++) {
       let tokenPriceId = tokensList[i].toHexString()
       let tokenPrice = TokenPrice.load(tokenPriceId)
       if (tokenPrice == null) {
         tokenPrice = new TokenPrice(tokenPriceId)
+        tokenPrice.poolTokenId = ''
         tokenPrice.poolLiquidity = BigDecimal.fromString('0')
       }
+
       let poolTokenId = id.concat('-').concat(tokenPriceId)
       let poolToken = PoolToken.load(poolTokenId)
 
-      if (tokenPrice.poolTokenId !== poolTokenId && tokenPrice.poolLiquidity.gt(liquidity)) return
+      if (tokenPrice.poolTokenId == poolTokenId || poolLiquidity.gt(tokenPrice.poolLiquidity)) {
+        tokenPrice.price = BigDecimal.fromString('0')
 
-      if (poolToken.balance.gt(BigDecimal.fromString('0'))) {
-        tokenPrice.price = liquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance).truncate(18)
+        if (poolToken.balance.gt(BigDecimal.fromString('0'))) {
+          tokenPrice.price = poolLiquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance)
+        }
+
+        tokenPrice.symbol = poolToken.symbol
+        tokenPrice.poolLiquidity = poolLiquidity
+        tokenPrice.poolTokenId = poolTokenId
+        tokenPrice.save()
       }
-      tokenPrice.poolLiquidity = liquidity.truncate(18)
-      tokenPrice.poolTokenId = poolTokenId
-      tokenPrice.save()
     }
   }
+
+  /* Update pool liquidity */
+
+  let liquidity = BigDecimal.fromString('0')
+  let denormWeight = BigDecimal.fromString('0')
+
   for (let i: i32 = 0; i < tokensList.length; i++) {
     let tokenPriceId = tokensList[i].toHexString()
     let tokenPrice = TokenPrice.load(tokenPriceId)
     if (tokenPrice !== null) {
       let poolTokenId = id.concat('-').concat(tokenPriceId)
       let poolToken = PoolToken.load(poolTokenId)
-      liquidity = tokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
+
+      if (poolToken.denormWeight.gt(denormWeight)) {
+        denormWeight = poolToken.denormWeight
+        liquidity = tokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
+      }
     }
   }
-  pool.liquidity = liquidity.truncate(18)
-  pool.save()
+
+  if (liquidity.gt(BigDecimal.fromString('0'))) {
+    pool.liquidity = liquidity
+    pool.save()
+  }
 }
 
 /************************************
