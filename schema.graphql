@@ -15,7 +15,8 @@ type Pool @entity {
     swapFee: BigDecimal!                                # Swap Fees
     totalWeight: BigDecimal!
     totalShares: BigDecimal!                            # Total pool token shares
-    tokensList: [Bytes!]                                # Temp workaround until graph supports filtering on derived field
+    liquidity: BigDecimal!                              # Pool liquidity value in WETH
+    tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
     shares: [PoolShare!] @derivedFrom(field: "poolId")
     createTime: Int!                                    # Block time pool was created
@@ -75,6 +76,14 @@ type Transaction @entity {
     userAddress: User
     action: SwapType
     sender: Bytes
+}
+
+type TokenPrice @entity {
+    id: ID!
+    symbol: String
+    price: BigDecimal!
+    poolLiquidity: BigDecimal!
+    poolTokenId: String
 }
 
 enum SwapType {
