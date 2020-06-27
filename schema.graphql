@@ -15,6 +15,7 @@ type Pool @entity {
     swapFee: BigDecimal!                                # Swap Fees
     totalWeight: BigDecimal!
     totalShares: BigDecimal!                            # Total pool token shares
+    totalSwapVolume: BigDecimal!                        # Total swap volume in WETH
     liquidity: BigDecimal!                              # Pool liquidity value in WETH
     tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
@@ -61,6 +62,7 @@ type Swap @entity {
     tokenAmountIn: BigDecimal!              #
     tokenAmountOut: BigDecimal!             #
     poolAddress: Pool!
+    poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in WETH
     timestamp: Int!
 }
 

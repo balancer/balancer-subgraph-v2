@@ -505,9 +505,6 @@ export function handleExitPool(event: LOG_EXIT): void {
 
 export function handleSwap(event: LOG_SWAP): void {
   let poolId = event.address.toHex()
-  let pool = Pool.load(poolId)
-  pool.swapsCount += BigInt.fromI32(1)
-  pool.save()
 
   let tokenIn = event.params.tokenIn.toHex()
   let poolTokenInId = poolId.concat('-').concat(tokenIn.toString())
@@ -532,6 +529,17 @@ export function handleSwap(event: LOG_SWAP): void {
   if (swap == null) {
     swap = new Swap(swapId)
   }
+
+  let pool = Pool.load(poolId)
+  let tokenPrice = TokenPrice.load(tokenIn)
+  let totalSwapVolume = pool.totalSwapVolume
+  if (tokenPrice !== null) {
+    totalSwapVolume = totalSwapVolume.plus(tokenPrice.price.times(tokenAmountIn))
+    pool.totalSwapVolume = totalSwapVolume
+  }
+  pool.swapsCount += BigInt.fromI32(1)
+  pool.save()
+
   swap.caller = event.params.caller
   swap.tokenIn = event.params.tokenIn
   swap.tokenInSym = poolTokenIn.symbol
@@ -540,6 +548,7 @@ export function handleSwap(event: LOG_SWAP): void {
   swap.tokenAmountIn = tokenAmountIn
   swap.tokenAmountOut = tokenAmountOut
   swap.poolAddress = event.address.toHex()
+  swap.poolTotalSwapVolume = totalSwapVolume
   swap.timestamp = event.block.timestamp.toI32()
   swap.save()
 
