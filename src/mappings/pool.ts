@@ -2,12 +2,6 @@ import { BigInt, BigDecimal, Address, Bytes, ByteArray, log, store, dataSource }
 import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer } from '../types/templates/Pool/Pool'
 import { BToken } from '../types/templates/Pool/BToken'
 import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
-
-let network = dataSource.network()
-let WETH = '';
-if (network == 'mainnet') WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
-if (network == 'kovan') WETH = '0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-
 import {
   Balancer,
   Pool,
@@ -18,6 +12,17 @@ import {
   Swap,
   TokenPrice
 } from '../types/schema'
+
+let network = dataSource.network()
+let WETH: string;
+let USD: string;
+if (network == 'mainnet') {
+  WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+  USD = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' // USDC
+} else if (network == 'kovan') {
+  WETH = '0xd0a1e359811322d97991e03f863a0c30c2cf029c'
+  USD = '0x1528f3fcc26d13f7079325fb78d9442607781c8c' // DAI
+}
 
 /************************************
  ********** Helpers ***********
@@ -131,10 +136,10 @@ function updatePoolLiquidity(id: string): void {
 
   /* Create or update token price */
 
-  if (tokensList.includes(Address.fromString(WETH))) {
-    let wethPoolTokenId = id.concat('-').concat(WETH)
-    let wethPoolToken = PoolToken.load(wethPoolTokenId)
-    let poolLiquidity = wethPoolToken.balance.div(wethPoolToken.denormWeight).times(pool.totalWeight)
+  if (tokensList.includes(Address.fromString(USD))) {
+    let usdPoolTokenId = id.concat('-').concat(USD)
+    let usdPoolToken = PoolToken.load(usdPoolTokenId)
+    let poolLiquidity = usdPoolToken.balance.div(usdPoolToken.denormWeight).times(pool.totalWeight)
 
     for (let i: i32 = 0; i < tokensList.length; i++) {
       let tokenPriceId = tokensList[i].toHexString()
