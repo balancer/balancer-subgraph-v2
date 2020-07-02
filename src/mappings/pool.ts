@@ -134,13 +134,29 @@ function updatePoolLiquidity(id: string): void {
 
   if (!tokensList || !pool.publicSwap) return
 
-  /* Create or update token price */
+  // Find pool liquidity
+
+  let hasPrice = false
+  let poolLiquidity = BigDecimal.fromString('0')
 
   if (tokensList.includes(Address.fromString(USD))) {
     let usdPoolTokenId = id.concat('-').concat(USD)
     let usdPoolToken = PoolToken.load(usdPoolTokenId)
-    let poolLiquidity = usdPoolToken.balance.div(usdPoolToken.denormWeight).times(pool.totalWeight)
+    poolLiquidity = usdPoolToken.balance.div(usdPoolToken.denormWeight).times(pool.totalWeight)
+    hasPrice = true
+  } else if (tokensList.includes(Address.fromString(WETH))) {
+    let wethTokenPrice = TokenPrice.load(WETH)
+    if (wethTokenPrice !== null) {
+      let poolTokenId = id.concat('-').concat(WETH)
+      let poolToken = PoolToken.load(poolTokenId)
+      poolLiquidity = wethTokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
+      hasPrice = true
+    }
+  }
 
+  // Create or update token price
+
+  if (hasPrice) {
     for (let i: i32 = 0; i < tokensList.length; i++) {
       let tokenPriceId = tokensList[i].toHexString()
       let tokenPrice = TokenPrice.load(tokenPriceId)
@@ -168,7 +184,7 @@ function updatePoolLiquidity(id: string): void {
     }
   }
 
-  /* Update pool liquidity */
+  // Update pool liquidity
 
   let liquidity = BigDecimal.fromString('0')
   let denormWeight = BigDecimal.fromString('0')
@@ -179,7 +195,6 @@ function updatePoolLiquidity(id: string): void {
     if (tokenPrice !== null) {
       let poolTokenId = id.concat('-').concat(tokenPriceId)
       let poolToken = PoolToken.load(poolTokenId)
-
       if (poolToken.denormWeight.gt(denormWeight)) {
         denormWeight = poolToken.denormWeight
         liquidity = tokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
@@ -187,10 +202,8 @@ function updatePoolLiquidity(id: string): void {
     }
   }
 
-  if (liquidity.gt(BigDecimal.fromString('0'))) {
-    pool.liquidity = liquidity
-    pool.save()
-  }
+  pool.liquidity = liquidity
+  pool.save()
 }
 
 /************************************
