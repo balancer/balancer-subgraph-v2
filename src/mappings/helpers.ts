@@ -171,6 +171,8 @@ export function updatePoolLiquidity(id: string): void {
         }
 
         tokenPrice.symbol = poolToken.symbol
+        tokenPrice.name = poolToken.name
+        tokenPrice.decimals = poolToken.decimals
         tokenPrice.poolLiquidity = poolLiquidity
         tokenPrice.poolTokenId = poolTokenId
         tokenPrice.save()
