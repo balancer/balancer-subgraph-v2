@@ -1,4 +1,4 @@
-import {Address, BigInt, Bytes, dataSource, ethereum} from '@graphprotocol/graph-ts/index';
+import { Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts/index';
 import { BigDecimal } from '@graphprotocol/graph-ts'
 import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
 import { BToken } from '../types/templates/Pool/BToken'
