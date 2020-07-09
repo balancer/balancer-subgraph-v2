@@ -1,5 +1,5 @@
 import { BigInt, Address, Bytes, store } from '@graphprotocol/graph-ts'
-import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer } from '../types/templates/Pool/Pool'
+import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer, GulpCall } from '../types/templates/Pool/Pool'
 import { BToken } from '../types/templates/Pool/BToken'
 import {
   Balancer,
@@ -17,7 +17,8 @@ import {
   createPoolShareEntity,
   createPoolTokenEntity,
   updatePoolLiquidity,
-  saveTransaction
+  saveTransaction,
+  ZERO_BD
 } from './helpers'
 
 /************************************
@@ -148,28 +149,29 @@ export function handleUnbind(event: LOG_CALL): void {
   saveTransaction(event, 'unbind')
 }
 
-export function handleGulp(event: LOG_CALL): void {
-  let poolId = event.address.toHex()
+export function handleGulp(call: GulpCall): void {
+  let poolId = call.to.toHexString()
   let pool = Pool.load(poolId)
 
-  let address = Address.fromString(event.params.data.toHexString().slice(-40))
+  let address = call.inputs.token.toHexString();
 
-  let token = BToken.bind(address)
+  let token = BToken.bind(Address.fromString(address))
   let balanceCall = token.try_balanceOf(Address.fromString(poolId))
 
-  let poolTokenId = poolId.concat('-').concat(address.toHexString())
+  let poolTokenId = poolId.concat('-').concat(address)
   let poolToken = PoolToken.load(poolTokenId)
 
-  let balance = poolToken.balance
-  if (!balanceCall.reverted) {
-    balance = bigIntToDecimal(balanceCall.value, poolToken.decimals)
+  if (poolToken != null) {
+    let balance = ZERO_BD
+    if (!balanceCall.reverted) {
+      balance = bigIntToDecimal(balanceCall.value, poolToken.decimals)
+    }
+    poolToken.balance = balance
+    poolToken.save()
   }
-  poolToken.balance = balance
-  poolToken.save()
 
   updatePoolLiquidity(poolId)
 
-  saveTransaction(event, 'gulp')
 }
 
 /************************************
