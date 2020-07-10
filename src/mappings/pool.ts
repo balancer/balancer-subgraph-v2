@@ -1,6 +1,6 @@
 import { BigInt, Address, Bytes, store } from '@graphprotocol/graph-ts'
 import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer, GulpCall } from '../types/templates/Pool/Pool'
-import { BToken } from '../types/templates/Pool/BToken'
+import { Pool as BPool } from '../types/templates/Pool/Pool'
 import {
   Balancer,
   Pool,
@@ -155,8 +155,8 @@ export function handleGulp(call: GulpCall): void {
 
   let address = call.inputs.token.toHexString();
 
-  let token = BToken.bind(Address.fromString(address))
-  let balanceCall = token.try_balanceOf(Address.fromString(poolId))
+  let bpool = BPool.bind(Address.fromString(poolId))
+  let balanceCall = bpool.try_getBalance(Address.fromString(address))
 
   let poolTokenId = poolId.concat('-').concat(address)
   let poolToken = PoolToken.load(poolTokenId)
