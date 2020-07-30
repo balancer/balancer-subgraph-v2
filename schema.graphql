@@ -22,6 +22,8 @@ type Pool @entity {
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
     shares: [PoolShare!] @derivedFrom(field: "poolId")
     createTime: Int!                                    # Block time pool was created
+    tokensCount: BigInt!                                # Number of tokens in the pool
+    holdersCount: BigInt!                               # Number of addresses holding a positive balance of BPT
     joinsCount: BigInt!                                 # liquidity has been added
     exitsCount: BigInt!                                 # liquidity has been removed
     swapsCount: BigInt!

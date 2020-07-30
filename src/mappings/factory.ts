@@ -29,6 +29,8 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.totalSwapVolume = ZERO_BD
   pool.liquidity = ZERO_BD
   pool.createTime = event.block.timestamp.toI32()
+  pool.tokensCount = BigInt.fromI32(0)
+  pool.holdersCount = BigInt.fromI32(0)
   pool.joinsCount = BigInt.fromI32(0)
   pool.exitsCount = BigInt.fromI32(0)
   pool.swapsCount = BigInt.fromI32(0)
