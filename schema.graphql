@@ -12,6 +12,7 @@ type Pool @entity {
     controller: Bytes!                                  # Controller address
     publicSwap: Boolean!                                # isPublicSwap
     finalized: Boolean!                                 # isFinalized
+    active: Boolean!                                    # isActive
     swapFee: BigDecimal!                                # Swap Fees
     totalWeight: BigDecimal!
     totalShares: BigDecimal!                            # Total pool token shares

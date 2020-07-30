@@ -22,6 +22,7 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.controller = event.params.caller
   pool.publicSwap = false
   pool.finalized = false
+  pool.active = true
   pool.swapFee = BigDecimal.fromString('0.000001')
   pool.totalWeight = ZERO_BD
   pool.totalShares = ZERO_BD

@@ -122,10 +122,11 @@ export function handleRebind(event: LOG_CALL): void {
   poolToken.balance = balance
   poolToken.denormWeight = denormWeight
   poolToken.save()
+
+  if (balance.equals(ZERO_BD)) pool.active = false
   pool.save()
 
   updatePoolLiquidity(poolId)
-
   saveTransaction(event, 'rebind')
 }
 
@@ -171,7 +172,6 @@ export function handleGulp(call: GulpCall): void {
   }
 
   updatePoolLiquidity(poolId)
-
 }
 
 /************************************
@@ -193,15 +193,11 @@ export function handleJoinPool(event: LOG_JOIN): void {
   poolToken.save()
 
   updatePoolLiquidity(poolId)
-
   saveTransaction(event, 'join')
 }
 
 export function handleExitPool(event: LOG_EXIT): void {
   let poolId = event.address.toHex()
-  let pool = Pool.load(poolId)
-  pool.exitsCount += BigInt.fromI32(1)
-  pool.save()
 
   let address = event.params.tokenOut.toHex()
   let poolTokenId = poolId.concat('-').concat(address.toString())
@@ -211,8 +207,12 @@ export function handleExitPool(event: LOG_EXIT): void {
   poolToken.balance = newAmount
   poolToken.save()
 
-  updatePoolLiquidity(poolId)
+  let pool = Pool.load(poolId)
+  pool.exitsCount += BigInt.fromI32(1)
+  if (newAmount.equals(ZERO_BD)) pool.active = false
+  pool.save()
 
+  updatePoolLiquidity(poolId)
   saveTransaction(event, 'exit')
 }
 
@@ -255,6 +255,9 @@ export function handleSwap(event: LOG_SWAP): void {
     pool.totalSwapVolume = totalSwapVolume
   }
   pool.swapsCount += BigInt.fromI32(1)
+  if (newAmountIn.equals(ZERO_BD) || newAmountOut.equals(ZERO_BD)) {
+    pool.active = false
+  }
   pool.save()
 
   swap.caller = event.params.caller
