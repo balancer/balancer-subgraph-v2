@@ -97,7 +97,7 @@ export function handleRebind(event: LOG_CALL): void {
     tokensList.push(tokenBytes)
   }
   pool.tokensList = tokensList
-
+  pool.tokensCount = BigInt.fromI32(tokensList.length)
 
   let address = Address.fromString(event.params.data.toHexString().slice(34,74))
   let denormWeight = hexToDecimal(event.params.data.toHexString().slice(138), 18)
@@ -137,6 +137,7 @@ export function handleUnbind(event: LOG_CALL): void {
   let index = tokensList.indexOf(tokenBytes)
   tokensList.splice(index, 1)
   pool.tokensList = tokensList
+  pool.tokensCount = BigInt.fromI32(tokensList.length)
 
 
   let address = Address.fromString(event.params.data.toHexString().slice(-40))
