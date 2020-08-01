@@ -1,7 +1,11 @@
-import { Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts/index';
-import { BigDecimal } from '@graphprotocol/graph-ts'
-import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
-import { BToken } from '../types/templates/Pool/BToken'
+import {
+  BigDecimal,
+  Address,
+  BigInt,
+  Bytes,
+  dataSource,
+  ethereum
+} from '@graphprotocol/graph-ts'
 import {
   Pool,
   User,
@@ -10,6 +14,8 @@ import {
   TokenPrice,
   Transaction
 } from '../types/schema'
+import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
+import { BToken } from '../types/templates/Pool/BToken'
 
 export let ZERO_BD = BigDecimal.fromString('0')
 
@@ -126,11 +132,12 @@ export function updatePoolLiquidity(id: string): void {
   let pool = Pool.load(id)
   let tokensList: Array<Bytes> = pool.tokensList
 
-  if (!tokensList || !pool.publicSwap) return
+  if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2)) || !pool.publicSwap) return
 
   // Find pool liquidity
 
   let hasPrice = false
+  let hasUsdPrice = false
   let poolLiquidity = ZERO_BD
 
   if (tokensList.includes(Address.fromString(USD))) {
@@ -138,6 +145,7 @@ export function updatePoolLiquidity(id: string): void {
     let usdPoolToken = PoolToken.load(usdPoolTokenId)
     poolLiquidity = usdPoolToken.balance.div(usdPoolToken.denormWeight).times(pool.totalWeight)
     hasPrice = true
+    hasUsdPrice = true
   } else if (tokensList.includes(Address.fromString(WETH))) {
     let wethTokenPrice = TokenPrice.load(WETH)
     if (wethTokenPrice !== null) {
@@ -163,7 +171,11 @@ export function updatePoolLiquidity(id: string): void {
       let poolTokenId = id.concat('-').concat(tokenPriceId)
       let poolToken = PoolToken.load(poolTokenId)
 
-      if (tokenPrice.poolTokenId == poolTokenId || poolLiquidity.gt(tokenPrice.poolLiquidity)) {
+      if (
+        pool.tokensCount.equals(BigInt.fromI32(2)) &&
+        (tokenPrice.poolTokenId == poolTokenId || poolLiquidity.gt(tokenPrice.poolLiquidity)) &&
+        (tokenPriceId != WETH.toString() || hasUsdPrice)
+      ) {
         tokenPrice.price = ZERO_BD
 
         if (poolToken.balance.gt(ZERO_BD)) {
