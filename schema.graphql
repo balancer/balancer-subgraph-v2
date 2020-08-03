@@ -53,6 +53,7 @@ type User @entity {
     id: ID!
     sharesOwned: [PoolShare!]  @derivedFrom(field: "userAddress")
     txs: [Transaction!]  @derivedFrom(field: "userAddress")
+    swaps: [Swap!]  @derivedFrom(field: "userAddress")
 }
 
 type Swap @entity {
@@ -64,7 +65,10 @@ type Swap @entity {
     tokenOutSym: String!                    #
     tokenAmountIn: BigDecimal!              #
     tokenAmountOut: BigDecimal!             #
-    poolAddress: Pool!
+    poolAddress: Pool
+    userAddress: User                       # User address that initiates the swap
+    value: BigDecimal!                      # Swap value in USD
+    swapFeeValue: BigDecimal!               # Swap fee value in USD
     poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in USD
     timestamp: Int!
 }

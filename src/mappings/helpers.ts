@@ -46,21 +46,18 @@ export function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
   return amount.div(scale)
 }
 
-export function createPoolShareEntity(id: string, pool: String, user: String): void {
+export function createPoolShareEntity(id: string, pool: string, user: string): void {
   let poolShare = new PoolShare(id)
 
-  let userdb = User.load(user)
-  if (userdb == null) {
-    userdb = new User(user)
-    userdb.save()
-  }
+  createUserEntity(user)
+
   poolShare.userAddress = user
   poolShare.poolId = pool
   poolShare.balance = ZERO_BD
   poolShare.save()
 }
 
-export function createPoolTokenEntity(id: string, pool: String, address: String): void {
+export function createPoolTokenEntity(id: string, pool: string, address: string): void {
   let token = BToken.bind(Address.fromString(address))
   let tokenBytes = BTokenBytes.bind(Address.fromString(address))
   let symbol = ''
@@ -216,18 +213,27 @@ export function updatePoolLiquidity(id: string): void {
 
 export function saveTransaction(event: ethereum.Event, eventName: string): void {
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
-
+  let userAddress = event.transaction.from.toHex()
   let transaction = Transaction.load(tx)
   if (transaction == null) {
     transaction = new Transaction(tx)
   }
   transaction.event = eventName
   transaction.poolAddress = event.address.toHex()
-  transaction.userAddress = event.transaction.from.toHex()
+  transaction.userAddress = userAddress
   transaction.gasUsed = event.transaction.gasUsed.toBigDecimal()
   transaction.gasPrice = event.transaction.gasPrice.toBigDecimal()
   transaction.tx = event.transaction.hash
   transaction.timestamp = event.block.timestamp.toI32()
   transaction.block = event.block.number.toI32()
   transaction.save()
+
+  createUserEntity(userAddress)
+}
+
+export function createUserEntity(address: string): void {
+  if (User.load(address) == null) {
+    let user = new User(address)
+    user.save()
+  }
 }

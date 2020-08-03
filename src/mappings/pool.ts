@@ -4,7 +4,6 @@ import { Pool as BPool } from '../types/templates/Pool/Pool'
 import {
   Balancer,
   Pool,
-  User,
   PoolToken,
   PoolShare,
   Swap,
@@ -18,8 +17,10 @@ import {
   createPoolTokenEntity,
   updatePoolLiquidity,
   saveTransaction,
-  ZERO_BD
+  ZERO_BD,
+  createUserEntity
 } from './helpers'
+import {BigDecimal} from "@graphprotocol/graph-ts/index";
 
 /************************************
  ********** Pool Controls ***********
@@ -64,12 +65,6 @@ export function handleFinalize(event: LOG_CALL): void {
   // pool.totalShares = balance
   pool.save()
 
-  let userId = event.params.caller.toHex()
-  let user = User.load(userId)
-  if (user == null) {
-    user = new User(userId)
-    user.save()
-  }
   /*
   let poolShareId = poolId.concat('-').concat(event.params.caller.toHex())
   let poolShare = PoolShare.load(poolShareId)
@@ -111,9 +106,9 @@ export function handleRebind(event: LOG_CALL): void {
   } else {
     let oldWeight = poolToken.denormWeight
     if (denormWeight > oldWeight) {
-      pool.totalWeight = pool.totalWeight + (denormWeight - oldWeight);
+      pool.totalWeight = pool.totalWeight + (denormWeight - oldWeight)
     } else {
-      pool.totalWeight = pool.totalWeight - (oldWeight - denormWeight);
+      pool.totalWeight = pool.totalWeight - (oldWeight - denormWeight)
     }
   }
 
@@ -155,7 +150,7 @@ export function handleGulp(call: GulpCall): void {
   let poolId = call.to.toHexString()
   let pool = Pool.load(poolId)
 
-  let address = call.inputs.token.toHexString();
+  let address = call.inputs.token.toHexString()
 
   let bpool = BPool.bind(Address.fromString(poolId))
   let balanceCall = bpool.try_getBalance(Address.fromString(address))
@@ -251,8 +246,10 @@ export function handleSwap(event: LOG_SWAP): void {
   let pool = Pool.load(poolId)
   let tokenPrice = TokenPrice.load(tokenIn)
   let totalSwapVolume = pool.totalSwapVolume
+  let swapUsdValue = ZERO_BD
   if (tokenPrice !== null) {
-    totalSwapVolume = totalSwapVolume.plus(tokenPrice.price.times(tokenAmountIn))
+    swapUsdValue = tokenPrice.price.times(tokenAmountIn)
+    totalSwapVolume = totalSwapVolume.plus(swapUsdValue)
     pool.totalSwapVolume = totalSwapVolume
   }
   pool.swapsCount += BigInt.fromI32(1)
@@ -265,17 +262,19 @@ export function handleSwap(event: LOG_SWAP): void {
   swap.tokenIn = event.params.tokenIn
   swap.tokenInSym = poolTokenIn.symbol
   swap.tokenOut = event.params.tokenOut
-  swap.tokenOutSym = poolTokenOut.symbol;
+  swap.tokenOutSym = poolTokenOut.symbol
   swap.tokenAmountIn = tokenAmountIn
   swap.tokenAmountOut = tokenAmountOut
   swap.poolAddress = event.address.toHex()
+  swap.userAddress = event.transaction.from.toHex()
   swap.poolTotalSwapVolume = totalSwapVolume
+  swap.value = swapUsdValue
+  swap.swapFeeValue = swapUsdValue.times(pool.swapFee)
   swap.timestamp = event.block.timestamp.toI32()
   swap.save()
 
   saveTransaction(event, 'swap')
 }
-
 
 /************************************
  *********** POOL SHARES ************
@@ -284,7 +283,7 @@ export function handleSwap(event: LOG_SWAP): void {
  export function handleTransfer(event: Transfer): void {
   let poolId = event.address.toHex()
 
-  const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+  let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
   let isMint = event.params.src.toHex() == ZERO_ADDRESS
   let isBurn = event.params.dst.toHex() == ZERO_ADDRESS
