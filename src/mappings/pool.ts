@@ -17,10 +17,8 @@ import {
   createPoolTokenEntity,
   updatePoolLiquidity,
   saveTransaction,
-  ZERO_BD,
-  createUserEntity
+  ZERO_BD
 } from './helpers'
-import {BigDecimal} from "@graphprotocol/graph-ts/index";
 
 /************************************
  ********** Pool Controls ***********
