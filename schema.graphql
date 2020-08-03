@@ -17,6 +17,7 @@ type Pool @entity {
     totalWeight: BigDecimal!
     totalShares: BigDecimal!                            # Total pool token shares
     totalSwapVolume: BigDecimal!                        # Total swap volume in USD
+    totalSwapFee: BigDecimal!                           # Total swap fee in USD
     liquidity: BigDecimal!                              # Pool liquidity value in USD
     tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
@@ -28,6 +29,7 @@ type Pool @entity {
     exitsCount: BigInt!                                 # liquidity has been removed
     swapsCount: BigInt!
     factoryID: Balancer!
+    tx: Bytes                                           # Pool creation transaction id
     swaps: [Swap!] @derivedFrom(field: "poolAddress")
 }
 
@@ -68,8 +70,9 @@ type Swap @entity {
     poolAddress: Pool
     userAddress: User                       # User address that initiates the swap
     value: BigDecimal!                      # Swap value in USD
-    swapFeeValue: BigDecimal!               # Swap fee value in USD
+    feeValue: BigDecimal!                   # Swap fee value in USD
     poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in USD
+    poolTotalSwapFee: BigDecimal!           # Total pool swap fee in USD
     timestamp: Int!
 }
 

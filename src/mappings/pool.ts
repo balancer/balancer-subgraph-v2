@@ -244,11 +244,16 @@ export function handleSwap(event: LOG_SWAP): void {
   let pool = Pool.load(poolId)
   let tokenPrice = TokenPrice.load(tokenIn)
   let totalSwapVolume = pool.totalSwapVolume
-  let swapUsdValue = ZERO_BD
+  let totalSwapFee = pool.totalSwapFee
+  let swapValue = ZERO_BD
+  let swapFeeValue = ZERO_BD
   if (tokenPrice !== null) {
-    swapUsdValue = tokenPrice.price.times(tokenAmountIn)
-    totalSwapVolume = totalSwapVolume.plus(swapUsdValue)
+    swapValue = tokenPrice.price.times(tokenAmountIn)
+    swapFeeValue = swapValue.times(pool.swapFee)
+    totalSwapVolume = totalSwapVolume.plus(swapValue)
+    totalSwapFee = totalSwapFee.plus(swapFeeValue)
     pool.totalSwapVolume = totalSwapVolume
+    pool.totalSwapFee = totalSwapFee
   }
   pool.swapsCount += BigInt.fromI32(1)
   if (newAmountIn.equals(ZERO_BD) || newAmountOut.equals(ZERO_BD)) {
@@ -266,8 +271,9 @@ export function handleSwap(event: LOG_SWAP): void {
   swap.poolAddress = event.address.toHex()
   swap.userAddress = event.transaction.from.toHex()
   swap.poolTotalSwapVolume = totalSwapVolume
-  swap.value = swapUsdValue
-  swap.swapFeeValue = swapUsdValue.times(pool.swapFee)
+  swap.poolTotalSwapFee = totalSwapFee
+  swap.value = swapValue
+  swap.feeValue = swapFeeValue
   swap.timestamp = event.block.timestamp.toI32()
   swap.save()
 
