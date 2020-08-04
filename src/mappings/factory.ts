@@ -27,6 +27,7 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.totalWeight = ZERO_BD
   pool.totalShares = ZERO_BD
   pool.totalSwapVolume = ZERO_BD
+  pool.totalSwapFee = ZERO_BD
   pool.liquidity = ZERO_BD
   pool.createTime = event.block.timestamp.toI32()
   pool.tokensCount = BigInt.fromI32(0)
@@ -36,7 +37,7 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.swapsCount = BigInt.fromI32(0)
   pool.factoryID = event.address.toHexString()
   pool.tokensList = []
-
+  pool.tx = event.transaction.hash
   pool.save()
 
   PoolContract.create(event.params.pool)
