@@ -73,6 +73,7 @@ type Swap @entity {
     feeValue: BigDecimal!                   # Swap fee value in USD
     poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in USD
     poolTotalSwapFee: BigDecimal!           # Total pool swap fee in USD
+    poolLiquidity: BigDecimal!              # Pool liquidity value in USD
     timestamp: Int!
 }
 

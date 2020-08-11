@@ -245,6 +245,7 @@ export function handleSwap(event: LOG_SWAP): void {
   let tokenPrice = TokenPrice.load(tokenIn)
   let totalSwapVolume = pool.totalSwapVolume
   let totalSwapFee = pool.totalSwapFee
+  let liquidity = pool.liquidity
   let swapValue = ZERO_BD
   let swapFeeValue = ZERO_BD
   if (tokenPrice !== null) {
@@ -272,6 +273,7 @@ export function handleSwap(event: LOG_SWAP): void {
   swap.userAddress = event.transaction.from.toHex()
   swap.poolTotalSwapVolume = totalSwapVolume
   swap.poolTotalSwapFee = totalSwapFee
+  swap.poolLiquidity = liquidity
   swap.value = swapValue
   swap.feeValue = swapFeeValue
   swap.timestamp = event.block.timestamp.toI32()
