@@ -14,6 +14,9 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
     factory.poolCount = 0
     factory.finalizedPoolCount = 0
     factory.txCount = BigInt.fromI32(0)
+    factory.totalLiquidity = ZERO_BD
+    factory.totalSwapVolume = ZERO_BD
+    factory.totalSwapFee = ZERO_BD
   }
   factory.poolCount = factory.poolCount + 1
   factory.save()
