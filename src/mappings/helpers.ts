@@ -12,7 +12,8 @@ import {
   PoolToken,
   PoolShare,
   TokenPrice,
-  Transaction
+  Transaction,
+  Balancer
 } from '../types/schema'
 import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
 import { BToken } from '../types/templates/Pool/BToken'
@@ -205,6 +206,10 @@ export function updatePoolLiquidity(id: string): void {
       }
     }
   }
+
+  let factory = Balancer.load('1')
+  factory.totalLiquidity = factory.totalLiquidity.minus(pool.liquidity).plus(liquidity)
+  factory.save()
 
   pool.liquidity = liquidity
   pool.save()
