@@ -256,8 +256,8 @@ export function handleSwap(event: LOG_SWAP): void {
     totalSwapFee = totalSwapFee.plus(swapFeeValue)
 
     let factory = Balancer.load('1')
-    factory.totalSwapVolume = factory.totalSwapVolume.minus(pool.totalSwapVolume).plus(totalSwapVolume)
-    factory.totalSwapFee = factory.totalSwapFee.minus(pool.totalSwapFee).plus(totalSwapFee)
+    factory.totalSwapVolume = factory.totalSwapVolume.plus(swapValue)
+    factory.totalSwapFee = factory.totalSwapFee.plus(swapFeeValue)
     factory.save()
 
     pool.totalSwapVolume = totalSwapVolume
