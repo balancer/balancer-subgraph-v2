@@ -59,6 +59,7 @@ export function handleFinalize(event: LOG_CALL): void {
   let pool = Pool.load(poolId)
   // let balance = BigDecimal.fromString('100')
   pool.finalized = true
+  pool.symbol = 'BPT'
   pool.publicSwap = true
   // pool.totalShares = balance
   pool.save()

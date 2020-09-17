@@ -17,6 +17,8 @@ import {
 } from '../types/schema'
 import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
 import { BToken } from '../types/templates/Pool/BToken'
+import { CRPFactory } from '../types/Factory/CRPFactory'
+import { ConfigurableRightsPool } from '../types/Factory/ConfigurableRightsPool'
 
 export let ZERO_BD = BigDecimal.fromString('0')
 
@@ -29,6 +31,10 @@ export let WETH: string = (network == 'mainnet')
 export let USD: string = (network == 'mainnet')
   ? '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' // USDC
   : '0x1528f3fcc26d13f7079325fb78d9442607781c8c' // DAI
+
+export let CRP_FACTORY: string = (network == 'mainnet')
+  ? '0xb3a3f6826281525dd57f7BA837235E4Fa71C6248'
+  : '0x17e8705E85aE8E3df7C5E4d3EEd94000FB30C483'
 
 export function hexToDecimal(hexString: String, decimals: i32): BigDecimal {
   let bytes = Bytes.fromHexString(hexString).reverse() as Bytes
@@ -240,4 +246,48 @@ export function createUserEntity(address: string): void {
     let user = new User(address)
     user.save()
   }
+}
+
+export function isCrp(address: Address): boolean {
+  let crpFactory = CRPFactory.bind(Address.fromString(CRP_FACTORY))
+  let isCrp = crpFactory.try_isCrp(address)
+  if (isCrp.reverted) return false
+  return isCrp.value
+}
+
+export function getCrpController(crp: ConfigurableRightsPool): string | null {
+  let controller = crp.try_getController()
+  if (controller.reverted) return null;
+  return controller.value.toHexString()
+}
+
+export function getCrpSymbol(crp: ConfigurableRightsPool): string {
+  let symbol = crp.try_symbol()
+  if (symbol.reverted) return ''
+  return symbol.value
+}
+
+export function getCrpName(crp: ConfigurableRightsPool): string {
+  let name = crp.try_name()
+  if (name.reverted) return ''
+  return name.value
+}
+
+export function getCrpCap(crp: ConfigurableRightsPool): BigInt {
+  let cap = crp.try_getCap()
+  if (cap.reverted) return BigInt.fromI32(0)
+  return cap.value
+}
+
+export function getCrpRights(crp: ConfigurableRightsPool): string[] {
+  let rights = crp.try_rights()
+  if (rights.reverted) return []
+  let rightsArr: string[] = []
+  if (rights.value.value0) rightsArr.push('canPauseSwapping')
+  if (rights.value.value1) rightsArr.push('canChangeSwapFee')
+  if (rights.value.value2) rightsArr.push('canChangeWeights')
+  if (rights.value.value3) rightsArr.push('canAddRemoveTokens')
+  if (rights.value.value4) rightsArr.push('canWhitelistLPs')
+  if (rights.value.value5) rightsArr.push('canChangeCap')
+  return rightsArr
 }

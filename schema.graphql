@@ -3,6 +3,7 @@ type Balancer @entity {
     color: String!                                      # Bronze, Silver, Gold
     poolCount: Int!                                     # Number of pools
     finalizedPoolCount: Int!                            # Number of finalized pools
+    crpCount: Int!                                      # Number of CRP
     pools: [Pool!] @derivedFrom(field: "factoryID")
     txCount: BigInt!                                    # Number of txs
     totalLiquidity: BigDecimal!                         # All the pools liquidity value in USD
@@ -15,6 +16,12 @@ type Pool @entity {
     controller: Bytes!                                  # Controller address
     publicSwap: Boolean!                                # isPublicSwap
     finalized: Boolean!                                 # isFinalized
+    crp: Boolean!                                       # Is configurable rights pool
+    crpController: Bytes                                # CRP controller address
+    symbol: String                                      # Pool token symbol
+    name: String                                        # Pool token name
+    rights: [String!]!                                  # List of rights (for CRP)
+    cap: BigInt                                         # Maximum supply if any (for CRP)
     active: Boolean!                                    # isActive
     swapFee: BigDecimal!                                # Swap Fees
     totalWeight: BigDecimal!

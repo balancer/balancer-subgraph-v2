@@ -21,6 +21,10 @@ dataSources:
       abis:
         - name: Factory
           file: ./abis/BFactory.json
+        - name: CRPFactory
+          file: ./abis/CRPFactory.json
+        - name: ConfigurableRightsPool
+          file: ./abis/ConfigurableRightsPool.json
       eventHandlers:
         - event: LOG_NEW_POOL(indexed address,indexed address)
           handler: handleNewPool
