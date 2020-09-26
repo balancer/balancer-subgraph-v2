@@ -17,7 +17,8 @@ import {
   createPoolTokenEntity,
   updatePoolLiquidity,
   saveTransaction,
-  ZERO_BD
+  ZERO_BD,
+  decrPoolCount
 } from './helpers'
 
 /************************************
@@ -117,7 +118,10 @@ export function handleRebind(event: LOG_CALL): void {
   poolToken.denormWeight = denormWeight
   poolToken.save()
 
-  if (balance.equals(ZERO_BD)) pool.active = false
+  if (balance.equals(ZERO_BD)) {
+    decrPoolCount(pool.finalized, pool.crp)
+    pool.active = false
+  }
   pool.save()
 
   updatePoolLiquidity(poolId)
@@ -204,7 +208,10 @@ export function handleExitPool(event: LOG_EXIT): void {
 
   let pool = Pool.load(poolId)
   pool.exitsCount += BigInt.fromI32(1)
-  if (newAmount.equals(ZERO_BD)) pool.active = false
+  if (newAmount.equals(ZERO_BD)) {
+    decrPoolCount(pool.finalized, pool.crp)
+    pool.active = false
+  }
   pool.save()
 
   updatePoolLiquidity(poolId)
@@ -266,6 +273,7 @@ export function handleSwap(event: LOG_SWAP): void {
   }
   pool.swapsCount += BigInt.fromI32(1)
   if (newAmountIn.equals(ZERO_BD) || newAmountOut.equals(ZERO_BD)) {
+    decrPoolCount(pool.finalized, pool.crp)
     pool.active = false
   }
   pool.save()

@@ -33,6 +33,7 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.crp = isCrp(event.params.caller)
   pool.rights = []
   if (pool.crp) {
+    factory.crpCount += 1
     let crp = ConfigurableRightsPool.bind(event.params.caller)
     pool.symbol = getCrpSymbol(crp)
     pool.name = getCrpName(crp)
@@ -61,7 +62,6 @@ export function handleNewPool(event: LOG_NEW_POOL): void {
   pool.tx = event.transaction.hash
   pool.save()
 
-  if (pool.crp) factory.crpCount = factory.crpCount + 1
   factory.poolCount = factory.poolCount + 1
   factory.save()
 

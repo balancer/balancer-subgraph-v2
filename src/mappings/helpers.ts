@@ -221,6 +221,14 @@ export function updatePoolLiquidity(id: string): void {
   pool.save()
 }
 
+export function decrPoolCount(finalized: boolean, crp: boolean): void {
+  let factory = Balancer.load('1')
+  factory.poolCount -= 1
+  if (finalized) factory.finalizedPoolCount -= 1
+  if (crp) factory.crpCount -= 1
+  factory.save()
+}
+
 export function saveTransaction(event: ethereum.Event, eventName: string): void {
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let userAddress = event.transaction.from.toHex()
