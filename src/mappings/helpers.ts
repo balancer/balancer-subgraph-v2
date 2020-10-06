@@ -33,7 +33,7 @@ export let USD: string = (network == 'mainnet')
   : '0x1528f3fcc26d13f7079325fb78d9442607781c8c' // DAI
 
 export let CRP_FACTORY: string = (network == 'mainnet')
-  ? '0xb3a3f6826281525dd57f7BA837235E4Fa71C6248'
+  ? '0xed52D8E202401645eDAD1c0AA21e872498ce47D0'
   : '0x17e8705E85aE8E3df7C5E4d3EEd94000FB30C483'
 
 export function hexToDecimal(hexString: String, decimals: i32): BigDecimal {
