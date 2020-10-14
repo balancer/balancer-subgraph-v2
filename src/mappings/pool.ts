@@ -251,6 +251,11 @@ export function handleSwap(event: LOG_SWAP): void {
 
   let pool = Pool.load(poolId)
   let tokenPrice = TokenPrice.load(tokenOut)
+  let tokenAmount = tokenAmountOut
+  if (tokenPrice == null) {
+    tokenPrice = TokenPrice.load(tokenIn)
+    tokenAmount = tokenAmountIn
+  }
   let totalSwapVolume = pool.totalSwapVolume
   let totalSwapFee = pool.totalSwapFee
   let liquidity = pool.liquidity
@@ -258,7 +263,7 @@ export function handleSwap(event: LOG_SWAP): void {
   let swapFeeValue = ZERO_BD
 
   if (tokenPrice !== null) {
-    swapValue = tokenPrice.price.times(tokenAmountOut)
+    swapValue = tokenPrice.price.times(tokenAmount)
     swapFeeValue = swapValue.times(pool.swapFee)
     totalSwapVolume = totalSwapVolume.plus(swapValue)
     totalSwapFee = totalSwapFee.plus(swapFeeValue)
