@@ -250,20 +250,38 @@ export function handleSwap(event: LOG_SWAP): void {
   }
 
   let pool = Pool.load(poolId)
-  let tokenPrice = TokenPrice.load(tokenOut)
-  let tokenAmount = tokenAmountOut
-  if (tokenPrice == null) {
-    tokenPrice = TokenPrice.load(tokenIn)
-    tokenAmount = tokenAmountIn
+  let tokensList: Array<Bytes> = pool.tokensList
+  let tokenOutPriceValue = ZERO_BD
+  let tokenOutPrice = TokenPrice.load(tokenOut)
+
+  if (tokenOutPrice != null) {
+    tokenOutPriceValue = tokenOutPrice.price
+  } else {
+    for (let i: i32 = 0; i < tokensList.length; i++) {
+      let tokenPriceId = tokensList[i].toHexString()
+      if (!tokenOutPriceValue.gt(ZERO_BD) && tokenPriceId !== tokenOut) {
+        let tokenPrice = TokenPrice.load(tokenPriceId)
+        if (tokenPrice !== null && tokenPrice.price.gt(ZERO_BD)) {
+          let poolTokenId = poolId.concat('-').concat(tokenPriceId)
+          let poolToken = PoolToken.load(poolTokenId)
+          tokenOutPriceValue = tokenPrice.price
+            .times(poolToken.balance)
+            .div(poolToken.denormWeight)
+            .times(poolTokenOut.denormWeight)
+            .div(poolTokenOut.balance)
+        }
+      }
+    }
   }
+
   let totalSwapVolume = pool.totalSwapVolume
   let totalSwapFee = pool.totalSwapFee
   let liquidity = pool.liquidity
   let swapValue = ZERO_BD
   let swapFeeValue = ZERO_BD
 
-  if (tokenPrice !== null) {
-    swapValue = tokenPrice.price.times(tokenAmount)
+  if (tokenOutPriceValue.gt(ZERO_BD)) {
+    swapValue = tokenOutPriceValue.times(tokenAmountOut)
     swapFeeValue = swapValue.times(pool.swapFee)
     totalSwapVolume = totalSwapVolume.plus(swapValue)
     totalSwapFee = totalSwapFee.plus(swapFeeValue)
