@@ -5,81 +5,52 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: Factory
-    network: mainnet
+    name: Vault 
+    network: ganache 
     source:
-      address: "0x9424B1412450D0f8Fc2255FAf6046b98213B76Bd"
-      abi: Factory
-      startBlock: 9562480
+      address: "0x4e59b44847b379578588920ca78fbf26c0b4956c"
+      abi: Vault
+      startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappings/factory.ts
+      file: ./src/mappings/vault.ts
       entities:
         - Balancer
       abis:
-        - name: Factory
-          file: ./abis/BFactory.json
-        - name: CRPFactory
-          file: ./abis/CRPFactory.json
-        - name: ConfigurableRightsPool
-          file: ./abis/ConfigurableRightsPool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
-        - event: LOG_NEW_POOL(indexed address,indexed address)
+        - event: PoolCreated(bytes32)
           handler: handleNewPool
+      #callHandlers:
+        #- function: setPoolController
+          #handler: handleSetPoolController
 templates:
   - kind: ethereum/contract
-    name: Pool
-    network: mainnet
+    name: PoolController
+    network: ganache
     source:
-      abi: Pool
+      abi: FixedSetPoolTokenizer
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappings/pool.ts
+      file: ./src/mappings/poolController.ts
       entities:
-        - Pool
-        - Balancer
-        - Swap
+        - FixedSetPoolTokenizer
+        - BToken
       abis:
-        - name: Pool
-          file: ./abis/BPool.json
+        - name: FixedSetPoolTokenizer
+          file: ./abis/FixedSetPoolTokenizer.json
         - name: BToken
           file: ./abis/BToken.json
-        - name: BTokenBytes
-          file: ./abis/BTokenBytes32.json
-      eventHandlers:
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0x34e1990700000000000000000000000000000000000000000000000000000000"
-          handler: handleSetSwapFee
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0x92eefe9b00000000000000000000000000000000000000000000000000000000"
-          handler: handleSetController
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0x49b5955200000000000000000000000000000000000000000000000000000000"
-          handler: handleSetPublicSwap
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0x4bb278f300000000000000000000000000000000000000000000000000000000"
-          handler: handleFinalize
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0x3fdddaa200000000000000000000000000000000000000000000000000000000"
-          handler: handleRebind
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0xe4e1e53800000000000000000000000000000000000000000000000000000000"
-          handler: handleRebind
-        - event: LOG_CALL(indexed bytes4,indexed address,bytes)
-          topic0: "0xcf5e7bd300000000000000000000000000000000000000000000000000000000"
-          handler: handleUnbind
-        - event: LOG_JOIN(indexed address,indexed address,uint256)
-          handler: handleJoinPool
-        - event: LOG_EXIT(indexed address,indexed address,uint256)
-          handler: handleExitPool
-        - event: LOG_SWAP(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleSwap
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+      #eventHandlers:
+        #- event: Transfer(indexed address,indexed address,uint256)
+          #handler: handleTransfer
       callHandlers:
-        - function: gulp(address)
-          handler: handleGulp
+        - function: joinPool(uint256, uint128[], bool, address)
+          handler: handleJoinPool
+        - function: exitPool(uint256, uint256[], bool, address)
+          handler: handleExitPool

@@ -12,7 +12,7 @@ import {
   PoolToken,
   PoolShare,
   TokenPrice,
-  Transaction,
+  PoolTransaction,
   Balancer
 } from '../types/schema'
 import { BTokenBytes } from '../types/templates/Pool/BTokenBytes'
@@ -128,7 +128,7 @@ export function createPoolTokenEntity(id: string, pool: string, address: string)
   poolToken.symbol = symbol
   poolToken.decimals = decimals
   poolToken.balance = ZERO_BD
-  poolToken.denormWeight = ZERO_BD
+  //poolToken.denormWeight = ZERO_BD
   poolToken.save()
 }
 
@@ -136,7 +136,7 @@ export function updatePoolLiquidity(id: string): void {
   let pool = Pool.load(id)
   let tokensList: Array<Bytes> = pool.tokensList
 
-  if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2)) || !pool.publicSwap) return
+  if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2))) return
 
   // Find pool liquidity
 
@@ -147,7 +147,7 @@ export function updatePoolLiquidity(id: string): void {
   if (tokensList.includes(Address.fromString(USD))) {
     let usdPoolTokenId = id.concat('-').concat(USD)
     let usdPoolToken = PoolToken.load(usdPoolTokenId)
-    poolLiquidity = usdPoolToken.balance.div(usdPoolToken.denormWeight).times(pool.totalWeight)
+    //poolLiquidity = usdPoolToken.balance.div(usdPoolToken.denormWeight).times(pool.totalWeight)
     hasPrice = true
     hasUsdPrice = true
   } else if (tokensList.includes(Address.fromString(WETH))) {
@@ -155,7 +155,7 @@ export function updatePoolLiquidity(id: string): void {
     if (wethTokenPrice !== null) {
       let poolTokenId = id.concat('-').concat(WETH)
       let poolToken = PoolToken.load(poolTokenId)
-      poolLiquidity = wethTokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
+      //poolLiquidity = wethTokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
       hasPrice = true
     }
   }
@@ -182,7 +182,7 @@ export function updatePoolLiquidity(id: string): void {
         tokenPrice.price = ZERO_BD
 
         if (poolToken.balance.gt(ZERO_BD)) {
-          tokenPrice.price = poolLiquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance)
+          //tokenPrice.price = poolLiquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance) // TODO
         }
 
         tokenPrice.symbol = poolToken.symbol
@@ -198,7 +198,7 @@ export function updatePoolLiquidity(id: string): void {
   // Update pool liquidity
 
   let liquidity = ZERO_BD
-  let denormWeight = ZERO_BD
+  //let denormWeight = ZERO_BD
 
   for (let i: i32 = 0; i < tokensList.length; i++) {
     let tokenPriceId = tokensList[i].toHexString()
@@ -206,10 +206,10 @@ export function updatePoolLiquidity(id: string): void {
     if (tokenPrice !== null) {
       let poolTokenId = id.concat('-').concat(tokenPriceId)
       let poolToken = PoolToken.load(poolTokenId)
-      if (poolToken.denormWeight.gt(denormWeight)) {
-        denormWeight = poolToken.denormWeight
-        liquidity = tokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
-      }
+      //if (poolToken.denormWeight.gt(denormWeight)) {
+        //denormWeight = poolToken.denormWeight // TODO
+        //liquidity = tokenPrice.price.times(poolToken.balance).div(poolToken.denormWeight).times(pool.totalWeight)
+      //}
     }
   }
 
@@ -225,16 +225,16 @@ export function decrPoolCount(finalized: boolean, crp: boolean): void {
   let factory = Balancer.load('1')
   factory.poolCount -= 1
   if (finalized) factory.finalizedPoolCount -= 1
-  if (crp) factory.crpCount -= 1
+  //if (crp) factory.crpCount -= 1
   factory.save()
 }
 
 export function saveTransaction(event: ethereum.Event, eventName: string): void {
   let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString())
   let userAddress = event.transaction.from.toHex()
-  let transaction = Transaction.load(tx)
+  let transaction = PoolTransaction.load(tx)
   if (transaction == null) {
-    transaction = new Transaction(tx)
+    transaction = new PoolTransaction(tx)
   }
   transaction.event = eventName
   transaction.poolAddress = event.address.toHex()

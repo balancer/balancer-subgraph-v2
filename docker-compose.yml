@@ -6,7 +6,7 @@ services:
       - "8545:8545"
     # Nota Bene - the mnemonic below is *INSECURE* and shouldn't be used for real funds, only local development
     #             it serves only to create deterministic contract addresses that can be shared with subgraph
-    command: ganache-cli --mnemonic "album wire record stuff abandon mesh museum piece bean allow refuse below"
+    command: ganache-cli --mnemonic "album wire record stuff abandon mesh museum piece bean allow refuse below" -l 4294967295000 --gasPrice 100
   graph-node:
     image: graphprotocol/graph-node
     ports:

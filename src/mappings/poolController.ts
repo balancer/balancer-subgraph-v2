@@ -1,4 +1,4 @@
-import { BigInt, Address, Bytes, store } from '@graphprotocol/graph-ts'
+import { BigInt, BigDecimal, Address, Bytes, store } from '@graphprotocol/graph-ts'
 import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer, GulpCall } from '../types/templates/Pool/Pool'
 import { Pool as BPool } from '../types/templates/Pool/Pool'
 import {
@@ -48,8 +48,8 @@ export function handleSetController(event: LOG_CALL): void {
 export function handleSetPublicSwap(event: LOG_CALL): void {
   let poolId = event.address.toHex()
   let pool = Pool.load(poolId)
-  let publicSwap = event.params.data.toHexString().slice(-1) == '1'
-  pool.publicSwap = publicSwap
+  //let publicSwap = event.params.data.toHexString().slice(-1) == '1'
+  //pool.publicSwap = publicSwap
   pool.save()
 
   saveTransaction(event, 'setPublicSwap')
@@ -60,8 +60,8 @@ export function handleFinalize(event: LOG_CALL): void {
   let pool = Pool.load(poolId)
   // let balance = BigDecimal.fromString('100')
   pool.finalized = true
-  pool.symbol = 'BPT'
-  pool.publicSwap = true
+  //pool.symbol = 'BPT'
+  //pool.publicSwap = true
   // pool.totalShares = balance
   pool.save()
 
@@ -102,24 +102,24 @@ export function handleRebind(event: LOG_CALL): void {
   if (poolToken == null) {
     createPoolTokenEntity(poolTokenId, poolId, address.toHexString())
     poolToken = PoolToken.load(poolTokenId)
-    pool.totalWeight += denormWeight
+    //pool.totalWeight += denormWeight
   } else {
-    let oldWeight = poolToken.denormWeight
-    if (denormWeight > oldWeight) {
-      pool.totalWeight = pool.totalWeight + (denormWeight - oldWeight)
-    } else {
-      pool.totalWeight = pool.totalWeight - (oldWeight - denormWeight)
-    }
+    //let oldWeight = poolToken.denormWeight
+    //if (denormWeight > oldWeight) {
+      //pool.totalWeight = pool.totalWeight + (denormWeight - oldWeight)
+    //} else {
+      //pool.totalWeight = pool.totalWeight - (oldWeight - denormWeight)
+    //}
   }
 
   let balance = hexToDecimal(event.params.data.toHexString().slice(74,138), poolToken.decimals)
 
   poolToken.balance = balance
-  poolToken.denormWeight = denormWeight
+  //poolToken.denormWeight = denormWeight
   poolToken.save()
 
   if (balance.equals(ZERO_BD)) {
-    decrPoolCount(pool.finalized, pool.crp)
+    decrPoolCount(pool.finalized, false) // TODO remove param
     pool.active = false
   }
   pool.save()
@@ -142,7 +142,7 @@ export function handleUnbind(event: LOG_CALL): void {
   let address = Address.fromString(event.params.data.toHexString().slice(-40))
   let poolTokenId = poolId.concat('-').concat(address.toHexString())
   let poolToken = PoolToken.load(poolTokenId)
-  pool.totalWeight -= poolToken.denormWeight
+  //pool.totalWeight -= poolToken.denormWeight
   pool.save()
   store.remove('PoolToken', poolTokenId)
 
@@ -180,7 +180,7 @@ export function handleGulp(call: GulpCall): void {
 export function handleJoinPool(event: LOG_JOIN): void {
   let poolId = event.address.toHex()
   let pool = Pool.load(poolId)
-  pool.joinsCount += BigInt.fromI32(1)
+  pool.joinsCount = pool.joinsCount + BigInt.fromI32(1)
   pool.save()
 
   let address = event.params.tokenIn.toHex()
@@ -207,9 +207,9 @@ export function handleExitPool(event: LOG_EXIT): void {
   poolToken.save()
 
   let pool = Pool.load(poolId)
-  pool.exitsCount += BigInt.fromI32(1)
+  pool.exitsCount = pool.exitsCount + BigInt.fromI32(1)
   if (newAmount.equals(ZERO_BD)) {
-    decrPoolCount(pool.finalized, pool.crp)
+    decrPoolCount(pool.finalized, false) // TODO remove param
     pool.active = false
   }
   pool.save()
@@ -264,10 +264,10 @@ export function handleSwap(event: LOG_SWAP): void {
         if (tokenPrice !== null && tokenPrice.price.gt(ZERO_BD)) {
           let poolTokenId = poolId.concat('-').concat(tokenPriceId)
           let poolToken = PoolToken.load(poolTokenId)
-          tokenOutPriceValue = tokenPrice.price
+          tokenOutPriceValue = tokenPrice.price // TODO incorrect
             .times(poolToken.balance)
-            .div(poolToken.denormWeight)
-            .times(poolTokenOut.denormWeight)
+            //.div(poolToken.denormWeight)
+            //.times(poolTokenOut.denormWeight)
             .div(poolTokenOut.balance)
         }
       }
@@ -294,9 +294,9 @@ export function handleSwap(event: LOG_SWAP): void {
     pool.totalSwapVolume = totalSwapVolume
     pool.totalSwapFee = totalSwapFee
   }
-  pool.swapsCount += BigInt.fromI32(1)
+  pool.swapsCount = pool.swapsCount + BigInt.fromI32(1)
   if (newAmountIn.equals(ZERO_BD) || newAmountOut.equals(ZERO_BD)) {
-    decrPoolCount(pool.finalized, pool.crp)
+    decrPoolCount(pool.finalized, false) // TODO fixup
     pool.active = false
   }
   pool.save()
@@ -348,7 +348,7 @@ export function handleSwap(event: LOG_SWAP): void {
       createPoolShareEntity(poolShareToId, poolId, event.params.dst.toHex())
       poolShareTo = PoolShare.load(poolShareToId)
     }
-    poolShareTo.balance += tokenToDecimal(event.params.amt.toBigDecimal(), 18)
+    poolShareTo.balance = poolShareTo.balance + tokenToDecimal(event.params.amt.toBigDecimal(), 18)
     poolShareTo.save()
     pool.totalShares += tokenToDecimal(event.params.amt.toBigDecimal(), 18)
   } else if (isBurn) {
