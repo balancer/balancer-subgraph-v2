@@ -5,3 +5,5 @@ src/types/
 yarn-error.log
 .idea
 .vscode
+data/ipfs
+data/postgres

@@ -17,24 +17,7 @@ Only the factory address is needed in subgraph.yaml, new pool addresses are auto
 
 ### Services
 
-Start a ganache chain using 0.0.0.0 as a host so docker can connect
-
-```
-ganache-cli -h 0.0.0.0 -d -l 4294967295 --allowUnlimitedContractSize
-```
-
-Run a local graph node
-
-```
-git clone https://github.com/graphprotocol/graph-node/
-```
-
-Update ethereum value in docker-compose.yml to `ganache:http://host.docker.internal:8545`
-
-```
-cd graph-node/docker
-```
-
+Start a ganache chain and a graph node by running
 ```
 docker-compose up
 ```

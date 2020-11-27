@@ -1,0 +1,47 @@
+version: '3'
+services:
+  ganache:
+    image: trufflesuite/ganache-cli:v6.10.1
+    ports:
+      - "8545:8545"
+    # Nota Bene - the mnemonic below is *INSECURE* and shouldn't be used for real funds, only local development
+    #             it serves only to create deterministic contract addresses that can be shared with subgraph
+    command: ganache-cli --mnemonic "album wire record stuff abandon mesh museum piece bean allow refuse below"
+  graph-node:
+    image: graphprotocol/graph-node
+    ports:
+      - '8000:8000'
+      - '8001:8001'
+      - '8020:8020'
+      - '8030:8030'
+      - '8040:8040'
+    depends_on:
+      - ipfs
+      - postgres
+      - ganache
+    environment:
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let-me-in
+      postgres_db: graph-node
+      ipfs: 'ipfs:5001'
+      #ethereum: 'mainnet:http://host.docker.internal:8545'
+      ethereum: 'ganache:http://ganache:8545'
+      RUST_LOG: info
+  ipfs:
+    image: ipfs/go-ipfs:v0.4.23
+    ports:
+      - '5001:5001'
+    volumes:
+      - ./data/ipfs:/data/ipfs
+  postgres:
+    image: postgres
+    ports:
+      - '5432:5432'
+    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+    environment:
+      POSTGRES_USER: graph-node
+      POSTGRES_PASSWORD: let-me-in
+      POSTGRES_DB: graph-node
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
