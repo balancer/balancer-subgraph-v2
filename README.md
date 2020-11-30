@@ -10,7 +10,6 @@ Only the factory address is needed in subgraph.yaml, new pool addresses are auto
 ### Prerequisites
 
 - Global Yarn Packages
-    - ganache-cli
     - truffle
     - graph-cli
 - Docker
@@ -81,10 +80,6 @@ Update ethereum value in docker-compose.yml to `kovan:http://host.docker.interna
 Comment out try_ functions in pool.ts LN52-64
 
 ```
-cd graph-node/docker
-```
-
-```
 docker-compose up
 ```
 
@@ -108,6 +103,8 @@ docker-compose kill && docker-compose rm -f && rm -rf data
 
 
 ## Queries
+
+### OUT OF DATE
 
 GraphiQL interface can be accessed on a dev env at: http://127.0.0.1:8000/subgraphs/name/balancer-labs/balancer-subgraph
 
