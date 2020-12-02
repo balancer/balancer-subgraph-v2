@@ -1,3 +1,7 @@
+<a href="https://circleci.com/gh/balancer-labs/balancer-subgraph-v2">
+  <img src="https://circleci.com/gh/balancer-labs/balancer-subgraph-v2.svg?style=svg&circle-token=8a04d106dc89eb9ce27aa239a9dc8d213f0ff7e3" />
+</a>
+
 # Balancer Subgraph
 
 The graphql schema is still under heavy development and will likely have major breaking changes.
