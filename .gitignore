@@ -7,3 +7,4 @@ yarn-error.log
 .vscode
 data/ipfs
 data/postgres
+*.js
