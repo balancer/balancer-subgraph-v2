@@ -5,7 +5,17 @@ import { PoolController } from '../types/templates'
 import {
   ZERO_BD,
 } from './helpers'
+import { LOG_JOIN } from '../types/templates/Pool/Pool'
+import {
+  PoolToken,
+} from '../types/schema'
 
+import {
+  tokenToDecimal,
+  updatePoolLiquidity,
+  saveTransaction,
+} from './helpers'
+  
 export function handleNewPool(event: PoolCreated): void {
   let vault = Balancer.load('2')
 
@@ -36,21 +46,22 @@ export function handleNewPool(event: PoolCreated): void {
   //pool.controller = event.params.caller
   //pool.publicSwap = false
   //pool.finalized = false
-  //pool.active = true
-  //pool.swapFee = BigDecimal.fromString('0.000001')
-  //pool.totalWeight = ZERO_BD
-  //pool.totalShares = ZERO_BD
-  //pool.totalSwapVolume = ZERO_BD
-  //pool.totalSwapFee = ZERO_BD
-  //pool.liquidity = ZERO_BD
-  //pool.createTime = event.block.timestamp.toI32()
-  //pool.tokensCount = BigInt.fromI32(0)
-  //pool.holdersCount = BigInt.fromI32(0)
-  //pool.joinsCount = BigInt.fromI32(0)
-  //pool.exitsCount = BigInt.fromI32(0)
-  //pool.swapsCount = BigInt.fromI32(0)
-  //pool.vaultID = event.address.toHexString()
-  //pool.tokensList = []
+  pool.active = true
+  // TODO
+  pool.swapFee = BigDecimal.fromString('0.000001')
+  pool.totalWeight = ZERO_BD
+  pool.totalShares = ZERO_BD
+  pool.totalSwapVolume = ZERO_BD
+  pool.totalSwapFee = ZERO_BD
+  pool.liquidity = ZERO_BD
+  pool.createTime = event.block.timestamp.toI32()
+  pool.tokensCount = BigInt.fromI32(0)
+  pool.holdersCount = BigInt.fromI32(0)
+  pool.joinsCount = BigInt.fromI32(0)
+  pool.exitsCount = BigInt.fromI32(0)
+  pool.swapsCount = BigInt.fromI32(0)
+  pool.vaultID = '2'
+  pool.tokensList = []
   pool.tx = event.transaction.hash
   pool.save()
 
@@ -59,3 +70,25 @@ export function handleNewPool(event: PoolCreated): void {
 
   //PoolController.create(event.params.poolId)
 }
+
+
+
+export function handleAddLiquidity(event: LOG_JOIN): void {
+  let poolId = event.address.toHex()
+  let pool = Pool.load(poolId)
+  pool.joinsCount = pool.joinsCount + BigInt.fromI32(1)
+  pool.save()
+
+  let address = event.params.tokenIn.toHex()
+  let poolTokenId = poolId.concat('-').concat(address.toString())
+  let poolToken = PoolToken.load(poolTokenId)
+  let tokenAmountIn = tokenToDecimal(event.params.tokenAmountIn.toBigDecimal(), poolToken.decimals)
+  let newAmount = poolToken.balance.plus(tokenAmountIn)
+  poolToken.balance = newAmount
+  poolToken.save()
+
+  updatePoolLiquidity(poolId)
+  saveTransaction(event, 'join')
+}
+
+

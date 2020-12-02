@@ -24,6 +24,7 @@ import {
 /************************************
  ********** Pool Controls ***********
  ************************************/
+// TODO only applies to FixedSetPoolTokenizer
 
 export function handleSetSwapFee(event: LOG_CALL): void {
   let poolId = event.address.toHex()
@@ -53,34 +54,6 @@ export function handleSetPublicSwap(event: LOG_CALL): void {
   pool.save()
 
   saveTransaction(event, 'setPublicSwap')
-}
-
-export function handleFinalize(event: LOG_CALL): void {
-  let poolId = event.address.toHex()
-  let pool = Pool.load(poolId)
-  // let balance = BigDecimal.fromString('100')
-  pool.finalized = true
-  //pool.symbol = 'BPT'
-  //pool.publicSwap = true
-  // pool.totalShares = balance
-  pool.save()
-
-  /*
-  let poolShareId = poolId.concat('-').concat(event.params.caller.toHex())
-  let poolShare = PoolShare.load(poolShareId)
-  if (poolShare == null) {
-    createPoolShareEntity(poolShareId, poolId, event.params.caller.toHex())
-    poolShare = PoolShare.load(poolShareId)
-  }
-  poolShare.balance = balance
-  poolShare.save()
-  */
-
-  let factory = Balancer.load('1')
-  factory.finalizedPoolCount = factory.finalizedPoolCount + 1
-  factory.save()
-
-  saveTransaction(event, 'finalize')
 }
 
 export function handleRebind(event: LOG_CALL): void {
@@ -119,7 +92,7 @@ export function handleRebind(event: LOG_CALL): void {
   poolToken.save()
 
   if (balance.equals(ZERO_BD)) {
-    decrPoolCount(pool.finalized, false) // TODO remove param
+    decrPoolCount(true, false) // TODO remove param
     pool.active = false
   }
   pool.save()
@@ -209,7 +182,7 @@ export function handleExitPool(event: LOG_EXIT): void {
   let pool = Pool.load(poolId)
   pool.exitsCount = pool.exitsCount + BigInt.fromI32(1)
   if (newAmount.equals(ZERO_BD)) {
-    decrPoolCount(pool.finalized, false) // TODO remove param
+    decrPoolCount(true, false) // TODO remove param
     pool.active = false
   }
   pool.save()
@@ -296,7 +269,7 @@ export function handleSwap(event: LOG_SWAP): void {
   }
   pool.swapsCount = pool.swapsCount + BigInt.fromI32(1)
   if (newAmountIn.equals(ZERO_BD) || newAmountOut.equals(ZERO_BD)) {
-    decrPoolCount(pool.finalized, false) // TODO fixup
+    decrPoolCount(true, false) // TODO fixup
     pool.active = false
   }
   pool.save()
