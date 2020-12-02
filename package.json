@@ -8,9 +8,6 @@
     "build": "graph build",
     "lint": "eslint . --ext .ts",
     "deploy": "graph deploy balancer-labs/balancer --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "_deploy:beta": "graph deploy balancer-labs/balancer-beta --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "_deploy:kovan": "graph deploy balancer-labs/balancer-kovan subgraph.kovan.yaml --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "_deploy:ropsten": "graph deploy balancer-labs/balancer-ropsten subgraph.ropsten.yaml --debug --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/balancer-subgraph-v2 subgraph.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "import-abis": "cp ../balancer-core-v2/abi/* ./abis/."
   },
@@ -27,10 +24,6 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0",
-    "keytar": "^5.0.0",
-    "truffle": "^5.1.0",
-    "truffle-contract": "^4.0.5",
-    "truffle-hdwallet-provider": "^1.0.4"
+    "babel-register": "^6.26.0"
   }
 }
