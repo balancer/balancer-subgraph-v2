@@ -1,9 +1,9 @@
+# Vault
 type Balancer @entity {
     id: ID!
     color: String!                                      # Bronze, Silver, Gold
     poolCount: Int!                                     # Number of pools
     finalizedPoolCount: Int!                            # Number of finalized pools
-    #crpCount: Int!                                      # Number of CRP
     pools: [Pool!] @derivedFrom(field: "vaultID")
     txCount: BigInt!                                    # Number of txs
     totalLiquidity: BigDecimal!                         # All the pools liquidity value in USD
@@ -13,29 +13,22 @@ type Balancer @entity {
 
 type Pool @entity {
     id: ID!                                             # Pool address
-    controller: Bytes                                   # Controller address
+    controller: Bytes                                    # Controller address
     #publicSwap: Boolean!                                # isPublicSwap
     #finalized: Boolean!                                 # isFinalized
-    #crp: Boolean!                                       # Is configurable rights pool
-    #crpController: Bytes                                # CRP controller address
     #symbol: String                                      # Pool token symbol
     #name: String                                        # Pool token name
-    #rights: [String!]!                                  # List of rights (for CRP)
-    #cap: BigInt                                         # Maximum supply if any (for CRP)
     active: Boolean!                                     # isActive
     swapFee: BigDecimal!                                # Swap Fees
     totalWeight: BigDecimal!
-    totalShares: BigDecimal!                            # Total pool token shares
     totalSwapVolume: BigDecimal!                        # Total swap volume in USD
     totalSwapFee: BigDecimal!                           # Total swap fee in USD
     liquidity: BigDecimal!                              # Pool liquidity value in USD
     tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
-    #tokens: [PoolToken!] @derivedFrom(field: "poolId")
-    #tokenized: Boolean!
-    #shares: [PoolShare!] @derivedFrom(field: "poolId")
+    tokens: [PoolToken!] @derivedFrom(field: "poolId")
+    tokenized: Boolean!
     createTime: Int!                                    # Block time pool was created
     tokensCount: BigInt!                                # Number of tokens in the pool
-    holdersCount: BigInt!                               # Number of addresses holding a positive balance of BPT
     joinsCount: BigInt!                                 # liquidity has been added
     exitsCount: BigInt!                                 # liquidity has been removed
     swapsCount: BigInt!
@@ -55,14 +48,17 @@ type PoolToken @entity {
     #denormWeight: BigDecimal!
 }
 
-type PoolController @entity {
+type PoolTokenizer @entity {
     id: ID!                                             # Pool address
+    totalShares: BigDecimal!                            # Total pool token shares
+    holdersCount: BigInt!                               # Number of addresses holding a positive balance of BPT
+    shares: [PoolShare!] @derivedFrom(field: "poolTokenizerId")
 }
 
 type PoolShare @entity {
     id: ID!                                             # poolId + userAddress
     userAddress: User!
-    poolId: Pool!
+    poolTokenizerId: PoolTokenizer!
     balance: BigDecimal!
 }
 

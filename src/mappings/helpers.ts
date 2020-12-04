@@ -1,7 +1,6 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, TokenPrice, PoolTransaction, Balancer } from '../types/schema';
-import { BTokenBytes } from '../types/templates/Pool/BTokenBytes';
-import { BToken } from '../types/templates/Pool/BToken';
+import { BToken } from '../types/templates/PoolTokenizer/BToken';
 import { CRPFactory } from '../types/Factory/CRPFactory';
 import { ConfigurableRightsPool } from '../types/Factory/ConfigurableRightsPool';
 
@@ -49,14 +48,14 @@ export function createPoolShareEntity(id: string, pool: string, user: string): v
   createUserEntity(user);
 
   poolShare.userAddress = user;
-  poolShare.poolId = pool;
+  poolShare.poolTokenizerId = pool;
   poolShare.balance = ZERO_BD;
   poolShare.save();
 }
 
 export function createPoolTokenEntity(id: string, pool: string, address: string): void {
   const token = BToken.bind(Address.fromString(address));
-  const tokenBytes = BTokenBytes.bind(Address.fromString(address));
+  //const tokenBytes = BTokenBytes.bind(Address.fromString(address));
   let symbol = '';
   let name = '';
   let decimals = 18;
@@ -68,19 +67,19 @@ export function createPoolTokenEntity(id: string, pool: string, address: string)
   const decimalCall = token.try_decimals();
 
   if (symbolCall.reverted) {
-    const symbolBytesCall = tokenBytes.try_symbol();
-    if (!symbolBytesCall.reverted) {
-      symbol = symbolBytesCall.value.toString();
-    }
+    //const symbolBytesCall = tokenBytes.try_symbol();
+    //if (!symbolBytesCall.reverted) {
+      //symbol = symbolBytesCall.value.toString();
+    //}
   } else {
     symbol = symbolCall.value;
   }
 
   if (nameCall.reverted) {
-    const nameBytesCall = tokenBytes.try_name();
-    if (!nameBytesCall.reverted) {
-      name = nameBytesCall.value.toString();
-    }
+    //const nameBytesCall = tokenBytes.try_name();
+    //if (!nameBytesCall.reverted) {
+      //name = nameBytesCall.value.toString();
+    //}
   } else {
     name = nameCall.value;
   }
@@ -88,28 +87,6 @@ export function createPoolTokenEntity(id: string, pool: string, address: string)
   if (!decimalCall.reverted) {
     decimals = decimalCall.value;
   }
-
-  // COMMENT THE LINES ABOVE OUT FOR LOCAL DEV ON KOVAN
-
-  // !!! COMMENT THE LINES BELOW OUT FOR NON-LOCAL DEPLOYMENT
-  // This code allows Symbols to be added when testing on local Kovan
-  /*
-  if(address == '0xd0a1e359811322d97991e03f863a0c30c2cf029c')
-    symbol = 'WETH';
-  else if(address == '0x1528f3fcc26d13f7079325fb78d9442607781c8c')
-    symbol = 'DAI'
-  else if(address == '0xef13c0c8abcaf5767160018d268f9697ae4f5375')
-    symbol = 'MKR'
-  else if(address == '0x2f375e94fc336cdec2dc0ccb5277fe59cbf1cae5')
-    symbol = 'USDC'
-  else if(address == '0x1f1f156e0317167c11aa412e3d1435ea29dc3cce')
-    symbol = 'BAT'
-  else if(address == '0x86436bce20258a6dcfe48c9512d4d49a30c4d8c4')
-    symbol = 'SNX'
-  else if(address == '0x8c9e6c40d3402480ace624730524facc5482798c')
-    symbol = 'REP'
-  */
-  // !!! COMMENT THE LINES ABOVE OUT FOR NON-LOCAL DEPLOYMENT
 
   const poolToken = new PoolToken(id);
   poolToken.poolId = pool;

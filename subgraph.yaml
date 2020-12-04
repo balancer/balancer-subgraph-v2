@@ -8,7 +8,9 @@ dataSources:
     name: Vault 
     network: dev
     source:
-      address: "0x51ea4ece31bfd87a6eb101c145c98ce3d2821d2d"
+      #address: "0x51ea4ece31bfd87a6eb101c145c98ce3d2821d2d"
+      #address: "0xcBf7C38134084030584E3C769e9c2Fef7Cd2E9Fd"
+      address: "0x9fCCc786024B9027169e257BACf4bf77af0f9c99"
       abi: Vault
       startBlock: 1
     mapping:
@@ -57,9 +59,6 @@ templates:
           file: ./abis/FixedSetPoolTokenizer.json
         - name: BToken
           file: ./abis/BToken.json
-      #eventHandlers:
-        #- event: Transfer(indexed address,indexed address,uint256)
-          #handler: handleTransfer
       callHandlers:
         - function: joinPool(uint256, uint128[], bool, address)
           handler: handleJoinPool
