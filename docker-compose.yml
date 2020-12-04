@@ -1,12 +1,19 @@
 version: '3'
 services:
-  ganache:
-    image: trufflesuite/ganache-cli:v6.10.1
+  parity:
+    image: parity/parity
+    volumes:
+      - ./dev-chain/chain.json:/home/parity/.local/share/io.parity.ethereum/chain.json
+      - ./dev-chain/config.toml:/home/parity/.local/share/io.parity.ethereum/config.toml
+      - ./dev-chain/keys:/home/parity/.local/share/io.parity.ethereum/keys/dev
+      - ./dev-chain/pass.txt:/home/parity/.local/share/io.parity.ethereum/pass.txt
+    command: --config /home/parity/.local/share/io.parity.ethereum/config.toml --jsonrpc-cors all --jsonrpc-interface all --jsonrpc-apis all --jsonrpc-hosts all --tracing on --pruning archive -l rpc=trace,own_tx=trace --jsonrpc-port 8545
+    restart: always
     ports:
-      - "8545:8545"
-    # Nota Bene - the mnemonic below is *INSECURE* and shouldn't be used for real funds, only local development
-    #             it serves only to create deterministic contract addresses that can be shared with subgraph
-    command: ganache-cli --mnemonic "album wire record stuff abandon mesh museum piece bean allow refuse below" -l 4294967295000 --gasPrice 100 --allowUnlimitedContractSize
+      - 8545:8545
+      #- 8546:8546
+      #- 30303:30303
+      #- 30303:30303/udp
   graph-node:
     image: graphprotocol/graph-node
     ports:
@@ -18,7 +25,7 @@ services:
     depends_on:
       - ipfs
       - postgres
-      - ganache
+      - parity 
     environment:
       postgres_host: postgres
       postgres_user: graph-node
@@ -26,8 +33,9 @@ services:
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       #ethereum: 'mainnet:http://host.docker.internal:8545'
-      ethereum: 'ganache:http://ganache:8545'
+      ethereum: 'dev:http://parity:8545'
       RUST_LOG: info
+      RUST_BACKTRACE: 1
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
     ports:

@@ -1,0 +1,16 @@
+version: '3'
+services:
+  ganache:
+    image: trufflesuite/ganache-cli:v6.10.1
+    ports:
+      - "8545:8545"
+    # Nota Bene - the mnemonic below is *INSECURE* and shouldn't be used for real funds, only local development
+    #             it serves only to create deterministic contract addresses that can be shared with subgraph
+    command: ganache-cli --mnemonic "album wire record stuff abandon mesh museum piece bean allow refuse below" -l 4294967295000 --gasPrice 100 --allowUnlimitedContractSize
+  graph-node:
+    depends_on:
+      - ipfs
+      - postgres
+      - ganache
+    environment:
+      ethereum: 'ganache:http://ganache:8545'

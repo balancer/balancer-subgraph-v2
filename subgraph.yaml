@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Vault 
-    network: ganache 
+    network: dev
     source:
       address: "0x51ea4ece31bfd87a6eb101c145c98ce3d2821d2d"
       abi: Vault
@@ -21,16 +21,27 @@ dataSources:
       abis:
         - name: Vault
           file: ./abis/Vault.json
+        - name: BToken
+          file: ./abis/BToken.json
       eventHandlers:
+        # TODO move to call handler
         - event: PoolCreated(bytes32)
           handler: handleNewPool
-      #callHandlers:
+        - event: Deposited(indexed address,indexed address,indexed address,uint128)
+          handler: handleUserBalanceDeposited
+        - event: Withdrawn(indexed address,indexed address,indexed address,uint128)
+          handler: handleUserBalanceWithdrawn
+      callHandlers:
+        - function: addLiquidity(bytes32,address,address[],uint128[],bool)
+          handler: handleAddLiquidity
+        - function: removeLiquidity(bytes32,address,address[],uint128[],bool)
+          handler: handleRemoveLiquidity
         #- function: setPoolController
           #handler: handleSetPoolController
 templates:
   - kind: ethereum/contract
-    name: PoolController
-    network: ganache
+    name: PoolTokenizer
+    network: dev
     source:
       abi: FixedSetPoolTokenizer
     mapping:
