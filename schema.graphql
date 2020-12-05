@@ -12,8 +12,8 @@ type Balancer @entity {
 }
 
 type Pool @entity {
-    id: ID!                                             # Pool address
-    controller: Bytes                                    # Controller address
+    id: ID!                                              # Pool address
+    controller: Bytes!                                   # Controller address
     #publicSwap: Boolean!                                # isPublicSwap
     #finalized: Boolean!                                 # isFinalized
     #symbol: String                                      # Pool token symbol
@@ -29,8 +29,6 @@ type Pool @entity {
     tokenized: Boolean!
     createTime: Int!                                    # Block time pool was created
     tokensCount: BigInt!                                # Number of tokens in the pool
-    joinsCount: BigInt!                                 # liquidity has been added
-    exitsCount: BigInt!                                 # liquidity has been removed
     swapsCount: BigInt!
     vaultID: Balancer!
     tx: Bytes                                           # Pool creation transaction id
@@ -50,8 +48,11 @@ type PoolToken @entity {
 
 type PoolTokenizer @entity {
     id: ID!                                             # Pool address
+    poolId: Pool!
     totalShares: BigDecimal!                            # Total pool token shares
     holdersCount: BigInt!                               # Number of addresses holding a positive balance of BPT
+    joinsCount: BigInt!                                 # liquidity has been added
+    exitsCount: BigInt!                                 # liquidity has been removed
     shares: [PoolShare!] @derivedFrom(field: "poolTokenizerId")
 }
 

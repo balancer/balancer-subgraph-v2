@@ -1,7 +1,6 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, TokenPrice, PoolTransaction, Balancer } from '../types/schema';
 import { BToken } from '../types/templates/PoolTokenizer/BToken';
-import { CRPFactory } from '../types/Factory/CRPFactory';
 import { ConfigurableRightsPool } from '../types/Factory/ConfigurableRightsPool';
 
 export const ZERO_BD = BigDecimal.fromString('0');
@@ -15,9 +14,6 @@ export const USD: string =
   network == 'mainnet'
     ? '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' // USDC
     : '0x1528f3fcc26d13f7079325fb78d9442607781c8c'; // DAI
-
-export const CRP_FACTORY: string =
-  network == 'mainnet' ? '0xed52D8E202401645eDAD1c0AA21e872498ce47D0' : '0x53265f0e014995363AE54DAd7059c018BaDbcD74';
 
 export function hexToDecimal(hexString: string, decimals: i32): BigDecimal {
   const bytes = Bytes.fromHexString(hexString).reverse() as Bytes;
@@ -42,13 +38,14 @@ export function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
   return amount.div(scale);
 }
 
-export function createPoolShareEntity(id: string, pool: string, user: string): void {
+export function createPoolShareEntity(poolControllerAddress: Address, lpAddress: Address): void {
+  let id = poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex())
   const poolShare = new PoolShare(id);
 
-  createUserEntity(user);
+  createUserEntity(lpAddress);
 
-  poolShare.userAddress = user;
-  poolShare.poolTokenizerId = pool;
+  poolShare.userAddress = lpAddress.toHex();
+  poolShare.poolTokenizerId = poolControllerAddress.toHex();
   poolShare.balance = ZERO_BD;
   poolShare.save();
 }
@@ -189,15 +186,15 @@ export function updatePoolLiquidity(id: string): void {
 }
 
 export function decrPoolCount(finalized: boolean): void {
-  const factory = Balancer.load('1');
+  let factory = Balancer.load('1');
   factory.poolCount -= 1;
   if (finalized) factory.finalizedPoolCount -= 1;
   factory.save();
 }
 
 export function saveTransaction(event: ethereum.Event, eventName: string): void {
-  const tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
-  const userAddress = event.transaction.from.toHex();
+  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+  let userAddress = event.transaction.from.toHex();
   let transaction = PoolTransaction.load(tx);
   if (transaction == null) {
     transaction = new PoolTransaction(tx);
@@ -212,56 +209,13 @@ export function saveTransaction(event: ethereum.Event, eventName: string): void 
   transaction.block = event.block.number.toI32();
   transaction.save();
 
-  createUserEntity(userAddress);
+  createUserEntity(Address.fromString(userAddress));
 }
 
-export function createUserEntity(address: string): void {
-  if (User.load(address) == null) {
-    const user = new User(address);
+export function createUserEntity(address: Address): void {
+  let addressHex = address.toHex()
+  if (User.load(addressHex) == null) {
+    let user = new User(addressHex);
     user.save();
   }
-}
-
-export function isCrp(address: Address): boolean {
-  const crpFactory = CRPFactory.bind(Address.fromString(CRP_FACTORY));
-  const isCrp = crpFactory.try_isCrp(address);
-  if (isCrp.reverted) return false;
-  return isCrp.value;
-}
-
-export function getCrpController(crp: ConfigurableRightsPool): string | null {
-  const controller = crp.try_getController();
-  if (controller.reverted) return null;
-  return controller.value.toHexString();
-}
-
-export function getCrpSymbol(crp: ConfigurableRightsPool): string {
-  const symbol = crp.try_symbol();
-  if (symbol.reverted) return '';
-  return symbol.value;
-}
-
-export function getCrpName(crp: ConfigurableRightsPool): string {
-  const name = crp.try_name();
-  if (name.reverted) return '';
-  return name.value;
-}
-
-export function getCrpCap(crp: ConfigurableRightsPool): BigInt {
-  const cap = crp.try_getCap();
-  if (cap.reverted) return BigInt.fromI32(0);
-  return cap.value;
-}
-
-export function getCrpRights(crp: ConfigurableRightsPool): string[] {
-  const rights = crp.try_rights();
-  if (rights.reverted) return [];
-  const rightsArr: string[] = [];
-  if (rights.value.value0) rightsArr.push('canPauseSwapping');
-  if (rights.value.value1) rightsArr.push('canChangeSwapFee');
-  if (rights.value.value2) rightsArr.push('canChangeWeights');
-  if (rights.value.value3) rightsArr.push('canAddRemoveTokens');
-  if (rights.value.value4) rightsArr.push('canWhitelistLPs');
-  if (rights.value.value5) rightsArr.push('canChangeCap');
-  return rightsArr;
 }

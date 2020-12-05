@@ -27,19 +27,23 @@ dataSources:
           file: ./abis/BToken.json
       eventHandlers:
         # TODO move to call handler
-        - event: PoolCreated(bytes32)
-          handler: handleNewPool
         - event: Deposited(indexed address,indexed address,indexed address,uint128)
           handler: handleUserBalanceDeposited
         - event: Withdrawn(indexed address,indexed address,indexed address,uint128)
           handler: handleUserBalanceWithdrawn
       callHandlers:
+        - function: newPool(address,uint8)
+          handler: handleNewPool
         - function: addLiquidity(bytes32,address,address[],uint128[],bool)
           handler: handleAddLiquidity
         - function: removeLiquidity(bytes32,address,address[],uint128[],bool)
           handler: handleRemoveLiquidity
-        #- function: setPoolController
-          #handler: handleSetPoolController
+        - function: setPoolController(bytes32,address)
+          handler: handleSetPoolController
+        - function: batchSwapGivenIn(tuple[],address[],tuple)
+          handler: handleBatchSwapGivenIn
+        - function: batchSwapGivenOut(tuple[],address[],tuple)
+          handler: handleBatchSwapGivenOut
 templates:
   - kind: ethereum/contract
     name: PoolTokenizer
