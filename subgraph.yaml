@@ -63,6 +63,9 @@ templates:
           file: ./abis/FixedSetPoolTokenizer.json
         - name: BToken
           file: ./abis/BToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
       callHandlers:
         - function: joinPool(uint256, uint128[], bool, address)
           handler: handleJoinPool

@@ -13,13 +13,13 @@ import { Balancer, Pool, PoolToken, Swap, TokenPrice, User, PoolTokenizer } from
 import {
   hexToDecimal,
   tokenToDecimal,
+  getPoolTokenId,
   createPoolShareEntity,
   createPoolTokenEntity,
   updatePoolLiquidity,
   ZERO_BD,
   decrPoolCount,
 } from './helpers';
-import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer } from '../types/templates/Pool/Pool';
 
 export function handleNewPool(call: NewPoolCall): void {
   let vault = Balancer.load('2');
@@ -78,13 +78,13 @@ export function handleAddLiquidity(call: AddLiquidityCall): void {
   const tokenAddresses = call.inputs.tokens;
   const amounts = call.inputs.amounts;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
-    let address = tokenAddresses[i];
-    let poolTokenId = poolId.concat('-').concat(address.toHexString());
+    let tokenAddress = tokenAddresses[i];
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
 
     // adding initial liquidity
     if (poolToken == null) {
-      createPoolTokenEntity(poolTokenId, poolId, address.toHexString());
+      createPoolTokenEntity(poolId, tokenAddress);
       poolToken = PoolToken.load(poolTokenId);
     }
 
@@ -109,8 +109,8 @@ export function handleRemoveLiquidity(call: RemoveLiquidityCall): void {
   const tokenAddresses = call.inputs.tokens;
   const amounts = call.inputs.amounts;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
-    let address = tokenAddresses[i];
-    let poolTokenId = poolId.concat('-').concat(address.toHexString());
+    let tokenAddress = tokenAddresses[i];
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
 
     let tokenAmountOut = tokenToDecimal(amounts[i].toBigDecimal(), poolToken.decimals);

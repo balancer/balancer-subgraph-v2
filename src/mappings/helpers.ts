@@ -40,9 +40,9 @@ export function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
 
 export function createPoolShareEntity(poolControllerAddress: Address, lpAddress: Address): void {
   let id = poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex())
-  const poolShare = new PoolShare(id);
-
   createUserEntity(lpAddress);
+
+  const poolShare = new PoolShare(id);
 
   poolShare.userAddress = lpAddress.toHex();
   poolShare.poolTokenizerId = poolControllerAddress.toHex();
@@ -50,8 +50,14 @@ export function createPoolShareEntity(poolControllerAddress: Address, lpAddress:
   poolShare.save();
 }
 
-export function createPoolTokenEntity(id: string, pool: string, address: string): void {
-  const token = BToken.bind(Address.fromString(address));
+export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
+  return poolId.concat('-').concat(tokenAddress.toHexString());
+}
+
+export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
+  let poolTokenId = getPoolTokenId(poolId, tokenAddress)
+
+  const token = BToken.bind(tokenAddress);
   //const tokenBytes = BTokenBytes.bind(Address.fromString(address));
   let symbol = '';
   let name = '';
@@ -85,9 +91,9 @@ export function createPoolTokenEntity(id: string, pool: string, address: string)
     decimals = decimalCall.value;
   }
 
-  const poolToken = new PoolToken(id);
-  poolToken.poolId = pool;
-  poolToken.address = address;
+  const poolToken = new PoolToken(poolTokenId);
+  poolToken.poolId = poolId;
+  poolToken.address = tokenAddress.toHexString();
   poolToken.name = name;
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
