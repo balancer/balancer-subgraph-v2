@@ -5,6 +5,9 @@ chain = "/home/parity/.local/share/io.parity.ethereum/chain.json"
 base_path = "./"
 keys_path = "/home/parity/.local/share/io.parity.ethereum/keys"
 
+[footprint]
+tracing = "on"
+
 [account]
 unlock = [
   "91d8afa86b21446f3bd2043504ae13abdcb0e59c",
