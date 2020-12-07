@@ -70,7 +70,9 @@ export function handleNewPool(call: NewPoolCall): void {
 
 export function handleAddLiquidity(call: AddLiquidityCall): void {
   const poolId = call.inputs.poolId.toHex();
+
   const pool = Pool.load(poolId);
+  let tokensList = pool.tokensList || []
 
   const poolTokenizer = PoolTokenizer.load(pool.controller.toHex());
 
@@ -84,6 +86,9 @@ export function handleAddLiquidity(call: AddLiquidityCall): void {
 
     // adding initial liquidity
     if (poolToken == null) {
+      if (tokensList.indexOf(tokenAddress) == -1 ) {
+        tokensList.push(tokenAddress)
+      }
       createPoolTokenEntity(poolId, tokenAddress);
       poolToken = PoolToken.load(poolTokenId);
     }
@@ -93,6 +98,8 @@ export function handleAddLiquidity(call: AddLiquidityCall): void {
     poolToken.balance = newAmount;
     poolToken.save();
   }
+  pool.tokensList = tokensList;
+  pool.save();
 
   poolTokenizer.save();
   updatePoolLiquidity(poolId);
