@@ -38,10 +38,14 @@ export function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
   return amount.div(scale);
 }
 
+export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {
+  return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex())
+}
+
 export function createPoolShareEntity(poolControllerAddress: Address, lpAddress: Address): void {
-  let id = poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex())
   createUserEntity(lpAddress);
 
+  let id = getPoolShareId(poolControllerAddress, lpAddress)
   const poolShare = new PoolShare(id);
 
   poolShare.userAddress = lpAddress.toHex();
