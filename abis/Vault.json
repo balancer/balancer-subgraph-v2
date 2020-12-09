@@ -102,43 +102,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_target",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_fee",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "FlashLoan",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "bytes32",
         "name": "poolId",
@@ -334,6 +297,16 @@
   {
     "inputs": [
       {
+        "internalType": "contract ISwapValidator",
+        "name": "validator",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "validatorData",
+        "type": "bytes"
+      },
+      {
         "components": [
           {
             "internalType": "bytes32",
@@ -399,18 +372,22 @@
       }
     ],
     "name": "batchSwapGivenIn",
-    "outputs": [
-      {
-        "internalType": "int256[]",
-        "name": "",
-        "type": "int256[]"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
+      {
+        "internalType": "contract ISwapValidator",
+        "name": "validator",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "validatorData",
+        "type": "bytes"
+      },
       {
         "components": [
           {
@@ -477,35 +454,6 @@
       }
     ],
     "name": "batchSwapGivenOut",
-    "outputs": [
-      {
-        "internalType": "int256[]",
-        "name": "",
-        "type": "int256[]"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC20[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "amounts",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
-      }
-    ],
-    "name": "claimUnaccountedForTokens",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -564,23 +512,23 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_receiver",
+        "internalType": "contract IFlashLoanReceiver",
+        "name": "receiver",
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "_token",
-        "type": "address"
+        "internalType": "contract IERC20[]",
+        "name": "tokens",
+        "type": "address[]"
       },
       {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
       },
       {
         "internalType": "bytes",
-        "name": "_params",
+        "name": "receiverData",
         "type": "bytes"
       }
     ],
@@ -611,6 +559,25 @@
       }
     ],
     "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "getCollectedFeesByToken",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -776,25 +743,6 @@
   {
     "inputs": [],
     "name": "getTotalTrustedOperators",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "getTotalUnaccountedForTokens",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1032,6 +980,19 @@
   },
   {
     "inputs": [],
+    "name": "protocolFeeCollector",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "protocolFlashLoanFee",
     "outputs": [
       {
@@ -1244,6 +1205,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "protocolFeeCollector",
+        "type": "address"
+      }
+    ],
+    "name": "setProtocolFeeCollector",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint128",
         "name": "fee",
         "type": "uint128"
@@ -1364,6 +1338,24 @@
       }
     ],
     "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20[]",
+        "name": "tokens",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amounts",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "withdrawProtocolFees",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
