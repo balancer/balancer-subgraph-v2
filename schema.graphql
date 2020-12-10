@@ -16,8 +16,8 @@ type Pool @entity {
     controller: Bytes!                                   # Controller address
     #publicSwap: Boolean!                                # isPublicSwap
     #finalized: Boolean!                                 # isFinalized
-    #symbol: String                                      # Pool token symbol
-    #name: String                                        # Pool token name
+    symbol: String                                      # Pool token symbol
+    name: String                                        # Pool token name
     active: Boolean!                                     # isActive
     swapFee: BigDecimal!                                # Swap Fees
     totalWeight: BigDecimal!
@@ -32,7 +32,7 @@ type Pool @entity {
     swapsCount: BigInt!
     vaultID: Balancer!
     tx: Bytes                                           # Pool creation transaction id
-    swaps: [Swap!] @derivedFrom(field: "poolAddress")
+    swaps: [Swap!] @derivedFrom(field: "poolId")
 }
 
 type PoolToken @entity {
@@ -79,7 +79,7 @@ type Swap @entity {
     tokenOutSym: String!                    #
     tokenAmountIn: BigDecimal!              #
     tokenAmountOut: BigDecimal!             #
-    poolAddress: Pool
+    poolId: Pool!
     userAddress: User                       # User address that initiates the swap
     value: BigDecimal!                      # Swap value in USD
     feeValue: BigDecimal!                   # Swap fee value in USD
@@ -90,7 +90,6 @@ type Swap @entity {
     timestamp: Int!
 }
 
-#type Transaction @entity {
 type PoolTransaction @entity {
     id: ID!                         # Log ID
     tx: Bytes!
@@ -99,7 +98,7 @@ type PoolTransaction @entity {
     timestamp: Int!
     gasUsed: BigDecimal!
     gasPrice: BigDecimal!
-    poolAddress: Pool
+    poolId: Pool
     userAddress: User
     action: SwapType
     sender: Bytes
@@ -113,7 +112,7 @@ type VaultTransaction @entity {
     timestamp: Int!
     gasUsed: BigDecimal!
     gasPrice: BigDecimal!
-    poolAddress: Pool
+    poolId: Pool
     userAddress: User
     action: SwapType
     sender: Bytes

@@ -1,7 +1,6 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, TokenPrice, PoolTransaction, Balancer } from '../types/schema';
 import { BToken } from '../types/templates/PoolTokenizer/BToken';
-import { ConfigurableRightsPool } from '../types/Factory/ConfigurableRightsPool';
 
 export const ZERO_BD = BigDecimal.fromString('0');
 

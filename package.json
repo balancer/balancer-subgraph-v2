@@ -16,6 +16,7 @@
     "@graphprotocol/graph-ts": "^0.18.1",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
+    "assemblyscript": "^0.17.5",
     "eslint": "^7.9.0",
     "eslint-plugin-mocha-no-only": "^1.1.1",
     "eslint-plugin-prettier": "^3.1.4",
@@ -23,6 +24,7 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
+    "@assemblyscript/loader": "^0.17.5",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0"
   }

@@ -19,8 +19,8 @@ import {
 
 // TODO only applies to FixedSetPoolTokenizer
 export function handleJoinPool(call: JoinPoolCall): void {
-  const poolControllerAddress = call.to
-  const poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
+  let poolControllerAddress = call.to
+  let poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
 
   poolController.joinsCount = poolController.joinsCount + BigInt.fromI32(1);
   poolController.save();
@@ -30,8 +30,8 @@ export function handleJoinPool(call: JoinPoolCall): void {
 
 export function handleExitPool(call: ExitPoolCall): void {
   // TODO this is the poolTokenizerAddress - load poolId
-  const poolControllerAddress = call.to
-  const poolController = PoolTokenizer.load(poolControllerAddress.toHex());
+  let poolControllerAddress = call.to
+  let poolController = PoolTokenizer.load(poolControllerAddress.toHex());
 
   poolController.exitsCount = poolController.exitsCount + BigInt.fromI32(1);
   poolController.save();
@@ -43,7 +43,7 @@ export function handleExitPool(call: ExitPoolCall): void {
 
 // TODO
 export function handleTransfer(event: Transfer): void {
-  const poolTokenizerId = event.address.toHex();
+  let poolTokenizerId = event.address.toHex();
 
   //const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 

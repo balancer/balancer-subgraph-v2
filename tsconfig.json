@@ -1,5 +1,6 @@
 {
-  "extends": "./node_modules/@graphprotocol/graph-ts/tsconfig.json",
+  "_extends": "./node_modules/@graphprotocol/graph-ts/tsconfig.json",
+  "extends": "../node_modules/assemblyscript/std/assembly.json",
   "compilerOptions": {
     "types": ["@graphprotocol/graph-ts"],
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
