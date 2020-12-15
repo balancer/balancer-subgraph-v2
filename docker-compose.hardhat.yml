@@ -9,4 +9,4 @@ services:
     entrypoint: ''
   graph-node:
     environment:
-      ethereum: 'ethereum:http://ethereum:8545'
+      ethereum: 'dev:http://ethereum:8545'

@@ -24,7 +24,7 @@ def generate_key_file(private_key):
     wallet = create_keyfile_json(bytearray.fromhex(private_key), b'test')
     address = wallet["address"]
     print(address)
-    f = open("wallet." + address + ".json", "w")
+    f = open("keys/dev/wallet." + address + ".json", "w")
     f.write(json.dumps(wallet))
     return wallet
 

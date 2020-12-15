@@ -3,14 +3,17 @@
 chain = "/home/parity/.local/share/io.parity.ethereum/chain.json"                                
 # Blockchain and settings will be stored in ./.
 base_path = "./"
-keys_path = "/home/parity/.local/share/io.parity.ethereum/keys"
+keys_path = "/home/parity/.local/share/io.parity.ethereum/keys/dev"
 
-
-# TODO testing
 [rpc]
-interface = "all"
-apis = ["all"]
 hosts = ["all"]
+interface = "all"
+apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "rpc", "parity_accounts", "personal"]
+
+[websockets]
+hosts = ["all"]
+interface = "all"
+apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "rpc", "parity_accounts", "personal"]
 
 [footprint]
 tracing = "on"
@@ -19,15 +22,15 @@ fat_db = "on"
 
 [account]
 unlock = [
-  "0683b39c3a042fceaf71de7ccf4bcd60898758da",
-  "43d836d2e6416b00c2805639b6e99ddcacebfe95",
-  "45c65932c112952668b960b4de4f7f0f3bdca564",
-  "6037c50f9a98149338bcd76c0ba96c5eac3c779f",
-  "6a94f8752dcc03b3717f26e5f1f88d4e63883af9",
-  "6fcf59a82ed228c3d5849255c2d52d6ccdb3a2b3",
-  "8aba14b229b1c4647fbf897b99b3a36e9bdf5422",
-  "91d8afa86b21446f3bd2043504ae13abdcb0e59c",
-  "b9d41db4bf1d2e9b75aeea48458a806d00cf44ae",
-  "c758c89acf31b19d189fe55921ecb6a192f4063d"
+  "0x0683b39c3a042fceaf71de7ccf4bcd60898758da",
+  "0x43d836d2e6416b00c2805639b6e99ddcacebfe95",
+  "0x45c65932c112952668b960b4de4f7f0f3bdca564",
+  "0x6037c50f9a98149338bcd76c0ba96c5eac3c779f",
+  "0x6a94f8752dcc03b3717f26e5f1f88d4e63883af9",
+  "0x6fcf59a82ed228c3d5849255c2d52d6ccdb3a2b3",
+  "0x8aba14b229b1c4647fbf897b99b3a36e9bdf5422",
+  "0x91d8afa86b21446f3bd2043504ae13abdcb0e59c",
+  "0xb9d41db4bf1d2e9b75aeea48458a806d00cf44ae",
+  "0xc758c89acf31b19d189fe55921ecb6a192f4063d"
 ]
 password = ["/home/parity/.local/share/io.parity.ethereum/pass.txt"]
