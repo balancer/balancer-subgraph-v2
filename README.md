@@ -43,6 +43,24 @@ To blow away graph-node settings
 docker-compose kill && docker-compose rm -f && rm -rf data
 ```
 
+| Service                          | address               |
+|----------------------------------|-----------------------|
+| JSON-RPC Server                  | http://localhost:8545 |
+| GraphQL HTTP server              | http://localhost:8000 |
+| Graph Node JSON-RPC admin server | http://localhost:8020 |
+| Graph Node IndexNode server      | http://localhost:8030 |
+| Graph Node Metrics server        | http://localhost:8040 |
+| Graph Node WebSocket server      |   ws://localhost:8001 |
+
+
+#### Contract Deployment
+
+From the balancer-core-v2 repo you can do
+```
+yarn hardhat clean && yarn deploy:docker && yarn seed:docker
+```
+to deploy contracts and test pools
+
 ### Contracts
 
 Deploy balancer contracts using truffle. Using the `yarn deploy` script in balancer-dapp also makes this easy to test out the subgraph using the frontend.
