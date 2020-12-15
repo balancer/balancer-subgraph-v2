@@ -38,13 +38,13 @@ export function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
 }
 
 export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {
-  return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex())
+  return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex());
 }
 
 export function createPoolShareEntity(poolControllerAddress: Address, lpAddress: Address): void {
   createUserEntity(lpAddress);
 
-  let id = getPoolShareId(poolControllerAddress, lpAddress)
+  const id = getPoolShareId(poolControllerAddress, lpAddress);
   const poolShare = new PoolShare(id);
 
   poolShare.userAddress = lpAddress.toHex();
@@ -58,7 +58,7 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
 }
 
 export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
-  let poolTokenId = getPoolTokenId(poolId, tokenAddress)
+  const poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
   const token = BToken.bind(tokenAddress);
   //const tokenBytes = BTokenBytes.bind(Address.fromString(address));
@@ -75,7 +75,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   if (symbolCall.reverted) {
     //const symbolBytesCall = tokenBytes.try_symbol();
     //if (!symbolBytesCall.reverted) {
-      //symbol = symbolBytesCall.value.toString();
+    //symbol = symbolBytesCall.value.toString();
     //}
   } else {
     symbol = symbolCall.value;
@@ -84,7 +84,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   if (nameCall.reverted) {
     //const nameBytesCall = tokenBytes.try_name();
     //if (!nameBytesCall.reverted) {
-      //name = nameBytesCall.value.toString();
+    //name = nameBytesCall.value.toString();
     //}
   } else {
     name = nameCall.value;
@@ -195,15 +195,15 @@ export function updatePoolLiquidity(id: string): void {
 }
 
 export function decrPoolCount(finalized: boolean): void {
-  let factory = Balancer.load('1');
+  const factory = Balancer.load('1');
   factory.poolCount -= 1;
   if (finalized) factory.finalizedPoolCount -= 1;
   factory.save();
 }
 
 export function saveTransaction(event: ethereum.Event, eventName: string): void {
-  let tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
-  let userAddress = event.transaction.from.toHex();
+  const tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+  const userAddress = event.transaction.from.toHex();
   let transaction = PoolTransaction.load(tx);
   if (transaction == null) {
     transaction = new PoolTransaction(tx);
@@ -222,9 +222,9 @@ export function saveTransaction(event: ethereum.Event, eventName: string): void 
 }
 
 export function createUserEntity(address: Address): void {
-  let addressHex = address.toHex()
+  const addressHex = address.toHex();
   if (User.load(addressHex) == null) {
-    let user = new User(addressHex);
+    const user = new User(addressHex);
     user.save();
   }
 }
