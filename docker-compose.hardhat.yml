@@ -1,0 +1,12 @@
+version: '3'
+services:
+  ethereum:
+    image: hardhat
+    build:
+      context: ./
+      dockerfile: Dockerfile.hardhat
+    command: yarn hardhat node
+    entrypoint: ''
+  graph-node:
+    environment:
+      ethereum: 'ethereum:http://ethereum:8545'

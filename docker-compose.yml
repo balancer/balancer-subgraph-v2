@@ -1,6 +1,6 @@
 version: '3'
 services:
-  parity:
+  ethereum:
     image: parity/parity:latest
     volumes:
       - ./dev-chain/chain.json:/home/parity/.local/share/io.parity.ethereum/chain.json
@@ -26,7 +26,7 @@ services:
     depends_on:
       - ipfs
       - postgres
-      - parity 
+      - ethereum
     environment:
       postgres_host: postgres
       postgres_user: graph-node
@@ -34,7 +34,7 @@ services:
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
       #ethereum: 'mainnet:http://host.docker.internal:8545'
-      ethereum: 'dev:http://parity:8545'
+      ethereum: 'dev:http://ethereum:8545'
       RUST_LOG: info
       GRAPH_LOG: debug
       RUST_BACKTRACE: 1
