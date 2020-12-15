@@ -20,9 +20,21 @@ Only the factory address is needed in subgraph.yaml, new pool addresses are auto
 
 ### Services
 
-Start a ganache chain and a graph node by running
+Docker compose can be started in various configurations to start a local etherem chain, a graph-node, and it's requisite services.
+
+Start a parity chain and a graph node by running
 ```
 docker-compose up
+```
+
+Start a hardhat chain and a graph node by running
+```
+docker-compose -f docker-compose.yml -f docker-compose.hardhat.yml up
+```
+
+Start a ganache chain and a graph node by running
+```
+docker-compose -f docker-compose.yml -f docker-compose.ganache.yml up
 ```
 
 To blow away graph-node settings
