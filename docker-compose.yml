@@ -8,7 +8,7 @@ services:
       - ./dev-chain/keys:/home/parity/.local/share/io.parity.ethereum/keys/dev
       - ./dev-chain/pass.txt:/home/parity/.local/share/io.parity.ethereum/pass.txt
     #command: --config /home/parity/.local/share/io.parity.ethereum/config.toml --jsonrpc-cors all --jsonrpc-interface all --jsonrpc-apis all --jsonrpc-hosts all --tracing on --pruning archive -l rpc=trace,own_tx=trace --jsonrpc-port 8545
-    command: --config /home/parity/.local/share/io.parity.ethereum/config.toml
+    command: --config /home/parity/.local/share/io.parity.ethereum/config.toml --unsafe-expose --geth --force-ui
     restart: always
     ports:
       - 8545:8545
