@@ -44,8 +44,6 @@ dataSources:
           handler: handleAddLiquidity
         - function: removeLiquidity(bytes32,address,address[],uint128[],bool)
           handler: handleRemoveLiquidity
-        - function: setPoolController(bytes32,address)
-          handler: handleSetPoolController
         - function: batchSwapGivenIn(address,bytes,tuple[],address[],tuple)
           handler: handleBatchSwapGivenIn
         - function: batchSwapGivenOut(address,bytes,tuple[],address[],tuple)
