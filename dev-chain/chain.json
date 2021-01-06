@@ -13,21 +13,23 @@
 		"networkID" : "0x11",
 		"chainID" : "0x11",
 		"registrar" : "0x0000000000000000000000000000000000001337",
+		"eip98Transition": "0xffffffffffffffff",
 		"eip150Transition": "0x0",
 		"eip160Transition": "0x0",
 		"eip161abcTransition": "0x0",
 		"eip161dTransition": "0x0",
+    "eip140Transition": "0x0",
+    "eip145Transition": "0x0",
 		"eip155Transition": "0x0",
-		"eip98Transition": "0x7fffffffffffff",
-		"maxCodeSize": 245760000,
-		"maxCodeSizeTransition": "0x0",
-		"eip140Transition": "0x0",
 		"eip211Transition": "0x0",
 		"eip214Transition": "0x0",
 		"eip658Transition": "0x0",
-		"eip145Transition": "0x0",
+    "eip1283Transition": "0x0",
 		"eip1014Transition": "0x0",
 		"eip1052Transition": "0x0",
+		"eip1884Transition": "0x0",
+		"maxCodeSize": 245760000,
+		"maxCodeSizeTransition": "0x0",
 		"wasmActivationTransition": "0x0"
 	},
 	"genesis": {
@@ -39,7 +41,7 @@
 		"timestamp": "0x00",
 		"parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
 		"extraData": "0x",
-		"gasLimit": "0x7A1200000000000000"
+		"gasLimit": "0x7A120001"
 	},
 	"accounts": {
 		"0000000000000000000000000000000000000001": { "balance": "1", "builtin": { "name": "ecrecover", "pricing": { "linear": { "base": 3000, "word": 0 } } } },

@@ -8,12 +8,14 @@ keys_path = "/home/parity/.local/share/io.parity.ethereum/keys/dev"
 [rpc]
 hosts = ["all"]
 interface = "all"
-apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "rpc", "parity_accounts", "personal"]
+apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "parity_accounts", "personal"]
+#apis = ["all"]
 
 [websockets]
 hosts = ["all"]
 interface = "all"
-apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "rpc", "parity_accounts", "personal"]
+apis = ["web3", "eth", "pubsub", "net", "parity", "parity_pubsub", "traces", "parity_accounts", "personal"]
+#apis = ["all"]
 
 [footprint]
 tracing = "on"

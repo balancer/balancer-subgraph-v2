@@ -43,7 +43,8 @@ type PoolToken @entity {
     decimals: Int!
     address: String!
     balance: BigDecimal!
-    #denormWeight: BigDecimal!
+    invested: BigDecimal!
+    investments: [Investment!] @derivedFrom(field: "poolTokenId")
 }
 
 type PoolTokenizer @entity {
@@ -137,4 +138,13 @@ enum SwapType {
     #joinswapPoolAmountOut,
     #exitswapPoolAmountIn,
     #exitswapExternAmountOut
+}
+
+
+type Investment @entity {
+  id: ID!
+  investmentManagerAddress: Bytes!
+  amount: BigDecimal!
+  poolTokenId: PoolToken!
+  timestamp: Int!
 }

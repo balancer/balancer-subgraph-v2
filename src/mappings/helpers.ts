@@ -1,15 +1,15 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, TokenPrice, PoolTransaction, Balancer } from '../types/schema';
-import { BToken } from '../types/templates/PoolTokenizer/BToken';
+import { ERC20 } from '../types/templates/ERC20/ERC20';
 
-export const ZERO_BD = BigDecimal.fromString('0');
+export let ZERO_BD = BigDecimal.fromString('0');
 
-const network = dataSource.network();
+let network = dataSource.network();
 
-export const WETH: string =
-  network == 'mainnet' ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' : '0xd0a1e359811322d97991e03f863a0c30c2cf029c';
+export let WETH: string =
+  network == 'mainnet' ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' : '0x6d5495Ce42aD2719AD9926c4EAC403d23E09d834';
 
-export const USD: string =
+export let USD: string =
   network == 'mainnet'
     ? '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' // USDC
     : '0x1528f3fcc26d13f7079325fb78d9442607781c8c'; // DAI
@@ -31,7 +31,7 @@ export function bigIntToDecimal(amount: BigInt, decimals: i32): BigDecimal {
 }
 
 export function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
-  const scale = BigInt.fromI32(10)
+  let scale = BigInt.fromI32(10)
     .pow(decimals as u8)
     .toBigDecimal();
   return amount.div(scale);
@@ -44,8 +44,8 @@ export function getPoolShareId(poolControllerAddress: Address, lpAddress: Addres
 export function createPoolShareEntity(poolControllerAddress: Address, lpAddress: Address): void {
   createUserEntity(lpAddress);
 
-  const id = getPoolShareId(poolControllerAddress, lpAddress);
-  const poolShare = new PoolShare(id);
+  let id = getPoolShareId(poolControllerAddress, lpAddress);
+  let poolShare = new PoolShare(id);
 
   poolShare.userAddress = lpAddress.toHex();
   poolShare.poolTokenizerId = poolControllerAddress.toHex();
@@ -58,50 +58,47 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
 }
 
 export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
-  const poolTokenId = getPoolTokenId(poolId, tokenAddress);
+  let poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
-  const token = BToken.bind(tokenAddress);
-  //const tokenBytes = BTokenBytes.bind(Address.fromString(address));
+  let token = ERC20.bind(tokenAddress);
   let symbol = '';
   let name = '';
   let decimals = 18;
 
-  // COMMENT THE LINES BELOW OUT FOR LOCAL DEV ON KOVAN
+  //let symbolCall = token.try_symbol();
+  //let nameCall = token.try_name();
+  //let decimalCall = token.try_decimals();
 
-  const symbolCall = token.try_symbol();
-  const nameCall = token.try_name();
-  const decimalCall = token.try_decimals();
-
-  if (symbolCall.reverted) {
+  //if (symbolCall.reverted) {
     //const symbolBytesCall = tokenBytes.try_symbol();
     //if (!symbolBytesCall.reverted) {
     //symbol = symbolBytesCall.value.toString();
     //}
-  } else {
-    symbol = symbolCall.value;
-  }
+  //} else {
+    //symbol = symbolCall.value;
+  //}
 
-  if (nameCall.reverted) {
-    //const nameBytesCall = tokenBytes.try_name();
-    //if (!nameBytesCall.reverted) {
-    //name = nameBytesCall.value.toString();
-    //}
-  } else {
-    name = nameCall.value;
-  }
+  //if (nameCall.reverted) {
+    ////const nameBytesCall = tokenBytes.try_name();
+    ////if (!nameBytesCall.reverted) {
+    ////name = nameBytesCall.value.toString();
+    ////}
+  //} else {
+    //name = nameCall.value;
+  //}
 
-  if (!decimalCall.reverted) {
-    decimals = decimalCall.value;
-  }
+  //if (!decimalCall.reverted) {
+    //decimals = decimalCall.value;
+  //}
 
-  const poolToken = new PoolToken(poolTokenId);
+  let poolToken = new PoolToken(poolTokenId);
   poolToken.poolId = poolId;
   poolToken.address = tokenAddress.toHexString();
   poolToken.name = name;
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
   poolToken.balance = ZERO_BD;
-  //poolToken.denormWeight = ZERO_BD
+  poolToken.invested = ZERO_BD;
   poolToken.save();
 }
 
@@ -195,7 +192,7 @@ export function updatePoolLiquidity(id: string): void {
 }
 
 export function decrPoolCount(finalized: boolean): void {
-  const factory = Balancer.load('1');
+  const factory = Balancer.load('2');
   factory.poolCount -= 1;
   if (finalized) factory.finalizedPoolCount -= 1;
   factory.save();
@@ -222,9 +219,9 @@ export function saveTransaction(event: ethereum.Event, eventName: string): void 
 }
 
 export function createUserEntity(address: Address): void {
-  const addressHex = address.toHex();
+  let addressHex = address.toHex();
   if (User.load(addressHex) == null) {
-    const user = new User(addressHex);
+    let user = new User(addressHex);
     user.save();
   }
 }

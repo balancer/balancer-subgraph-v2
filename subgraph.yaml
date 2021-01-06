@@ -8,15 +8,7 @@ dataSources:
     name: Vault 
     network: dev
     source:
-      #address: "0x51ea4ece31bfd87a6eb101c145c98ce3d2821d2d"
-      #address: "0xcBf7C38134084030584E3C769e9c2Fef7Cd2E9Fd"
-      #address: "0x9fCCc786024B9027169e257BACf4bf77af0f9c99"
-      #address: "0x022CC30A9Eba5d3B68B8B0353B480eA5d197318C" // deterministic
-      #address: "0x4c42a48D8f08f97a9e3275caC297F2aba6a3D74C"
-      #address: "0x780Dc7Dc6e9dBdFA70b4e29d0658638cb82E3f73"
-      #address: "0xF5a8dfB15685AC3c6Fe160b8b3c6eafb16eFCF2F"
-      #address: "0xe7EC76aD6b65A10C5ff62691CD0DA023ca1a9A70"
-      address: "0x9fCCc786024B9027169e257BACf4bf77af0f9c99"
+      address: "0xEB3614970eF01b35f656040777CE5D91BA9e659B"
       abi: Vault
       startBlock: 1
     mapping:
@@ -31,12 +23,17 @@ dataSources:
           file: ./abis/Vault.json
         - name: BToken
           file: ./abis/BToken.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
-        # TODO move to call handler
         - event: Deposited(indexed address,indexed address,indexed address,uint128)
           handler: handleUserBalanceDeposited
         - event: Withdrawn(indexed address,indexed address,indexed address,uint128)
           handler: handleUserBalanceWithdrawn
+        - event: TokenSwap(bytes32,int256[])
+          handler: handleSwapEvent
+        - event: PoolInvested(indexed bytes32,indexed address,indexed address,uint256)
+          handler: handleInvestment
       callHandlers:
         - function: newPool(address,uint8)
           handler: handleNewPool
@@ -44,16 +41,16 @@ dataSources:
           handler: handleAddLiquidity
         - function: removeLiquidity(bytes32,address,address[],uint128[],bool)
           handler: handleRemoveLiquidity
-        - function: batchSwapGivenIn(address,bytes,tuple[],address[],tuple)
-          handler: handleBatchSwapGivenIn
-        - function: batchSwapGivenOut(address,bytes,tuple[],address[],tuple)
-          handler: handleBatchSwapGivenOut
+        #- function: batchSwapGivenIn(address,bytes,tuple[],address[],tuple)
+          #handler: handleBatchSwapGivenIn
+        #- function: batchSwapGivenOut(address,bytes,tuple[],address[],tuple)
+          #handler: handleBatchSwapGivenOut
 templates:
   - kind: ethereum/contract
-    name: PoolTokenizer
+    name: Pool
     network: dev
     source:
-      abi: FixedSetPoolTokenizer
+      abi: ConstantProductPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -63,15 +60,32 @@ templates:
         - FixedSetPoolTokenizer
         - BToken
       abis:
-        - name: FixedSetPoolTokenizer
-          file: ./abis/FixedSetPoolTokenizer.json
+        - name: ConstantProductPool
+          file: ./abis/ConstantProductPool.json
+        - name: StablecoinPool
+          file: ./abis/StablecoinPool.json
         - name: BToken
           file: ./abis/BToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       callHandlers:
-        - function: joinPool(uint256, uint128[], bool, address)
+        - function: joinPool(uint256,uint128[],bool,address)
           handler: handleJoinPool
-        - function: exitPool(uint256, uint256[], bool, address)
+        - function: exitPool(uint256,uint256[],bool,address)
           handler: handleExitPool
+  - kind: ethereum/contract
+    name: ERC20
+    network: dev
+    source:
+      abi: ERC20
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - ERC20
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
