@@ -8,3 +8,5 @@ yarn-error.log
 data/ipfs
 data/postgres
 *.js
+frontend
+core
