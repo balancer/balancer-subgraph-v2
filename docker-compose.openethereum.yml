@@ -1,0 +1,12 @@
+version: '3'
+services:
+  ethereum:
+    image: openethereum/openethereum 
+    #volumes:
+      #- ./dev-chain/chain.json:/home/parity/.local/share/io.parity.ethereum/chain.json
+      #- ./dev-chain/config.toml:/home/parity/.local/share/io.parity.ethereum/config.toml
+      #- ./dev-chain/keys:/home/parity/.local/share/io.parity.ethereum/keys/dev
+      #- ./dev-chain/pass.txt:/home/parity/.local/share/io.parity.ethereum/pass.txt
+    #command: --config dev
+    command: --config /home/parity/.local/share/io.parity.ethereum/config.toml --unsafe-expose --jsonrpc-cors all # --force-ui
+    #command: -c dev-insecure --chain /home/parity/.local/share/io.parity.ethereum/chain.json
