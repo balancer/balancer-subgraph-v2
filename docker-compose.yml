@@ -56,3 +56,9 @@ services:
       POSTGRES_DB: graph-node
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+  block-explorer:
+    image: alethio/ethereum-lite-explorer
+    environment:
+      APP_NODE_URL: http://localhost:8545
+    ports:
+      - '7000:80'
