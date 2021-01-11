@@ -38,6 +38,7 @@ services:
       RUST_LOG: info
       GRAPH_LOG: debug
       RUST_BACKTRACE: 1
+      GRAPH_ETH_CALL_BY_NUMBER: 1 # remove when EIP1898 is merged into openethereum... https://github.com/openethereum/openethereum/pull/203
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
     ports:
