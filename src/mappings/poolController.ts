@@ -8,7 +8,6 @@ import {
   createPoolShareEntity,
   createPoolTokenEntity,
   updatePoolLiquidity,
-  saveTransaction,
   ZERO_BD,
   decrPoolCount,
 } from './helpers';
@@ -17,19 +16,15 @@ import {
  ********** Pool Controls ***********
  ************************************/
 
-// TODO only applies to FixedSetPoolTokenizer
 export function handleJoinPool(call: JoinPoolCall): void {
   let poolControllerAddress = call.to;
   let poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
 
   poolController.joinsCount = poolController.joinsCount + BigInt.fromI32(1);
   poolController.save();
-
-  createPoolShareEntity(poolControllerAddress, call.inputs.beneficiary);
 }
 
 export function handleExitPool(call: ExitPoolCall): void {
-  // TODO this is the poolTokenizerAddress - load poolId
   let poolControllerAddress = call.to;
   let poolController = PoolTokenizer.load(poolControllerAddress.toHex());
 
@@ -41,7 +36,6 @@ export function handleExitPool(call: ExitPoolCall): void {
  *********** POOL SHARES ************
  ************************************/
 
-// TODO
 export function handleTransfer(event: Transfer): void {
   let poolTokenizerId = event.address.toHex();
   let poolAddress = event.address;

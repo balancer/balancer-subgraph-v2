@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, TokenPrice, PoolTransaction, Balancer } from '../types/schema';
+import { Pool, User, PoolToken, PoolShare, TokenPrice, Balancer } from '../types/schema';
 import { ERC20 } from '../types/templates/ERC20/ERC20';
 
 export let ZERO_BD = BigDecimal.fromString('0');
@@ -65,31 +65,31 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   let name = '';
   let decimals = 18;
 
-  //let symbolCall = token.try_symbol();
-  //let nameCall = token.try_name();
-  //let decimalCall = token.try_decimals();
+  let symbolCall = token.try_symbol();
+  let nameCall = token.try_name();
+  let decimalCall = token.try_decimals();
 
-  //if (symbolCall.reverted) {
+  if (symbolCall.reverted) {
+    // TODO
     //const symbolBytesCall = tokenBytes.try_symbol();
     //if (!symbolBytesCall.reverted) {
     //symbol = symbolBytesCall.value.toString();
+  } else {
+    symbol = symbolCall.value;
+  }
+
+  if (nameCall.reverted) {
+    //const nameBytesCall = tokenBytes.try_name();
+    //if (!nameBytesCall.reverted) {
+    //name = nameBytesCall.value.toString();
     //}
-  //} else {
-    //symbol = symbolCall.value;
-  //}
+  } else {
+    name = nameCall.value;
+  }
 
-  //if (nameCall.reverted) {
-    ////const nameBytesCall = tokenBytes.try_name();
-    ////if (!nameBytesCall.reverted) {
-    ////name = nameBytesCall.value.toString();
-    ////}
-  //} else {
-    //name = nameCall.value;
-  //}
-
-  //if (!decimalCall.reverted) {
-    //decimals = decimalCall.value;
-  //}
+  if (!decimalCall.reverted) {
+    decimals = decimalCall.value;
+  }
 
   let poolToken = new PoolToken(poolTokenId);
   poolToken.poolId = poolId;
@@ -196,26 +196,6 @@ export function decrPoolCount(finalized: boolean): void {
   factory.poolCount -= 1;
   if (finalized) factory.finalizedPoolCount -= 1;
   factory.save();
-}
-
-export function saveTransaction(event: ethereum.Event, eventName: string): void {
-  const tx = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
-  const userAddress = event.transaction.from.toHex();
-  let transaction = PoolTransaction.load(tx);
-  if (transaction == null) {
-    transaction = new PoolTransaction(tx);
-  }
-  transaction.event = eventName;
-  transaction.poolAddress = event.address.toHex();
-  transaction.userAddress = userAddress;
-  transaction.gasUsed = event.transaction.gasUsed.toBigDecimal();
-  transaction.gasPrice = event.transaction.gasPrice.toBigDecimal();
-  transaction.tx = event.transaction.hash;
-  transaction.timestamp = event.block.timestamp.toI32();
-  transaction.block = event.block.number.toI32();
-  transaction.save();
-
-  createUserEntity(Address.fromString(userAddress));
 }
 
 export function createUserEntity(address: Address): void {

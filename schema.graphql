@@ -14,8 +14,6 @@ type Balancer @entity {
 type Pool @entity {
     id: ID!                                              # Pool address
     controller: Bytes!                                   # Controller address
-    #publicSwap: Boolean!                                # isPublicSwap
-    #finalized: Boolean!                                 # isFinalized
     symbol: String                                      # Pool token symbol
     name: String                                        # Pool token name
     active: Boolean!                                     # isActive
@@ -33,6 +31,7 @@ type Pool @entity {
     vaultID: Balancer!
     tx: Bytes                                           # Pool creation transaction id
     swaps: [Swap!] @derivedFrom(field: "poolId")
+    poolTokenizer: PoolTokenizer
 }
 
 type PoolToken @entity {
@@ -67,21 +66,29 @@ type PoolShare @entity {
 type User @entity {
     id: ID!
     sharesOwned: [PoolShare!]  @derivedFrom(field: "userAddress")
-    txs: [PoolTransaction!]  @derivedFrom(field: "userAddress")
     swaps: [Swap!]  @derivedFrom(field: "userAddress")
+    userBalances: [UserBalance!]  @derivedFrom(field: "userAddress")
+}
+
+type UserBalance @entity {
+  id:  ID!
+  userAddress: User!
+  token: Bytes!
+  balance: BigDecimal!
 }
 
 type Swap @entity {
-    id: ID!                                 #
-    caller: Bytes!                          #
-    tokenIn: Bytes!                         #
-    tokenInSym: String!                     #
-    tokenOut: Bytes!                        #
-    tokenOutSym: String!                    #
-    tokenAmountIn: BigDecimal!              #
-    tokenAmountOut: BigDecimal!             #
+    id: ID!
+    caller: Bytes!
+    tokenIn: Bytes!
+    tokenInSym: String!
+    tokenOut: Bytes!
+    tokenOutSym: String!
+    tokenAmountIn: BigDecimal!
+    tokenAmountOut: BigDecimal!
+    tokenDeltas: [BigInt!]!
     poolId: Pool!
-    userAddress: User                       # User address that initiates the swap
+    userAddress: User!                      # User address that initiates the swap
     value: BigDecimal!                      # Swap value in USD
     feeValue: BigDecimal!                   # Swap fee value in USD
     protocolFeeValue: BigDecimal!           # Swap fee value in USD
@@ -89,34 +96,6 @@ type Swap @entity {
     poolTotalSwapFee: BigDecimal!           # Total pool swap fee in USD
     poolLiquidity: BigDecimal!              # Pool liquidity value in USD
     timestamp: Int!
-}
-
-type PoolTransaction @entity {
-    id: ID!                         # Log ID
-    tx: Bytes!
-    event: String
-    block: Int!
-    timestamp: Int!
-    gasUsed: BigDecimal!
-    gasPrice: BigDecimal!
-    poolId: Pool
-    userAddress: User
-    action: SwapType
-    sender: Bytes
-}
-
-type VaultTransaction @entity {
-    id: ID!                         # Log ID
-    tx: Bytes!
-    event: String
-    block: Int!
-    timestamp: Int!
-    gasUsed: BigDecimal!
-    gasPrice: BigDecimal!
-    poolId: Pool
-    userAddress: User
-    action: SwapType
-    sender: Bytes
 }
 
 type TokenPrice @entity {
@@ -128,18 +107,6 @@ type TokenPrice @entity {
     poolLiquidity: BigDecimal!
     poolTokenId: String
 }
-
-enum SwapType {
-    batchSwapGiveIn,
-    batchSwapGivenOut,
-    #swapExactAmountIn,
-    #swapExactAmountOut,
-    #joinswapExternAmountIn,
-    #joinswapPoolAmountOut,
-    #exitswapPoolAmountIn,
-    #exitswapExternAmountOut
-}
-
 
 type Investment @entity {
   id: ID!
