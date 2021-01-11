@@ -95,7 +95,7 @@ export function handleAddLiquidity(call: AddLiquidityCall): void {
       createPoolTokenEntity(poolId, tokenAddress);
       poolToken = PoolToken.load(poolTokenId);
     }
-    let tokenAmountIn = tokenToDecimal(amounts[i].toBigDecimal(), poolToken.decimals);
+    let tokenAmountIn = tokenToDecimal(amounts[i], poolToken.decimals);
     let newAmount = poolToken.balance.plus(tokenAmountIn);
     poolToken.balance = newAmount;
     poolToken.save();
@@ -121,7 +121,7 @@ export function handleRemoveLiquidity(call: RemoveLiquidityCall): void {
     let poolTokenId = getPoolTokenId(poolId, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
 
-    let tokenAmountOut = tokenToDecimal(amounts[i].toBigDecimal(), poolToken.decimals);
+    let tokenAmountOut = tokenToDecimal(amounts[i], poolToken.decimals);
     let newAmount = poolToken.balance.minus(tokenAmountOut);
     poolToken.balance = newAmount;
     poolToken.save();
@@ -204,8 +204,8 @@ export function handleSwapEvent(event: TokenSwap): void {
   let tokenOutAddress: Address;
   let tokenInSym: string;
   let tokenOutSym: string;
-  let tokenAmountIn: BigInt;
-  let tokenAmountOut: BigInt;
+  let tokenAmountIn: BigDecimal;
+  let tokenAmountOut: BigDecimal;
 
   for (let i: i32 = 0; i < tokensList.length; i++) {
     let tokenAddressBytes: Bytes = tokensList[i32(i)];
@@ -219,11 +219,13 @@ export function handleSwapEvent(event: TokenSwap): void {
     if (tokenDeltas[i] < BigInt.fromI32(0)) {
       tokenInAddress = tokenAddress;
       tokenInSym = poolToken.symbol;
-      tokenAmountIn = tokenDeltas[i];
+      //tokenAmountIn = tokenDeltas[i];
+      tokenAmountIn = tokenToDecimal(tokenDeltas[i], poolToken.decimals);
     } else if (tokenDeltas[i] > BigInt.fromI32(0)) {
       tokenOutAddress = tokenAddress;
       tokenOutSym = poolToken.symbol;
-      tokenAmountOut = tokenDeltas[i];
+      //tokenAmountOut = tokenDeltas[i];
+      tokenAmountOut = tokenToDecimal(tokenDeltas[i], poolToken.decimals);
     }
   }
 
@@ -234,11 +236,11 @@ export function handleSwapEvent(event: TokenSwap): void {
 
   swap.tokenIn = tokenInAddress;
   swap.tokenInSym = tokenInSym;
-  swap.tokenAmountIn = new BigDecimal(tokenAmountIn);
+  swap.tokenAmountIn = tokenAmountIn;
 
   swap.tokenOut = tokenOutAddress;
   swap.tokenOutSym = tokenOutSym;
-  swap.tokenAmountOut = new BigDecimal(tokenAmountOut);
+  swap.tokenAmountOut = tokenAmountOut;
 
   swap.tokenDeltas = tokenDeltas;
 

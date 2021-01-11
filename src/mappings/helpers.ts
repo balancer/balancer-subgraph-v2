@@ -30,11 +30,11 @@ export function bigIntToDecimal(amount: BigInt, decimals: i32): BigDecimal {
   return amount.toBigDecimal().div(scale);
 }
 
-export function tokenToDecimal(amount: BigDecimal, decimals: i32): BigDecimal {
+export function tokenToDecimal(amount: BigInt, decimals: i32): BigDecimal {
   let scale = BigInt.fromI32(10)
     .pow(decimals as u8)
     .toBigDecimal();
-  return amount.div(scale);
+  return amount.toBigDecimal().div(scale);
 }
 
 export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {

@@ -20,7 +20,7 @@ export function handleJoinPool(call: JoinPoolCall): void {
   let poolControllerAddress = call.to;
   let poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
 
-  poolController.joinsCount = poolController.joinsCount + BigInt.fromI32(1);
+  poolController.joinsCount = poolController.joinsCount.plus(BigInt.fromI32(1));
   poolController.save();
 }
 
@@ -28,7 +28,7 @@ export function handleExitPool(call: ExitPoolCall): void {
   let poolControllerAddress = call.to;
   let poolController = PoolTokenizer.load(poolControllerAddress.toHex());
 
-  poolController.exitsCount = poolController.exitsCount + BigInt.fromI32(1);
+  poolController.exitsCount = poolController.exitsCount.plus(BigInt.fromI32(1));
   poolController.save();
 }
 
@@ -61,39 +61,39 @@ export function handleTransfer(event: Transfer): void {
       createPoolShareEntity(poolAddress, event.params.dst);
       poolShareTo = PoolShare.load(poolShareToId);
     }
-    poolShareTo.balance = poolShareTo.balance + tokenToDecimal(event.params.amt.toBigDecimal(), 18);
+    poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.amt, 18));
     poolShareTo.save();
-    poolTokenizer.totalShares += tokenToDecimal(event.params.amt.toBigDecimal(), 18);
+    poolTokenizer.totalShares = poolTokenizer.totalShares.plus(tokenToDecimal(event.params.amt, 18));
   } else if (isBurn) {
     if (poolShareFrom == null) {
       createPoolShareEntity(poolAddress, event.params.src);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
-    poolShareFrom.balance -= tokenToDecimal(event.params.amt.toBigDecimal(), 18);
+    poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.amt, 18));
     poolShareFrom.save();
-    poolTokenizer.totalShares -= tokenToDecimal(event.params.amt.toBigDecimal(), 18);
+    poolTokenizer.totalShares = poolTokenizer.totalShares.minus(tokenToDecimal(event.params.amt, 18));
   } else {
     if (poolShareTo == null) {
       createPoolShareEntity(poolAddress, event.params.dst);
       poolShareTo = PoolShare.load(poolShareToId);
     }
-    poolShareTo.balance += tokenToDecimal(event.params.amt.toBigDecimal(), 18);
+    poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.amt, 18));
     poolShareTo.save();
 
     if (poolShareFrom == null) {
       createPoolShareEntity(poolAddress, event.params.src);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
-    poolShareFrom.balance -= tokenToDecimal(event.params.amt.toBigDecimal(), 18);
+    poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.amt, 18));
     poolShareFrom.save();
   }
 
   if (poolShareTo !== null && poolShareTo.balance.notEqual(ZERO_BD) && poolShareToBalance.equals(ZERO_BD)) {
-    poolTokenizer.holdersCount += BigInt.fromI32(1);
+    poolTokenizer.holdersCount = poolTokenizer.holdersCount.plus(BigInt.fromI32(1));
   }
 
   if (poolShareFrom !== null && poolShareFrom.balance.equals(ZERO_BD) && poolShareFromBalance.notEqual(ZERO_BD)) {
-    poolTokenizer.holdersCount -= BigInt.fromI32(1);
+    poolTokenizer.holdersCount = poolTokenizer.holdersCount.minus(BigInt.fromI32(1));
   }
 
   pool.save();
