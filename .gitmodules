@@ -1,0 +1,6 @@
+[submodule "core"]
+	path = core
+	url = git@github.com:balancer-labs/balancer-core-v2.git
+[submodule "balancer.eth"]
+	path = balancer.eth
+	url = git@github.com:balancer-labs/balancer.eth.git
