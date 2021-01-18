@@ -1,16 +1,18 @@
 import { BigInt, Address, Bytes, store } from '@graphprotocol/graph-ts';
-import { LOG_CALL, LOG_JOIN, LOG_EXIT, LOG_SWAP, Transfer } from '../types/templates/Pool/Pool';
-import { JoinPoolCall, ExitPoolCall } from '../types/templates/PoolController/FixedSetPoolTokenizer';
-import { Balancer, Pool, PoolToken, PoolShare, Swap, TokenPrice, PoolTokenizer } from '../types/schema';
+import { Transfer } from '../types/templates/Pool/BToken';
+import { JoinPoolCall, ExitPoolCall } from '../types/templates/Pool/ConstantProductPool';
+import { Balancer, Pool, PoolToken, PoolShare, Swap, PoolTokenizer } from '../types/schema';
 import {
   hexToDecimal,
   tokenToDecimal,
   createPoolShareEntity,
   createPoolTokenEntity,
   updatePoolLiquidity,
-  ZERO_BD,
   decrPoolCount,
 } from './helpers';
+import {
+  ZERO_BD,
+} from './constants';
 
 /************************************
  ********** Pool Controls ***********
@@ -42,14 +44,14 @@ export function handleTransfer(event: Transfer): void {
 
   let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-  let isMint = event.params.src.toHex() == ZERO_ADDRESS;
-  let isBurn = event.params.dst.toHex() == ZERO_ADDRESS;
+  let isMint = event.params.from.toHex() == ZERO_ADDRESS;
+  let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
 
-  let poolShareFromId = poolTokenizerId.concat('-').concat(event.params.src.toHex());
+  let poolShareFromId = poolTokenizerId.concat('-').concat(event.params.from.toHex());
   let poolShareFrom = PoolShare.load(poolShareFromId);
   let poolShareFromBalance = poolShareFrom == null ? ZERO_BD : poolShareFrom.balance;
 
-  let poolShareToId = poolTokenizerId.concat('-').concat(event.params.dst.toHex());
+  let poolShareToId = poolTokenizerId.concat('-').concat(event.params.to.toHex());
   let poolShareTo = PoolShare.load(poolShareToId);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
 
@@ -58,33 +60,33 @@ export function handleTransfer(event: Transfer): void {
 
   if (isMint) {
     if (poolShareTo == null) {
-      createPoolShareEntity(poolAddress, event.params.dst);
+      createPoolShareEntity(poolAddress, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
-    poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.amt, 18));
+    poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, 18));
     poolShareTo.save();
-    poolTokenizer.totalShares = poolTokenizer.totalShares.plus(tokenToDecimal(event.params.amt, 18));
+    poolTokenizer.totalShares = poolTokenizer.totalShares.plus(tokenToDecimal(event.params.value, 18));
   } else if (isBurn) {
     if (poolShareFrom == null) {
-      createPoolShareEntity(poolAddress, event.params.src);
+      createPoolShareEntity(poolAddress, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
-    poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.amt, 18));
+    poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, 18));
     poolShareFrom.save();
-    poolTokenizer.totalShares = poolTokenizer.totalShares.minus(tokenToDecimal(event.params.amt, 18));
+    poolTokenizer.totalShares = poolTokenizer.totalShares.minus(tokenToDecimal(event.params.value, 18));
   } else {
     if (poolShareTo == null) {
-      createPoolShareEntity(poolAddress, event.params.dst);
+      createPoolShareEntity(poolAddress, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
-    poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.amt, 18));
+    poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, 18));
     poolShareTo.save();
 
     if (poolShareFrom == null) {
-      createPoolShareEntity(poolAddress, event.params.src);
+      createPoolShareEntity(poolAddress, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
-    poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.amt, 18));
+    poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, 18));
     poolShareFrom.save();
   }
 

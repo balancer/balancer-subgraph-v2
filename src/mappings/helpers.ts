@@ -1,18 +1,8 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, TokenPrice, Balancer } from '../types/schema';
 import { ERC20 } from '../types/templates/ERC20/ERC20';
+import { ZERO_BD, WETH, USD, BAL } from './constants';
 
-export let ZERO_BD = BigDecimal.fromString('0');
-
-let network = dataSource.network();
-
-export let WETH: string =
-  network == 'mainnet' ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' : '0x6d5495Ce42aD2719AD9926c4EAC403d23E09d834';
-
-export let USD: string =
-  network == 'mainnet'
-    ? '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' // USDC
-    : '0x1528f3fcc26d13f7079325fb78d9442607781c8c'; // DAI
 
 export function hexToDecimal(hexString: string, decimals: i32): BigDecimal {
   const bytes = Bytes.fromHexString(hexString).reverse() as Bytes;
@@ -102,6 +92,37 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   poolToken.save();
 }
 
+export function getTokenPriceId(poolId: string, tokenAddress: Address, stableTokenAddress: Address, block: BigInt): string {
+  return poolId.concat('-')
+    .concat(tokenAddress.toHexString()).concat('-')
+    .concat(stableTokenAddress.toHexString()).concat('-')
+    .concat(block.toString());
+}
+
+export function capturePrices(id: string): void {
+  const pool = Pool.load(id);
+  const tokensList: Array<Bytes> = pool.tokensList;
+  if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2))) return;
+
+  let pricingAssets = [BAL, WETH, USD].map(pa => Address.fromString(pa))
+
+  pricingAssets.forEach((pa) => {
+    if (tokensList.includes(pa)) {
+      tokensList.filter(tokenAddress => tokenAddress !== pa).forEach(tokenAddress => {
+
+        let block  = 0; // TODO
+        let tokenPriceId = getTokenPriceId(id, tokenAddress, pa, block)
+        let tokenPrice = new TokenPrice(tokenPriceId);
+        tokenPrice.poolId = id;
+        //tokenPrice.timestamp = ???;
+        tokenPrice.pricingAsset = pa;
+      })
+    }
+  })
+}
+
+
+// TODO out of date
 export function updatePoolLiquidity(id: string): void {
   const pool = Pool.load(id);
   const tokensList: Array<Bytes> = pool.tokensList;
@@ -115,7 +136,7 @@ export function updatePoolLiquidity(id: string): void {
   const poolLiquidity = ZERO_BD;
 
   if (tokensList.includes(Address.fromString(USD))) {
-    //const usdPoolTokenId = id.concat('-').concat(USD);
+    const usdPoolTokenId = id.concat('-').concat(USD);
     //const usdPoolToken = PoolToken.load(usdPoolTokenId);
     //poolLiquidity = usdPoolToken.balance.div(usdPoolToken.denormWeight).times(pool.totalWeight)
     hasPrice = true;
@@ -138,15 +159,15 @@ export function updatePoolLiquidity(id: string): void {
       let tokenPrice = TokenPrice.load(tokenPriceId);
       if (tokenPrice == null) {
         tokenPrice = new TokenPrice(tokenPriceId);
-        tokenPrice.poolTokenId = '';
-        tokenPrice.poolLiquidity = ZERO_BD;
+        //tokenPrice.poolTokenId = '';
+        //tokenPrice.poolLiquidity = ZERO_BD;
       }
 
       const poolTokenId = id.concat('-').concat(tokenPriceId);
       const poolToken = PoolToken.load(poolTokenId);
 
       if (
-        (tokenPrice.poolTokenId == poolTokenId || poolLiquidity.gt(tokenPrice.poolLiquidity)) &&
+        //(tokenPrice.poolTokenId == poolTokenId || poolLiquidity.gt(tokenPrice.poolLiquidity)) &&
         (tokenPriceId != WETH.toString() || (pool.tokensCount.equals(BigInt.fromI32(2)) && hasUsdPrice))
       ) {
         tokenPrice.price = ZERO_BD;
@@ -155,11 +176,11 @@ export function updatePoolLiquidity(id: string): void {
           //tokenPrice.price = poolLiquidity.div(pool.totalWeight).times(poolToken.denormWeight).div(poolToken.balance) // TODO
         }
 
-        tokenPrice.symbol = poolToken.symbol;
-        tokenPrice.name = poolToken.name;
-        tokenPrice.decimals = poolToken.decimals;
-        tokenPrice.poolLiquidity = poolLiquidity;
-        tokenPrice.poolTokenId = poolTokenId;
+        //tokenPrice.symbol = poolToken.symbol;
+        //tokenPrice.name = poolToken.name;
+        //tokenPrice.decimals = poolToken.decimals;
+        //tokenPrice.poolLiquidity = poolLiquidity;
+        //tokenPrice.poolTokenId = poolTokenId;
         tokenPrice.save();
       }
     }

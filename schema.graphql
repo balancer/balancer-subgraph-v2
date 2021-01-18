@@ -99,13 +99,12 @@ type Swap @entity {
 }
 
 type TokenPrice @entity {
-    id: ID!
-    symbol: String
-    name: String
-    decimals: Int!
-    price: BigDecimal!
-    poolLiquidity: BigDecimal!
-    poolTokenId: String
+  id: ID! # address of token + address of stablecoin-poolId
+  poolId: Pool!
+  asset: Bytes!
+  pricingAsset: Bytes! # address of stable asset
+  price: BigDecimal!
+  block: BigInt!
 }
 
 type Investment @entity {

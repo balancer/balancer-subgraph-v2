@@ -16,12 +16,23 @@ import {
   hexToDecimal,
   tokenToDecimal,
   getPoolTokenId,
+  getTokenPriceId,
   createPoolTokenEntity,
   updatePoolLiquidity,
-  ZERO_BD,
   decrPoolCount,
 } from './helpers';
+import {
+  ZERO_BD,
+  WETH,
+  WBTC,
+  USD,
+  USDC,
+  DAI,
+  BAL
+} from './constants';
+
 import { Pool as PoolTemplate} from '../types/templates'
+
 
 export function handleNewPool(call: NewPoolCall): void {
   let vault = Balancer.load('2');
@@ -219,12 +230,10 @@ export function handleSwapEvent(event: TokenSwap): void {
     if (tokenDeltas[i] < BigInt.fromI32(0)) {
       tokenInAddress = tokenAddress;
       tokenInSym = poolToken.symbol;
-      //tokenAmountIn = tokenDeltas[i];
-      tokenAmountIn = tokenToDecimal(tokenDeltas[i], poolToken.decimals);
+      tokenAmountIn = tokenToDecimal(tokenDeltas[i].abs(), poolToken.decimals);
     } else if (tokenDeltas[i] > BigInt.fromI32(0)) {
       tokenOutAddress = tokenAddress;
       tokenOutSym = poolToken.symbol;
-      //tokenAmountOut = tokenDeltas[i];
       tokenAmountOut = tokenToDecimal(tokenDeltas[i], poolToken.decimals);
     }
   }
@@ -257,6 +266,36 @@ export function handleSwapEvent(event: TokenSwap): void {
 
   swap.timestamp = event.block.timestamp.toI32();
   swap.save();
+
+  if (tokenAmountOut == BigDecimal.fromString('0') || tokenAmountIn == BigDecimal.fromString('0')) { return;}
+
+  // Capture price
+  let block = event.block.number;
+  let pricing_assets: Address[] = [WETH, WBTC, USDC, DAI, BAL] 
+
+  if (pricing_assets.includes(tokenInAddress)) {
+    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, block)
+    let tokenPrice = new TokenPrice(tokenPriceId);
+    //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenOutAddress);
+    tokenPrice.poolId = poolId.toHexString();
+    tokenPrice.block = block;
+    tokenPrice.asset = tokenOutAddress;
+    tokenPrice.pricingAsset = tokenInAddress;
+    // TODO decimals
+    tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
+    tokenPrice.save();
+  } else if (pricing_assets.includes(tokenOutAddress)) {
+    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block)
+    let tokenPrice = new TokenPrice(tokenPriceId);
+    //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenInAddress);
+    tokenPrice.poolId = poolId.toHexString();
+    tokenPrice.block = block;
+    tokenPrice.asset = tokenInAddress;
+    tokenPrice.pricingAsset = tokenOutAddress;
+    // TODO decimals
+    tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
+    tokenPrice.save();
+  }
 }
 
 export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
