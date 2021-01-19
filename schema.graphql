@@ -72,7 +72,7 @@ type User @entity {
 
 type UserBalance @entity {
   id:  ID!
-  userAddress: User!
+  userAddress: User
   token: Bytes!
   balance: BigDecimal!
 }

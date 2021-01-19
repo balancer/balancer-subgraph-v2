@@ -148,7 +148,7 @@ export function handleUserBalanceDeposited(event: Deposited): void {
 
   if (userBalance == null) {
     userBalance = new UserBalance(userBalanceId);
-    userBalance.userAddress = event.params.user.toHexString();
+    userBalance.userAddress = event.params.user.toHex();
     userBalance.token = event.params.token;
     userBalance.balance = ZERO_BD;
   }
@@ -298,6 +298,7 @@ export function handleSwapEvent(event: TokenSwap): void {
   }
 }
 
+// Deprecated in favor of events
 export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
   let swaps = call.inputs.swaps;
   let tokens = call.inputs.tokens;
@@ -349,6 +350,7 @@ export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
   }
 }
 
+// Deprecated in favor of events
 export function handleBatchSwapGivenOut(call: BatchSwapGivenOutCall): void {
   let swaps = call.inputs.swaps;
   let tokens = call.inputs.tokens;
