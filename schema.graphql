@@ -84,9 +84,9 @@ type Swap @entity {
     tokenInSym: String!
     tokenOut: Bytes!
     tokenOutSym: String!
-    tokenAmountIn: BigDecimal!
-    tokenAmountOut: BigDecimal!
-    tokenDeltas: [BigInt!]!
+    tokenAmountIn: BigInt!
+    tokenAmountOut: BigInt!
+    #tokenDeltas: [BigInt!]!
     poolId: Pool!
     userAddress: User!                      # User address that initiates the swap
     value: BigDecimal!                      # Swap value in USD
@@ -98,6 +98,13 @@ type Swap @entity {
     timestamp: Int!
 }
 
+type PoolHistoricalLiquidity @entity {
+  id: ID!
+  poolLiquidity: BigDecimal! # total value, priced in the stable asset - ie USD
+  pricingAsset: Bytes! # address of stable asset
+  block: BigInt!
+}
+
 type TokenPrice @entity {
   id: ID! # address of token + address of stablecoin-poolId
   poolId: Pool!
@@ -106,6 +113,16 @@ type TokenPrice @entity {
   price: BigDecimal!
   block: BigInt!
 }
+
+#type TokenPrice @entity {
+    #id: ID!
+    #symbol: String
+    #name: String
+    #decimals: Int!
+    #price: BigDecimal!
+    #poolLiquidity: BigDecimal!
+    #poolTokenId: String
+#}
 
 type Investment @entity {
   id: ID!

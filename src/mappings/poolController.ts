@@ -1,6 +1,6 @@
 import { BigInt, Address, Bytes, store } from '@graphprotocol/graph-ts';
-import { Transfer } from '../types/templates/Pool/BToken';
-import { JoinPoolCall, ExitPoolCall } from '../types/templates/Pool/ConstantProductPool';
+import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
+import { JoinPoolCall, ExitPoolCall } from '../types/templates/WeightedPool/WeightedPool';
 import { Balancer, Pool, PoolToken, PoolShare, Swap, PoolTokenizer } from '../types/schema';
 import {
   hexToDecimal,

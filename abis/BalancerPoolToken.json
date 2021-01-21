@@ -3,12 +3,12 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "name_",
+        "name": "tokenName",
         "type": "string"
       },
       {
         "internalType": "string",
-        "name": "symbol_",
+        "name": "tokenSymbol",
         "type": "string"
       }
     ],
@@ -142,7 +142,7 @@
         "type": "uint8"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -154,11 +154,11 @@
       },
       {
         "internalType": "uint256",
-        "name": "subtractedValue",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "decreaseAllowance",
+    "name": "decreaseApproval",
     "outputs": [
       {
         "internalType": "bool",
@@ -178,11 +178,11 @@
       },
       {
         "internalType": "uint256",
-        "name": "addedValue",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "increaseAllowance",
+    "name": "increaseApproval",
     "outputs": [
       {
         "internalType": "bool",

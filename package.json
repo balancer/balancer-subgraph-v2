@@ -14,7 +14,7 @@
     "start:parity": "docker-compose -f docker-compose.yml -f docker-compose.openethereum.yml up",
     "deploy": "graph deploy balancer-labs/balancer --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/balancer-subgraph-v2 subgraph.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
-    "import-abis": "cp ../balancer-core-v2/abi/* ./abis/.",
+    "import-abis": "cp ./core/abi/* ./abis/.",
     "sync": "yarn import-abis && yarn codegen && yarn build"
   },
   "devDependencies": {
