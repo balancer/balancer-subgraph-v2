@@ -1,6 +1,6 @@
 import { BigInt, Address, Bytes, store } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
-import { JoinPoolCall, ExitPoolCall } from '../types/templates/WeightedPool/WeightedPool';
+import { OnJoinPoolCall, OnExitPoolCall } from '../types/templates/WeightedPool/WeightedPool';
 import { Balancer, Pool, PoolToken, PoolShare, Swap, PoolTokenizer } from '../types/schema';
 import {
   hexToDecimal,
@@ -18,7 +18,7 @@ import {
  ********** Pool Controls ***********
  ************************************/
 
-export function handleJoinPool(call: JoinPoolCall): void {
+export function handleJoinPool(call: OnJoinPoolCall): void {
   let poolControllerAddress = call.to;
   let poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
 
@@ -26,7 +26,7 @@ export function handleJoinPool(call: JoinPoolCall): void {
   poolController.save();
 }
 
-export function handleExitPool(call: ExitPoolCall): void {
+export function handleExitPool(call: OnExitPoolCall): void {
   let poolControllerAddress = call.to;
   let poolController = PoolTokenizer.load(poolControllerAddress.toHex());
 

@@ -8,7 +8,7 @@ dataSources:
     name: Vault 
     network: dev
     source:
-      address: "0x4002da7B1409046987ea1A998842fE8634ccd19D"
+      address: "0xA92b0e957B6FF4F607c73FeC2F2Afa6e2eB193F6"
       abi: Vault
       startBlock: 1
     mapping:
@@ -24,19 +24,19 @@ dataSources:
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
-        - event: Deposited(indexed address,indexed address,indexed address,uint256)
+        - event: InternalBalanceDeposited(indexed address,indexed address,indexed address,uint256)
           handler: handleUserBalanceDeposited
-        - event: Withdrawn(indexed address,indexed address,indexed address,uint256)
+        - event: InternalBalanceWithdrawn(indexed address,indexed address,indexed address,uint256)
           handler: handleUserBalanceWithdrawn
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent
         - event: PoolBalanceChanged(indexed bytes32,indexed address,indexed address,int256)
           handler: handleInvestment
-      callHandlers:
-        - function: addLiquidity(bytes32,address,address[],uint256[],bool)
-          handler: handleAddLiquidity
-        - function: removeLiquidity(bytes32,address,address[],uint256[],bool)
-          handler: handleRemoveLiquidity
+      #callHandlers:
+        #- function: addLiquidity(bytes32,address,address[],uint256[],bool)
+          #handler: handleAddLiquidity
+        #- function: removeLiquidity(bytes32,address,address[],uint256[],bool)
+          #handler: handleRemoveLiquidity
         #- function: newPool(address,uint8)
           #handler: handleNewPool
         #- function: batchSwapGivenIn(address,bytes,tuple[],address[],tuple)
@@ -47,7 +47,7 @@ dataSources:
     name: WeightedPoolFactory
     network: dev
     source:
-      address: "0x3df11Af77eb6d77616A6422b529EC81840C38575"
+      address: "0x2356b79126252beF711B2C058B1E7d70F27efe7B"
       abi: WeightedPoolFactory
       startBlock: 1
     mapping:
@@ -70,7 +70,7 @@ dataSources:
     name: StablePoolFactory
     network: dev
     source:
-      address: "0x7111A3D425b40e0Ed3F0364B608C5E1F61f7602d"
+      address: "0xfd42310276d233Fe13D25946D7AD3e35Cd6c6e00"
       abi: StablePoolFactory
       startBlock: 1
     mapping:
