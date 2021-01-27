@@ -123,13 +123,13 @@ export function capturePrices(id: string): void {
   const tokensList: Array<Bytes> = pool.tokensList;
   if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2))) return;
 
-  let pricingAssets = [BAL, WETH, USD].map(pa => Address.fromString(pa))
+  let pricingAssets = [BAL, WETH, USD]
 
   pricingAssets.forEach((pa) => {
     if (tokensList.includes(pa)) {
       tokensList.filter(tokenAddress => tokenAddress !== pa).forEach(tokenAddress => {
 
-        let block  = 0; // TODO
+        let block  = BigInt.from("0"); // TODO
         let tokenPriceId = getTokenPriceId(id, tokenAddress, pa, block)
         let tokenPrice = new TokenPrice(tokenPriceId);
         tokenPrice.poolId = id;
