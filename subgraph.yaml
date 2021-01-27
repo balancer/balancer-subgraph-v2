@@ -32,6 +32,8 @@ dataSources:
           handler: handleSwapEvent
         - event: PoolBalanceChanged(indexed bytes32,indexed address,indexed address,int256)
           handler: handleInvestment
+        - event: TokensRegistered(bytes32,address[])
+          handler: handleTokensRegistered
       #callHandlers:
         #- function: addLiquidity(bytes32,address,address[],uint256[],bool)
           #handler: handleAddLiquidity

@@ -47,6 +47,25 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
   return poolId.concat('-').concat(tokenAddress.toHexString());
 }
 
+// pool entity when created
+export function newPoolEntity(poolId: string): Pool {
+  let pool = new Pool(poolId);
+  pool.active = true;
+  pool.tokenized = true;
+  pool.vaultID = '2';
+  pool.tokensList = [];
+
+  pool.totalWeight = ZERO_BD;
+  pool.totalSwapVolume = ZERO_BD;
+  pool.totalSwapFee = ZERO_BD;
+  pool.liquidity = ZERO_BD;
+  pool.tokensCount = BigInt.fromI32(0);
+  pool.swapsCount = BigInt.fromI32(0);
+
+  return pool
+}
+
+
 export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
   let poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
