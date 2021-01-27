@@ -8,7 +8,7 @@ dataSources:
     name: Vault 
     network: dev
     source:
-      address: "0xA92b0e957B6FF4F607c73FeC2F2Afa6e2eB193F6"
+      address: "0x47753454C4270DAE017499952b973c24Aaa5768D"
       abi: Vault
       startBlock: 1
     mapping:
@@ -18,11 +18,19 @@ dataSources:
       file: ./src/mappings/vault.ts
       entities:
         - Balancer
+        - Pool
+        - PoolToken
+        - User
+        - UserBalance
+        - PoolTokenizer
+        - Investment
       abis:
         - name: Vault
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
       eventHandlers:
         - event: InternalBalanceDeposited(indexed address,indexed address,indexed address,uint256)
           handler: handleUserBalanceDeposited
@@ -34,22 +42,15 @@ dataSources:
           handler: handleInvestment
         - event: TokensRegistered(bytes32,address[])
           handler: handleTokensRegistered
-      #callHandlers:
-        #- function: addLiquidity(bytes32,address,address[],uint256[],bool)
-          #handler: handleAddLiquidity
-        #- function: removeLiquidity(bytes32,address,address[],uint256[],bool)
-          #handler: handleRemoveLiquidity
-        #- function: newPool(address,uint8)
-          #handler: handleNewPool
-        #- function: batchSwapGivenIn(address,bytes,tuple[],address[],tuple)
-          #handler: handleBatchSwapGivenIn
-        #- function: batchSwapGivenOut(address,bytes,tuple[],address[],tuple)
-          #handler: handleBatchSwapGivenOut
+        - event: PoolJoined(indexed bytes32,indexed address,uint256[],uint256[])
+          handler: handlePoolJoined
+        - event: PoolExited(indexed bytes32,indexed address,uint256[],uint256[])
+          handler: handlePoolExited
   - kind: ethereum/contract
     name: WeightedPoolFactory
     network: dev
     source:
-      address: "0x2356b79126252beF711B2C058B1E7d70F27efe7B"
+      address: "0x3D8c98c3Edb8fb401B654877516B68b95806DFc1"
       abi: WeightedPoolFactory
       startBlock: 1
     mapping:
@@ -59,7 +60,8 @@ dataSources:
       file: ./src/mappings/poolFactory.ts
       entities:
         - Balancer
-        - WeightedPool
+        - Pool
+        - PoolTokenizer
       abis:
         - name: WeightedPoolFactory
           file: ./abis/WeightedPoolFactory.json
@@ -72,7 +74,7 @@ dataSources:
     name: StablePoolFactory
     network: dev
     source:
-      address: "0xfd42310276d233Fe13D25946D7AD3e35Cd6c6e00"
+      address: "0xA840ddccf6a06692B312f54D63F7487b2806A3a1"
       abi: StablePoolFactory
       startBlock: 1
     mapping:
@@ -82,6 +84,8 @@ dataSources:
       file: ./src/mappings/poolFactory.ts
       entities:
         - Balancer
+        - Pool
+        - PoolTokenizer
       abis:
         - name: StablePoolFactory
           file: ./abis/StablePoolFactory.json
@@ -100,21 +104,25 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
-        - WeightedPool
-        - BalancerPoolToken
+        - Pool
+        - PoolShare
+        - PoolTokenizer
+        - PoolShare
+        - Swap
+        - PoolToken
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: BalancerPoolToken
-          file: ./abis/BalancerPoolToken.json
+        #- name: BalancerPoolToken
+          #file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: joinPool(uint256,uint128[],bool,address)
-          handler: handleJoinPool
-        - function: exitPool(uint256,uint256[],bool,address)
-          handler: handleExitPool
+      #callHandlers:
+        #- function: joinPool(uint256,uint128[],bool,address)
+          #handler: handleJoinPool
+        #- function: exitPool(uint256,uint256[],bool,address)
+          #handler: handleExitPool
   - kind: ethereum/contract
     name: StablePool
     network: dev
@@ -128,6 +136,9 @@ templates:
       entities:
         - StablePool
         - BalancerPoolToken
+        - PoolShare
+        - Swap
+        - PoolToken
       abis:
         - name: StablePool
           file: ./abis/StablePool.json
@@ -136,23 +147,8 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: joinPool(uint256,uint128[],bool,address)
-          handler: handleJoinPool
-        - function: exitPool(uint256,uint256[],bool,address)
-          handler: handleExitPool
-  - kind: ethereum/contract
-    name: ERC20
-    network: dev
-    source:
-      abi: ERC20
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
-      entities:
-        - ERC20
-      abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
+      #callHandlers:
+        #- function: joinPool(uint256,uint128[],bool,address)
+          #handler: handleJoinPool
+        #- function: exitPool(uint256,uint256[],bool,address)
+          #handler: handleExitPool

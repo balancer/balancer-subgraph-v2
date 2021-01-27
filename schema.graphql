@@ -25,6 +25,8 @@ type Pool @entity {
     tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
     tokenized: Boolean!
+    joinsCount: BigInt!                                 # liquidity has been added
+    exitsCount: BigInt!                                 # liquidity has been removed
     createTime: Int!                                    # Block time pool was created
     tokensCount: BigInt!                                # Number of tokens in the pool
     swapsCount: BigInt!
@@ -46,13 +48,12 @@ type PoolToken @entity {
     investments: [Investment!] @derivedFrom(field: "poolTokenId")
 }
 
+# distinct from the pool type, which is just the vault's notion of a pool
 type PoolTokenizer @entity {
     id: ID!                                             # Pool address
     poolId: Pool!
     totalShares: BigDecimal!                            # Total pool token shares
     holdersCount: BigInt!                               # Number of addresses holding a positive balance of BPT
-    joinsCount: BigInt!                                 # liquidity has been added
-    exitsCount: BigInt!                                 # liquidity has been removed
     shares: [PoolShare!] @derivedFrom(field: "poolTokenizerId")
 }
 
@@ -89,9 +90,9 @@ type Swap @entity {
     #tokenDeltas: [BigInt!]!
     poolId: Pool!
     userAddress: User!                      # User address that initiates the swap
-    value: BigDecimal!                      # Swap value in USD
-    feeValue: BigDecimal!                   # Swap fee value in USD
-    protocolFeeValue: BigDecimal!           # Swap fee value in USD
+    #value: BigDecimal!                      # Swap value in USD
+    #feeValue: BigDecimal!                   # Swap fee value in USD
+    #protocolFeeValue: BigDecimal!           # Swap fee value in USD
     poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in USD
     poolTotalSwapFee: BigDecimal!           # Total pool swap fee in USD
     poolLiquidity: BigDecimal!              # Pool liquidity value in USD
@@ -113,16 +114,6 @@ type TokenPrice @entity {
   price: BigDecimal!
   block: BigInt!
 }
-
-#type TokenPrice @entity {
-    #id: ID!
-    #symbol: String
-    #name: String
-    #decimals: Int!
-    #price: BigDecimal!
-    #poolLiquidity: BigDecimal!
-    #poolTokenId: String
-#}
 
 type Investment @entity {
   id: ID!

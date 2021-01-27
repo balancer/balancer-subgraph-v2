@@ -7,11 +7,11 @@ import { BigInt, BigDecimal, Address, Bytes, store } from '@graphprotocol/graph-
 import {
   PoolCreated
 } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { Balancer, Pool, PoolToken, Swap, TokenPrice, User, UserBalance, PoolTokenizer, Investment } from '../types/schema';
+import { Balancer, Pool, Swap, TokenPrice, User, UserBalance, PoolTokenizer } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates'
-import { StablePool as StablePoolTemplate } from '../types/templates'
+//import { StablePool as StablePoolTemplate } from '../types/templates'
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool'
 
@@ -30,7 +30,7 @@ export function handleNewPool(event: PoolCreated): void {
     vault.totalSwapFee = ZERO_BD;
   }
 
-  let poolAddress = event.params.pool
+  let poolAddress: Address = event.params.pool
   let poolContract = WeightedPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
@@ -49,6 +49,9 @@ export function handleNewPool(event: PoolCreated): void {
     pool.tx = event.transaction.hash;
 
     pool.save();
+
+    // start receiving events
+    WeightedPoolTemplate.create(poolAddress);
   }
 
   vault.poolCount = vault.poolCount + 1;
@@ -58,13 +61,7 @@ export function handleNewPool(event: PoolCreated): void {
   poolTokenizer.poolId = poolId.toHexString();
   poolTokenizer.totalShares = ZERO_BD;
   poolTokenizer.holdersCount = BigInt.fromI32(0);
-  poolTokenizer.joinsCount = BigInt.fromI32(0);
-  poolTokenizer.exitsCount = BigInt.fromI32(0);
   poolTokenizer.save();
-
-
-  // start receiving events
-  WeightedPoolTemplate.create(poolAddress);
 }
 
 

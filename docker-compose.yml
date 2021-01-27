@@ -1,20 +1,20 @@
 version: '3'
 services:
   ethereum:
-    image: parity/parity:latest
+    image: openethereum/openethereum 
+    #image: parity/parity:latest
     volumes:
       - ./dev-chain/chain.json:/home/parity/.local/share/io.parity.ethereum/chain.json
       - ./dev-chain/config.toml:/home/parity/.local/share/io.parity.ethereum/config.toml
       - ./dev-chain/keys:/home/parity/.local/share/io.parity.ethereum/keys/dev
       - ./dev-chain/pass.txt:/home/parity/.local/share/io.parity.ethereum/pass.txt
     #command: --config /home/parity/.local/share/io.parity.ethereum/config.toml --jsonrpc-cors all --jsonrpc-interface all --jsonrpc-apis all --jsonrpc-hosts all --tracing on --pruning archive -l rpc=trace,own_tx=trace --jsonrpc-port 8545
-    command: --config /home/parity/.local/share/io.parity.ethereum/config.toml --unsafe-expose --geth --force-ui
+    command: --config /home/parity/.local/share/io.parity.ethereum/config.toml --unsafe-expose --jsonrpc-cors all # --force-ui
     restart: always
     ports:
       - 8545:8545
       - 8546:8546
       - 30303:30303
-      #- 30303:30303/udp
   graph-node:
     image: graphprotocol/graph-node
     ports:

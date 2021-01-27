@@ -4,18 +4,20 @@ let network = dataSource.network();
 
 export let ZERO_BD = BigDecimal.fromString('0');
 
+export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
 export let WETH: Address =
   Address.fromString(
     network == 'mainnet'
     ? '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
-    : '0x6d5495Ce42aD2719AD9926c4EAC403d23E09d834'
+    : '0x4CDDb3505Cf09ee0Fa0877061eB654839959B9cd'
   );
 
 export let WBTC: Address =
   Address.fromString(
     network == 'mainnet'
     ? '0xTODO'
-    : '0x2f53b3Ad9dD06bc83a1fb5B9c5CeB6B07194f356'
+    : '0xcD80986f08d776CE41698c47f705CDc99dDBfB0A'
   );
 
 export let USD: Address =
@@ -29,19 +31,22 @@ export let USDC: Address =
   Address.fromString(
     network == 'mainnet'
     ? '0xTODO'
-    : '0x6a0bc95bfc5abe306d40903422ee72b4bbfc21e2'
+    : '0x7c0c5AdA758cf764EcD6bAC05b63b2482f90bBB2'
   )
 
 export let DAI: Address =
   Address.fromString(
     network == 'mainet'
-    ? '0xTODO'
-    : '0xa92f958A1F4E89CCD2f68e2BccbeC0BD99Fa4D85'
+    ? '0x6B175474E89094C44Da98b954EedeAC495271d0F'
+    : '0x5C0E66606eAbEC1df45E2ADd26C5DF8C0895a397'
   )
 
 export let BAL: Address =
   Address.fromString(
     network == 'mainet'
-    ? '0xTODO'
-    : '0x0B04892da60C07F5e12015747d46F8451461cB97'
+    ? '0xba100000625a3754423978a60c9317c58a424e3D'
+    : '0xf702269193081364E355f862f2CFbFCdC5DB738C'
   )
+
+
+export let PRICING_ASSETS: Address[] = [WETH, WBTC, USDC, DAI, BAL];

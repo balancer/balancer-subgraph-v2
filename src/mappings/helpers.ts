@@ -62,6 +62,9 @@ export function newPoolEntity(poolId: string): Pool {
   pool.tokensCount = BigInt.fromI32(0);
   pool.swapsCount = BigInt.fromI32(0);
 
+  pool.joinsCount = BigInt.fromI32(0);
+  pool.exitsCount = BigInt.fromI32(0);
+
   return pool
 }
 
