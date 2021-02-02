@@ -14,7 +14,8 @@
     "deploy": "graph deploy balancer-labs/balancer --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/balancer-subgraph-v2 subgraph.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "import-abis": "cp ./core/abi/* ./abis/.",
-    "sync": "yarn import-abis && yarn codegen && yarn build"
+    "update-addresses": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js",
+    "sync": "yarn import-abis && yarn update-addresses && yarn codegen && yarn build"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
@@ -25,6 +26,7 @@
     "eslint": "^7.9.0",
     "eslint-plugin-mocha-no-only": "^1.1.1",
     "eslint-plugin-prettier": "^3.1.4",
+    "js-yaml": "^4.0.0",
     "prettier": "^2.1.2",
     "typescript": "^4.0.2"
   },
