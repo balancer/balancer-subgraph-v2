@@ -14,13 +14,17 @@ function contractAddress(contractName) {
 const subgraphFilePath = path.resolve(__dirname, '../subgraph.yaml')
 let doc = yaml.load(fs.readFileSync(subgraphFilePath, 'utf8'));
 
-doc.dataSources.forEach((ds) => {
-  let address = contractAddress(ds.name)
-  ds.source.address = address
-})
-
-fs.writeFile('./Settings.yml', yaml.dump(doc), (err) => {
+try {
+  doc.dataSources.forEach((ds) => {
+    let address = contractAddress(ds.name)
+    ds.source.address = address
+  })
+  fs.writeFile(subgraphFilePath, yaml.dump(doc, {lineWidth: 150}), (err) => {
     if (err) {
-        console.log(err);
+      console.log(err);
     }
-});
+  });
+} catch (err) {
+  const msg = 'Cannot find ' + network + ' contract artifacts - have you deployed core contracts to it?'
+  console.log(msg)
+}
