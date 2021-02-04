@@ -113,8 +113,8 @@ templates:
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        #- name: BalancerPoolToken
-          #file: ./abis/BalancerPoolToken.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

@@ -1,6 +1,6 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, TokenPrice, Balancer } from '../types/schema';
-import { ERC20 } from '../types/templates/ERC20/ERC20';
+import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD, WETH, USD, BAL } from './constants';
 
 
