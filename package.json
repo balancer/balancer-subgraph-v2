@@ -12,6 +12,7 @@
     "clean:parity": "docker-compose kill && docker-compose down -v && docker-compose rm -f -v",
     "start:parity": "docker-compose up",
     "restart:parity": "yarn clean:parity && yarn start:parity",
+    "test": "jest",
     "deploy": "graph deploy balancer-labs/balancer-v2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:kovan": "graph deploy balancer-labs/balancer-kovan-v2 subgraph.kovan.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/balancer-v2 subgraph.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
@@ -22,21 +23,51 @@
     "sync:kovan": "yarn import-abis && yarn update-addresses kovan && yarn codegen && yarn build"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
+    "@babel/preset-typescript": "^7.12.13",
     "@graphprotocol/graph-cli": "^0.18.0",
     "@graphprotocol/graph-ts": "^0.18.1",
+    "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "assemblyscript": "^0.17.5",
+    "babel-jest": "^26.6.3",
     "eslint": "^7.9.0",
     "eslint-plugin-mocha-no-only": "^1.1.1",
     "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.6.3",
     "js-yaml": "^4.0.0",
     "prettier": "^2.1.2",
+    "ts-jest": "^26.5.0",
     "typescript": "^4.0.2"
   },
   "dependencies": {
     "@assemblyscript/loader": "^0.17.5",
     "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0"
+    "babel-register": "^6.26.0",
+    "global": "^4.4.0",
+    "node-fetch": "^2.6.1"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.test.json"
+      }
+    },
+    "preset": "ts-jest"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        },
+        "@babel/preset-typescript"
+      ]
+    ]
   }
 }
