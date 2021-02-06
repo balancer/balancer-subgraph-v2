@@ -2,8 +2,8 @@
   "name": "balancer",
   "version": "0.1.0",
   "scripts": {
-    "create": "graph create balancer-labs/balancer-subgraph-v2 --node https://api.thegraph.com/deploy/",
-    "create:local": "graph create balancer-labs/balancer-subgraph-v2 --node http://127.0.0.1:8020",
+    "create": "graph create balancer-labs/balancer-v2 --node https://api.thegraph.com/deploy/",
+    "create:local": "graph create balancer-labs/balancer-v2 --node http://127.0.0.1:8020",
     "codegen": "graph codegen --output-dir src/types/",
     "build": "graph build",
     "lint": "eslint . --ext .ts",
