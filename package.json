@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .ts",
     "clean": "docker-compose -f docker-compose.yml -f docker-compose.hardhat.yml kill && docker-compose -f docker-compose.yml -f docker-compose.hardhat.yml rm -f &&  sudo rm -rf data",
     "start:hardhat": "docker-compose -f docker-compose.yml -f docker-compose.hardhat.yml up",
-    "clean:parity": "docker-compose kill && docker-compose rm -f &&  sudo rm -rf data",
+    "clean:parity": "docker-compose kill && docker-compose down -v && docker-compose rm -f -v",
     "start:parity": "docker-compose up",
     "restart:parity": "yarn clean:parity && yarn start:parity",
     "deploy": "graph deploy balancer-labs/balancer-v2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",

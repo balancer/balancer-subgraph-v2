@@ -44,7 +44,7 @@ services:
     ports:
       - '5001:5001'
     volumes:
-      - ./data/ipfs:/data/ipfs
+      - ipfs-data-volume:/data/ipfs
   postgres:
     image: postgres
     ports:
@@ -55,10 +55,13 @@ services:
       POSTGRES_PASSWORD: let-me-in
       POSTGRES_DB: graph-node
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - postgres-data-volume:/var/lib/postgresql/data
   block-explorer:
     image: alethio/ethereum-lite-explorer
     environment:
       APP_NODE_URL: http://localhost:8545
     ports:
       - '7000:80'
+volumes:
+  ipfs-data-volume:
+  postgres-data-volume:
