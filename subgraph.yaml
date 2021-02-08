@@ -8,7 +8,7 @@ dataSources:
     name: Vault
     network: dev
     source:
-      address: '0xf61DE4034f9cB0e1d256D075A2161b5FB83e824f'
+      address: '0x293f6758Fe4a4343E367Ac8E6A697eC6315fBEd7'
       abi: Vault
       startBlock: 1
     mapping:
@@ -50,7 +50,7 @@ dataSources:
     name: WeightedPoolFactory
     network: dev
     source:
-      address: '0x1a6880d69BB0257a103A666d39bA45553D373a23'
+      address: '0xE48Aae4178612fdF77af25C83fa1099491A8AD1B'
       abi: WeightedPoolFactory
       startBlock: 1
     mapping:
@@ -74,7 +74,7 @@ dataSources:
     name: StablePoolFactory
     network: dev
     source:
-      address: '0xA5f747A3eaBb314fC25fE1ffe5B7e5A43E34d119'
+      address: '0xb4F97F452D71C3bba3c30c554305A7250c08b23A'
       abi: StablePoolFactory
       startBlock: 1
     mapping:
