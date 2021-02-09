@@ -110,6 +110,7 @@ type TokenPrice @entity {
   id: ID! # address of token + address of stablecoin-poolId
   poolId: Pool!
   asset: Bytes!
+  amount: BigDecimal!
   pricingAsset: Bytes! # address of stable asset
   price: BigDecimal!
   block: BigInt!

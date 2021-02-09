@@ -7,9 +7,11 @@ import {
   tokenToDecimal,
   createPoolShareEntity,
   createPoolTokenEntity,
-  updatePoolLiquidity,
   decrPoolCount,
 } from './helpers';
+import {
+  updatePoolLiquidity,
+} from './pricing';
 import {
   ZERO_ADDRESS,
   ZERO_BD,

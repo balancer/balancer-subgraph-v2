@@ -31,10 +31,13 @@ import {
   getTokenPriceId,
   newPoolEntity,
   createPoolTokenEntity,
-  updatePoolLiquidity,
   decrPoolCount,
 } from './helpers';
-import { ZERO_BD, PRICING_ASSETS } from './constants';
+import {
+  isPricingAsset,
+  updatePoolLiquidity,
+} from './pricing'
+import { ZERO_BD } from './constants';
 
 export function handleTokensRegistered(event: TokensRegistered): void {
   let poolId: Bytes = event.params.poolId;
@@ -227,20 +230,17 @@ export function handleInvestment(event: PoolBalanceChanged): void {
  ************** SWAPS ***************
  ************************************/
 
-function isPricingAsset(asset: Address): boolean {
-  //for (let pa of PRICING_ASSETS) {
-  for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
-    if (PRICING_ASSETS[i] == asset) return true;
-  }
-  return false;
-}
-
-function scale(num: BigInt, decimals: i32): BigInt {
+function scaleUp(num: BigInt, decimals: i32): BigInt {
   return num.times(
     BigInt.fromI32(10).pow(u8(decimals))
   )
 }
 
+function scaleDown(num: BigInt, decimals: i32): BigDecimal {
+  return num.divDecimal(
+    (BigInt.fromI32(10).pow(u8(decimals))).toBigDecimal()
+  )
+}
 
 export function handleSwapEvent(event: SwapEvent): void {
   let poolId = event.params.poolId;
@@ -287,7 +287,8 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // Capture price
   let block = event.block.number;
-
+  let tokenAmountIn: BigDecimal = scaleDown(swap.tokenAmountIn, poolTokenIn.decimals);
+  let tokenAmountOut: BigDecimal = scaleDown(swap.tokenAmountOut, poolTokenOut.decimals);
   if (isPricingAsset(tokenInAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, block);
     let tokenPrice = new TokenPrice(tokenPriceId);
@@ -295,24 +296,23 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.poolId = poolId.toHexString();
     tokenPrice.block = block;
     tokenPrice.asset = tokenOutAddress;
+    tokenPrice.amount = tokenAmountIn
     tokenPrice.pricingAsset = tokenInAddress;
 
-    tokenPrice.price = scale(swap.tokenAmountIn, poolTokenOut.decimals).divDecimal(
-      scale(swap.tokenAmountOut, poolTokenIn.decimals).toBigDecimal()
-      );
+    tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
-  } else if (isPricingAsset(tokenOutAddress)) {
+  } 
+  if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
     let tokenPrice = new TokenPrice(tokenPriceId);
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenInAddress);
     tokenPrice.poolId = poolId.toHexString();
     tokenPrice.block = block;
     tokenPrice.asset = tokenInAddress;
+    tokenPrice.amount = tokenAmountOut;
     tokenPrice.pricingAsset = tokenOutAddress;
 
-    tokenPrice.price = scale(swap.tokenAmountOut, poolTokenIn.decimals).divDecimal(
-      scale(swap.tokenAmountIn, poolTokenOut.decimals).toBigDecimal()
-      );
+    tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
   }
 }
