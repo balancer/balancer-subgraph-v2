@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pools resolvers getPools 1`] = `
+Object {
+  "data": Object {
+    "pools": Array [
+      Object {
+        "__typename": "Pool",
+        "id": "0x3f5ef20b46970e175c1201e4de5df2da8c0543e5000200000000000000000001",
+        "tokens": Array [
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x3f5ef20b46970e175c1201e4de5df2da8c0543e5000200000000000000000001-0x4cddb3505cf09ee0fa0877061eb654839959b9cd",
+          },
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x3f5ef20b46970e175c1201e4de5df2da8c0543e5000200000000000000000001-0x7c0c5ada758cf764ecd6bac05b63b2482f90bbb2",
+          },
+        ],
+      },
+      Object {
+        "__typename": "Pool",
+        "id": "0x444029933ccb4227c082c572f5afb046f09f2835000200000000000000000003",
+        "tokens": Array [
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x444029933ccb4227c082c572f5afb046f09f2835000200000000000000000003-0x4cddb3505cf09ee0fa0877061eb654839959b9cd",
+          },
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x444029933ccb4227c082c572f5afb046f09f2835000200000000000000000003-0x5c0e66606eabec1df45e2add26c5df8c0895a397",
+          },
+        ],
+      },
+      Object {
+        "__typename": "Pool",
+        "id": "0x4aabff65b717cceeab1df26bc7f36f81ed3ad936000200000000000000000002",
+        "tokens": Array [
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x4aabff65b717cceeab1df26bc7f36f81ed3ad936000200000000000000000002-0x4cddb3505cf09ee0fa0877061eb654839959b9cd",
+          },
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x4aabff65b717cceeab1df26bc7f36f81ed3ad936000200000000000000000002-0xf702269193081364e355f862f2cfbfcdc5db738c",
+          },
+        ],
+      },
+      Object {
+        "__typename": "Pool",
+        "id": "0x75fe54ce4f6503c8d714d9497639608f591ac479000200000000000000000000",
+        "tokens": Array [
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x75fe54ce4f6503c8d714d9497639608f591ac479000200000000000000000000-0x4cddb3505cf09ee0fa0877061eb654839959b9cd",
+          },
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x75fe54ce4f6503c8d714d9497639608f591ac479000200000000000000000000-0xcd80986f08d776ce41698c47f705cdc99ddbfb0a",
+          },
+        ],
+      },
+      Object {
+        "__typename": "Pool",
+        "id": "0xdda9f9b4b2b057d416e89d2fd399ae9a13d7168a000200000000000000000004",
+        "tokens": Array [
+          Object {
+            "__typename": "PoolToken",
+            "id": "0xdda9f9b4b2b057d416e89d2fd399ae9a13d7168a000200000000000000000004-0x7c0c5ada758cf764ecd6bac05b63b2482f90bbb2",
+          },
+          Object {
+            "__typename": "PoolToken",
+            "id": "0xdda9f9b4b2b057d416e89d2fd399ae9a13d7168a000200000000000000000004-0xbf92d6171938ebf1c6c14bf436471694f7d282de",
+          },
+        ],
+      },
+    ],
+  },
+  "loading": false,
+  "networkStatus": 7,
+}
+`;
