@@ -244,7 +244,6 @@ function scale(num: BigInt, decimals: i32): BigInt {
 
 export function handleSwapEvent(event: SwapEvent): void {
   let poolId = event.params.poolId;
-  //let tokenDeltas: BigInt[] = event.params.tokenDeltas;
   let pool = Pool.load(poolId.toHexString());
   let tokensList: Bytes[] = pool.tokensList;
 
@@ -252,8 +251,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   let tokenOutAddress: Address = event.params.tokenOut;
   let tokenInSym: string;
   let tokenOutSym: string;
-  //let tokenAmountIn: BigInt;
-  //let tokenAmountOut: BigInt;
 
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -276,9 +273,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.userAddress = event.transaction.from.toHex();
   swap.poolId = poolId.toHex();
 
-  //swap.value = BigDecimal.fromString('100'); //TODO
-  //swap.feeValue = BigDecimal.fromString('1'); //TODO
-  //swap.protocolFeeValue = BigDecimal.fromString('0'); //TODO
   swap.poolTotalSwapVolume = BigDecimal.fromString('0'); //TODO
   swap.poolTotalSwapFee = BigDecimal.fromString('0'); //TODO
   swap.poolLiquidity = BigDecimal.fromString('1000'); //TODO
