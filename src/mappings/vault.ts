@@ -293,7 +293,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
-    //updatePoolLiquidity(poolId.toHex(), block, tokenInAddress);
+    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress);
   } 
   if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
@@ -308,7 +308,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
-    //updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress);
+    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress);
   }
 }
 
