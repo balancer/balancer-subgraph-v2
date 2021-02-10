@@ -32,6 +32,8 @@ import {
   newPoolEntity,
   createPoolTokenEntity,
   decrPoolCount,
+  scaleUp,
+  scaleDown
 } from './helpers';
 import {
   isPricingAsset,
@@ -82,17 +84,16 @@ export function handleTokensRegistered(event: TokensRegistered): void {
       poolToken.save();
     }
   }
+  pool.tokensCount = BigInt.fromI32(tokensList.length);
   pool.tokensList = tokensList;
   pool.save();
 }
 
 export function handlePoolJoined(event: PoolJoined): void {
-  let poolId = event.params.poolId.toHexString();
-  let amounts = event.params.amountsIn;
+  let poolId: string = event.params.poolId.toHexString();
+  let amounts: BigInt[] = event.params.amountsIn;
 
   let pool = Pool.load(poolId);
-  let tokensList = pool.tokensList || [];
-
   let tokenAddresses = pool.tokensList;
 
   pool.joinsCount = pool.joinsCount.plus(BigInt.fromI32(1));
@@ -110,8 +111,10 @@ export function handlePoolJoined(event: PoolJoined): void {
     let newAmount = poolToken.balance.plus(tokenAmountIn);
     poolToken.balance = newAmount;
     poolToken.save();
+    if (isPricingAsset(tokenAddress)) {
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+    }
   }
-  //updatePoolLiquidity(poolId);
 }
 
 export function handlePoolExited(event: PoolExited): void {
@@ -119,8 +122,6 @@ export function handlePoolExited(event: PoolExited): void {
   let amounts = event.params.amountsOut;
 
   let pool = Pool.load(poolId);
-  let tokensList = pool.tokensList || [];
-
   let tokenAddresses = pool.tokensList;
 
   pool.exitsCount = pool.exitsCount.plus(BigInt.fromI32(1));
@@ -138,8 +139,10 @@ export function handlePoolExited(event: PoolExited): void {
     let newAmount = poolToken.balance.plus(tokenAmountOut);
     poolToken.balance = newAmount;
     poolToken.save();
+    if (isPricingAsset(tokenAddress)) {
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+    }
   }
-  //updatePoolLiquidity(poolId);
 }
 
 //export function handleRemoveLiquidity(call: RemoveLiquidityCall): void {
@@ -229,19 +232,6 @@ export function handleInvestment(event: PoolBalanceChanged): void {
 /************************************
  ************** SWAPS ***************
  ************************************/
-
-function scaleUp(num: BigInt, decimals: i32): BigInt {
-  return num.times(
-    BigInt.fromI32(10).pow(u8(decimals))
-  )
-}
-
-function scaleDown(num: BigInt, decimals: i32): BigDecimal {
-  return num.divDecimal(
-    (BigInt.fromI32(10).pow(u8(decimals))).toBigDecimal()
-  )
-}
-
 export function handleSwapEvent(event: SwapEvent): void {
   let poolId = event.params.poolId;
   let pool = Pool.load(poolId.toHexString());
@@ -277,7 +267,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.poolTotalSwapFee = BigDecimal.fromString('0'); //TODO
   swap.poolLiquidity = BigDecimal.fromString('1000'); //TODO
 
-  swap.timestamp = event.block.timestamp.toI32();
+  let blockTimestamp = event.block.timestamp.toI32()
+  swap.timestamp = blockTimestamp;
   swap.save();
 
   let zero = BigInt.fromI32(0)
@@ -295,12 +286,14 @@ export function handleSwapEvent(event: SwapEvent): void {
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenOutAddress);
     tokenPrice.poolId = poolId.toHexString();
     tokenPrice.block = block;
+    tokenPrice.timestamp = BigInt.fromI32(blockTimestamp);
     tokenPrice.asset = tokenOutAddress;
     tokenPrice.amount = tokenAmountIn
     tokenPrice.pricingAsset = tokenInAddress;
 
     tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
+    //updatePoolLiquidity(poolId.toHex(), block, tokenInAddress);
   } 
   if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
@@ -308,12 +301,14 @@ export function handleSwapEvent(event: SwapEvent): void {
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenInAddress);
     tokenPrice.poolId = poolId.toHexString();
     tokenPrice.block = block;
+    tokenPrice.timestamp = BigInt.fromI32(blockTimestamp);
     tokenPrice.asset = tokenInAddress;
     tokenPrice.amount = tokenAmountOut;
     tokenPrice.pricingAsset = tokenOutAddress;
 
     tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
+    //updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress);
   }
 }
 

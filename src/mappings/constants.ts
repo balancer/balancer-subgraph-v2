@@ -50,3 +50,4 @@ export let BAL: Address =
 
 
 export let PRICING_ASSETS: Address[] = [WETH, WBTC, USDC, DAI, BAL];
+export let USD_STABLE_ASSETS: Address[] = [USDC, DAI];

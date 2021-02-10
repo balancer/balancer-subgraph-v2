@@ -27,6 +27,18 @@ export function tokenToDecimal(amount: BigInt, decimals: i32): BigDecimal {
   return amount.toBigDecimal().div(scale);
 }
 
+export function scaleUp(num: BigInt, decimals: i32): BigInt {
+  return num.times(
+    BigInt.fromI32(10).pow(u8(decimals))
+  )
+}
+
+export function scaleDown(num: BigInt, decimals: i32): BigDecimal {
+  return num.divDecimal(
+    (BigInt.fromI32(10).pow(u8(decimals))).toBigDecimal()
+  )
+}
+
 export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {
   return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex());
 }
@@ -45,6 +57,10 @@ export function createPoolShareEntity(poolControllerAddress: Address, lpAddress:
 
 export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
   return poolId.concat('-').concat(tokenAddress.toHexString());
+}
+
+export function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
+  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
 }
 
 // pool entity when created
@@ -121,27 +137,27 @@ export function getTokenPriceId(poolId: string, tokenAddress: Address, stableTok
     .concat(block.toString());
 }
 
-export function capturePrices(id: string): void {
-  const pool = Pool.load(id);
-  const tokensList: Array<Bytes> = pool.tokensList;
-  if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2))) return;
+//export function capturePrices(id: string): void {
+  //const pool = Pool.load(id);
+  //const tokensList: Array<Bytes> = pool.tokensList;
+  //if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2))) return;
 
-  let pricingAssets = [BAL, WETH, USD]
+  //let pricingAssets = [BAL, WETH, USD]
 
-  pricingAssets.forEach((pa) => {
-    if (tokensList.includes(pa)) {
-      tokensList.filter(tokenAddress => tokenAddress !== pa).forEach(tokenAddress => {
+  //pricingAssets.forEach((pa) => {
+    //if (tokensList.includes(pa)) {
+      //tokensList.filter(tokenAddress => tokenAddress !== pa).forEach(tokenAddress => {
 
-        let block  = BigInt.from("0"); // TODO
-        let tokenPriceId = getTokenPriceId(id, tokenAddress, pa, block)
-        let tokenPrice = new TokenPrice(tokenPriceId);
-        tokenPrice.poolId = id;
-        //tokenPrice.timestamp = ???;
-        tokenPrice.pricingAsset = pa;
-      })
-    }
-  })
-}
+        //let block  = BigInt.from(0); // TODO
+        //let tokenPriceId = getTokenPriceId(id, tokenAddress, pa, block)
+        //let tokenPrice = new TokenPrice(tokenPriceId);
+        //tokenPrice.poolId = id;
+        ////tokenPrice.timestamp = ???;
+        //tokenPrice.pricingAsset = pa;
+      //})
+    //}
+  //})
+//}
 
 
 export function decrPoolCount(finalized: boolean): void {
