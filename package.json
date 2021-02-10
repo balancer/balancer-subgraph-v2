@@ -23,6 +23,7 @@
     "sync:kovan": "yarn import-abis && yarn update-addresses kovan && yarn codegen && yarn build"
   },
   "devDependencies": {
+    "@apollo/client": "^3.3.9",
     "@babel/core": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
@@ -31,6 +32,7 @@
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
+    "apollo-client": "^2.6.10",
     "assemblyscript": "^0.17.5",
     "babel-jest": "^26.6.3",
     "eslint": "^7.9.0",
