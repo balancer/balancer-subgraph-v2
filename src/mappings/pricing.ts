@@ -63,12 +63,12 @@ export function updatePoolLiquidity(id: string, block: BigInt, pricingAsset: Add
   phl.poolLiquidity = poolValue;
   phl.save()
 
-  let factory = Balancer.load('1');
   if (isUSDStable(pricingAsset)) {
     let oldPoolLiquidity: BigDecimal = pool.liquidity
-    //factory.totalLiquidity = factory.totalLiquidity.minus(oldPoolLiquidity).plus(poolValue);
-    //factory.save();
-    //pool.liquidity = poolValue;
-    //pool.save();
+    let vault = Balancer.load('2');
+    vault.totalLiquidity = vault.totalLiquidity.minus(oldPoolLiquidity).plus(poolValue);
+    vault.save();
+    pool.liquidity = poolValue;
+    pool.save();
   }
 }
