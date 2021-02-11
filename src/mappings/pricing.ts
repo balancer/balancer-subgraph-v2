@@ -1,7 +1,7 @@
-import { PRICING_ASSETS, USD_STABLE_ASSETS, ZERO_BD, USD, WETH } from './constants';
-import { getTokenPriceId, getPoolTokenId, getPoolHistoricalLiquidityId, scaleDown } from './helpers';
+import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI} from './constants';
+import { getTokenPriceId, getPoolTokenId, getLatestPriceId, getPoolHistoricalLiquidityId, scaleDown } from './helpers';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
-import { Pool, PoolToken, TokenPrice, Balancer, PoolHistoricalLiquidity } from '../types/schema';
+import { Pool, PoolToken, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 
 export function isPricingAsset(asset: Address): boolean {
   //for (let pa of PRICING_ASSETS) {
@@ -19,56 +19,101 @@ export function isUSDStable(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(id: string, block: BigInt, pricingAsset: Address): void {
-  let pool = Pool.load(id);
+export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): void {
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
   if (pool.tokensCount.lt(BigInt.fromI32(2))) return;
 
-  let tokenAddresses: Address[] = [];
-  let tokensList: Bytes[] = pool.tokensList || [];
+  let tokensList: Bytes[] = pool.tokensList;
+  if (tokensList.length == 0) return;
 
-  for (let j: i32 = 0; j < tokensList.length; j++) {
-    let tokenAddressString: string = tokensList[j].toHexString();
-    tokenAddresses.push(Address.fromString(tokenAddressString))
-  }
-
-  //let phlId = id + pricingAsset.toString() + block.toString()
-  let phlId = getPoolHistoricalLiquidityId(id, pricingAsset, block);
+  let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
   let phl = new PoolHistoricalLiquidity(phlId)
-  phl.poolId = id;
+  phl.poolId = poolId;
   phl.pricingAsset = pricingAsset;
   phl.block = block;
 
   let poolValue: BigDecimal = BigDecimal.fromString('0');
-  for (let j: i32 = 0; j < tokenAddresses.length; j++) {
-    let tokenAddress = tokenAddresses[j]
-    let poolTokenId = getPoolTokenId(id, tokenAddress)
+
+  for (let j: i32 = 0; j < tokensList.length; j++) {
+    let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
+
+    let poolTokenId: string = getPoolTokenId(poolId, tokenAddress)
     let poolToken = PoolToken.load(poolTokenId)
 
-    if (tokenAddresses[j] == pricingAsset) {
+    if (tokenAddress == pricingAsset) {
       poolValue = poolValue.plus(poolToken.balance)
       continue;
     }
-    let tokenPriceId = getTokenPriceId(id, tokenAddress, pricingAsset, block);
+    let poolTokenQuantity: BigDecimal = poolToken.balance;
+
+    // compare any new token price with the last price
+    let tokenPriceId = getTokenPriceId(poolId, tokenAddress, pricingAsset, block);
     let tokenPrice = TokenPrice.load(tokenPriceId)
+    let price: BigDecimal | null;
+    let latestPriceId = getLatestPriceId(tokenAddress, pricingAsset);
+    let latestPrice = LatestPrice.load(latestPriceId)
+
+    if (tokenPrice == null && latestPrice != null) {
+      price = latestPrice.price;
+    }
     // note that we can only meaningfully report liquidity once assets are traded with
     // the pricing asset
     if (tokenPrice) {
       //value in terms of priceableAsset
-      let poolTokenQuantity: BigDecimal = poolToken.balance;
-      let poolTokenValue = tokenPrice.price.times(poolTokenQuantity);
+      price = tokenPrice.price;
 
+      // Possibly update latest price
+      if (latestPrice == null) {
+        latestPrice = new LatestPrice(latestPriceId)
+        latestPrice.asset = tokenAddress
+        latestPrice.pricingAsset = pricingAsset;
+      }
+      latestPrice.price = price!;
+      latestPrice.block = block;
+      latestPrice.poolId = poolId;
+      latestPrice.save();
+    }
+    if (price) {
+      let poolTokenValue = price.times(poolTokenQuantity);
       poolValue = poolValue.plus(poolTokenValue)
     }
   }
   phl.poolLiquidity = poolValue;
   phl.save()
 
-  if (isUSDStable(pricingAsset)) {
-    let oldPoolLiquidity: BigDecimal = pool.liquidity
+  let oldPoolLiquidity: BigDecimal = pool.liquidity
+  let newPoolLiquidity: BigDecimal = poolLiquidityInUSD(poolValue, pricingAsset);
+
+  if (newPoolLiquidity && oldPoolLiquidity) {
     let vault = Balancer.load('2');
-    vault.totalLiquidity = vault.totalLiquidity.minus(oldPoolLiquidity).plus(poolValue);
+    let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity)
+    vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
     vault.save();
-    pool.liquidity = poolValue;
+    pool.liquidity = newPoolLiquidity;
     pool.save();
   }
+}
+
+function poolLiquidityInUSD(poolValue: BigDecimal, pricingAsset: Address): BigDecimal {
+  let newPoolLiquidity: BigDecimal;
+
+  if (isUSDStable(pricingAsset)) {
+    newPoolLiquidity = poolValue;
+  } else {
+    // convert to USD
+    let pricingAssetInUSDId: string = getLatestPriceId(pricingAsset, USDC);
+    let pricingAssetInUSD = LatestPrice.load(pricingAssetInUSDId)
+
+    if (!pricingAssetInUSD) {
+      pricingAssetInUSDId = getLatestPriceId(pricingAsset, DAI);
+      pricingAssetInUSD = LatestPrice.load(pricingAssetInUSDId)
+    }
+
+    if (pricingAssetInUSD) {
+      newPoolLiquidity = poolValue.times(pricingAssetInUSD.price)
+    }
+  }
+
+  return newPoolLiquidity || BigDecimal.fromString('0')
 }

@@ -17,6 +17,18 @@ const testCases = [
             }
             `
   },
+  {
+    id: 'getTotalLiquidity',
+    query: gql`
+            query {
+              balancers{
+                id
+                totalLiquidity
+              }
+            }
+            `
+  },
+
 ]
 
 runTestCases('TokenPrices', testCases);

@@ -88,16 +88,21 @@ type Swap @entity {
     tokenOutSym: String!
     tokenAmountIn: BigInt!
     tokenAmountOut: BigInt!
-    #tokenDeltas: [BigInt!]!
     poolId: Pool!
     userAddress: User!                      # User address that initiates the swap
-    #value: BigDecimal!                      # Swap value in USD
-    #feeValue: BigDecimal!                   # Swap fee value in USD
-    #protocolFeeValue: BigDecimal!           # Swap fee value in USD
     poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in USD
     poolTotalSwapFee: BigDecimal!           # Total pool swap fee in USD
     poolLiquidity: BigDecimal!              # Pool liquidity value in USD
     timestamp: Int!
+}
+
+type LatestPrice @entity {
+  id: ID!
+  asset: Bytes!
+  pricingAsset: Bytes! # address of stable asset
+  poolId: Pool! # last pool which set price
+  price:  BigDecimal! # all the latest prices
+  block: BigInt! # last block that prices were updated
 }
 
 type PoolHistoricalLiquidity @entity {
