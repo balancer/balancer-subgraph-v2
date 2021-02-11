@@ -59,6 +59,10 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
   return poolId.concat('-').concat(tokenAddress.toHexString());
 }
 
+export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
+  return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
+}
+
 export function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
   return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
 }
