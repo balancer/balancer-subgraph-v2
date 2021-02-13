@@ -28,7 +28,6 @@ import {
   hexToDecimal,
   tokenToDecimal,
   getPoolTokenId,
-  getTokenPriceId,
   newPoolEntity,
   createPoolTokenEntity,
   decrPoolCount,
@@ -38,6 +37,7 @@ import {
 import {
   isPricingAsset,
   updatePoolLiquidity,
+  getTokenPriceId,
 } from './pricing'
 import { ZERO_BD } from './constants';
 
