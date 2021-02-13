@@ -1,5 +1,5 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI} from './constants';
-import { getTokenPriceId, getPoolTokenId, getLatestPriceId, getPoolHistoricalLiquidityId, scaleDown } from './helpers';
+import { getTokenPriceId, getPoolTokenId, scaleDown } from './helpers';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, PoolToken, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 
@@ -117,3 +117,19 @@ function poolLiquidityInUSD(poolValue: BigDecimal, pricingAsset: Address): BigDe
 
   return newPoolLiquidity || BigDecimal.fromString('0')
 }
+
+export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
+  return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
+}
+
+export function getLatestPrice(tokenAddress: Address, pricingAsset: Address): BigDecimal | null {
+  let id = getLatestPriceId(tokenAddress, pricingAsset)
+  let lprice = LatestPrice.load(id)
+  return lprice.price
+}
+
+export function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
+  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
+}
+
+

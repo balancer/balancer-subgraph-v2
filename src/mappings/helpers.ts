@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, TokenPrice, Balancer } from '../types/schema';
+import { Pool, User, PoolToken, PoolShare, TokenPrice, LatestPrice, Balancer } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD, WETH, USD, BAL } from './constants';
 
@@ -58,15 +58,6 @@ export function createPoolShareEntity(poolControllerAddress: Address, lpAddress:
 export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
   return poolId.concat('-').concat(tokenAddress.toHexString());
 }
-
-export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
-  return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
-}
-
-export function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
-  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
-}
-
 // pool entity when created
 export function newPoolEntity(poolId: string): Pool {
   let pool = new Pool(poolId);
