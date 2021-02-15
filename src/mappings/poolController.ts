@@ -59,7 +59,7 @@ export function handleTransfer(event: Transfer): void {
 
   if (isMint) {
     if (poolShareTo == null) {
-      createPoolShareEntity(poolAddress, event.params.to);
+      createPoolShareEntity(poolTokenizer!, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, 18));
@@ -67,7 +67,7 @@ export function handleTransfer(event: Transfer): void {
     poolTokenizer.totalShares = poolTokenizer.totalShares.plus(tokenToDecimal(event.params.value, 18));
   } else if (isBurn) {
     if (poolShareFrom == null) {
-      createPoolShareEntity(poolAddress, event.params.from);
+      createPoolShareEntity(poolTokenizer!, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, 18));
@@ -75,14 +75,14 @@ export function handleTransfer(event: Transfer): void {
     poolTokenizer.totalShares = poolTokenizer.totalShares.minus(tokenToDecimal(event.params.value, 18));
   } else {
     if (poolShareTo == null) {
-      createPoolShareEntity(poolAddress, event.params.to);
+      createPoolShareEntity(poolTokenizer!, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, 18));
     poolShareTo.save();
 
     if (poolShareFrom == null) {
-      createPoolShareEntity(poolAddress, event.params.from);
+      createPoolShareEntity(poolTokenizer!, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, 18));
