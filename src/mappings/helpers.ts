@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, TokenPrice, LatestPrice, Balancer } from '../types/schema';
+import { Pool, User, PoolToken, PoolTokenizer, PoolShare, TokenPrice, Balancer } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD, WETH, USD, BAL } from './constants';
 
@@ -43,14 +43,16 @@ export function getPoolShareId(poolControllerAddress: Address, lpAddress: Addres
   return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex());
 }
 
-export function createPoolShareEntity(poolControllerAddress: Address, lpAddress: Address): void {
+export function createPoolShareEntity(poolController: PoolTokenizer, lpAddress: Address): void {
   createUserEntity(lpAddress);
+  let poolControllerAddress = Address.fromString(poolController.id)
 
   let id = getPoolShareId(poolControllerAddress, lpAddress);
   let poolShare = new PoolShare(id);
 
   poolShare.userAddress = lpAddress.toHex();
   poolShare.poolTokenizerId = poolControllerAddress.toHex();
+  poolShare.poolId = poolController.poolId;
   poolShare.balance = ZERO_BD;
   poolShare.save();
 }

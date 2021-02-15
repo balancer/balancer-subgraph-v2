@@ -62,6 +62,7 @@ type PoolShare @entity {
     id: ID!                                             # poolId + userAddress
     userAddress: User!
     poolTokenizerId: PoolTokenizer!
+    poolId: Pool!
     balance: BigDecimal!
 }
 
