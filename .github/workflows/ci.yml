@@ -24,6 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          token: ${{ secrets.PAT }} # `PAT` stored in secrets that has access to the core contracts repo
           submodules: true
       - name: check abis
         run: diff -rq abis core/abi
