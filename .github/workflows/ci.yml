@@ -17,8 +17,8 @@ jobs:
           node-version: 14
       - name: Install
         run: yarn --frozen-lockfile
-      - name: Lint
-        run: yarn lint
+      #- name: Lint
+        #run: yarn lint
   abi-integrity:
     runs-on: ubuntu-latest
     steps:
