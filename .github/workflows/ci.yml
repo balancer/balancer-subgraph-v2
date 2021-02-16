@@ -17,6 +17,8 @@ jobs:
           node-version: 14
       - name: Install
         run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
       - name: Build
         run: yarn build
       #- name: Lint
