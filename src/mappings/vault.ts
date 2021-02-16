@@ -32,12 +32,12 @@ import {
   createPoolTokenEntity,
   decrPoolCount,
   scaleUp,
+  getTokenPriceId,
   scaleDown
 } from './helpers';
 import {
   isPricingAsset,
   updatePoolLiquidity,
-  getTokenPriceId,
 } from './pricing'
 import { ZERO_BD } from './constants';
 
