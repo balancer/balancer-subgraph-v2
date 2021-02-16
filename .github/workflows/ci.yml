@@ -7,7 +7,7 @@ on:
     branches: "*"
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,6 +17,8 @@ jobs:
           node-version: 14
       - name: Install
         run: yarn --frozen-lockfile
+      - name: Build
+        run: yarn build
       #- name: Lint
         #run: yarn lint
   abi-integrity:
