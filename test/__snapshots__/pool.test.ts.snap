@@ -6,20 +6,6 @@ Object {
     "pools": Array [
       Object {
         "__typename": "Pool",
-        "id": "0x4aabff65b717cceeab1df26bc7f36f81ed3ad936000200000000000000000002",
-        "tokens": Array [
-          Object {
-            "__typename": "PoolToken",
-            "id": "0x4aabff65b717cceeab1df26bc7f36f81ed3ad936000200000000000000000002-0x4cddb3505cf09ee0fa0877061eb654839959b9cd",
-          },
-          Object {
-            "__typename": "PoolToken",
-            "id": "0x4aabff65b717cceeab1df26bc7f36f81ed3ad936000200000000000000000002-0xf702269193081364e355f862f2cfbfcdc5db738c",
-          },
-        ],
-      },
-      Object {
-        "__typename": "Pool",
         "id": "0x52c1245a6e1948424a588a621605a9b88dd50e6f000200000000000000000003",
         "tokens": Array [
           Object {
@@ -48,6 +34,20 @@ Object {
       },
       Object {
         "__typename": "Pool",
+        "id": "0x80cdbbe17a65107c8f14f38389dfb2fe036907e8000200000000000000000001",
+        "tokens": Array [
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x80cdbbe17a65107c8f14f38389dfb2fe036907e8000200000000000000000001-0x4cddb3505cf09ee0fa0877061eb654839959b9cd",
+          },
+          Object {
+            "__typename": "PoolToken",
+            "id": "0x80cdbbe17a65107c8f14f38389dfb2fe036907e8000200000000000000000001-0xf702269193081364e355f862f2cfbfcdc5db738c",
+          },
+        ],
+      },
+      Object {
+        "__typename": "Pool",
         "id": "0x81b802515b0e8a583fc934bdac4cff214baa09ea000200000000000000000004",
         "tokens": Array [
           Object {
@@ -62,15 +62,15 @@ Object {
       },
       Object {
         "__typename": "Pool",
-        "id": "0x845e708b7969e6c4161ba03b316f399ebdc5c514000200000000000000000001",
+        "id": "0xa6128d6807bbbf8530e44ee0f458f5f1f5f9d80d000200000000000000000002",
         "tokens": Array [
           Object {
             "__typename": "PoolToken",
-            "id": "0x845e708b7969e6c4161ba03b316f399ebdc5c514000200000000000000000001-0x7c0c5ada758cf764ecd6bac05b63b2482f90bbb2",
+            "id": "0xa6128d6807bbbf8530e44ee0f458f5f1f5f9d80d000200000000000000000002-0x7c0c5ada758cf764ecd6bac05b63b2482f90bbb2",
           },
           Object {
             "__typename": "PoolToken",
-            "id": "0x845e708b7969e6c4161ba03b316f399ebdc5c514000200000000000000000001-0xbf92d6171938ebf1c6c14bf436471694f7d282de",
+            "id": "0xa6128d6807bbbf8530e44ee0f458f5f1f5f9d80d000200000000000000000002-0xbf92d6171938ebf1c6c14bf436471694f7d282de",
           },
         ],
       },
