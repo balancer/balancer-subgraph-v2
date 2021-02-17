@@ -67,6 +67,7 @@ export function newPoolEntity(poolId: string): Pool {
   pool.tokenized = true;
   pool.vaultID = '2';
   pool.tokensList = [];
+  pool.strategyType = i32(parseInt(poolId.slice(42, 46)));
 
   pool.totalWeight = ZERO_BD;
   pool.totalSwapVolume = ZERO_BD;
