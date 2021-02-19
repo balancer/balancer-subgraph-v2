@@ -249,15 +249,20 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let poolTokenInId = getPoolTokenId(poolId.toHexString(), tokenInAddress);
   let poolTokenIn = PoolToken.load(poolTokenInId);
-  swap.tokenIn = tokenInAddress;
-  swap.tokenInSym = poolTokenIn.symbol;
-  swap.tokenAmountIn = event.params.tokensIn;
 
   let poolTokenOutId = getPoolTokenId(poolId.toHexString(), tokenOutAddress);
   let poolTokenOut = PoolToken.load(poolTokenOutId);
+
+  let tokenAmountIn: BigDecimal = scaleDown(event.params.tokensIn, poolTokenIn.decimals);
+  let tokenAmountOut: BigDecimal = scaleDown(event.params.tokensOut, poolTokenOut.decimals);
+
+  swap.tokenIn = tokenInAddress;
+  swap.tokenInSym = poolTokenIn.symbol;
+  swap.tokenAmountIn = tokenAmountIn;
+
   swap.tokenOut = tokenOutAddress;
   swap.tokenOutSym = poolTokenOut.symbol;
-  swap.tokenAmountOut = event.params.tokensOut;
+  swap.tokenAmountOut = tokenAmountOut;
 
   swap.caller = event.transaction.from;
   swap.userAddress = event.transaction.from.toHex();
@@ -271,15 +276,13 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.timestamp = blockTimestamp;
   swap.save();
 
-  let zero = BigInt.fromI32(0)
+  let zero = BigDecimal.fromString('0')
   if (swap.tokenAmountOut == zero || swap.tokenAmountIn == zero) {
     return;
   }
 
   // Capture price
   let block = event.block.number;
-  let tokenAmountIn: BigDecimal = scaleDown(swap.tokenAmountIn, poolTokenIn.decimals);
-  let tokenAmountOut: BigDecimal = scaleDown(swap.tokenAmountOut, poolTokenOut.decimals);
   if (isPricingAsset(tokenInAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, block);
     let tokenPrice = new TokenPrice(tokenPriceId);
