@@ -88,8 +88,8 @@ type Swap @entity {
     tokenInSym: String!
     tokenOut: Bytes!
     tokenOutSym: String!
-    tokenAmountIn: BigInt!
-    tokenAmountOut: BigInt!
+    tokenAmountIn: BigDecimal!
+    tokenAmountOut: BigDecimal!
     poolId: Pool!
     userAddress: User!                      # User address that initiates the swap
     poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in USD
