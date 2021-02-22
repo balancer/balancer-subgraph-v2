@@ -69,7 +69,7 @@ dataSources:
           file: ./abis/WeightedPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewPool
+          handler: handleNewWeightedPool
   - kind: ethereum/contract
     name: StablePoolFactory
     network: dev
@@ -89,9 +89,11 @@ dataSources:
       abis:
         - name: StablePoolFactory
           file: ./abis/StablePoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewPool
+          handler: handleNewStablePool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -129,6 +131,7 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
+        - Pool
         - StablePool
         - BalancerPoolToken
         - PoolShare
