@@ -30,8 +30,10 @@ Then deploy V2 contracts, seed data and deploy subgraph
 cd core && yarn redeploy:docker && popd
 yarn codegen && yarn create:local && yarn deploy:local
 ```
+now you should be able to interact with the graphql server at
+http://localhost:8000/subgraphs/name/balancer-labs/balancer-v2
 
-You can start the pool management frontend too
+Start the pool management frontend:
 ```
 cd pool-management-v2 && yarn serve
 ```
@@ -50,9 +52,9 @@ Once setup, you can access the services at the addresses below
 | Graph Node WebSocket server      |   ws://localhost:8001 |
 
 
-## Alternative Setups
+## Alternative Docker Compose Settings
 
-### Alternative docker configuration: Running services against a hardhat chain
+### Running services against a hardhat chain
 
 The docker-compose can be overridden to test contracts, subgraph, frontend against other networks.  This is not generally recommended because the hardhat VM doesn't support call tracing which the subgraph uses to track contract calls. YMMV
 
