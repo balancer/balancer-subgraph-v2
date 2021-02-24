@@ -2,8 +2,7 @@
 
 The graphql schema is still under heavy development and will likely have major breaking changes.
 
-Only the factory address is needed in subgraph.yaml, new pool addresses are automatically picked up using Graph Protocol's data source templates.
-
+This repo tracks both the subgraph and a docker configuration that allows you to run the subgraph and frontend against the core v2 contracts.
 
 ## Setup
 
@@ -14,14 +13,49 @@ Only the factory address is needed in subgraph.yaml, new pool addresses are auto
     - graph-cli
 - Docker
 
-### Services
+Clone the `pool-management-v2` repo and `core` repo submodules
+
+### Recommended setup: Running V2 contracts, frontend and subgraph against development parity chain
 
 Docker compose can be started in various configurations to start a local etherem chain, a graph-node, and it's requisite services.
 
 Start a parity chain and a graph node by running
 ```
-docker-compose up
+yarn restart:parity
 ```
+
+Then deploy V2 contracts, seed data and deploy subgraph
+
+```
+cd core && yarn redeploy:docker && popd
+yarn codegen && yarn create:local && yarn deploy:local
+```
+
+You can start the pool management frontend too
+```
+cd pool-management-v2 && yarn serve
+```
+
+Once setup, you can access the services at the addresses below
+
+### Services
+
+| Service                          | address               |
+|----------------------------------|-----------------------|
+| JSON-RPC Server                  | http://localhost:8545 |
+| GraphQL HTTP server              | http://localhost:8000 |
+| Graph Node JSON-RPC admin server | http://localhost:8020 |
+| Graph Node IndexNode server      | http://localhost:8030 |
+| Graph Node Metrics server        | http://localhost:8040 |
+| Graph Node WebSocket server      |   ws://localhost:8001 |
+
+
+## Alternative Setups
+
+### Alternative docker configuration: Running services against a hardhat chain
+
+The docker-compose can be overridden to test contracts, subgraph, frontend against other networks.  This is not generally recommended because the hardhat VM doesn't support call tracing which the subgraph uses to track contract calls. YMMV
+
 
 Start a hardhat chain and a graph node by running
 ```
@@ -39,37 +73,20 @@ To blow away graph-node settings
 docker-compose kill && docker-compose rm -f && rm -rf data
 ```
 
-| Service                          | address               |
-|----------------------------------|-----------------------|
-| JSON-RPC Server                  | http://localhost:8545 |
-| GraphQL HTTP server              | http://localhost:8000 |
-| Graph Node JSON-RPC admin server | http://localhost:8020 |
-| Graph Node IndexNode server      | http://localhost:8030 |
-| Graph Node Metrics server        | http://localhost:8040 |
-| Graph Node WebSocket server      |   ws://localhost:8001 |
-
-
-#### Contract Deployment
-
-From the balancer-core-v2 repo you can do
-```
-yarn hardhat clean && yarn deploy:docker && yarn seed:docker
-```
-to deploy contracts and test pools
-
+## Components
 ### Contracts
 
-Deploy balancer contracts using truffle. Using the `yarn deploy` script in balancer-dapp also makes this easy to test out the subgraph using the frontend.
+Deploy balancer contracts using truffle. Using the `yarn deploy` script in balancer-v2 also makes this easy to test out the subgraph using the frontend.
 
 ### Subgraph
 
 Clone the balancer subgraph
 
 ```
-git clone git@github.com:balancer-labs/balancer-subgraph.git
+git clone git@github.com:balancer-labs/balancer-subgraph-v2.git
 ```
 
-Update factory address in subgraph.yaml to the one listed as part of the deploy
+Update deployed contract address in subgraph.yaml to the ones listed as part of the deploy
 
 Install dependencies
 
@@ -123,72 +140,4 @@ Deploy locally
 
 ```
 yarn deploy:local
-```
-
-To blow away graph-node settings
-
-```
-docker-compose kill && docker-compose rm -f && rm -rf data
-```
-
-
-## Queries
-
-### OUT OF DATE
-
-GraphiQL interface can be accessed on a dev env at: http://127.0.0.1:8000/subgraphs/name/balancer-labs/balancer-subgraph
-
-**List of pools**
-```GraphQL
-{
-  pools {
-    id
-    controller
-    publicSwap
-    finalized
-    swapFee
-    totalWeight
-    totalShares
-    createTime
-    joinsCount
-    exitsCount
-    swapsCount
-    tokens {
-      id
-      poolId {
-        id
-      }
-      address
-      balance
-      denormWeight
-    }
-    shares {
-      id
-      poolId {
-        id
-      }
-      userAddress {
-        id
-      }
-    }
-  }
-}
-```
-
-**Pools with 2 tokens**
-```GraphQL
-{
-  pools (where: {tokensList_contains: ["0x5b1869d9a4c187f2eaa108f3062412ecf0526b24", "0xcfeb869f69431e42cdb54a4f4f105c19c080a601"]}) {
-    id
-    publicSwap
-    swapFee
-    tokensList
-    tokens {
-      id
-      address
-      balance
-      denormWeight
-    }
-  }
-}
 ```
