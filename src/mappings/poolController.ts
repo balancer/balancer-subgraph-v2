@@ -7,6 +7,7 @@ import {
   tokenToDecimal,
   createPoolShareEntity,
   createPoolTokenEntity,
+  getPoolShareId,
   decrPoolCount,
 } from './helpers';
 import {
@@ -47,11 +48,11 @@ export function handleTransfer(event: Transfer): void {
   let isMint = event.params.from.toHex() == ZERO_ADDRESS;
   let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
 
-  let poolShareFromId = poolAddress.toHex().concat('-').concat(event.params.from.toHex());
+  let poolShareFromId = getPoolShareId(poolAddress, event.params.from)
   let poolShareFrom = PoolShare.load(poolShareFromId);
   let poolShareFromBalance = poolShareFrom == null ? ZERO_BD : poolShareFrom.balance;
 
-  let poolShareToId = poolAddress.toHex().concat('-').concat(event.params.to.toHex());
+  let poolShareToId = getPoolShareId(poolAddress, event.params.to)
   let poolShareTo = PoolShare.load(poolShareToId);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
 
