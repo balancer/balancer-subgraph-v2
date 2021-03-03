@@ -44,7 +44,7 @@ import {
 export function handleTransfer(event: Transfer): void {
   let poolAddress = event.address;
 
-  let isMint = (event.params.from.toHex() == ZERO_ADDRESS || event.params.from == event.address);
+  let isMint = event.params.from.toHex() == ZERO_ADDRESS;
   let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
 
   let poolShareFromId = poolAddress.toHex().concat('-').concat(event.params.from.toHex());
