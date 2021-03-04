@@ -74,7 +74,6 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): void
     pool.controller = poolAddress;
     pool.tx = event.transaction.hash;
 
-    pool.save();
   }
 
   vault.poolCount = vault.poolCount + 1;
@@ -85,4 +84,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): void
   poolTokenizer.totalShares = ZERO_BD;
   poolTokenizer.holdersCount = BigInt.fromI32(0);
   poolTokenizer.save();
+
+  pool.poolTokenizer = poolAddress.toHexString();
+  pool.save();
 }
