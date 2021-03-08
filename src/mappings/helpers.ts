@@ -183,17 +183,14 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   let snapshot = new PoolSnapshot(snapshotId);
   let poolTokenizer = PoolTokenizer.load(pool.poolTokenizer);
 
-  snapshot.pool = poolAddress;
-
   if (!pool.tokensList) {
     return;
   }
   if (!poolTokenizer) {
     return;
   }
-  let tokens = pool.tokensList;
-  let totalShares = poolTokenizer.totalShares;
 
+  let tokens = pool.tokensList;
   let amounts = new Array<BigDecimal>(tokens.length);
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
@@ -201,8 +198,9 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
     let poolToken = PoolToken.load(poolTokenId);
     amounts[i] = poolToken.balance;
   }
+  snapshot.pool = poolAddress;
   snapshot.amounts = amounts;
-  snapshot.totalShares = totalShares;
+  snapshot.totalShares = poolTokenizer.totalShares;
   snapshot.timestamp = dayTimestamp;
   snapshot.save();
 }
