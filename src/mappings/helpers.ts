@@ -194,7 +194,8 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   let amounts = new Array<BigDecimal>(tokens.length);
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
-    let poolTokenId = poolAddress + '-' + token.toHexString();
+    let tokenAddress = Address.fromString(token.toHexString());
+    let poolTokenId = getPoolTokenId(poolAddress, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
     amounts[i] = poolToken.balance;
   }
