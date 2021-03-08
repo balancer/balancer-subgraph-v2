@@ -1,8 +1,9 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolTokenizer, PoolShare, TokenPrice, Balancer } from '../types/schema';
+import { Pool, User, PoolToken, PoolTokenizer, PoolShare, TokenPrice, Balancer, PoolSnapshot } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD, WETH, USD, BAL } from './constants';
 
+const DAY = 24 * 60 * 60;
 
 export function hexToDecimal(hexString: string, decimals: i32): BigDecimal {
   const bytes = Bytes.fromHexString(hexString).reverse() as Bytes;
@@ -171,4 +172,37 @@ export function createUserEntity(address: Address): void {
     let user = new User(addressHex);
     user.save();
   }
+}
+
+export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
+  let dayTimestamp = timestamp - (timestamp % DAY) + DAY; // Tomorrow's timestamp
+
+  let pool = Pool.load(poolAddress);
+  // Save pool snapshot
+  let snapshotId = poolAddress + '-' + dayTimestamp.toString();
+  let snapshot = new PoolSnapshot(snapshotId);
+  let poolTokenizer = PoolTokenizer.load(pool.poolTokenizer);
+
+  snapshot.pool = poolAddress;
+
+  if (!pool.tokensList) {
+    return;
+  }
+  if (!poolTokenizer) {
+    return;
+  }
+  let tokens = pool.tokensList;
+  let totalShares = poolTokenizer.totalShares;
+
+  let amounts = new Array<BigDecimal>(tokens.length);
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
+    let poolTokenId = poolAddress + '-' + token.toHexString();
+    let poolToken = PoolToken.load(poolTokenId);
+    amounts[i] = poolToken.balance;
+  }
+  snapshot.amounts = amounts;
+  snapshot.totalShares = totalShares;
+  snapshot.timestamp = dayTimestamp;
+  snapshot.save();
 }

@@ -33,7 +33,8 @@ import {
   decrPoolCount,
   scaleUp,
   getTokenPriceId,
-  scaleDown
+  scaleDown,
+  createPoolSnapshot,
 } from './helpers';
 import {
   isPricingAsset,
@@ -92,6 +93,7 @@ export function handleTokensRegistered(event: TokensRegistered): void {
 export function handlePoolJoined(event: PoolJoined): void {
   let poolId: string = event.params.poolId.toHexString();
   let amounts: BigInt[] = event.params.amountsIn;
+  let blockTimestamp = event.block.timestamp.toI32();
 
   let pool = Pool.load(poolId);
   let tokenAddresses = pool.tokensList;
@@ -115,11 +117,14 @@ export function handlePoolJoined(event: PoolJoined): void {
       updatePoolLiquidity(poolId, event.block.number, tokenAddress);
     }
   }
+
+  createPoolSnapshot(poolId, blockTimestamp);
 }
 
 export function handlePoolExited(event: PoolExited): void {
   let poolId = event.params.poolId.toHex();
   let amounts = event.params.amountsOut;
+  let blockTimestamp = event.block.timestamp.toI32();
 
   let pool = Pool.load(poolId);
   let tokenAddresses = pool.tokensList;
@@ -143,6 +148,8 @@ export function handlePoolExited(event: PoolExited): void {
       updatePoolLiquidity(poolId, event.block.number, tokenAddress);
     }
   }
+
+  createPoolSnapshot(poolId, blockTimestamp);
 }
 
 //export function handleRemoveLiquidity(call: RemoveLiquidityCall): void {
@@ -309,6 +316,8 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress);
   }
+
+  createPoolSnapshot(poolId.toHexString(), blockTimestamp);
 }
 
 // Deprecated in favor of events

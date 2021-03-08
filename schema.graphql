@@ -130,3 +130,11 @@ type Investment @entity {
   poolTokenId: PoolToken!
   timestamp: Int!
 }
+
+type PoolSnapshot @entity {
+  id: ID!
+  pool: Pool!
+  amounts: [BigDecimal!]
+  totalShares: BigDecimal!
+  timestamp: Int!
+}
