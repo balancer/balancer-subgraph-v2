@@ -268,10 +268,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.userAddress = event.transaction.from.toHex();
   swap.poolId = poolId.toHex();
 
-  swap.poolTotalSwapVolume = BigDecimal.fromString('0'); //TODO
-  swap.poolTotalSwapFee = BigDecimal.fromString('0'); //TODO
-  swap.poolLiquidity = BigDecimal.fromString('1000'); //TODO
-
   let blockTimestamp = event.block.timestamp.toI32()
   swap.timestamp = blockTimestamp;
   swap.save();
@@ -355,9 +351,6 @@ export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
     //swap.value = BigDecimal.fromString('100'); //TODO
     //swap.feeValue = BigDecimal.fromString('1'); //TODO
     //swap.protocolFeeValue = BigDecimal.fromString('0'); //TODO
-    swap.poolTotalSwapVolume = BigDecimal.fromString('0'); //TODO
-    swap.poolTotalSwapFee = BigDecimal.fromString('0'); //TODO
-    swap.poolLiquidity = BigDecimal.fromString('1000'); //TODO
     swap.timestamp = call.block.timestamp.toI32();
     swap.save();
 
@@ -406,9 +399,6 @@ export function handleBatchSwapGivenOut(call: BatchSwapGivenOutCall): void {
     //swap.value = BigDecimal.fromString('100'); //TODO
     //swap.feeValue = BigDecimal.fromString('1'); //TODO
     //swap.protocolFeeValue = BigDecimal.fromString('0'); //TODO
-    swap.poolTotalSwapVolume = BigDecimal.fromString('0'); //TODO
-    swap.poolTotalSwapFee = BigDecimal.fromString('0'); //TODO
-    swap.poolLiquidity = BigDecimal.fromString('1000'); //TODO
     swap.timestamp = call.block.timestamp.toI32();
     swap.save();
 
