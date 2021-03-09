@@ -1,4 +1,7 @@
-import { Swap, User, UserBalance, Investment } from '../types/schema';
+import { BigDecimal } from '@graphprotocol/graph-ts';
+
+import { UserBalance } from '../types/schema';
+import { ZERO_BD } from './constants';
 
 export function handleUserBalanceDeposited(event: Deposited): void {
   let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString();

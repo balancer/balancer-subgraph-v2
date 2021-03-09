@@ -1,4 +1,4 @@
-import { BigInt, BigDecimal, Address, Bytes, store } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, Address, Bytes } from '@graphprotocol/graph-ts';
 import {
   InternalBalanceDeposited,
   InternalBalanceWithdrawn,
@@ -13,25 +13,12 @@ import {
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
+import { Pool, PoolToken, Swap, TokenPrice, UserBalance, Investment } from '../types/schema';
 import {
-  Balancer,
-  Pool,
-  PoolToken,
-  Swap,
-  TokenPrice,
-  User,
-  UserBalance,
-  PoolTokenizer,
-  Investment,
-} from '../types/schema';
-import {
-  hexToDecimal,
   tokenToDecimal,
   getPoolTokenId,
   newPoolEntity,
   createPoolTokenEntity,
-  decrPoolCount,
-  scaleUp,
   getTokenPriceId,
   scaleDown,
   createPoolSnapshot,
@@ -216,7 +203,6 @@ export function handleInvestment(event: PoolBalanceChanged): void {
   let investmentManagerAddress: Address = event.params.assetManager;
   let amount = event.params.amount;
 
-  let pool = Pool.load(poolId.toHexString());
   let poolTokenId = getPoolTokenId(poolId.toHexString(), token);
   let poolToken = PoolToken.load(poolTokenId);
 
@@ -238,13 +224,9 @@ export function handleInvestment(event: PoolBalanceChanged): void {
  ************************************/
 export function handleSwapEvent(event: SwapEvent): void {
   let poolId = event.params.poolId;
-  let pool = Pool.load(poolId.toHexString());
-  let tokensList: Bytes[] = pool.tokensList;
 
   let tokenInAddress: Address = event.params.tokenIn;
   let tokenOutAddress: Address = event.params.tokenOut;
-  let tokenInSym: string;
-  let tokenOutSym: string;
 
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -321,7 +303,6 @@ export function handleSwapEvent(event: SwapEvent): void {
 export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
   let swaps = call.inputs.swaps;
   let tokens = call.inputs.tokens;
-  let funds = call.inputs.funds;
 
   for (let i: i32 = 0; i < swaps.length; i++) {
     //struct SwapInternal {
@@ -335,7 +316,6 @@ export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
     let poolId = swapStruct.poolId;
     let tokenInAddress = tokens[i32(swapStruct.tokenInIndex)];
     let tokenOutAddress = tokens[i32(swapStruct.tokenOutIndex)];
-    let amountIn = swapStruct.amountIn;
 
     let swapId = call.transaction.hash.toHexString().concat(i.toString());
 
@@ -370,7 +350,6 @@ export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
 export function handleBatchSwapGivenOut(call: BatchSwapGivenOutCall): void {
   let swaps = call.inputs.swaps;
   let tokens = call.inputs.tokens;
-  let funds = call.inputs.funds;
 
   for (let i: i32 = 0; i < swaps.length; i++) {
     //struct SwapInternal {
@@ -384,7 +363,6 @@ export function handleBatchSwapGivenOut(call: BatchSwapGivenOutCall): void {
     let poolId = swapStruct.poolId;
     let tokenInAddress = tokens[i32(swapStruct.tokenInIndex)];
     let tokenOutAddress = tokens[i32(swapStruct.tokenOutIndex)];
-    let amountOut = swapStruct.amountOut;
 
     let swapId = call.transaction.hash.toHexString().concat(i.toString());
 

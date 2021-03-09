@@ -1,4 +1,4 @@
-import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, dataSource } from '@graphprotocol/graph-ts';
 
 export let ZERO_BD = BigDecimal.fromString('0');
 
