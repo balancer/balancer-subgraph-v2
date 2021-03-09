@@ -92,9 +92,6 @@ type Swap @entity {
     tokenAmountOut: BigDecimal!
     poolId: Pool!
     userAddress: User!                      # User address that initiates the swap
-    poolTotalSwapVolume: BigDecimal!        # Total pool swap volume in USD
-    poolTotalSwapFee: BigDecimal!           # Total pool swap fee in USD
-    poolLiquidity: BigDecimal!              # Pool liquidity value in USD
     timestamp: Int!
 }
 
@@ -131,5 +128,13 @@ type Investment @entity {
   investmentManagerAddress: Bytes!
   amount: BigDecimal!
   poolTokenId: PoolToken!
+  timestamp: Int!
+}
+
+type PoolSnapshot @entity {
+  id: ID!
+  pool: Pool!
+  amounts: [BigDecimal!]
+  totalShares: BigDecimal!
   timestamp: Int!
 }
