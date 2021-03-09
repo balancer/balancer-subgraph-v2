@@ -1,5 +1,5 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './constants';
-import { getTokenPriceId, getPoolTokenId, scaleDown } from './helpers';
+import { getTokenPriceId, getPoolTokenId } from './helpers';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, PoolToken, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 

@@ -1,16 +1,7 @@
-import { BigInt, Address, Bytes, store } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
-import { OnJoinPoolCall, OnExitPoolCall } from '../types/templates/WeightedPool/WeightedPool';
-import { Balancer, Pool, PoolToken, PoolShare, Swap, PoolTokenizer } from '../types/schema';
-import {
-  hexToDecimal,
-  tokenToDecimal,
-  createPoolShareEntity,
-  createPoolTokenEntity,
-  getPoolShareId,
-  decrPoolCount,
-} from './helpers';
-import { updatePoolLiquidity } from './pricing';
+import { PoolShare, PoolTokenizer } from '../types/schema';
+import { tokenToDecimal, createPoolShareEntity, getPoolShareId } from './helpers';
 import { ZERO_ADDRESS, ZERO_BD } from './constants';
 
 /************************************

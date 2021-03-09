@@ -1,9 +1,9 @@
 import { ZERO_BD } from './constants';
 import { newPoolEntity } from './helpers';
 
-import { BigInt, BigDecimal, Address, Bytes, store, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { Balancer, Pool, Swap, TokenPrice, User, UserBalance, PoolTokenizer } from '../types/schema';
+import { Balancer, Pool, PoolTokenizer } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
