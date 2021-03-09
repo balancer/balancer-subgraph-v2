@@ -10,9 +10,9 @@ import {
   Swap as SwapEvent,
   PoolBalanceChanged,
 } from '../types/Vault/Vault';
-import { Vault } from '../types/Vault/Vault'
-import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool'
-import { WeightedPool as WeightedPoolTemplate } from '../types/templates'
+import { Vault } from '../types/Vault/Vault';
+import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
+import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import {
   Balancer,
   Pool,
@@ -36,17 +36,14 @@ import {
   scaleDown,
   createPoolSnapshot,
 } from './helpers';
-import {
-  isPricingAsset,
-  updatePoolLiquidity,
-} from './pricing'
+import { isPricingAsset, updatePoolLiquidity } from './pricing';
 import { ZERO_BD } from './constants';
 
 export function handleTokensRegistered(event: TokensRegistered): void {
   let poolId: Bytes = event.params.poolId;
   let tokenAddresses: Address[] = event.params.tokens;
 
-  let pool = Pool.load(poolId.toHexString())
+  let pool = Pool.load(poolId.toHexString());
   if (pool === null) {
     pool = newPoolEntity(poolId.toHexString());
 
@@ -275,11 +272,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.userAddress = event.transaction.from.toHex();
   swap.poolId = poolId.toHex();
 
-  let blockTimestamp = event.block.timestamp.toI32()
+  let blockTimestamp = event.block.timestamp.toI32();
   swap.timestamp = blockTimestamp;
   swap.save();
 
-  let zero = BigDecimal.fromString('0')
+  let zero = BigDecimal.fromString('0');
   if (swap.tokenAmountOut == zero || swap.tokenAmountIn == zero) {
     return;
   }
@@ -294,13 +291,13 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.block = block;
     tokenPrice.timestamp = BigInt.fromI32(blockTimestamp);
     tokenPrice.asset = tokenOutAddress;
-    tokenPrice.amount = tokenAmountIn
+    tokenPrice.amount = tokenAmountIn;
     tokenPrice.pricingAsset = tokenInAddress;
 
     tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenInAddress);
-  } 
+  }
   if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
     let tokenPrice = new TokenPrice(tokenPriceId);
