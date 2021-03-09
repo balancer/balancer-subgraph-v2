@@ -1,6 +1,5 @@
 import { BigDecimal, Address, BigInt, Bytes, dataSource, ethereum } from '@graphprotocol/graph-ts';
 
-
 export let ZERO_BD = BigDecimal.fromString('0');
 
 export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -50,11 +49,11 @@ let daiAddressByNetwork: AddressByNetwork = {
 
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
   if (network == 'mainnet') {
-    return Address.fromString(addressByNetwork.mainnet)
+    return Address.fromString(addressByNetwork.mainnet);
   } else if (network == 'kovan') {
-    return Address.fromString(addressByNetwork.kovan)
+    return Address.fromString(addressByNetwork.kovan);
   } else {
-    return Address.fromString(addressByNetwork.dev)
+    return Address.fromString(addressByNetwork.dev);
   }
 }
 

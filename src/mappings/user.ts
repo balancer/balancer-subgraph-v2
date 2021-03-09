@@ -1,7 +1,7 @@
 import { Swap, User, UserBalance, Investment } from '../types/schema';
 
 export function handleUserBalanceDeposited(event: Deposited): void {
-  let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString()
+  let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString();
   let userBalance = UserBalance.load(userBalanceId);
 
   if (userBalance == null) {
@@ -17,7 +17,7 @@ export function handleUserBalanceDeposited(event: Deposited): void {
 }
 
 export function handleUserBalanceWithdrawn(event: Withdrawn): void {
-  let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString()
+  let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString();
   let userBalance = UserBalance.load(userBalanceId);
 
   if (userBalance == null) {
@@ -32,4 +32,3 @@ export function handleUserBalanceWithdrawn(event: Withdrawn): void {
   userBalance.balance = userBalance.balance.minus(tokenAmount);
   userBalance.save();
 }
-

@@ -10,32 +10,27 @@ import {
   getPoolShareId,
   decrPoolCount,
 } from './helpers';
-import {
-  updatePoolLiquidity,
-} from './pricing';
-import {
-  ZERO_ADDRESS,
-  ZERO_BD,
-} from './constants';
+import { updatePoolLiquidity } from './pricing';
+import { ZERO_ADDRESS, ZERO_BD } from './constants';
 
 /************************************
  ********** Pool Controls ***********
  ************************************/
 
 //export function handleJoinPool(call: OnJoinPoolCall): void {
-  //let poolControllerAddress = call.to;
-  //let poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
+//let poolControllerAddress = call.to;
+//let poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
 
-  //poolController.joinsCount = poolController.joinsCount.plus(BigInt.fromI32(1));
-  //poolController.save();
+//poolController.joinsCount = poolController.joinsCount.plus(BigInt.fromI32(1));
+//poolController.save();
 //}
 
 //export function handleExitPool(call: OnExitPoolCall): void {
-  //let poolControllerAddress = call.to;
-  //let poolController = PoolTokenizer.load(poolControllerAddress.toHex());
+//let poolControllerAddress = call.to;
+//let poolController = PoolTokenizer.load(poolControllerAddress.toHex());
 
-  //poolController.exitsCount = poolController.exitsCount.plus(BigInt.fromI32(1));
-  //poolController.save();
+//poolController.exitsCount = poolController.exitsCount.plus(BigInt.fromI32(1));
+//poolController.save();
 //}
 
 /************************************
@@ -48,11 +43,11 @@ export function handleTransfer(event: Transfer): void {
   let isMint = event.params.from.toHex() == ZERO_ADDRESS;
   let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
 
-  let poolShareFromId = getPoolShareId(poolAddress, event.params.from)
+  let poolShareFromId = getPoolShareId(poolAddress, event.params.from);
   let poolShareFrom = PoolShare.load(poolShareFromId);
   let poolShareFromBalance = poolShareFrom == null ? ZERO_BD : poolShareFrom.balance;
 
-  let poolShareToId = getPoolShareId(poolAddress, event.params.to)
+  let poolShareToId = getPoolShareId(poolAddress, event.params.to);
   let poolShareTo = PoolShare.load(poolShareToId);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
 
