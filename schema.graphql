@@ -25,7 +25,6 @@ type Pool @entity {
     liquidity: BigDecimal!                              # Pool liquidity value in USD
     tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
     tokens: [PoolToken!] @derivedFrom(field: "poolId")
-    tokenized: Boolean!
     joinsCount: BigInt!                                 # liquidity has been added
     exitsCount: BigInt!                                 # liquidity has been removed
     createTime: Int!                                    # Block time pool was created
@@ -34,8 +33,11 @@ type Pool @entity {
     vaultID: Balancer!
     tx: Bytes                                           # Pool creation transaction id
     swaps: [Swap!] @derivedFrom(field: "poolId")
+    tokenized: Boolean!
     poolTokenizer: PoolTokenizer
     historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
+    weights: [BigInt!]                                  # array of weights (for weighted pools)
+    amp: BigInt                                         # amplification (for stable pools)
 }
 
 type PoolToken @entity {

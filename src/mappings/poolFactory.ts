@@ -22,8 +22,13 @@ export function handleNewWeightedPool(event: PoolCreated): void {
   let swapFeeCall = poolContract.try_getSwapFee();
   let swapFee = swapFeeCall.value;
 
-  handleNewPool(event, poolId, swapFee);
+  let pool = handleNewPool(event, poolId, swapFee) as Pool;
   WeightedPoolTemplate.create(poolAddress);
+
+  let weightArrayCall = poolContract.try_getNormalizedWeights(pool.tokensList as Address[]);
+  let weightArray = weightArrayCall.value;
+  pool.weights = weightArray;
+  pool.save();
 }
 
 export function handleNewStablePool(event: PoolCreated): void {
@@ -36,8 +41,13 @@ export function handleNewStablePool(event: PoolCreated): void {
   let swapFeeCall = poolContract.try_getSwapFee();
   let swapFee = swapFeeCall.value;
 
-  handleNewPool(event, poolId, swapFee);
+  let pool = handleNewPool(event, poolId, swapFee);
   StablePoolTemplate.create(poolAddress);
+
+  let ampCall = poolContract.try_getAmplification();
+  let amp = ampCall.value;
+  pool.amp = amp;
+  pool.save();
 }
 
 function findOrInitializeVault(): Balancer {
@@ -56,7 +66,7 @@ function findOrInitializeVault(): Balancer {
   return vault as Balancer;
 }
 
-function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): void {
+function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool | null {
   let vault = findOrInitializeVault();
 
   let poolAddress: Address = event.params.pool;
@@ -82,4 +92,5 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): void
 
   pool.poolTokenizer = poolAddress.toHexString();
   pool.save();
+  return pool;
 }
