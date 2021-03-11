@@ -52,7 +52,7 @@ dataSources:
     source:
       address: '0xdB49af9b25cFAdbb0118BD38ec86EaE51F210931'
       abi: WeightedPoolFactory
-      startBlock: 1
+      startBlock: 23311174
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -76,7 +76,7 @@ dataSources:
     source:
       address: '0xd0264838A8278674fa71f135f7Dba07cDDeC20d9'
       abi: StablePoolFactory
-      startBlock: 1
+      startBlock: 23311176
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
