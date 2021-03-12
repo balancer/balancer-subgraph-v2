@@ -26,7 +26,7 @@ let wbtcAddressByNetwork: AddressByNetwork = {
 
 let usdAddressByNetwork: AddressByNetwork = {
   mainnet: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
-  kovan: '0xTODO',
+  kovan: '0x2f375e94fc336cdec2dc0ccb5277fe59cbf1cae5',
   dev: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
 };
 let usdcAddressByNetwork: AddressByNetwork = {
