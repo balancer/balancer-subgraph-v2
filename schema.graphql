@@ -1,79 +1,79 @@
 # Vault
 type Balancer @entity {
-    id: ID!
-    color: String!                                      # Bronze, Silver, Gold
-    poolCount: Int!                                     # Number of pools
-    finalizedPoolCount: Int!                            # Number of finalized pools
-    pools: [Pool!] @derivedFrom(field: "vaultID")
-    txCount: BigInt!                                    # Number of txs
-    totalLiquidity: BigDecimal!                         # All the pools liquidity value in USD
-    totalSwapVolume: BigDecimal!                        # All the swap volume in USD
-    totalSwapFee: BigDecimal!                           # All the swap fee in USD
+  id: ID!
+  color: String!                                      # Bronze, Silver, Gold
+  poolCount: Int!                                     # Number of pools
+  finalizedPoolCount: Int!                            # Number of finalized pools
+  pools: [Pool!] @derivedFrom(field: "vaultID")
+  txCount: BigInt!                                    # Number of txs
+  totalLiquidity: BigDecimal!                         # All the pools liquidity value in USD
+  totalSwapVolume: BigDecimal!                        # All the swap volume in USD
+  totalSwapFee: BigDecimal!                           # All the swap fee in USD
 }
 
 type Pool @entity {
-    id: ID!                                              # Pool address
-    controller: Bytes!                                   # Controller address
-    strategyType: Int!                                   # Strategy Type
-    symbol: String                                      # Pool token symbol
-    name: String                                        # Pool token name
-    active: Boolean!                                     # isActive
-    swapFee: BigDecimal!                                # Swap Fees
-    totalWeight: BigDecimal!
-    totalSwapVolume: BigDecimal!                        # Total swap volume in USD
-    totalSwapFee: BigDecimal!                           # Total swap fee in USD
-    liquidity: BigDecimal!                              # Pool liquidity value in USD
-    tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
-    tokens: [PoolToken!] @derivedFrom(field: "poolId")
-    joinsCount: BigInt!                                 # liquidity has been added
-    exitsCount: BigInt!                                 # liquidity has been removed
-    createTime: Int!                                    # Block time pool was created
-    tokensCount: BigInt!                                # Number of tokens in the pool
-    swapsCount: BigInt!
-    vaultID: Balancer!
-    tx: Bytes                                           # Pool creation transaction id
-    swaps: [Swap!] @derivedFrom(field: "poolId")
-    tokenized: Boolean!
-    poolTokenizer: PoolTokenizer
-    historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
-    weights: [BigInt!]                                  # array of weights (for weighted pools)
-    amp: BigInt                                         # amplification (for stable pools)
+  id: ID!                                              # Pool address
+  controller: Bytes!                                   # Controller address
+  strategyType: Int!                                   # Strategy Type
+  symbol: String                                      # Pool token symbol
+  name: String                                        # Pool token name
+  active: Boolean!                                     # isActive
+  swapFee: BigDecimal!                                # Swap Fees
+  totalWeight: BigDecimal!
+  totalSwapVolume: BigDecimal!                        # Total swap volume in USD
+  totalSwapFee: BigDecimal!                           # Total swap fee in USD
+  liquidity: BigDecimal!                              # Pool liquidity value in USD
+  tokensList: [Bytes!]!                               # Temp workaround until graph supports filtering on derived field
+  tokens: [PoolToken!] @derivedFrom(field: "poolId")
+  joinsCount: BigInt!                                 # liquidity has been added
+  exitsCount: BigInt!                                 # liquidity has been removed
+  createTime: Int!                                    # Block time pool was created
+  tokensCount: BigInt!                                # Number of tokens in the pool
+  swapsCount: BigInt!
+  vaultID: Balancer!
+  tx: Bytes                                           # Pool creation transaction id
+  swaps: [Swap!] @derivedFrom(field: "poolId")
+  tokenized: Boolean!
+  poolTokenizer: PoolTokenizer
+  historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
+  weights: [BigInt!]                                  # array of weights (for weighted pools)
+  amp: BigInt                                         # amplification (for stable pools)
 }
 
 type PoolToken @entity {
-    id: ID!                                             # poolId + token address
-    poolId: Pool!
-    symbol: String
-    name: String
-    decimals: Int!
-    address: String!
-    balance: BigDecimal!
-    invested: BigDecimal!
-    investments: [Investment!] @derivedFrom(field: "poolTokenId")
+  id: ID!                                             # poolId + token address
+  poolId: Pool!
+  symbol: String
+  name: String
+  decimals: Int!
+  address: String!
+  balance: BigDecimal!
+  invested: BigDecimal!
+  investments: [Investment!] @derivedFrom(field: "poolTokenId")
 }
 
 # distinct from the pool type, which is just the vault's notion of a pool
 type PoolTokenizer @entity {
-    id: ID!                                             # Pool address
-    poolId: Pool!
-    totalShares: BigDecimal!                            # Total pool token shares
-    holdersCount: BigInt!                               # Number of addresses holding a positive balance of BPT
-    shares: [PoolShare!] @derivedFrom(field: "poolTokenizerId")
+  id: ID!                                             # Pool address
+  poolId: Pool!
+  totalShares: BigDecimal!                            # Total pool token shares
+  holdersCount: BigInt!                               # Number of addresses holding a positive balance of BPT
+  shares: [PoolShare!] @derivedFrom(field: "poolTokenizerId")
 }
 
 type PoolShare @entity {
-    id: ID!                                             # poolId + userAddress
-    userAddress: User!
-    poolTokenizerId: PoolTokenizer!
-    poolId: Pool!
-    balance: BigDecimal!
+  id: ID!                                             # poolId + userAddress
+  userAddress: User!
+  poolTokenizerId: PoolTokenizer!
+  poolId: Pool!
+  balance: BigDecimal!
 }
 
 type User @entity {
-    id: ID!
-    sharesOwned: [PoolShare!]  @derivedFrom(field: "userAddress")
-    swaps: [Swap!]  @derivedFrom(field: "userAddress")
-    userBalances: [UserBalance!]  @derivedFrom(field: "userAddress")
+  id: ID!
+  sharesOwned: [PoolShare!]  @derivedFrom(field: "userAddress")
+  swaps: [Swap!]  @derivedFrom(field: "userAddress")
+  userBalances: [UserBalance!]  @derivedFrom(field: "userAddress")
 }
 
 type UserBalance @entity {
@@ -84,18 +84,18 @@ type UserBalance @entity {
 }
 
 type Swap @entity {
-    id: ID!
-    caller: Bytes!
-    tokenIn: Bytes!
-    tokenInSym: String!
-    tokenOut: Bytes!
-    tokenOutSym: String!
-    tokenAmountIn: BigDecimal!
-    tokenAmountOut: BigDecimal!
-    poolId: Pool!
-    userAddress: User!                      # User address that initiates the swap
-    timestamp: Int!
-    tx: Bytes!
+  id: ID!
+  caller: Bytes!
+  tokenIn: Bytes!
+  tokenInSym: String!
+  tokenOut: Bytes!
+  tokenOutSym: String!
+  tokenAmountIn: BigDecimal!
+  tokenAmountOut: BigDecimal!
+  poolId: Pool!
+  userAddress: User!                      # User address that initiates the swap
+  timestamp: Int!
+  tx: Bytes!
 }
 
 type LatestPrice @entity {
