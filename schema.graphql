@@ -95,6 +95,7 @@ type Swap @entity {
     poolId: Pool!
     userAddress: User!                      # User address that initiates the swap
     timestamp: Int!
+    tx: Bytes!
 }
 
 type LatestPrice @entity {
