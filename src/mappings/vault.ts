@@ -256,6 +256,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let blockTimestamp = event.block.timestamp.toI32();
   swap.timestamp = blockTimestamp;
+  swap.tx = transactionHash;
   swap.save();
 
   let zero = BigDecimal.fromString('0');
