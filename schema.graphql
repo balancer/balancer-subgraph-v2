@@ -108,6 +108,16 @@ type Join @entity {
   tx: Bytes!
 }
 
+type Exit @entity {
+  id: ID!
+  sender: Bytes!
+  amounts: [BigDecimal!]!
+  pool: Pool!
+  user: User!                      # User address that initiates the exit
+  timestamp: Int!
+  tx: Bytes!
+}
+
 type LatestPrice @entity {
   id: ID!
   asset: Bytes!
