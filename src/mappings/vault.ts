@@ -13,7 +13,7 @@ import {
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
-import { Pool, PoolToken, Swap, TokenPrice, UserBalance, Investment } from '../types/schema';
+import { Pool, PoolToken, Swap, Join, Exit, TokenPrice, UserBalance, Investment } from '../types/schema';
 import {
   tokenToDecimal,
   getPoolTokenId,
@@ -78,12 +78,32 @@ export function handlePoolJoined(event: PoolJoined): void {
   let poolId: string = event.params.poolId.toHexString();
   let amounts: BigInt[] = event.params.amountsIn;
   let blockTimestamp = event.block.timestamp.toI32();
+  let logIndex = event.logIndex;
+  let transactionHash = event.transaction.hash;
 
   let pool = Pool.load(poolId);
   let tokenAddresses = pool.tokensList;
 
   pool.joinsCount = pool.joinsCount.plus(BigInt.fromI32(1));
   pool.save();
+
+  let joinId = transactionHash.toHexString().concat(logIndex.toString());
+  let join = new Join(joinId);
+  join.sender = event.params.liquidityProvider;
+  let joinAmounts = new Array<BigDecimal>(amounts.length);
+  for (let i: i32 = 0; i < tokenAddresses.length; i++) {
+    let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+    let poolToken = PoolToken.load(poolTokenId);
+    let joinAmount = scaleDown(amounts[i], poolToken.decimals);
+    joinAmounts[i] = joinAmount;
+  }
+  join.amounts = joinAmounts;
+  join.pool = event.params.poolId.toHexString();
+  join.user = event.params.liquidityProvider.toHexString();
+  join.timestamp = blockTimestamp;
+  join.tx = transactionHash;
+  join.save();
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
@@ -109,12 +129,32 @@ export function handlePoolExited(event: PoolExited): void {
   let poolId = event.params.poolId.toHex();
   let amounts = event.params.amountsOut;
   let blockTimestamp = event.block.timestamp.toI32();
+  let logIndex = event.logIndex;
+  let transactionHash = event.transaction.hash;
 
   let pool = Pool.load(poolId);
   let tokenAddresses = pool.tokensList;
 
   pool.exitsCount = pool.exitsCount.plus(BigInt.fromI32(1));
   pool.save();
+
+  let exitId = transactionHash.toHexString().concat(logIndex.toString());
+  let exit = new Exit(exitId);
+  exit.sender = event.params.liquidityProvider;
+  let exitAmounts = new Array<BigDecimal>(amounts.length);
+  for (let i: i32 = 0; i < tokenAddresses.length; i++) {
+    let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+    let poolToken = PoolToken.load(poolTokenId);
+    let exitAmount = scaleDown(amounts[i], poolToken.decimals);
+    exitAmounts[i] = exitAmount;
+  }
+  exit.amounts = exitAmounts;
+  exit.pool = event.params.poolId.toHexString();
+  exit.user = event.params.liquidityProvider.toHexString();
+  exit.timestamp = blockTimestamp;
+  exit.tx = transactionHash;
+  exit.save();
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
