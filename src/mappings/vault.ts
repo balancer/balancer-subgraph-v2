@@ -1,7 +1,5 @@
 import { BigInt, BigDecimal, Address, Bytes } from '@graphprotocol/graph-ts';
 import {
-  InternalBalanceDeposited,
-  InternalBalanceWithdrawn,
   PoolJoined,
   PoolExited,
   TokensRegistered,
@@ -201,38 +199,38 @@ export function handlePoolExited(event: PoolExited): void {
 ////updatePoolLiquidity(poolId);
 //}
 
-export function handleUserBalanceDeposited(event: InternalBalanceDeposited): void {
-  let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString();
-  let userBalance = UserBalance.load(userBalanceId);
+// export function handleUserBalanceDeposited(event: InternalBalanceDeposited): void {
+//   let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString();
+//   let userBalance = UserBalance.load(userBalanceId);
 
-  if (userBalance == null) {
-    userBalance = new UserBalance(userBalanceId);
-    userBalance.userAddress = event.params.user.toHex();
-    userBalance.token = event.params.token;
-    userBalance.balance = ZERO_BD;
-  }
-  // TODO tokenToDeciml - amount is a BigInt
-  let tokenAmount: BigDecimal = event.params.amount.toBigDecimal();
-  userBalance.balance = userBalance.balance.plus(tokenAmount);
-  userBalance.save();
-}
+//   if (userBalance == null) {
+//     userBalance = new UserBalance(userBalanceId);
+//     userBalance.userAddress = event.params.user.toHex();
+//     userBalance.token = event.params.token;
+//     userBalance.balance = ZERO_BD;
+//   }
+//   // TODO tokenToDeciml - amount is a BigInt
+//   let tokenAmount: BigDecimal = event.params.amount.toBigDecimal();
+//   userBalance.balance = userBalance.balance.plus(tokenAmount);
+//   userBalance.save();
+// }
 
-export function handleUserBalanceWithdrawn(event: InternalBalanceWithdrawn): void {
-  let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString();
-  let userBalance = UserBalance.load(userBalanceId);
+// export function handleUserBalanceWithdrawn(event: InternalBalanceWithdrawn): void {
+//   let userBalanceId: string = event.params.user.toHexString() + event.params.token.toHexString();
+//   let userBalance = UserBalance.load(userBalanceId);
 
-  if (userBalance == null) {
-    // this should never happen since balances must be > 0
-    userBalance = new UserBalance(userBalanceId);
-    userBalance.userAddress = event.params.user.toHexString();
-    userBalance.token = event.params.token;
-    userBalance.balance = ZERO_BD;
-  }
-  // TODO tokenToDeciml
-  let tokenAmount: BigDecimal = event.params.amount.toBigDecimal();
-  userBalance.balance = userBalance.balance.minus(tokenAmount);
-  userBalance.save();
-}
+//   if (userBalance == null) {
+//     // this should never happen since balances must be > 0
+//     userBalance = new UserBalance(userBalanceId);
+//     userBalance.userAddress = event.params.user.toHexString();
+//     userBalance.token = event.params.token;
+//     userBalance.balance = ZERO_BD;
+//   }
+//   // TODO tokenToDeciml
+//   let tokenAmount: BigDecimal = event.params.amount.toBigDecimal();
+//   userBalance.balance = userBalance.balance.minus(tokenAmount);
+//   userBalance.save();
+// }
 
 /************************************
  ********** INVESTMENTS *************
@@ -343,7 +341,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 // Deprecated in favor of events
 export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
   let swaps = call.inputs.swaps;
-  let tokens = call.inputs.tokens;
+  let tokens = call.inputs.assets;
 
   for (let i: i32 = 0; i < swaps.length; i++) {
     //struct SwapInternal {
@@ -390,7 +388,7 @@ export function handleBatchSwapGivenIn(call: BatchSwapGivenInCall): void {
 // Deprecated in favor of events
 export function handleBatchSwapGivenOut(call: BatchSwapGivenOutCall): void {
   let swaps = call.inputs.swaps;
-  let tokens = call.inputs.tokens;
+  let tokens = call.inputs.assets;
 
   for (let i: i32 = 0; i < swaps.length; i++) {
     //struct SwapInternal {

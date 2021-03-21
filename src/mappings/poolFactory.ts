@@ -2,7 +2,7 @@ import { ZERO_BD } from './constants';
 import { newPoolEntity } from './helpers';
 
 import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
-import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
+import { PoolRegistered } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool, PoolTokenizer } from '../types/schema';
 
 // datasource
@@ -12,7 +12,7 @@ import { StablePool as StablePoolTemplate } from '../types/templates';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 
-export function handleNewWeightedPool(event: PoolCreated): void {
+export function handleNewWeightedPool(event: PoolRegistered): void {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
@@ -25,13 +25,13 @@ export function handleNewWeightedPool(event: PoolCreated): void {
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
   WeightedPoolTemplate.create(poolAddress);
 
-  let weightArrayCall = poolContract.try_getNormalizedWeights(pool.tokensList as Address[]);
+  let weightArrayCall = poolContract.try_getNormalizedWeights();
   let weightArray = weightArrayCall.value;
   pool.weights = weightArray;
   pool.save();
 }
 
-export function handleNewStablePool(event: PoolCreated): void {
+export function handleNewStablePool(event: PoolRegistered): void {
   let poolAddress: Address = event.params.pool;
   let poolContract = StablePool.bind(poolAddress);
 
@@ -44,7 +44,7 @@ export function handleNewStablePool(event: PoolCreated): void {
   let pool = handleNewPool(event, poolId, swapFee);
   StablePoolTemplate.create(poolAddress);
 
-  let ampCall = poolContract.try_getAmplification();
+  let ampCall = poolContract.try_getAmplificationParameter();
   let amp = ampCall.value;
   pool.amp = amp;
   pool.save();
@@ -66,7 +66,7 @@ function findOrInitializeVault(): Balancer {
   return vault as Balancer;
 }
 
-function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool | null {
+function handleNewPool(event: PoolRegistered, poolId: Bytes, swapFee: BigInt): Pool | null {
   let vault = findOrInitializeVault();
 
   let poolAddress: Address = event.params.pool;

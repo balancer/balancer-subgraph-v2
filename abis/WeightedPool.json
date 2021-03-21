@@ -30,6 +30,16 @@
         "internalType": "uint256",
         "name": "swapFee",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "emergencyPeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "emergencyPeriodCheckExtension",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -58,6 +68,19 @@
       }
     ],
     "name": "Approval",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "active",
+        "type": "bool"
+      }
+    ],
+    "name": "EmergencyPeriodChanged",
     "type": "event"
   },
   {
@@ -191,6 +214,42 @@
   },
   {
     "inputs": [],
+    "name": "getAuthorizer",
+    "outputs": [
+      {
+        "internalType": "contract IAuthorizer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getEmergencyPeriod",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "active",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "checkEndDate",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getInvariant",
     "outputs": [
       {
@@ -216,18 +275,12 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "contract IERC20[]",
-        "name": "tokens",
-        "type": "address[]"
-      }
-    ],
+    "inputs": [],
     "name": "getNormalizedWeights",
     "outputs": [
       {
         "internalType": "uint256[]",
-        "name": "normalizedWeights",
+        "name": "",
         "type": "uint256[]"
       }
     ],
@@ -242,6 +295,19 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -324,7 +390,7 @@
       },
       {
         "internalType": "address",
-        "name": "",
+        "name": "recipient",
         "type": "address"
       },
       {
@@ -334,12 +400,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "latestBlockNumberUsed",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "protocolFeePercentage",
+        "name": "protocolSwapFeePercentage",
         "type": "uint256"
       },
       {
@@ -373,7 +439,7 @@
       },
       {
         "internalType": "address",
-        "name": "",
+        "name": "sender",
         "type": "address"
       },
       {
@@ -388,12 +454,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "latestBlockNumberUsed",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "protocolFeePercentage",
+        "name": "protocolSwapFeePercentage",
         "type": "uint256"
       },
       {
@@ -416,77 +482,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20",
-            "name": "tokenIn",
-            "type": "address"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "tokenOut",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountOut",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "poolId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "latestBlockNumberUsed",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes",
-            "name": "userData",
-            "type": "bytes"
-          }
-        ],
-        "internalType": "struct IPoolQuoteStructs.QuoteRequestGivenOut",
-        "name": "request",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint256",
-        "name": "currentBalanceTokenIn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "currentBalanceTokenOut",
-        "type": "uint256"
-      }
-    ],
-    "name": "quoteInGivenOut",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -534,8 +529,8 @@
             "type": "bytes"
           }
         ],
-        "internalType": "struct IPoolQuoteStructs.QuoteRequestGivenIn",
-        "name": "request",
+        "internalType": "struct IPoolSwapStructs.SwapRequestGivenIn",
+        "name": "swapRequest",
         "type": "tuple"
       },
       {
@@ -549,7 +544,7 @@
         "type": "uint256"
       }
     ],
-    "name": "quoteOutGivenIn",
+    "name": "onSwapGivenIn",
     "outputs": [
       {
         "internalType": "uint256",
@@ -558,6 +553,211 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20",
+            "name": "tokenIn",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC20",
+            "name": "tokenOut",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOut",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "poolId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "latestBlockNumberUsed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "userData",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IPoolSwapStructs.SwapRequestGivenOut",
+        "name": "swapRequest",
+        "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentBalanceTokenIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentBalanceTokenOut",
+        "type": "uint256"
+      }
+    ],
+    "name": "onSwapGivenOut",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "poolId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "currentBalances",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "latestBlockNumberUsed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "protocolSwapFeePercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "userData",
+        "type": "bytes"
+      }
+    ],
+    "name": "queryExit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "bptIn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amountsOut",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "poolId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "currentBalances",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "latestBlockNumberUsed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "protocolSwapFeePercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "userData",
+        "type": "bytes"
+      }
+    ],
+    "name": "queryJoin",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "bptOut",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "amountsIn",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "active",
+        "type": "bool"
+      }
+    ],
+    "name": "setEmergencyPeriod",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "swapFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSwapFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

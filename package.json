@@ -19,6 +19,9 @@
     "import-abis": "cp ./core/abi/* ./abis/.",
     "update-addresses": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js",
     "update-addresses:kovan": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js kovan",
+    "update-addresses:ropsten": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js ropsten",
+    "update-addresses:rinkeby": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js rinkeby",
+    "update-addresses:goerli": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js goerli",
     "sync": "yarn import-abis && yarn update-addresses && yarn codegen && yarn build",
     "sync:kovan": "yarn import-abis && yarn update-addresses kovan && yarn codegen && yarn build"
   },
