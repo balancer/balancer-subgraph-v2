@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Vault
-    network: kovan
+    network: ropsten
     source:
       address: '0xba1c01474A7598c2B49015FdaFc67DdF06ce15f7'
       abi: Vault
@@ -44,7 +44,7 @@ dataSources:
           handler: handlePoolExited
   - kind: ethereum/contract
     name: WeightedPoolFactory
-    network: kovan
+    network: ropsten
     source:
       address: '0x3b5dBD2bFbE5eFA86dD51Af24436A9B3c25caE40'
       abi: WeightedPoolFactory
@@ -68,7 +68,7 @@ dataSources:
           handler: handleNewWeightedPool
   - kind: ethereum/contract
     name: StablePoolFactory
-    network: kovan
+    network: ropsten
     source:
       address: '0x360E616ef7A487558982C0005C7B8E60ef252a78'
       abi: StablePoolFactory
@@ -93,7 +93,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: WeightedPool
-    network: kovan
+    network: ropsten
     source:
       abi: WeightedPool
     mapping:
@@ -118,7 +118,7 @@ templates:
           handler: handleTransfer
   - kind: ethereum/contract
     name: StablePool
-    network: kovan
+    network: ropsten
     source:
       abi: StablePool
     mapping:

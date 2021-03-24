@@ -20,7 +20,7 @@
         "type": "address"
       }
     ],
-    "name": "PoolCreated",
+    "name": "PoolRegistered",
     "type": "event"
   },
   {
@@ -42,12 +42,22 @@
       },
       {
         "internalType": "uint256",
-        "name": "amp",
+        "name": "amplificationParameter",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
         "name": "swapFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "emergencyPeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "emergencyPeriodCheckExtension",
         "type": "uint256"
       }
     ],
@@ -63,45 +73,8 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "start",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "end",
-        "type": "uint256"
-      }
-    ],
-    "name": "getCreatedPoolIds",
-    "outputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
-    "name": "getNumberOfCreatedPools",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getVault",
+    "name": "vault",
     "outputs": [
       {
         "internalType": "contract IVault",
