@@ -3,6 +3,7 @@ import { BigDecimal, Address, dataSource } from '@graphprotocol/graph-ts';
 export let ZERO_BD = BigDecimal.fromString('0');
 
 export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export let VAULT_ADDRESS = '0xa0b05b20e511b1612e908dfcee0e407e22b76028';
 
 export class AddressByNetwork {
   public mainnet: string;

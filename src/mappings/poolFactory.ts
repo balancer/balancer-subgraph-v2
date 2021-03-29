@@ -1,14 +1,15 @@
-import { ZERO_BD } from './constants';
-import { newPoolEntity } from './helpers';
+import { ZERO_BD, VAULT_ADDRESS } from './constants';
+import { newPoolEntity, createPoolTokenEntity, getPoolTokenId, scaleDown } from './helpers';
 
 import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
 import { PoolRegistered } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { Balancer, Pool, PoolTokenizer } from '../types/schema';
+import { Balancer, Pool, PoolToken } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
 
+import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 
@@ -23,11 +24,35 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
   let swapFee = swapFeeCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
+  pool.poolType = "Weighted";
+
+  let vaultContract = Vault.bind(Address.fromString(VAULT_ADDRESS));
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+  let weightsCall = poolContract.try_getNormalizedWeights();
+
+  if (!tokensCall.reverted && !weightsCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    let weights = weightsCall.value;
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      let tokenAddress = tokens[i];
+      let weight = weights[i];
+
+      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+
+      if (pool.tokensList.indexOf(tokenAddress) == -1) {
+        pool.tokensList.push(tokenAddress);
+        pool.save();
+      }
+      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
+      let poolToken = PoolToken.load(poolTokenId);
+      poolToken.weight = scaleDown(weight, 18);
+      poolToken.save();
+    }
+  }
+
   WeightedPoolTemplate.create(poolAddress);
 
-  let weightArrayCall = poolContract.try_getNormalizedWeights();
-  let weightArray = weightArrayCall.value;
-  pool.weights = weightArray;
   pool.save();
 }
 
@@ -56,9 +81,7 @@ function findOrInitializeVault(): Balancer {
 
   // if no vault yet, set up blank initial
   vault = new Balancer('2');
-  vault.color = 'Silver';
   vault.poolCount = 0;
-  vault.finalizedPoolCount = 0;
   vault.totalLiquidity = ZERO_BD;
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
@@ -76,20 +99,13 @@ function handleNewPool(event: PoolRegistered, poolId: Bytes, swapFee: BigInt): P
 
     pool.swapFee = swapFee.toBigDecimal();
     pool.createTime = event.block.timestamp.toI32();
-    pool.controller = poolAddress;
+    pool.address = poolAddress;
     pool.tx = event.transaction.hash;
   }
 
   vault.poolCount = vault.poolCount + 1;
   vault.save();
 
-  let poolTokenizer = new PoolTokenizer(poolAddress.toHexString());
-  poolTokenizer.poolId = poolId.toHexString();
-  poolTokenizer.totalShares = ZERO_BD;
-  poolTokenizer.holdersCount = BigInt.fromI32(0);
-  poolTokenizer.save();
-
-  pool.poolTokenizer = poolAddress.toHexString();
   pool.save();
   return pool;
 }

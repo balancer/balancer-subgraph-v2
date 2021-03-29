@@ -81,7 +81,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   phl.poolLiquidity = poolValue;
   phl.save();
 
-  let oldPoolLiquidity: BigDecimal = pool.liquidity;
+  let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
   let newPoolLiquidity: BigDecimal = poolLiquidityInUSD(poolValue, pricingAsset);
 
   if (newPoolLiquidity && oldPoolLiquidity) {
@@ -89,7 +89,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
     vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
     vault.save();
-    pool.liquidity = newPoolLiquidity;
+    pool.totalLiquidity = newPoolLiquidity;
     pool.save();
   }
 }
