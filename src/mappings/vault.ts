@@ -163,7 +163,7 @@ export function handlePoolExited(event: PoolExited): void {
       throw new Error('poolToken not found');
     }
     let tokenAmountOut = tokenToDecimal(amounts[i], poolToken.decimals);
-    let newAmount = poolToken.balance.plus(tokenAmountOut);
+    let newAmount = poolToken.balance.minus(tokenAmountOut);
     poolToken.balance = newAmount;
     poolToken.save();
     if (isPricingAsset(tokenAddress)) {
