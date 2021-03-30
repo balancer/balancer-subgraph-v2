@@ -163,7 +163,7 @@ export function handlePoolExited(event: PoolExited): void {
       throw new Error('poolToken not found');
     }
     let tokenAmountOut = tokenToDecimal(amounts[i], poolToken.decimals);
-    let newAmount = poolToken.balance.plus(tokenAmountOut);
+    let newAmount = poolToken.balance.minus(tokenAmountOut);
     poolToken.balance = newAmount;
     poolToken.save();
     if (isPricingAsset(tokenAddress)) {
@@ -296,6 +296,14 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
   swap.save();
+  
+  let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
+  poolTokenIn.balance = newInAmount;
+  poolTokenIn.save();
+  
+  let newOutAmount = poolTokenOut.balance.minus(tokenAmountOut);
+  poolTokenOut.balance = newOutAmount;
+  poolTokenOut.save();
 
   let zero = BigDecimal.fromString('0');
   if (swap.tokenAmountOut == zero || swap.tokenAmountIn == zero) {
