@@ -296,6 +296,14 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
   swap.save();
+  
+  let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
+  poolTokenIn.balance = newInAmount;
+  poolTokenIn.save();
+  
+  let newOutAmount = poolTokenOut.balance.minus(tokenAmountOut);
+  poolTokenOut.balance = newOutAmount;
+  poolTokenOut.save();
 
   let zero = BigDecimal.fromString('0');
   if (swap.tokenAmountOut == zero || swap.tokenAmountIn == zero) {
