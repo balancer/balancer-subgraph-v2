@@ -1,6 +1,0 @@
-[submodule "core"]
-	path = core
-	url = git@github.com:balancer-labs/balancer-core-v2.git
-[submodule "pool-management-v2"]
-	path = pool-management-v2
-	url = git@github.com:balancer-labs/pool-management-v2.git

@@ -26,11 +26,18 @@ jobs:
   abi-integrity:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout subgraph
+        uses: actions/checkout@v2
         with:
-          token: ${{ secrets.PAT }} # `PAT` stored in secrets that has access to the core contracts repo
-          submodules: true
+          path: subgraph
+      - name: Checkout core
+        uses: actions/checkout@v2
+        with:
+          repository: balancer-labs/balancer-core-v2
+          token: ${{ secrets.PAT }}
+          path: core
+          ref: rc01-reduce-bytecodesize
       - name: check abis
-        run: diff -rq abis core/abi
+        run: diff -rq subgraph/abis core/abi
 env:
   CI: true

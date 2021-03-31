@@ -5,7 +5,7 @@ import * as yaml from 'js-yaml';
 const network = process.argv[2] || 'dockerParity';
 
 function contractAddress(contractName) {
-  const file = fs.readFileSync(path.resolve(__dirname,'../core/deployments/artifacts/' + network + '/' + contractName + '.json'), 'utf8');
+  const file = fs.readFileSync(path.resolve(__dirname,'../../core/deployments/artifacts/' + network + '/' + contractName + '.json'), 'utf8');
   const json = JSON.parse(file)
   return json.address
 }
