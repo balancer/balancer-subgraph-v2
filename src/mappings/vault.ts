@@ -24,54 +24,6 @@ import {
 import { isPricingAsset, updatePoolLiquidity } from './pricing';
 import { ZERO_BD } from './constants';
 
-// export function handleTokensRegistered(event: TokensRegistered): void {
-//   let poolId: Bytes = event.params.poolId;
-//   let tokenAddresses: Address[] = event.params.tokens;
-
-//   let pool = Pool.load(poolId.toHexString());
-//   if (pool === null) {
-//     pool = newPoolEntity(poolId.toHexString());
-
-//     let vaultContract = Vault.bind(event.address);
-
-//     let poolDetails = vaultContract.try_getPool(poolId);
-//     let poolAddress: Address = poolDetails.value.value0;
-
-//     let poolContract = WeightedPool.bind(poolAddress);
-
-//     let swapFeeCall = poolContract.try_getSwapFee();
-//     let swapFee = swapFeeCall.value;
-//     pool.swapFee = swapFee.toBigDecimal();
-//     pool.createTime = event.block.timestamp.toI32();
-//     // load pool address from vault
-
-//     pool.address = poolAddress;
-//     pool.tx = event.transaction.hash;
-
-//     // start receiving events
-//     WeightedPoolTemplate.create(poolAddress);
-//   }
-
-//   let tokensList: Bytes[] = pool.tokensList || [];
-
-//   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
-//     let tokenAddress = tokenAddresses[i];
-//     let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
-//     let poolToken = PoolToken.load(poolTokenId);
-//     if (poolToken == null) {
-//       if (tokensList.indexOf(tokenAddress) == -1) {
-//         tokensList.push(tokenAddress);
-//       }
-//       createPoolTokenEntity(poolId.toHexString(), tokenAddress);
-//       poolToken = PoolToken.load(poolTokenId);
-//       poolToken.save();
-//     }
-//   }
-//   pool.tokensCount = BigInt.fromI32(tokensList.length);
-//   pool.tokensList = tokensList;
-//   pool.save();
-// }
-
 export function handlePoolJoined(event: PoolJoined): void {
   let poolId: string = event.params.poolId.toHexString();
   let amounts: BigInt[] = event.params.amountsIn;

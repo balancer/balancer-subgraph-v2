@@ -1,7 +1,7 @@
 import { ZERO_BD, VAULT_ADDRESS } from './constants';
 import { newPoolEntity, createPoolTokenEntity, getPoolTokenId, scaleDown } from './helpers';
 
-import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, log } from '@graphprotocol/graph-ts';
 import { PoolRegistered } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool, PoolToken } from '../types/schema';
 
@@ -33,6 +33,7 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
   if (!tokensCall.reverted && !weightsCall.reverted) {
     let tokens = tokensCall.value.value0;
     let weights = weightsCall.value;
+    let tokensList = pool.tokensList;
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       let tokenAddress = tokens[i];
@@ -40,20 +41,20 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
 
       let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
 
-      if (pool.tokensList.indexOf(tokenAddress) == -1) {
-        pool.tokensList.push(tokenAddress);
-        pool.save();
+      if (tokensList.indexOf(tokenAddress) == -1) {
+        tokensList.push(tokenAddress);
       }
       createPoolTokenEntity(poolId.toHexString(), tokenAddress);
       let poolToken = PoolToken.load(poolTokenId);
       poolToken.weight = scaleDown(weight, 18);
       poolToken.save();
     }
+
+    pool.tokensList = tokensList;
+    pool.save();
   }
 
   WeightedPoolTemplate.create(poolAddress);
-
-  pool.save();
 }
 
 export function handleNewStablePool(event: PoolRegistered): void {
