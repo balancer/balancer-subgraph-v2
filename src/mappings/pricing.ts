@@ -4,7 +4,6 @@ import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, PoolToken, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 
 export function isPricingAsset(asset: Address): boolean {
-  //for (let pa of PRICING_ASSETS) {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
     if (PRICING_ASSETS[i] == asset) return true;
   }
