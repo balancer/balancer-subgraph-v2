@@ -5,7 +5,6 @@ type Balancer @entity {
   poolCount: Int!                                     # Number of pools
   finalizedPoolCount: Int!                            # Number of finalized pools
   pools: [Pool!] @derivedFrom(field: "vaultID")
-  txCount: BigInt!                                    # Number of txs
   totalLiquidity: BigDecimal!                         # All the pools liquidity value in USD
   totalSwapVolume: BigDecimal!                        # All the swap volume in USD
   totalSwapFee: BigDecimal!                           # All the swap fee in USD
