@@ -11,7 +11,7 @@ import {
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
-import { Pool, PoolToken, Swap, Join, Exit, TokenPrice, UserBalance, Investment } from '../types/schema';
+import { Balancer, Pool, PoolToken, Swap, Join, Exit, TokenPrice, UserBalance, Investment } from '../types/schema';
 import {
   tokenToDecimal,
   getPoolTokenId,
@@ -21,7 +21,7 @@ import {
   scaleDown,
   createPoolSnapshot,
 } from './helpers';
-import { isPricingAsset, updatePoolLiquidity } from './pricing';
+import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
 
 export function handlePoolJoined(event: PoolJoined): void {
@@ -221,11 +221,17 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
   swap.save();
-  
+
+  // update vault total swap volume
+  let swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+  let vault = Balancer.load('2');
+  vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
+  vault.save();
+
   let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
   poolTokenIn.balance = newInAmount;
   poolTokenIn.save();
-  
+
   let newOutAmount = poolTokenOut.balance.minus(tokenAmountOut);
   poolTokenOut.balance = newOutAmount;
   poolTokenOut.save();
