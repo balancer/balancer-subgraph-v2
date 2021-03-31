@@ -303,6 +303,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
   vault.save();
 
+
+  // update pool swapsCount
+  let pool = Pool.load(poolId.toHex());
+  pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
+  pool.save()
+
   let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
   poolTokenIn.balance = newInAmount;
   poolTokenIn.save();
