@@ -59,7 +59,6 @@ function findOrInitializeVault(): Balancer {
   vault.color = 'Silver';
   vault.poolCount = 0;
   vault.finalizedPoolCount = 0;
-  vault.txCount = BigInt.fromI32(0);
   vault.totalLiquidity = ZERO_BD;
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
