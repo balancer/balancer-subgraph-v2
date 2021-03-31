@@ -82,7 +82,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   phl.save();
 
   let oldPoolLiquidity: BigDecimal = pool.liquidity;
-  let newPoolLiquidity: BigDecimal = poolLiquidityInUSD(poolValue, pricingAsset);
+  let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset);
 
   if (newPoolLiquidity && oldPoolLiquidity) {
     let vault = Balancer.load('2');
@@ -94,11 +94,11 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   }
 }
 
-function poolLiquidityInUSD(poolValue: BigDecimal, pricingAsset: Address): BigDecimal {
-  let newPoolLiquidity: BigDecimal;
+export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal {
+  let usdValue: BigDecimal;
 
   if (isUSDStable(pricingAsset)) {
-    newPoolLiquidity = poolValue;
+    usdValue = value;
   } else {
     // convert to USD
     let pricingAssetInUSDId: string = getLatestPriceId(pricingAsset, USDC);
@@ -110,11 +110,11 @@ function poolLiquidityInUSD(poolValue: BigDecimal, pricingAsset: Address): BigDe
     }
 
     if (pricingAssetInUSD) {
-      newPoolLiquidity = poolValue.times(pricingAssetInUSD.price);
+      usdValue = value.times(pricingAssetInUSD.price);
     }
   }
 
-  return newPoolLiquidity || BigDecimal.fromString('0');
+  return usdValue || BigDecimal.fromString('0');
 }
 
 export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
