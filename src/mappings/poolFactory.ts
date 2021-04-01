@@ -26,7 +26,7 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
   pool.poolType = "Weighted";
 
-  let vaultContract = Vault.bind(Address.fromString(VAULT_ADDRESS));
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);
   let weightsCall = poolContract.try_getNormalizedWeights();
 
