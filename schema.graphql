@@ -30,7 +30,6 @@ type Pool @entity {
   totalShares: BigDecimal!
   
   createTime: Int!
-  tokensCount: BigInt!
   swapsCount: BigInt!
   holdersCount: BigInt!
 
