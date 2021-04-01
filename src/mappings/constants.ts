@@ -16,7 +16,7 @@ let vaultAddressByNetwork: AddressByNetwork = {
   mainnet: '0xTODO',
   kovan: '0xba1c01474A7598c2B49015FdaFc67DdF06ce15f7',
   dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
-}
+};
 
 let wethAddressByNetwork: AddressByNetwork = {
   mainnet: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',

@@ -1,26 +1,7 @@
-import { BigInt, BigDecimal, Address, Bytes } from '@graphprotocol/graph-ts';
-import {
-  PoolJoined,
-  PoolExited,
-  TokensRegistered,
-  BatchSwapGivenInCall,
-  BatchSwapGivenOutCall,
-  Swap as SwapEvent,
-  PoolBalanceChanged,
-} from '../types/Vault/Vault';
-import { Vault } from '../types/Vault/Vault';
-import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
-import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
-import { Balancer, Pool, PoolToken, Swap, Join, Exit, TokenPrice, UserBalance, Investment } from '../types/schema';
-import {
-  tokenToDecimal,
-  getPoolTokenId,
-  newPoolEntity,
-  createPoolTokenEntity,
-  getTokenPriceId,
-  scaleDown,
-  createPoolSnapshot,
-} from './helpers';
+import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts';
+import { PoolJoined, PoolExited, Swap as SwapEvent, PoolBalanceChanged } from '../types/Vault/Vault';
+import { Balancer, Pool, PoolToken, Swap, Join, Exit, TokenPrice, Investment } from '../types/schema';
+import { tokenToDecimal, getPoolTokenId, getTokenPriceId, scaleDown, createPoolSnapshot } from './helpers';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
 
@@ -222,7 +203,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tx = transactionHash;
   swap.save();
 
-
   let swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
 
   // update vault total swap volume
@@ -234,7 +214,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   let pool = Pool.load(poolId.toHex());
   pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
   pool.totalSwapVolume = pool.totalSwapVolume.plus(swapValueUSD);
-  pool.save()
+  pool.save();
 
   let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
   poolTokenIn.balance = newInAmount;
@@ -244,8 +224,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   poolTokenOut.balance = newOutAmount;
   poolTokenOut.save();
 
-  let zero = BigDecimal.fromString('0');
-  if (swap.tokenAmountOut == zero || swap.tokenAmountIn == zero) {
+  if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
   }
 

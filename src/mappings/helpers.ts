@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, Balancer, PoolSnapshot } from '../types/schema';
+import { Pool, User, PoolToken, PoolShare, PoolSnapshot } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD } from './constants';
 
@@ -134,12 +134,6 @@ export function getTokenPriceId(
     .concat(block.toString());
 }
 
-export function decrPoolCount(finalized: boolean): void {
-  const factory = Balancer.load('2');
-  factory.poolCount -= 1;
-  factory.save();
-}
-
 export function createUserEntity(address: Address): void {
   let addressHex = address.toHex();
   if (User.load(addressHex) == null) {
@@ -155,7 +149,6 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   // Save pool snapshot
   let snapshotId = poolAddress + '-' + dayTimestamp.toString();
   let snapshot = new PoolSnapshot(snapshotId);
-
 
   if (!pool.tokensList) {
     return;

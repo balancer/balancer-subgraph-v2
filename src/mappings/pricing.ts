@@ -68,7 +68,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
         latestPrice.asset = tokenAddress;
         latestPrice.pricingAsset = pricingAsset;
       }
-      latestPrice.price = price!;
+      latestPrice.price = price;
       latestPrice.block = block;
       latestPrice.poolId = poolId;
       latestPrice.save();
