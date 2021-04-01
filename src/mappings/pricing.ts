@@ -10,14 +10,6 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function isUSDStable(asset: Address): boolean {
-  //for (let pa of PRICING_ASSETS) {
-  for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
-    if (USD_STABLE_ASSETS[i] == asset) return true;
-  }
-  return false;
-}
-
 export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): void {
   let pool = Pool.load(poolId);
   if (pool == null) return;
@@ -117,16 +109,18 @@ export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal
   return usdValue || BigDecimal.fromString('0');
 }
 
-export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
+function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
   return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
 }
 
-export function getLatestPrice(tokenAddress: Address, pricingAsset: Address): BigDecimal | null {
-  let id = getLatestPriceId(tokenAddress, pricingAsset);
-  let lprice = LatestPrice.load(id);
-  return lprice.price;
+function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
+  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
 }
 
-export function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
-  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
+function isUSDStable(asset: Address): boolean {
+  //for (let pa of PRICING_ASSETS) {
+  for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
+    if (USD_STABLE_ASSETS[i] == asset) return true;
+  }
+  return false;
 }
