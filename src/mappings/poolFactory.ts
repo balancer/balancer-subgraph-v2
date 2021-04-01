@@ -68,6 +68,8 @@ export function handleNewStablePool(event: PoolRegistered): void {
   let swapFee = swapFeeCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
+  pool.poolType = 'Stable';
+
   StablePoolTemplate.create(poolAddress);
 
   let ampCall = poolContract.try_getAmplificationParameter();
