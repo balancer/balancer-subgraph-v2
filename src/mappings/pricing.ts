@@ -13,10 +13,9 @@ export function isPricingAsset(asset: Address): boolean {
 export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): void {
   let pool = Pool.load(poolId);
   if (pool == null) return;
-  if (pool.tokensCount.lt(BigInt.fromI32(2))) return;
 
   let tokensList: Bytes[] = pool.tokensList;
-  if (tokensList.length == 0) return;
+  if (tokensList.length < 2) return;
 
   let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
   let phl = new PoolHistoricalLiquidity(phlId);
