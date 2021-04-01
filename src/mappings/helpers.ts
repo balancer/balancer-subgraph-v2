@@ -47,7 +47,6 @@ export function newPoolEntity(poolId: string): Pool {
   pool.totalSwapFee = ZERO_BD;
   pool.totalLiquidity = ZERO_BD;
   pool.totalShares = ZERO_BD;
-  pool.tokensCount = BigInt.fromI32(0);
   pool.swapsCount = BigInt.fromI32(0);
   pool.holdersCount = BigInt.fromI32(0);
 
