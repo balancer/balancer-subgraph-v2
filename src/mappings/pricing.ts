@@ -41,7 +41,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     // compare any new token price with the last price
     let tokenPriceId = getTokenPriceId(poolId, tokenAddress, pricingAsset, block);
     let tokenPrice = TokenPrice.load(tokenPriceId);
-    let price: BigDecimal | null;
+    let price: BigDecimal;
     let latestPriceId = getLatestPriceId(tokenAddress, pricingAsset);
     let latestPrice = LatestPrice.load(latestPriceId);
 

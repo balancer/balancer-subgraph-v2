@@ -30,7 +30,7 @@ export function handleTransfer(event: Transfer): void {
   let poolShareTo = PoolShare.load(poolShareToId);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
 
-  let pool = Pool.load(poolId.toHexString());
+  let pool = Pool.load(poolId.toHexString()) as Pool;
 
   let BPT_DECIMALS = 18;
 
