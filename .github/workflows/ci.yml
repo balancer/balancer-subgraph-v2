@@ -23,6 +23,19 @@ jobs:
         run: yarn build
       #- name: Lint
         #run: yarn lint
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Lint
+        run: yarn lint
+
   abi-integrity:
     runs-on: ubuntu-latest
     steps:
