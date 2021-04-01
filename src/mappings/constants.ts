@@ -12,6 +12,12 @@ export class AddressByNetwork {
 
 let network: string = dataSource.network();
 
+let vaultAddressByNetwork: AddressByNetwork = {
+  mainnet: '0xTODO',
+  kovan: '0xba1c01474A7598c2B49015FdaFc67DdF06ce15f7',
+  dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
+}
+
 let wethAddressByNetwork: AddressByNetwork = {
   mainnet: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
   kovan: '0xe1329748c41A140536e41049C95c36A53bCACee6',
@@ -57,6 +63,7 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
   }
 }
 
+export let VAULT_ADDRESS = forNetwork(vaultAddressByNetwork, network);
 export let WETH: Address = forNetwork(wethAddressByNetwork, network);
 export let WBTC: Address = forNetwork(wbtcAddressByNetwork, network);
 export let USD: Address = forNetwork(usdAddressByNetwork, network);

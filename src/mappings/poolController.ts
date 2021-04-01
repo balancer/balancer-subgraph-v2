@@ -1,28 +1,11 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
-import { PoolShare, PoolTokenizer } from '../types/schema';
+import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
+
+import { PoolShare, Pool } from '../types/schema';
 import { tokenToDecimal, createPoolShareEntity, getPoolShareId } from './helpers';
 import { ZERO_ADDRESS, ZERO_BD } from './constants';
 
-/************************************
- ********** Pool Controls ***********
- ************************************/
-
-//export function handleJoinPool(call: OnJoinPoolCall): void {
-//let poolControllerAddress = call.to;
-//let poolController = PoolTokenizer.load(poolControllerAddress.toHexString());
-
-//poolController.joinsCount = poolController.joinsCount.plus(BigInt.fromI32(1));
-//poolController.save();
-//}
-
-//export function handleExitPool(call: OnExitPoolCall): void {
-//let poolControllerAddress = call.to;
-//let poolController = PoolTokenizer.load(poolControllerAddress.toHex());
-
-//poolController.exitsCount = poolController.exitsCount.plus(BigInt.fromI32(1));
-//poolController.save();
-//}
 
 /************************************
  *********** POOL SHARES ************
@@ -30,6 +13,12 @@ import { ZERO_ADDRESS, ZERO_BD } from './constants';
 
 export function handleTransfer(event: Transfer): void {
   let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
 
   let isMint = event.params.from.toHex() == ZERO_ADDRESS;
   let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
@@ -42,36 +31,36 @@ export function handleTransfer(event: Transfer): void {
   let poolShareTo = PoolShare.load(poolShareToId);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
 
-  let poolTokenizer = PoolTokenizer.load(poolAddress.toHexString());
+  let pool = Pool.load(poolId.toHexString());
 
   let BPT_DECIMALS = 18;
 
   if (isMint) {
     if (poolShareTo == null) {
-      createPoolShareEntity(poolTokenizer!, event.params.to);
+      createPoolShareEntity(pool!, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
-    poolTokenizer.totalShares = poolTokenizer.totalShares.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+    pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
   } else if (isBurn) {
     if (poolShareFrom == null) {
-      createPoolShareEntity(poolTokenizer!, event.params.from);
+      createPoolShareEntity(pool!, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareFrom.save();
-    poolTokenizer.totalShares = poolTokenizer.totalShares.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+    pool.totalShares = pool.totalShares.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
   } else {
     if (poolShareTo == null) {
-      createPoolShareEntity(poolTokenizer!, event.params.to);
+      createPoolShareEntity(pool!, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
 
     if (poolShareFrom == null) {
-      createPoolShareEntity(poolTokenizer!, event.params.from);
+      createPoolShareEntity(pool!, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
@@ -79,12 +68,12 @@ export function handleTransfer(event: Transfer): void {
   }
 
   if (poolShareTo !== null && poolShareTo.balance.notEqual(ZERO_BD) && poolShareToBalance.equals(ZERO_BD)) {
-    poolTokenizer.holdersCount = poolTokenizer.holdersCount.plus(BigInt.fromI32(1));
+    pool.holdersCount = pool.holdersCount.plus(BigInt.fromI32(1));
   }
 
   if (poolShareFrom !== null && poolShareFrom.balance.equals(ZERO_BD) && poolShareFromBalance.notEqual(ZERO_BD)) {
-    poolTokenizer.holdersCount = poolTokenizer.holdersCount.minus(BigInt.fromI32(1));
+    pool.holdersCount = pool.holdersCount.minus(BigInt.fromI32(1));
   }
 
-  poolTokenizer.save();
+  pool.save();
 }

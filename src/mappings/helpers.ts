@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolTokenizer, PoolShare, Balancer, PoolSnapshot } from '../types/schema';
+import { Pool, User, PoolToken, PoolShare, Balancer, PoolSnapshot } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD } from './constants';
 
@@ -40,16 +40,15 @@ export function getPoolShareId(poolControllerAddress: Address, lpAddress: Addres
   return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex());
 }
 
-export function createPoolShareEntity(poolController: PoolTokenizer, lpAddress: Address): void {
+export function createPoolShareEntity(pool: Pool, lpAddress: Address): void {
   createUserEntity(lpAddress);
-  let poolControllerAddress = Address.fromString(poolController.id);
+  let poolControllerAddress = Address.fromString(pool.address.toHexString());
 
   let id = getPoolShareId(poolControllerAddress, lpAddress);
   let poolShare = new PoolShare(id);
 
   poolShare.userAddress = lpAddress.toHex();
-  poolShare.poolTokenizerId = poolControllerAddress.toHex();
-  poolShare.poolId = poolController.poolId;
+  poolShare.poolId = pool.id;
   poolShare.balance = ZERO_BD;
   poolShare.save();
 }
@@ -60,21 +59,17 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
 // pool entity when created
 export function newPoolEntity(poolId: string): Pool {
   let pool = new Pool(poolId);
-  pool.active = true;
-  pool.tokenized = true;
   pool.vaultID = '2';
-  pool.tokensList = [];
   pool.strategyType = i32(parseInt(poolId.slice(42, 46)));
-
+  pool.tokensList = [];
   pool.totalWeight = ZERO_BD;
   pool.totalSwapVolume = ZERO_BD;
   pool.totalSwapFee = ZERO_BD;
-  pool.liquidity = ZERO_BD;
+  pool.totalLiquidity = ZERO_BD;
+  pool.totalShares = ZERO_BD;
   pool.tokensCount = BigInt.fromI32(0);
   pool.swapsCount = BigInt.fromI32(0);
-
-  pool.joinsCount = BigInt.fromI32(0);
-  pool.exitsCount = BigInt.fromI32(0);
+  pool.holdersCount = BigInt.fromI32(0);
 
   return pool;
 }
@@ -139,32 +134,9 @@ export function getTokenPriceId(
     .concat(block.toString());
 }
 
-//export function capturePrices(id: string): void {
-//const pool = Pool.load(id);
-//const tokensList: Array<Bytes> = pool.tokensList;
-//if (!tokensList || pool.tokensCount.lt(BigInt.fromI32(2))) return;
-
-//let pricingAssets = [BAL, WETH, USD]
-
-//pricingAssets.forEach((pa) => {
-//if (tokensList.includes(pa)) {
-//tokensList.filter(tokenAddress => tokenAddress !== pa).forEach(tokenAddress => {
-
-//let block  = BigInt.from(0); // TODO
-//let tokenPriceId = getTokenPriceId(id, tokenAddress, pa, block)
-//let tokenPrice = new TokenPrice(tokenPriceId);
-//tokenPrice.poolId = id;
-////tokenPrice.timestamp = ???;
-//tokenPrice.pricingAsset = pa;
-//})
-//}
-//})
-//}
-
 export function decrPoolCount(finalized: boolean): void {
   const factory = Balancer.load('2');
   factory.poolCount -= 1;
-  if (finalized) factory.finalizedPoolCount -= 1;
   factory.save();
 }
 
@@ -183,12 +155,13 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   // Save pool snapshot
   let snapshotId = poolAddress + '-' + dayTimestamp.toString();
   let snapshot = new PoolSnapshot(snapshotId);
-  let poolTokenizer = PoolTokenizer.load(pool.poolTokenizer);
+
 
   if (!pool.tokensList) {
     return;
   }
-  if (!poolTokenizer) {
+
+  if (!pool.tokens) {
     return;
   }
 
@@ -201,9 +174,10 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
     let poolToken = PoolToken.load(poolTokenId);
     amounts[i] = poolToken.balance;
   }
+
   snapshot.pool = poolAddress;
   snapshot.amounts = amounts;
-  snapshot.totalShares = poolTokenizer.totalShares;
+  snapshot.totalShares = pool.totalShares;
   snapshot.timestamp = dayTimestamp;
   snapshot.save();
 }

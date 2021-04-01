@@ -32,16 +32,12 @@ dataSources:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
       eventHandlers:
-        # - event: InternalBalanceDeposited(indexed address,indexed address,indexed address,uint256)
-        #   handler: handleUserBalanceDeposited
-        # - event: InternalBalanceWithdrawn(indexed address,indexed address,indexed address,uint256)
-        #   handler: handleUserBalanceWithdrawn
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent
         - event: PoolBalanceChanged(indexed bytes32,indexed address,indexed address,int256)
           handler: handleInvestment
-        - event: TokensRegistered(bytes32,address[],address[])
-          handler: handleTokensRegistered
+        # - event: TokensRegistered(bytes32,address[],address[])
+        #   handler: handleTokensRegistered
         - event: PoolJoined(indexed bytes32,indexed address,address[],uint256[],uint256[])
           handler: handlePoolJoined
         - event: PoolExited(indexed bytes32,indexed address,address[],uint256[],uint256[])
@@ -61,8 +57,11 @@ dataSources:
       entities:
         - Balancer
         - Pool
-        - PoolTokenizer
       abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: WeightedPoolFactory
           file: ./abis/WeightedPoolFactory.json
         - name: WeightedPool
@@ -85,7 +84,6 @@ dataSources:
       entities:
         - Balancer
         - Pool
-        - PoolTokenizer
       abis:
         - name: StablePoolFactory
           file: ./abis/StablePoolFactory.json
@@ -107,8 +105,6 @@ templates:
       file: ./src/mappings/poolController.ts
       entities:
         - Pool
-        - PoolShare
-        - PoolTokenizer
         - PoolShare
         - Swap
         - PoolToken
@@ -132,8 +128,6 @@ templates:
       file: ./src/mappings/poolController.ts
       entities:
         - Pool
-        - StablePool
-        - BalancerPoolToken
         - PoolShare
         - Swap
         - PoolToken
