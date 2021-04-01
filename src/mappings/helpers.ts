@@ -1,35 +1,15 @@
-import { BigDecimal, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, PoolSnapshot } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD } from './constants';
 
 const DAY = 24 * 60 * 60;
 
-export function hexToDecimal(hexString: string, decimals: i32): BigDecimal {
-  const bytes = Bytes.fromHexString(hexString).reverse() as Bytes;
-  const bi = BigInt.fromUnsignedBytes(bytes);
-  const scale = BigInt.fromI32(10)
-    .pow(decimals as u8)
-    .toBigDecimal();
-  return bi.divDecimal(scale);
-}
-
-export function bigIntToDecimal(amount: BigInt, decimals: i32): BigDecimal {
-  const scale = BigInt.fromI32(10)
-    .pow(decimals as u8)
-    .toBigDecimal();
-  return amount.toBigDecimal().div(scale);
-}
-
 export function tokenToDecimal(amount: BigInt, decimals: i32): BigDecimal {
   let scale = BigInt.fromI32(10)
     .pow(decimals as u8)
     .toBigDecimal();
   return amount.toBigDecimal().div(scale);
-}
-
-export function scaleUp(num: BigInt, decimals: i32): BigInt {
-  return num.times(BigInt.fromI32(10).pow(u8(decimals)));
 }
 
 export function scaleDown(num: BigInt, decimals: i32): BigDecimal {
@@ -134,14 +114,6 @@ export function getTokenPriceId(
     .concat(block.toString());
 }
 
-export function createUserEntity(address: Address): void {
-  let addressHex = address.toHex();
-  if (User.load(addressHex) == null) {
-    let user = new User(addressHex);
-    user.save();
-  }
-}
-
 export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   let dayTimestamp = timestamp - (timestamp % DAY) + DAY; // Tomorrow's timestamp
 
@@ -173,4 +145,12 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   snapshot.totalShares = pool.totalShares;
   snapshot.timestamp = dayTimestamp;
   snapshot.save();
+}
+
+function createUserEntity(address: Address): void {
+  let addressHex = address.toHex();
+  if (User.load(addressHex) == null) {
+    let user = new User(addressHex);
+    user.save();
+  }
 }
