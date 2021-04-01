@@ -2,7 +2,7 @@ name: Deploy Graph
 
 on:
   push:
-    branches: master
+    branches: revert-schema-changes
 
 jobs:
   deploy:
