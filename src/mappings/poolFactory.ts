@@ -1,7 +1,7 @@
 import { ZERO_BD, VAULT_ADDRESS } from './constants';
 import { newPoolEntity, createPoolTokenEntity, getPoolTokenId, scaleDown } from './helpers';
 
-import { BigInt, Address, Bytes, log } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
 import { PoolRegistered } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool, PoolToken } from '../types/schema';
 
@@ -24,7 +24,7 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
   let swapFee = swapFeeCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
-  pool.poolType = "Weighted";
+  pool.poolType = 'Weighted';
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);

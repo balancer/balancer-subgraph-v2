@@ -6,7 +6,6 @@ import { PoolShare, Pool } from '../types/schema';
 import { tokenToDecimal, createPoolShareEntity, getPoolShareId } from './helpers';
 import { ZERO_ADDRESS, ZERO_BD } from './constants';
 
-
 /************************************
  *********** POOL SHARES ************
  ************************************/
@@ -37,7 +36,7 @@ export function handleTransfer(event: Transfer): void {
 
   if (isMint) {
     if (poolShareTo == null) {
-      createPoolShareEntity(pool!, event.params.to);
+      createPoolShareEntity(pool, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
@@ -45,7 +44,7 @@ export function handleTransfer(event: Transfer): void {
     pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
   } else if (isBurn) {
     if (poolShareFrom == null) {
-      createPoolShareEntity(pool!, event.params.from);
+      createPoolShareEntity(pool, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
@@ -53,14 +52,14 @@ export function handleTransfer(event: Transfer): void {
     pool.totalShares = pool.totalShares.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
   } else {
     if (poolShareTo == null) {
-      createPoolShareEntity(pool!, event.params.to);
+      createPoolShareEntity(pool, event.params.to);
       poolShareTo = PoolShare.load(poolShareToId);
     }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
 
     if (poolShareFrom == null) {
-      createPoolShareEntity(pool!, event.params.from);
+      createPoolShareEntity(pool, event.params.from);
       poolShareFrom = PoolShare.load(poolShareFromId);
     }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
