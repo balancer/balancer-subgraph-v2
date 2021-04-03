@@ -125,10 +125,6 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
     return;
   }
 
-  if (!pool.tokens) {
-    return;
-  }
-
   let tokens = pool.tokensList;
   let amounts = new Array<BigDecimal>(tokens.length);
   for (let i = 0; i < tokens.length; i++) {
