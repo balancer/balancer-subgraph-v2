@@ -3,16 +3,20 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core
 
 import fetch from 'node-fetch';
 
+interface QueryVariables {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}
+
 interface TestCase {
   id: string;
   query: DocumentNode;
-  variables?: any;
+  variables?: QueryVariables;
 }
 
 const SUBGRAPH_QUERY_ENDPOINT = 'http://127.0.0.1:8000/subgraphs/name/balancer-labs/balancer-v2';
-let cache = new InMemoryCache();
 
-export const runTestCases = async (groupName: string, testCases: TestCase[]) => {
+export const runTestCases = async (groupName: string, testCases: TestCase[]): void => {
   const linkOptions = { uri: SUBGRAPH_QUERY_ENDPOINT, fetch };
   const link = createHttpLink(linkOptions);
   const cache = new InMemoryCache();
