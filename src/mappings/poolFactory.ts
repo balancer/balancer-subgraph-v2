@@ -34,6 +34,7 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
     let tokens = tokensCall.value.value0;
     let weights = weightsCall.value;
     let tokensList = pool.tokensList;
+    let totalWeight = ZERO_BD;
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       let tokenAddress = tokens[i];
@@ -48,9 +49,12 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
       let poolToken = PoolToken.load(poolTokenId);
       poolToken.weight = scaleDown(weight, 18);
       poolToken.save();
+
+      totalWeight = totalWeight.plus(scaleDown(weight, 18));
     }
 
     pool.tokensList = tokensList;
+    pool.totalWeight = totalWeight;
     pool.save();
   }
 
