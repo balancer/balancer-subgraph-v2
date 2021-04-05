@@ -100,7 +100,7 @@ function handleNewPool(event: PoolRegistered, poolId: Bytes, swapFee: BigInt): P
   if (pool == null) {
     pool = newPoolEntity(poolId.toHexString());
 
-    pool.swapFee = swapFee.toBigDecimal();
+    pool.swapFee = scaleDown(swapFee, 18);
     pool.createTime = event.block.timestamp.toI32();
     pool.address = poolAddress;
     pool.tx = event.transaction.hash;
