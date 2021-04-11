@@ -1,7 +1,14 @@
 import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts';
 import { PoolJoined, PoolExited, Swap as SwapEvent, PoolBalanceChanged } from '../types/Vault/Vault';
 import { Balancer, Pool, PoolToken, Swap, Join, Exit, TokenPrice, Investment } from '../types/schema';
-import { tokenToDecimal, getPoolTokenId, getTokenPriceId, scaleDown, createPoolSnapshot } from './helpers';
+import {
+  tokenToDecimal,
+  getPoolTokenId,
+  getTokenPriceId,
+  scaleDown,
+  createPoolSnapshot,
+  savePoolSnapshotVolume,
+} from './helpers';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
 
@@ -229,4 +236,5 @@ export function handleSwapEvent(event: SwapEvent): void {
   }
 
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);
+  savePoolSnapshotVolume(poolId.toHexString(), blockTimestamp, swapValueUSD);
 }
