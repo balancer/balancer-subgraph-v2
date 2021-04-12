@@ -14,42 +14,42 @@ let network: string = dataSource.network();
 
 let vaultAddressByNetwork: AddressByNetwork = {
   mainnet: '0xTODO',
-  kovan: '0xba1c01474A7598c2B49015FdaFc67DdF06ce15f7',
+  kovan: '0xba1222227c37746aDA22d10Da6265E02E44400DD',
   dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
 };
 
 let wethAddressByNetwork: AddressByNetwork = {
   mainnet: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-  kovan: '0xe1329748c41A140536e41049C95c36A53bCACee6',
+  kovan: '0x02822e968856186a20fEc2C824D4B174D0b70502',
   dev: '0x4CDDb3505Cf09ee0Fa0877061eB654839959B9cd',
 };
 
 let wbtcAddressByNetwork: AddressByNetwork = {
   mainnet: '0xTODO',
-  kovan: '0x7A0Fbc1aD60E8d624215282afb0e877E51A08136',
+  kovan: '0x1C8E3Bcb3378a443CC591f154c5CE0EBb4dA9648',
   dev: '0xcD80986f08d776CE41698c47f705CDc99dDBfB0A',
 };
 
 let usdAddressByNetwork: AddressByNetwork = {
   mainnet: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
-  kovan: '0xFd05Bbf0e4E2fc552A67F3cb2dD2ecB289252eE1',
+  kovan: '0xc2569dd7d0fd715B054fBf16E75B001E5c0C1115',
   dev: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
 };
 let usdcAddressByNetwork: AddressByNetwork = {
   mainnet: '0xTODO',
-  kovan: '0xFd05Bbf0e4E2fc552A67F3cb2dD2ecB289252eE1',
+  kovan: '0xc2569dd7d0fd715B054fBf16E75B001E5c0C1115',
   dev: '0x7c0c5AdA758cf764EcD6bAC05b63b2482f90bBB2',
 };
 
 let balAddressByNetwork: AddressByNetwork = {
   mainnet: '0xba100000625a3754423978a60c9317c58a424e3D',
-  kovan: '0x1688C45BC51Faa1B783D274E03Da0A0B28A0A871',
+  kovan: '0x41286Bb1D3E870f3F750eB7E1C25d7E48c8A1Ac7',
   dev: '0xf702269193081364E355f862f2CFbFCdC5DB738C',
 };
 
 let daiAddressByNetwork: AddressByNetwork = {
   mainnet: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-  kovan: '0x59935f19d720aD935beCdC34c4F367397a28DaED',
+  kovan: '0x04DF6e4121c27713ED22341E7c7Df330F56f289B',
   dev: '0x5C0E66606eAbEC1df45E2ADd26C5DF8C0895a397',
 };
 
