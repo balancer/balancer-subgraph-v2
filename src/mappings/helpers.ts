@@ -139,11 +139,12 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   snapshot.amounts = amounts;
   snapshot.totalShares = pool.totalShares;
   snapshot.swapVolume = ZERO_BD;
+  snapshot.swapFees = ZERO_BD;
   snapshot.timestamp = dayTimestamp;
   snapshot.save();
 }
 
-export function savePoolSnapshotVolume(poolAddress: string, timestamp: i32, swapVolume: BigDecimal): void {
+export function saveSwapToSnapshot(poolAddress: string, timestamp: i32, volume: BigDecimal, fees: BigDecimal): void {
   let dayTimestamp = timestamp - (timestamp % DAY) + DAY; // Tomorrow's timestamp
 
   // Save pool snapshot
@@ -154,7 +155,8 @@ export function savePoolSnapshotVolume(poolAddress: string, timestamp: i32, swap
     return;
   }
 
-  snapshot.swapVolume = snapshot.swapVolume.plus(swapVolume);
+  snapshot.swapVolume = snapshot.swapVolume.plus(volume);
+  snapshot.swapFees = snapshot.swapFees.plus(fees);
   snapshot.save();
 }
 
