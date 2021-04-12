@@ -7,7 +7,7 @@ import {
   getTokenPriceId,
   scaleDown,
   createPoolSnapshot,
-  savePoolSnapshotVolume,
+  saveSwapToSnapshot,
 } from './helpers';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
@@ -235,6 +235,9 @@ export function handleSwapEvent(event: SwapEvent): void {
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress);
   }
 
+  let swapFee = pool.swapFee;
+  let swapFeesUSD = swapValueUSD.times(swapFee);
+
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);
-  savePoolSnapshotVolume(poolId.toHexString(), blockTimestamp, swapValueUSD);
+  saveSwapToSnapshot(poolId.toHexString(), blockTimestamp, swapValueUSD, swapFeesUSD);
 }
