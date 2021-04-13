@@ -23,7 +23,6 @@ dataSources:
         - User
         - UserBalance
         - PoolTokenizer
-        - Investment
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -34,12 +33,8 @@ dataSources:
       eventHandlers:
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent
-        - event: PoolBalanceChanged(indexed bytes32,indexed address,indexed address,int256)
-          handler: handleInvestment
-        - event: PoolJoined(indexed bytes32,indexed address,address[],uint256[],uint256[])
-          handler: handlePoolJoined
-        - event: PoolExited(indexed bytes32,indexed address,address[],uint256[],uint256[])
-          handler: handlePoolExited
+        - event: PoolBalanceChanged(indexed bytes32,indexed address,address[],int256[],uint256[])
+          handler: handleBalanceChange
   - kind: ethereum/contract
     name: WeightedPoolFactory
     network: ropsten
