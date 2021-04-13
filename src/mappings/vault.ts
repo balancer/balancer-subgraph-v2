@@ -97,7 +97,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolTokenId = getPoolTokenId(poolId, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
-    let exitAmount = scaleDown(amounts[i], poolToken.decimals);
+    let exitAmount = scaleDown(amounts[i].neg(), poolToken.decimals);
     exitAmounts[i] = exitAmount;
   }
   exit.amounts = exitAmounts;
@@ -115,7 +115,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     if (poolToken == null) {
       throw new Error('poolToken not found');
     }
-    let tokenAmountOut = tokenToDecimal(amounts[i], poolToken.decimals);
+    let tokenAmountOut = tokenToDecimal(amounts[i].neg(), poolToken.decimals);
     let newAmount = poolToken.balance.minus(tokenAmountOut);
     poolToken.balance = newAmount;
     poolToken.save();
