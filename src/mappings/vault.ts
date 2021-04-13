@@ -1,6 +1,6 @@
 import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts';
-import { PoolJoined, PoolExited, Swap as SwapEvent, PoolBalanceChanged } from '../types/Vault/Vault';
-import { Balancer, Pool, PoolToken, Swap, Join, Exit, TokenPrice, Investment } from '../types/schema';
+import { Swap as SwapEvent, PoolBalanceChanged } from '../types/Vault/Vault';
+import { Balancer, Pool, PoolToken, Swap, Join, Exit, TokenPrice } from '../types/schema';
 import {
   tokenToDecimal,
   getPoolTokenId,
@@ -12,9 +12,24 @@ import {
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
 
-export function handlePoolJoined(event: PoolJoined): void {
+let ZERO = BigInt.fromI32(0);
+
+export function handleBalanceChange(event: PoolBalanceChanged): void {
+  let amounts: BigInt[] = event.params.amounts;
+
+  if (amounts.length === 0) {
+    return;
+  }
+  if (amounts[0].gt(ZERO)) {
+    handlePoolJoined(event);
+  } else {
+    handlePoolExited(event);
+  }
+}
+
+function handlePoolJoined(event: PoolBalanceChanged): void {
   let poolId: string = event.params.poolId.toHexString();
-  let amounts: BigInt[] = event.params.amountsIn;
+  let amounts: BigInt[] = event.params.amounts;
   let blockTimestamp = event.block.timestamp.toI32();
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -62,9 +77,9 @@ export function handlePoolJoined(event: PoolJoined): void {
   createPoolSnapshot(poolId, blockTimestamp);
 }
 
-export function handlePoolExited(event: PoolExited): void {
+function handlePoolExited(event: PoolBalanceChanged): void {
   let poolId = event.params.poolId.toHex();
-  let amounts = event.params.amountsOut;
+  let amounts = event.params.amounts;
   let blockTimestamp = event.block.timestamp.toI32();
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -110,31 +125,6 @@ export function handlePoolExited(event: PoolExited): void {
   }
 
   createPoolSnapshot(poolId, blockTimestamp);
-}
-
-/************************************
- ********** INVESTMENTS *************
- ************************************/
-export function handleInvestment(event: PoolBalanceChanged): void {
-  let poolId = event.params.poolId;
-  let token: Address = event.params.token;
-  let investmentManagerAddress: Address = event.params.assetManager;
-  let amount = event.params.amount;
-
-  let poolTokenId = getPoolTokenId(poolId.toHexString(), token);
-  let poolToken = PoolToken.load(poolTokenId);
-
-  // TODO tokenToDeciml
-  let tokenAmount: BigDecimal = amount.toBigDecimal();
-  poolToken.invested = poolToken.invested.plus(tokenAmount);
-  poolToken.save();
-
-  let investment = new Investment(poolTokenId.concat(investmentManagerAddress.toHexString()));
-  investment.investmentManagerAddress = investmentManagerAddress;
-  investment.poolTokenId = poolTokenId;
-  investment.amount = amount.toBigDecimal();
-  investment.timestamp = event.block.timestamp.toI32();
-  investment.save();
 }
 
 /************************************
