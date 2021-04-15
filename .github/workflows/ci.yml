@@ -51,8 +51,8 @@ jobs:
           path: core
           ref: master
       - name: import abis
-        run: yarn import-abis
+        run: cd subgraph && yarn import-abis
       - name: check abis
-        run: git diff HEAD --exit-code
+        run: cd subgraph && git diff HEAD --exit-code
 env:
   CI: true
