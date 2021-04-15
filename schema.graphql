@@ -130,7 +130,9 @@ type LatestPrice @entity {
 type PoolHistoricalLiquidity @entity {
   id: ID!
   poolId: Pool!
+  poolTotalShares: BigDecimal!
   poolLiquidity: BigDecimal! # total value, priced in the stable asset - ie USD
+  poolShareValue: BigDecimal!
   pricingAsset: Bytes! # address of stable asset
   block: BigInt!
 }
