@@ -1,6 +1,6 @@
 import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts';
-import { Swap as SwapEvent, PoolBalanceChanged } from '../types/Vault/Vault';
-import { Balancer, Pool, PoolToken, Swap, Join, Exit, TokenPrice } from '../types/schema';
+import { Swap as SwapEvent, PoolBalanceChanged, PoolBalanceManaged } from '../types/Vault/Vault';
+import { Balancer, Pool, PoolToken, Swap, Join, Exit, Investment, TokenPrice } from '../types/schema';
 import {
   tokenToDecimal,
   getPoolTokenId,
@@ -13,6 +13,10 @@ import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
 
 let ZERO = BigInt.fromI32(0);
+
+/************************************
+ ****** DEPOSITS & WITHDRAWALS ******
+ ************************************/
 
 export function handleBalanceChange(event: PoolBalanceChanged): void {
   let amounts: BigInt[] = event.params.amounts;
@@ -125,6 +129,30 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   }
 
   createPoolSnapshot(poolId, blockTimestamp);
+}
+
+/************************************
+ ********** INVESTMENTS *************
+ ************************************/
+export function handleBalanceManage(event: PoolBalanceManaged): void {
+  let poolId = event.params.poolId;
+  let token: Address = event.params.token;
+  let investmentManagerAddress: Address = event.params.assetManager;
+  let amount = event.params.amount;
+
+  let poolTokenId = getPoolTokenId(poolId.toHexString(), token);
+  let poolToken = PoolToken.load(poolTokenId);
+
+  let tokenAmount = tokenToDecimal(amount, poolToken.decimals);
+  poolToken.invested = poolToken.invested.plus(tokenAmount);
+  poolToken.save();
+
+  let investment = new Investment(poolTokenId.concat(investmentManagerAddress.toHexString()));
+  investment.investmentManagerAddress = investmentManagerAddress;
+  investment.poolTokenId = poolTokenId;
+  investment.amount = amount.toBigDecimal();
+  investment.timestamp = event.block.timestamp.toI32();
+  investment.save();
 }
 
 /************************************
