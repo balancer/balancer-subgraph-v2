@@ -22,6 +22,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   phl.poolId = poolId;
   phl.pricingAsset = pricingAsset;
   phl.block = block;
+  phl.poolTotalShares = pool.totalShares;
 
   let poolValue: BigDecimal = BigDecimal.fromString('0');
 
@@ -70,6 +71,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     }
   }
   phl.poolLiquidity = poolValue;
+  phl.poolShareValue = poolValue.div(pool.totalShares);
   phl.save();
 
   let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
