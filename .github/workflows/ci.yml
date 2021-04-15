@@ -49,7 +49,7 @@ jobs:
           repository: balancer-labs/balancer-core-v2
           token: ${{ secrets.PAT }}
           path: core
-          ref: rc01-reduce-bytecodesize
+          ref: master
       - name: check abis
         run: diff -rq subgraph/abis core/abi
 env:
