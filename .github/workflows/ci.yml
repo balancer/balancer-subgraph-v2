@@ -50,6 +50,8 @@ jobs:
           token: ${{ secrets.PAT }}
           path: core
           ref: master
+      - name: Install
+        run: cd subgraph && yarn --frozen-lockfile
       - name: import abis
         run: cd subgraph && yarn import-abis
       - name: check abis
