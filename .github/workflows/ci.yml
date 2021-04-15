@@ -50,7 +50,9 @@ jobs:
           token: ${{ secrets.PAT }}
           path: core
           ref: master
+      - name: import abis
+        run: yarn import-abis
       - name: check abis
-        run: diff -rq subgraph/abis core/abi
+        run: git diff HEAD
 env:
   CI: true
