@@ -53,6 +53,6 @@ jobs:
       - name: import abis
         run: yarn import-abis
       - name: check abis
-        run: git diff HEAD
+        run: git diff HEAD --exit-code
 env:
   CI: true
