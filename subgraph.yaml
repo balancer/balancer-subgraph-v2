@@ -35,6 +35,8 @@ dataSources:
           handler: handleSwapEvent
         - event: PoolBalanceChanged(indexed bytes32,indexed address,address[],int256[],uint256[])
           handler: handleBalanceChange
+        - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256)
+          handler: handleBalanceManage
   - kind: ethereum/contract
     name: WeightedPoolFactory
     network: dev
