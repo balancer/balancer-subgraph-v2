@@ -2,7 +2,7 @@ import { ZERO_BD, VAULT_ADDRESS } from './constants';
 import { newPoolEntity, createPoolTokenEntity, getPoolTokenId, scaleDown } from './helpers';
 
 import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
-import { PoolRegistered } from '../types/WeightedPoolFactory/WeightedPoolFactory';
+import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool, PoolToken } from '../types/schema';
 
 // datasource
@@ -13,14 +13,14 @@ import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 
-export function handleNewWeightedPool(event: PoolRegistered): void {
+export function handleNewWeightedPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let swapFeeCall = poolContract.try_getSwapFee();
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
@@ -61,14 +61,14 @@ export function handleNewWeightedPool(event: PoolRegistered): void {
   WeightedPoolTemplate.create(poolAddress);
 }
 
-export function handleNewStablePool(event: PoolRegistered): void {
+export function handleNewStablePool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
   let poolContract = StablePool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let swapFeeCall = poolContract.try_getSwapFee();
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
@@ -95,7 +95,7 @@ function findOrInitializeVault(): Balancer {
   return vault as Balancer;
 }
 
-function handleNewPool(event: PoolRegistered, poolId: Bytes, swapFee: BigInt): Pool | null {
+function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool | null {
   let vault = findOrInitializeVault();
 
   let poolAddress: Address = event.params.pool;

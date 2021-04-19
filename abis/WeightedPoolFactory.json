@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "contract IVault",
-        "name": "_vault",
+        "name": "vault",
         "type": "address"
       }
     ],
@@ -20,7 +20,7 @@
         "type": "address"
       }
     ],
-    "name": "PoolRegistered",
+    "name": "PoolCreated",
     "type": "event"
   },
   {
@@ -47,18 +47,13 @@
       },
       {
         "internalType": "uint256",
-        "name": "swapFee",
+        "name": "swapFeePercentage",
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "emergencyPeriod",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "emergencyPeriodCheckExtension",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
       }
     ],
     "name": "create",
@@ -74,12 +69,49 @@
   },
   {
     "inputs": [],
-    "name": "vault",
+    "name": "getPauseConfiguration",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "pauseWindowDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "bufferPeriodDuration",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVault",
     "outputs": [
       {
         "internalType": "contract IVault",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pool",
+        "type": "address"
+      }
+    ],
+    "name": "isPoolFromFactory",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",

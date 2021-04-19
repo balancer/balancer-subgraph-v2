@@ -150,7 +150,7 @@ type TokenPrice @entity {
 
 type Investment @entity {
   id: ID!
-  investmentManagerAddress: Bytes!
+  assetManagerAddress: Bytes!
   amount: BigDecimal!
   poolTokenId: PoolToken!
   timestamp: Int!

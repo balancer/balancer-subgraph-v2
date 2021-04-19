@@ -62,7 +62,7 @@ dataSources:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
       eventHandlers:
-        - event: PoolRegistered(indexed address)
+        - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
   - kind: ethereum/contract
     name: StablePoolFactory
@@ -85,7 +85,7 @@ dataSources:
         - name: StablePool
           file: ./abis/StablePool.json
       eventHandlers:
-        - event: PoolRegistered(indexed address)
+        - event: PoolCreated(indexed address)
           handler: handleNewStablePool
 templates:
   - kind: ethereum/contract
