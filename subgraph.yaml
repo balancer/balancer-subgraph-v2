@@ -8,7 +8,7 @@ dataSources:
     name: Vault
     network: mainnet
     source:
-      address: '0xba1222227c37746aDA22d10Da6265E02E44400DD'
+      address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
       startBlock: 1
     mapping:
@@ -41,7 +41,7 @@ dataSources:
     name: WeightedPoolFactory
     network: mainnet
     source:
-      address: '0xCFD48F189e5fBfd74eE8E63Cfe2EB1930246e3F9'
+      address: '0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9'
       abi: WeightedPoolFactory
       startBlock: 1
     mapping:
@@ -64,29 +64,29 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
-  - kind: ethereum/contract
-    name: StablePoolFactory
-    network: mainnet
-    source:
-      address: '0xaD9a0de4fda03eE4cdb07590B42D6469Ad1aBd85'
-      abi: StablePoolFactory
-      startBlock: 1
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: StablePoolFactory
-          file: ./abis/StablePoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewStablePool
+  #- kind: ethereum/contract
+    #name: StablePoolFactory
+    #network: mainnet
+    #source:
+      #address: '0xaD9a0de4fda03eE4cdb07590B42D6469Ad1aBd85'
+      #abi: StablePoolFactory
+      #startBlock: 1
+    #mapping:
+      #kind: ethereum/events
+      #apiVersion: 0.0.4
+      #language: wasm/assemblyscript
+      #file: ./src/mappings/poolFactory.ts
+      #entities:
+        #- Balancer
+        #- Pool
+      #abis:
+        #- name: StablePoolFactory
+          #file: ./abis/StablePoolFactory.json
+        #- name: StablePool
+          #file: ./abis/StablePool.json
+      #eventHandlers:
+        #- event: PoolCreated(indexed address)
+          #handler: handleNewStablePool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
