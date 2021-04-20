@@ -10,15 +10,17 @@
     "test": "jest ./test/*.test.ts",
     "deploy": "graph deploy balancer-labs/balancer-v2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:kovan": "graph deploy balancer-labs/balancer-kovan-v2 subgraph.kovan.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy:local": "graph deploy balancer-labs/balancer-v2 subgraph.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy:local": "graph deploy balancer-labs/balancer-v2 subgraph.dockerParity.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "import-abis": "tsc ./scripts/update-abis.ts && node ./scripts/update-abis.js",
     "update-addresses": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js",
     "update-addresses:kovan": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js kovan",
     "update-addresses:ropsten": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js ropsten",
     "update-addresses:rinkeby": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js rinkeby",
     "update-addresses:goerli": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js goerli",
+    "update-addresses:local": "tsc ./scripts/update-addresses-subgraph.ts && node ./scripts/update-addresses-subgraph.js dockerParity",
     "sync": "yarn import-abis && yarn update-addresses && yarn codegen && yarn build",
-    "sync:kovan": "yarn import-abis && yarn update-addresses kovan && yarn codegen && yarn build"
+    "sync:kovan": "yarn import-abis && yarn update-addresses kovan && yarn codegen && yarn build",
+    "sync:local": "yarn import-abis && yarn update-addresses dockerParity && yarn codegen && yarn build"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.9",
