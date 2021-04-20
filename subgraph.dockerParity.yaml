@@ -6,9 +6,9 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Vault
-    network: mainnet
+    network: dev
     source:
-      address: '0xba1222227c37746aDA22d10Da6265E02E44400DD'
+      address: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028'
       abi: Vault
       startBlock: 1
     mapping:
@@ -39,9 +39,9 @@ dataSources:
           handler: handleBalanceManage
   - kind: ethereum/contract
     name: WeightedPoolFactory
-    network: mainnet
+    network: dev
     source:
-      address: '0xCFD48F189e5fBfd74eE8E63Cfe2EB1930246e3F9'
+      address: '0xb51CEadC0B36d694Dc14296Caa7BEB746fB5a6E0'
       abi: WeightedPoolFactory
       startBlock: 1
     mapping:
@@ -66,9 +66,9 @@ dataSources:
           handler: handleNewWeightedPool
   - kind: ethereum/contract
     name: StablePoolFactory
-    network: mainnet
+    network: dev
     source:
-      address: '0xaD9a0de4fda03eE4cdb07590B42D6469Ad1aBd85'
+      address: '0x27E83a843394c3Fc59DdEa4ce14A53c55A9c91D7'
       abi: StablePoolFactory
       startBlock: 1
     mapping:
@@ -90,7 +90,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: WeightedPool
-    network: mainnet
+    network: dev
     source:
       abi: WeightedPool
     mapping:
@@ -113,7 +113,7 @@ templates:
           handler: handleTransfer
   - kind: ethereum/contract
     name: StablePool
-    network: mainnet
+    network: dev
     source:
       abi: StablePool
     mapping:

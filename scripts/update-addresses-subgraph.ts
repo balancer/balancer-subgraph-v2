@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
 
-const network = process.argv[2] || 'dockerParity';
+const network = process.argv[2] || 'mainnet';
 
 function contractAddress(contractName) {
   const file = fs.readFileSync(
@@ -13,7 +13,7 @@ function contractAddress(contractName) {
   return json.address;
 }
 
-const suffix: string = network == 'dockerParity' ? '' : '.' + network;
+const suffix: string = network == 'mainnet' ? '' : '.' + network;
 
 const subgraphFilePath = path.resolve(__dirname, '../subgraph' + suffix + '.yaml');
 console.log(subgraphFilePath);
