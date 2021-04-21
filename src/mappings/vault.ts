@@ -19,7 +19,7 @@ let ZERO = BigInt.fromI32(0);
  ************************************/
 
 export function handleBalanceChange(event: PoolBalanceChanged): void {
-  let amounts: BigInt[] = event.params.amounts;
+  let amounts: BigInt[] = event.params.deltas;
 
   if (amounts.length === 0) {
     return;
@@ -33,7 +33,7 @@ export function handleBalanceChange(event: PoolBalanceChanged): void {
 
 function handlePoolJoined(event: PoolBalanceChanged): void {
   let poolId: string = event.params.poolId.toHexString();
-  let amounts: BigInt[] = event.params.amounts;
+  let amounts: BigInt[] = event.params.deltas;
   let blockTimestamp = event.block.timestamp.toI32();
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -83,7 +83,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
 function handlePoolExited(event: PoolBalanceChanged): void {
   let poolId = event.params.poolId.toHex();
-  let amounts = event.params.amounts;
+  let amounts = event.params.deltas;
   let blockTimestamp = event.block.timestamp.toI32();
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -137,20 +137,25 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 export function handleBalanceManage(event: PoolBalanceManaged): void {
   let poolId = event.params.poolId;
   let token: Address = event.params.token;
-  let investmentManagerAddress: Address = event.params.assetManager;
-  let amount = event.params.amount;
+  let assetManagerAddress: Address = event.params.assetManager;
+
+  //let cashDelta = event.params.cashDelta;
+  let managedDelta = event.params.managedDelta;
 
   let poolTokenId = getPoolTokenId(poolId.toHexString(), token);
   let poolToken = PoolToken.load(poolTokenId);
 
-  let tokenAmount = tokenToDecimal(amount, poolToken.decimals);
-  poolToken.invested = poolToken.invested.plus(tokenAmount);
+  let managedDeltaAmount = tokenToDecimal(managedDelta, poolToken.decimals);
+
+  poolToken.invested = poolToken.invested.plus(managedDeltaAmount);
   poolToken.save();
 
-  let investment = new Investment(poolTokenId.concat(investmentManagerAddress.toHexString()));
-  investment.investmentManagerAddress = investmentManagerAddress;
+  let assetManagerId = poolTokenId.concat(assetManagerAddress.toHexString());
+
+  let investment = new Investment(assetManagerId);
+  investment.assetManagerAddress = assetManagerAddress;
   investment.poolTokenId = poolTokenId;
-  investment.amount = amount.toBigDecimal();
+  investment.amount = managedDeltaAmount;
   investment.timestamp = event.block.timestamp.toI32();
   investment.save();
 }
@@ -175,8 +180,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   let poolTokenOutId = getPoolTokenId(poolId.toHexString(), tokenOutAddress);
   let poolTokenOut = PoolToken.load(poolTokenOutId);
 
-  let tokenAmountIn: BigDecimal = scaleDown(event.params.tokensIn, poolTokenIn.decimals);
-  let tokenAmountOut: BigDecimal = scaleDown(event.params.tokensOut, poolTokenOut.decimals);
+  let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, poolTokenIn.decimals);
+  let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, poolTokenOut.decimals);
 
   swap.tokenIn = tokenInAddress;
   swap.tokenInSym = poolTokenIn.symbol;
