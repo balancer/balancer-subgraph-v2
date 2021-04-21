@@ -35,7 +35,7 @@ dataSources:
           handler: handleSwapEvent
         - event: PoolBalanceChanged(indexed bytes32,indexed address,address[],int256[],uint256[])
           handler: handleBalanceChange
-        - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256)
+        - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256,int256)
           handler: handleBalanceManage
   - kind: ethereum/contract
     name: WeightedPoolFactory
@@ -64,29 +64,29 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
-  - kind: ethereum/contract
-    name: StablePoolFactory
-    network: kovan
-    source:
-      address: '0xaD9a0de4fda03eE4cdb07590B42D6469Ad1aBd85'
-      abi: StablePoolFactory
-      startBlock: 24226732
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: StablePoolFactory
-          file: ./abis/StablePoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewStablePool
+  #- kind: ethereum/contract
+    #name: StablePoolFactory
+    #network: kovan
+    #source:
+      #address: '0xaD9a0de4fda03eE4cdb07590B42D6469Ad1aBd85'
+      #abi: StablePoolFactory
+      #startBlock: 24226732
+    #mapping:
+      #kind: ethereum/events
+      #apiVersion: 0.0.4
+      #language: wasm/assemblyscript
+      #file: ./src/mappings/poolFactory.ts
+      #entities:
+        #- Balancer
+        #- Pool
+      #abis:
+        #- name: StablePoolFactory
+          #file: ./abis/StablePoolFactory.json
+        #- name: StablePool
+          #file: ./abis/StablePool.json
+      #eventHandlers:
+        #- event: PoolCreated(indexed address)
+          #handler: handleNewStablePool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
