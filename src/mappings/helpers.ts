@@ -114,7 +114,7 @@ export function getTokenPriceId(
 }
 
 export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
-  let dayTimestamp = timestamp - (timestamp % DAY) + DAY; // Tomorrow's timestamp
+  let dayTimestamp = timestamp - (timestamp % DAY); // Todays Timestamp
 
   let pool = Pool.load(poolAddress);
   // Save pool snapshot
@@ -145,7 +145,7 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
 }
 
 export function saveSwapToSnapshot(poolAddress: string, timestamp: i32, volume: BigDecimal, fees: BigDecimal): void {
-  let dayTimestamp = timestamp - (timestamp % DAY) + DAY; // Tomorrow's timestamp
+  let dayTimestamp = timestamp - (timestamp % DAY); // Todays timestamp
 
   // Save pool snapshot
   let snapshotId = poolAddress + '-' + dayTimestamp.toString();
