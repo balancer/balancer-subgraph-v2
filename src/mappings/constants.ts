@@ -13,19 +13,19 @@ export class AddressByNetwork {
 let network: string = dataSource.network();
 
 let vaultAddressByNetwork: AddressByNetwork = {
-  mainnet: '0xTODO',
-  kovan: '0xba1222227c37746aDA22d10Da6265E02E44400DD',
+  mainnet: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  kovan: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
 };
 
 let wethAddressByNetwork: AddressByNetwork = {
   mainnet: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-  kovan: '0x02822e968856186a20fEc2C824D4B174D0b70502',
+  kovan: '0xdFCeA9088c8A88A76FF74892C1457C17dfeef9C1',
   dev: '0x4CDDb3505Cf09ee0Fa0877061eB654839959B9cd',
 };
 
 let wbtcAddressByNetwork: AddressByNetwork = {
-  mainnet: '0xTODO',
+  mainnet: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
   kovan: '0x1C8E3Bcb3378a443CC591f154c5CE0EBb4dA9648',
   dev: '0xcD80986f08d776CE41698c47f705CDc99dDBfB0A',
 };
@@ -36,7 +36,7 @@ let usdAddressByNetwork: AddressByNetwork = {
   dev: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
 };
 let usdcAddressByNetwork: AddressByNetwork = {
-  mainnet: '0xTODO',
+  mainnet: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   kovan: '0xc2569dd7d0fd715B054fBf16E75B001E5c0C1115',
   dev: '0x7c0c5AdA758cf764EcD6bAC05b63b2482f90bBB2',
 };
