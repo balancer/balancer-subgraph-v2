@@ -211,6 +211,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   let pool = Pool.load(poolId.toHex());
   pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
   pool.totalSwapVolume = pool.totalSwapVolume.plus(swapValueUSD);
+
+  let swapFee = pool.swapFee;
+  let swapFeesUSD = swapValueUSD.times(swapFee);
+  pool.totalSwapFee = pool.totalSwapFee.plus(swapFeesUSD);
+
   pool.save();
 
   let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
@@ -257,9 +262,6 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress);
   }
-
-  let swapFee = pool.swapFee;
-  let swapFeesUSD = swapValueUSD.times(swapFee);
 
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);
   saveSwapToSnapshot(poolId.toHexString(), blockTimestamp, swapValueUSD, swapFeesUSD);
