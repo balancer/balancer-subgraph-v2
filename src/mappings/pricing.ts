@@ -2,6 +2,7 @@ import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './constants';
 import { getTokenPriceId, getPoolTokenId } from './helpers';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, PoolToken, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
+import { ZERO_BD } from './constants';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -75,7 +76,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   phl.save();
 
   let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
-  let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset);
+  let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset) || ZERO_BD;
 
   if (newPoolLiquidity && oldPoolLiquidity) {
     let vault = Balancer.load('2');
@@ -107,7 +108,7 @@ export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal
     }
   }
 
-  return usdValue || BigDecimal.fromString('0');
+  return usdValue;
 }
 
 function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {

@@ -200,7 +200,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tx = transactionHash;
   swap.save();
 
-  let swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+  let swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
 
   // update vault total swap volume
   let vault = Balancer.load('2');
