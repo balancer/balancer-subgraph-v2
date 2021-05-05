@@ -113,12 +113,12 @@ export function getTokenPriceId(
     .concat(block.toString());
 }
 
-export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
+export function createPoolSnapshot(poolId: string, timestamp: i32): void {
   let dayTimestamp = timestamp - (timestamp % DAY); // Todays Timestamp
 
-  let pool = Pool.load(poolAddress);
+  let pool = Pool.load(poolId);
   // Save pool snapshot
-  let snapshotId = poolAddress + '-' + dayTimestamp.toString();
+  let snapshotId = poolId + '-' + dayTimestamp.toString();
   let snapshot = new PoolSnapshot(snapshotId);
 
   if (!pool.tokensList) {
@@ -130,12 +130,12 @@ export function createPoolSnapshot(poolAddress: string, timestamp: i32): void {
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
     let tokenAddress = Address.fromString(token.toHexString());
-    let poolTokenId = getPoolTokenId(poolAddress, tokenAddress);
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
     amounts[i] = poolToken.balance;
   }
 
-  snapshot.pool = poolAddress;
+  snapshot.pool = poolId;
   snapshot.amounts = amounts;
   snapshot.totalShares = pool.totalShares;
   snapshot.swapVolume = ZERO_BD;
