@@ -1,4 +1,4 @@
-import { BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, Address, log } from '@graphprotocol/graph-ts';
 import { Swap as SwapEvent, PoolBalanceChanged, PoolBalanceManaged } from '../types/Vault/Vault';
 import { Balancer, Pool, PoolToken, Swap, Join, Exit, Investment, TokenPrice } from '../types/schema';
 import {
@@ -39,6 +39,9 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let transactionHash = event.transaction.hash;
 
   let pool = Pool.load(poolId);
+  if (pool == null) {
+    log.error('Pool not found: {}', [poolId])
+  }
   let tokenAddresses = pool.tokensList;
 
   pool.save();
