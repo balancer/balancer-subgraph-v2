@@ -139,7 +139,7 @@ export function createPoolSnapshot(poolId: string, timestamp: i32): void {
   snapshot.amounts = amounts;
   snapshot.totalShares = pool.totalShares;
   snapshot.swapVolume = ZERO_BD;
-  snapshot.swapFees = ZERO_BD;
+  snapshot.swapFees = pool.totalSwapFee;
   snapshot.timestamp = dayTimestamp;
   snapshot.save();
 }
