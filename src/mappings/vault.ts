@@ -44,7 +44,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   }
   let tokenAddresses = pool.tokensList;
 
-  pool.save();
+  //pool.save();
 
   let joinId = transactionHash.toHexString().concat(logIndex.toString());
   let join = new Join(joinId);
