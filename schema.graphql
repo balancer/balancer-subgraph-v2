@@ -98,18 +98,14 @@ type Swap @entity {
   tx: Bytes!
 }
 
-type Join @entity {
-  id: ID!
-  sender: Bytes!
-  amounts: [BigDecimal!]!
-  pool: Pool!
-  user: User!
-  timestamp: Int!
-  tx: Bytes!
+enum InvestType {
+  Join
+  Exit
 }
 
-type Exit @entity {
+type JoinExit @entity {
   id: ID!
+  type: InvestType!
   sender: Bytes!
   amounts: [BigDecimal!]!
   pool: Pool!

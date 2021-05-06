@@ -1,6 +1,6 @@
 import { BigInt, BigDecimal, Address, log } from '@graphprotocol/graph-ts';
 import { Swap as SwapEvent, PoolBalanceChanged, PoolBalanceManaged } from '../types/Vault/Vault';
-import { Balancer, Pool, PoolToken, Swap, Join, Exit, Investment, TokenPrice } from '../types/schema';
+import { Balancer, Pool, PoolToken, Swap, JoinExit, Investment, TokenPrice } from '../types/schema';
 import {
   tokenToDecimal,
   getPoolTokenId,
@@ -46,7 +46,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let tokenAddresses = pool.tokensList;
 
   let joinId = transactionHash.toHexString().concat(logIndex.toString());
-  let join = new Join(joinId);
+  let join = new JoinExit(joinId);
   join.sender = event.params.liquidityProvider;
   let joinAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -56,6 +56,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let joinAmount = scaleDown(amounts[i], poolToken.decimals);
     joinAmounts[i] = joinAmount;
   }
+  join.type = 'Join'; 
   join.amounts = joinAmounts;
   join.pool = event.params.poolId.toHexString();
   join.user = event.params.liquidityProvider.toHexString();
@@ -96,7 +97,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   pool.save();
 
   let exitId = transactionHash.toHexString().concat(logIndex.toString());
-  let exit = new Exit(exitId);
+  let exit = new JoinExit(exitId);
   exit.sender = event.params.liquidityProvider;
   let exitAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -106,6 +107,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let exitAmount = scaleDown(amounts[i].neg(), poolToken.decimals);
     exitAmounts[i] = exitAmount;
   }
+  exit.type = 'Exit';
   exit.amounts = exitAmounts;
   exit.pool = event.params.poolId.toHexString();
   exit.user = event.params.liquidityProvider.toHexString();
