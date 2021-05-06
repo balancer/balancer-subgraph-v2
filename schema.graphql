@@ -159,7 +159,7 @@ type Investment @entity {
 type PoolSnapshot @entity {
   id: ID!
   pool: Pool!
-  amounts: [BigDecimal!]
+  amounts: [BigDecimal!]!
   totalShares: BigDecimal!
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
