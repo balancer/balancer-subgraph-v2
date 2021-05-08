@@ -40,7 +40,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
   let pool = Pool.load(poolId);
   if (pool == null) {
-    log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()])
+    log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()]);
     return;
   }
   let tokenAddresses = pool.tokensList;
@@ -56,7 +56,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let joinAmount = scaleDown(amounts[i], poolToken.decimals);
     joinAmounts[i] = joinAmount;
   }
-  join.type = 'Join'; 
+  join.type = 'Join';
   join.amounts = joinAmounts;
   join.pool = event.params.poolId.toHexString();
   join.user = event.params.liquidityProvider.toHexString();
