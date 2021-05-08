@@ -23,8 +23,12 @@ export function handleNewWeightedPool(event: PoolCreated): void {
   let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
+  let ownerCall = poolContract.try_getOwner();
+  let owner = ownerCall.value;
+
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
   pool.poolType = 'Weighted';
+  pool.owner = owner;
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);
@@ -71,8 +75,12 @@ export function handleNewStablePool(event: PoolCreated): void {
   let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
+  let ownerCall = poolContract.try_getOwner();
+  let owner = ownerCall.value;
+
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = 'Stable';
+  pool.owner = owner;
 
   StablePoolTemplate.create(poolAddress);
 
