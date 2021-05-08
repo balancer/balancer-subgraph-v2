@@ -40,7 +40,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
   let pool = Pool.load(poolId);
   if (pool == null) {
-    log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()])
+    log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()]);
     return;
   }
   let tokenAddresses = pool.tokensList;
