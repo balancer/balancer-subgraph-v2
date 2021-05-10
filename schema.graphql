@@ -22,6 +22,7 @@ type Pool @entity {
   symbol: String
   name: String
   swapFee: BigDecimal!
+  owner: Bytes
 
   totalWeight: BigDecimal!
   totalSwapVolume: BigDecimal!
