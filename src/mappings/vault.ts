@@ -24,7 +24,7 @@ export function handleBalanceChange(event: PoolBalanceChanged): void {
   if (amounts.length === 0) {
     return;
   }
-  let total = amounts.reduce((sum, amount) => sum + amount);
+  let total: BigInt = amounts.reduce<BigInt>((sum, amount) => sum.plus(amount), new BigInt(0));
   if (total.gt(ZERO)) {
     handlePoolJoined(event);
   } else {
