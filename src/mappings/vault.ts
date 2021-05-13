@@ -208,11 +208,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   let swapValueUSD =
     valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
 
-  // update vault total swap volume
-  let vault = Balancer.load('2');
-  vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
-  vault.save();
-
   // update pool swapsCount
   let pool = Pool.load(poolId.toHex());
   pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
@@ -223,6 +218,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   pool.totalSwapFee = pool.totalSwapFee.plus(swapFeesUSD);
 
   pool.save();
+
+  // update vault total swap volume
+  let vault = Balancer.load('2');
+  vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
+  vault.totalSwapFee = vault.totalSwapFee.plus(swapFeesUSD);
+  vault.save();
 
   let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
   poolTokenIn.balance = newInAmount;
