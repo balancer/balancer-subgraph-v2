@@ -28,6 +28,7 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
   pool.poolType = 'Weighted';
+  pool.factory = event.address;
   pool.owner = owner;
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
@@ -80,6 +81,7 @@ export function handleNewStablePool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = 'Stable';
+  pool.factory = event.address;
   pool.owner = owner;
 
   StablePoolTemplate.create(poolAddress);

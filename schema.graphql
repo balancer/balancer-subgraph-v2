@@ -18,6 +18,7 @@ type Pool @entity {
   id: ID!
   address: Bytes!
   poolType: PoolType
+  factory: Bytes
   strategyType: Int!
   symbol: String
   name: String
