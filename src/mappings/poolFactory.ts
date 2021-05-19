@@ -8,10 +8,12 @@ import { Balancer, Pool, PoolToken } from '../types/schema';
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
+import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
+import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
 export function handleNewWeightedPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
@@ -90,6 +92,69 @@ export function handleNewStablePool(event: PoolCreated): void {
   let amp = ampCall.value;
   pool.amp = amp;
   pool.save();
+}
+
+export function handleNewCCPPool(event: PoolCreated): void {
+  let poolAddress: Address = event.params.pool;
+  
+  let poolContract = ConvergentCurvePool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_percentFee();
+  let swapFee = swapFeeCall.value;
+
+  let principalTokenCall = poolContract.try_bond();
+  let principalToken = principalTokenCall.value;
+
+  let baseTokenCall = poolContract.try_underlying();
+  let baseToken = baseTokenCall.value;
+
+  let expiryTimeCall = poolContract.try_expiration();
+  let expiryTime = expiryTimeCall.value;
+
+  let unitSecondsCall = poolContract.try_unitSeconds();
+  let unitSeconds = unitSecondsCall.value;
+
+  // let ownerCall = poolContract.try_getOwner();
+  // let owner = ownerCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee) as Pool;
+  pool.poolType = 'Element';
+  pool.factory = event.address;
+  // pool.owner = owner;
+  pool.principalToken = principalToken;
+  pool.baseToken = baseToken;
+  pool.expiryTime = expiryTime;
+  pool.uniSeconds = unitSeconds;
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    let tokensList = pool.tokensList;
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      let tokenAddress = tokens[i];
+
+      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+
+      if (tokensList.indexOf(tokenAddress) == -1) {
+        tokensList.push(tokenAddress);
+      }
+      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
+      let poolToken = PoolToken.load(poolTokenId);
+      poolToken.save();
+    }
+
+    pool.tokensList = tokensList;
+    pool.save();
+
+  }
+
+  CCPoolTemplate.create(poolAddress);
 }
 
 function findOrInitializeVault(): Balancer {
