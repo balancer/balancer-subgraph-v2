@@ -37,33 +37,60 @@ dataSources:
           handler: handleBalanceChange
         - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256,int256)
           handler: handleBalanceManage
-  # - kind: ethereum/contract
-  #   name: WeightedPoolFactory
-  #   network: goerli
-  #   source:
-  #     address: '0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE7'
-  #     abi: WeightedPoolFactory
-  #     startBlock: 4648000
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.4
-  #     language: wasm/assemblyscript
-  #     file: ./src/mappings/poolFactory.ts
-  #     entities:
-  #       - Balancer
-  #       - Pool
-  #     abis:
-  #       - name: Vault
-  #         file: ./abis/Vault.json
-  #       - name: ERC20
-  #         file: ./abis/ERC20.json
-  #       - name: WeightedPoolFactory
-  #         file: ./abis/WeightedPoolFactory.json
-  #       - name: WeightedPool
-  #         file: ./abis/WeightedPool.json
-  #     eventHandlers:
-  #       - event: PoolCreated(indexed address)
-  #         handler: handleNewWeightedPool
+  - kind: ethereum/contract
+    name: ConvergentPoolFactory
+    network: goerli
+    source:
+      address: '0x0766B218517d9dC198155f0dC3485270cF788aF7'
+      abi: ConvergentPoolFactory
+      startBlock: 4752660
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ConvergentPoolFactory
+          file: ./abis/ConvergentPoolFactory.json
+        - name: ConvergentCurvePool
+          file: ./abis/ConvergentCurvePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewCCPPool
+  - kind: ethereum/contract
+    name: WeightedPoolFactory
+    network: goerli
+    source:
+      address: '0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE7'
+      abi: WeightedPoolFactory
+      startBlock: 4648000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPoolFactory
+          file: ./abis/WeightedPoolFactory.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewWeightedPool
   # - kind: ethereum/contract
   #   name: StablePoolFactory
   #   network: goerli
@@ -134,3 +161,26 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+  - kind: ethereum/contract
+    name: ConvergentCurvePool
+    network: goerli
+    source:
+      abi: ConvergentCurvePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: ConvergentCurvePool
+          file: ./abis/ConvergentCurvePool.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransferCCP
