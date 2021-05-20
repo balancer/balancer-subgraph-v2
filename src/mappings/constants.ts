@@ -42,7 +42,7 @@ let usdAddressByNetwork: AddressByNetwork = {
 };
 
 let usdcAddressByNetwork: AddressByNetwork = {
-  mainnet: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
+  mainnet: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   kovan: '0xc2569dd7d0fd715B054fBf16E75B001E5c0C1115',
   goerli: '0x78dEca24CBa286C0f8d56370f5406B48cFCE2f86',
   dev: '0x1528f3fcc26d13f7079325fb78d9442607781c8c',
