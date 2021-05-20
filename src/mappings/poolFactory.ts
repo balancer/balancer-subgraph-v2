@@ -127,7 +127,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
   pool.principalToken = principalToken;
   pool.baseToken = baseToken;
   pool.expiryTime = expiryTime;
-  pool.uniSeconds = unitSeconds;
+  pool.unitSeconds = unitSeconds;
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);
