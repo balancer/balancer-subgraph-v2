@@ -96,7 +96,7 @@ export function handleNewStablePool(event: PoolCreated): void {
 
 export function handleNewCCPPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
-  
+
   let poolContract = ConvergentCurvePool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
@@ -151,7 +151,6 @@ export function handleNewCCPPool(event: PoolCreated): void {
 
     pool.tokensList = tokensList;
     pool.save();
-
   }
 
   CCPoolTemplate.create(poolAddress);
