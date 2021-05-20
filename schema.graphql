@@ -53,7 +53,7 @@ type Pool @entity {
   principalToken: Bytes
   baseToken: Bytes
   expiryTime: BigInt
-  uniSeconds: BigInt
+  unitSeconds: BigInt
 }
 
 type PoolToken @entity {
