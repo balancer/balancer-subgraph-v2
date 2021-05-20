@@ -9,7 +9,6 @@
     "lint": "eslint --max-warnings 0 . --ext .ts",
     "test": "jest ./test/*.test.ts",
     "deploy": "graph deploy balancer-labs/balancer-v2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy:john": "graph deploy johngrantuk/balancer subgraph.goerli.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:kovan": "graph deploy balancer-labs/balancer-kovan-v2 subgraph.kovan.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/balancer-v2 subgraph.dockerParity.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "import-abis": "tsc ./scripts/update-abis.ts && node ./scripts/update-abis.js",
