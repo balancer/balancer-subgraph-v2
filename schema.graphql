@@ -12,6 +12,7 @@ type Balancer @entity {
 enum PoolType {
   Weighted
   Stable
+  Element
 }
 
 type Pool @entity {
@@ -47,6 +48,12 @@ type Pool @entity {
 
   # StablePool Only
   amp: BigInt
+
+  # ConvergentCurvePool (Element) Only
+  principalToken: Bytes
+  baseToken: Bytes
+  expiryTime: BigInt
+  unitSeconds: BigInt
 }
 
 type PoolToken @entity {

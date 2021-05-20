@@ -93,6 +93,10 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   let transactionHash = event.transaction.hash;
 
   let pool = Pool.load(poolId);
+  if (pool == null) {
+    log.warning('Pool not found in handlePoolExited: {} {}', [poolId, transactionHash.toHexString()]);
+    return;
+  }
   let tokenAddresses = pool.tokensList;
 
   pool.save();
@@ -141,6 +145,12 @@ function handlePoolExited(event: PoolBalanceChanged): void {
  ************************************/
 export function handleBalanceManage(event: PoolBalanceManaged): void {
   let poolId = event.params.poolId;
+  let pool = Pool.load(poolId.toHex());
+  if (pool == null) {
+    log.warning('Pool not found in handleBalanceManage: {}', [poolId.toHexString()]);
+    return;
+  }
+
   let token: Address = event.params.token;
   let assetManagerAddress: Address = event.params.assetManager;
 
@@ -170,6 +180,12 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
  ************************************/
 export function handleSwapEvent(event: SwapEvent): void {
   let poolId = event.params.poolId;
+
+  let pool = Pool.load(poolId.toHex());
+  if (pool == null) {
+    log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
+    return;
+  }
 
   let tokenInAddress: Address = event.params.tokenIn;
   let tokenOutAddress: Address = event.params.tokenOut;
@@ -209,7 +225,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
 
   // update pool swapsCount
-  let pool = Pool.load(poolId.toHex());
+  // let pool = Pool.load(poolId.toHex());
   pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
   pool.totalSwapVolume = pool.totalSwapVolume.plus(swapValueUSD);
 
