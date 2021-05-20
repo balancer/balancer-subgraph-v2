@@ -25,6 +25,26 @@ jobs:
           graph_subgraph_name: "balancer-kovan-v2"
           graph_account: 'balancer-labs'
           graph_config_file: 'subgraph.kovan.yaml'
+  deploy-goerli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.0
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-goerli-v2"
+          graph_account: 'balancer-labs'
+          graph_config_file: 'subgraph.goerli.yaml'
   deploy-mainnet:
     runs-on: ubuntu-latest
     steps:
