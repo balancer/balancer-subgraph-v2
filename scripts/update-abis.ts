@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as glob from 'glob';
 
-const coreArtifactPath = __dirname + '/../../core/artifacts';
+const coreArtifactPath = __dirname + '/../../core/pkg/core/artifacts';
 const outputPath = __dirname + '/../abis';
 
 const abiJSONfilenames = [
