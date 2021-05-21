@@ -1,5 +1,6 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
+import { WeightedPool2Tokens, OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
@@ -10,6 +11,18 @@ import { ZERO_ADDRESS, ZERO_BD } from './constants';
 /************************************
  *********** POOL SHARES ************
  ************************************/
+
+export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.oracleEnabled = event.params.enabled;
+  pool.save();
+}
 
 export function handleTransfer(event: Transfer): void {
   let poolAddress = event.address;

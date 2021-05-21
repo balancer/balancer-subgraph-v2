@@ -21,6 +21,7 @@ type Pool @entity {
   poolType: PoolType
   factory: Bytes
   strategyType: Int!
+  oracleEnabled: Boolean!
   symbol: String
   name: String
   swapFee: BigDecimal!

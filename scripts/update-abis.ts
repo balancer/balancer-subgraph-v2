@@ -8,6 +8,7 @@ const outputPath = __dirname + '/../abis';
 const abiJSONfilenames = [
   'Vault',
   'WeightedPool',
+  'WeightedPool2Tokens',
   'StablePool',
   'WeightedPoolFactory',
   'StablePoolFactory',

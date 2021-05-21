@@ -7,6 +7,7 @@ import { Balancer, Pool, PoolToken } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
+import { WeightedPool2Tokens as WeightedPool2TokensTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 
@@ -15,7 +16,7 @@ import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
-export function handleNewWeightedPool(event: PoolCreated): void {
+function createWeightedPoolEntity(event: PoolCreated): Address {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
@@ -30,7 +31,6 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
   pool.poolType = 'Weighted';
-  pool.factory = event.address;
   pool.owner = owner;
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
@@ -65,7 +65,17 @@ export function handleNewWeightedPool(event: PoolCreated): void {
     pool.save();
   }
 
+  return poolAddress;
+}
+
+export function handleNewWeightedPool(event: PoolCreated): void {
+  let poolAddress = createWeightedPoolEntity(event);
   WeightedPoolTemplate.create(poolAddress);
+}
+
+export function handleNewWeighted2TokenPool(event: PoolCreated): void {
+  let poolAddress = createWeightedPoolEntity(event);
+  WeightedPool2TokensTemplate.create(poolAddress);
 }
 
 export function handleNewStablePool(event: PoolCreated): void {
@@ -83,7 +93,6 @@ export function handleNewStablePool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = 'Stable';
-  pool.factory = event.address;
   pool.owner = owner;
 
   StablePoolTemplate.create(poolAddress);
@@ -181,6 +190,8 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.swapFee = scaleDown(swapFee, 18);
     pool.createTime = event.block.timestamp.toI32();
     pool.address = poolAddress;
+    pool.factory = event.address;
+    pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
   }
 
