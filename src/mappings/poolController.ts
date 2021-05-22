@@ -14,7 +14,7 @@ import { ZERO_ADDRESS, ZERO_BD } from './constants';
 
 export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
+  let poolContract = WeightedPool2Tokens.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
