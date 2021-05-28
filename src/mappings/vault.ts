@@ -8,6 +8,7 @@ import {
   scaleDown,
   createPoolSnapshot,
   saveSwapToSnapshot,
+  createUserEntity,  
 } from './helpers';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
@@ -179,6 +180,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
  ************** SWAPS ***************
  ************************************/
 export function handleSwapEvent(event: SwapEvent): void {
+  createUserEntity(event.transaction.from);
   let poolId = event.params.poolId;
 
   let pool = Pool.load(poolId.toHex());
