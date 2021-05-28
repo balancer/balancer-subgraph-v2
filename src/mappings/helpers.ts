@@ -160,7 +160,7 @@ export function saveSwapToSnapshot(poolAddress: string, timestamp: i32, volume: 
   snapshot.save();
 }
 
-function createUserEntity(address: Address): void {
+export function createUserEntity(address: Address): void {
   let addressHex = address.toHex();
   if (User.load(addressHex) == null) {
     let user = new User(addressHex);
