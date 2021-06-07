@@ -91,29 +91,29 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
-   - kind: ethereum/contract
-     name: StablePoolFactory
-     network: kovan
-     source:
-       address: '0xA9B3f46761F3A47056F39724FB5D9560f3629fB8'
-       abi: StablePoolFactory
-       startBlock: 25266622
-     mapping:
-       kind: ethereum/events
-       apiVersion: 0.0.4
-       language: wasm/assemblyscript
-       file: ./src/mappings/poolFactory.ts
-       entities:
-         - Balancer
-         - Pool
-       abis:
-         - name: StablePoolFactory
-           file: ./abis/StablePoolFactory.json
-         - name: StablePool
-           file: ./abis/StablePool.json
-       eventHandlers:
-         - event: PoolCreated(indexed address)
-           handler: handleNewStablePool
+  - kind: ethereum/contract
+    name: StablePoolFactory
+    network: kovan
+    source:
+      address: '0xA9B3f46761F3A47056F39724FB5D9560f3629fB8'
+      abi: StablePoolFactory
+      startBlock: 25266622
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: StablePoolFactory
+          file: ./abis/StablePoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewStablePool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -138,26 +138,26 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-  # - kind: ethereum/contract
-  #   name: StablePool
-  #   network: kovan
-  #   source:
-  #     abi: StablePool
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.4
-  #     language: wasm/assemblyscript
-  #     file: ./src/mappings/poolController.ts
-  #     entities:
-  #       - Pool
-  #       - PoolShare
-  #       - Swap
-  #       - PoolToken
-  #     abis:
-  #       - name: StablePool
-  #         file: ./abis/StablePool.json
-  #       - name: BalancerPoolToken
-  #         file: ./abis/BalancerPoolToken.json
-  #     eventHandlers:
-  #       - event: Transfer(indexed address,indexed address,uint256)
-  #         handler: handleTransfer
+  - kind: ethereum/contract
+    name: StablePool
+    network: kovan
+    source:
+      abi: StablePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: StablePool
+          file: ./abis/StablePool.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
