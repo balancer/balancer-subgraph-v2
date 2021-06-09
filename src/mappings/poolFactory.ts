@@ -47,12 +47,12 @@ export function handleNewWeightedPool(event: PoolCreated): void {
       let tokenAddress = tokens[i];
       let weight = weights[i];
 
-      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+      let poolTokenId = getPoolTokenId(poolAddress, tokenAddress);
 
       if (tokensList.indexOf(tokenAddress) == -1) {
         tokensList.push(tokenAddress);
       }
-      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
+      createPoolTokenEntity(poolAddress, tokenAddress);
       let poolToken = PoolToken.load(poolTokenId);
       poolToken.weight = scaleDown(weight, 18);
       poolToken.save();
@@ -96,12 +96,12 @@ export function handleNewStablePool(event: PoolCreated): void {
     for (let i: i32 = 0; i < tokens.length; i++) {
       let tokenAddress = tokens[i];
 
-      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+      let poolTokenId = getPoolTokenId(poolAddress, tokenAddress);
 
       if (tokensList.indexOf(tokenAddress) == -1) {
         tokensList.push(tokenAddress);
       }
-      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
+      createPoolTokenEntity(poolAddress, tokenAddress);
       let poolToken = PoolToken.load(poolTokenId);
 
       poolToken.save();
@@ -163,12 +163,12 @@ export function handleNewCCPPool(event: PoolCreated): void {
     for (let i: i32 = 0; i < tokens.length; i++) {
       let tokenAddress = tokens[i];
 
-      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+      let poolTokenId = getPoolTokenId(poolAddress, tokenAddress);
 
       if (tokensList.indexOf(tokenAddress) == -1) {
         tokensList.push(tokenAddress);
       }
-      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
+      createPoolTokenEntity(poolAddress, tokenAddress);
       let poolToken = PoolToken.load(poolTokenId);
       poolToken.save();
     }
@@ -198,9 +198,9 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
 
   let poolAddress: Address = event.params.pool;
 
-  let pool = Pool.load(poolId.toHexString());
+  let pool = Pool.load(poolAddress.toHexString());
   if (pool == null) {
-    pool = newPoolEntity(poolId.toHexString());
+    pool = newPoolEntity(poolAddress.toHexString(), poolId);
 
     pool.swapFee = scaleDown(swapFee, 18);
     pool.createTime = event.block.timestamp.toI32();

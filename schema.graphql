@@ -17,6 +17,7 @@ enum PoolType {
 
 type Pool @entity {
   id: ID!
+  poolId: Bytes!
   address: Bytes!
   poolType: PoolType
   factory: Bytes
@@ -41,10 +42,10 @@ type Pool @entity {
 
   tokensList: [Bytes!]!
 
-  tokens: [PoolToken!] @derivedFrom(field: "poolId")
-  swaps: [Swap!] @derivedFrom(field: "poolId")
-  shares: [PoolShare!] @derivedFrom(field: "poolId")
-  historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
+  tokens: [PoolToken!] @derivedFrom(field: "poolAddress")
+  swaps: [Swap!] @derivedFrom(field: "poolAddress")
+  shares: [PoolShare!] @derivedFrom(field: "poolAddress")
+  historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolAddress")
 
   # StablePool Only
   amp: BigInt
@@ -58,7 +59,7 @@ type Pool @entity {
 
 type PoolToken @entity {
   id: ID!
-  poolId: Pool!
+  poolAddress: Pool!
   symbol: String
   name: String
   decimals: Int!
@@ -74,7 +75,7 @@ type PoolToken @entity {
 type PoolShare @entity {
   id: ID!
   userAddress: User!
-  poolId: Pool!
+  poolAddress: Pool!
   balance: BigDecimal!
 }
 
@@ -101,7 +102,7 @@ type Swap @entity {
   tokenOutSym: String!
   tokenAmountIn: BigDecimal!
   tokenAmountOut: BigDecimal!
-  poolId: Pool!
+  poolAddress: Pool!
   userAddress: User!
   timestamp: Int!
   tx: Bytes!
@@ -127,14 +128,14 @@ type LatestPrice @entity {
   id: ID!
   asset: Bytes!
   pricingAsset: Bytes! # address of stable asset
-  poolId: Pool! # last pool which set price
+  poolAddress: Pool! # last pool which set price
   price:  BigDecimal! # all the latest prices
   block: BigInt! # last block that prices were updated
 }
 
 type PoolHistoricalLiquidity @entity {
   id: ID!
-  poolId: Pool!
+  poolAddress: Pool!
   poolTotalShares: BigDecimal!
   poolLiquidity: BigDecimal! # total value, priced in the stable asset - ie USD
   poolShareValue: BigDecimal!
@@ -143,8 +144,8 @@ type PoolHistoricalLiquidity @entity {
 }
 
 type TokenPrice @entity {
-  id: ID! # address of token + address of stablecoin-poolId
-  poolId: Pool!
+  id: ID! # address of token + address of stablecoin-poolAddress
+  poolAddress: Pool!
   asset: Bytes!
   amount: BigDecimal!
   pricingAsset: Bytes! # address of stable asset

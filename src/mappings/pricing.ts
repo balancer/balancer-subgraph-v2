@@ -11,16 +11,16 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): void {
-  let pool = Pool.load(poolId);
+export function updatePoolLiquidity(poolAddress: Address, block: BigInt, pricingAsset: Address): void {
+  let pool = Pool.load(poolAddress.toHexString());
   if (pool == null) return;
 
   let tokensList: Bytes[] = pool.tokensList;
   if (tokensList.length < 2) return;
 
-  let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
+  let phlId = getPoolHistoricalLiquidityId(poolAddress, pricingAsset, block);
   let phl = new PoolHistoricalLiquidity(phlId);
-  phl.poolId = poolId;
+  phl.poolAddress = poolAddress.toHexString();
   phl.pricingAsset = pricingAsset;
   phl.block = block;
   phl.poolTotalShares = pool.totalShares;
@@ -30,7 +30,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   for (let j: i32 = 0; j < tokensList.length; j++) {
     let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
 
-    let poolTokenId: string = getPoolTokenId(poolId, tokenAddress);
+    let poolTokenId: string = getPoolTokenId(poolAddress, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
 
     if (tokenAddress == pricingAsset) {
@@ -40,7 +40,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     let poolTokenQuantity: BigDecimal = poolToken.balance;
 
     // compare any new token price with the last price
-    let tokenPriceId = getTokenPriceId(poolId, tokenAddress, pricingAsset, block);
+    let tokenPriceId = getTokenPriceId(poolAddress, tokenAddress, pricingAsset, block);
     let tokenPrice = TokenPrice.load(tokenPriceId);
     let price: BigDecimal;
     let latestPriceId = getLatestPriceId(tokenAddress, pricingAsset);
@@ -63,7 +63,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       }
       latestPrice.price = price;
       latestPrice.block = block;
-      latestPrice.poolId = poolId;
+      latestPrice.poolAddress = poolAddress.toHexString();
       latestPrice.save();
     }
     if (price) {
@@ -115,8 +115,8 @@ function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string 
   return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
 }
 
-function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
-  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
+function getPoolHistoricalLiquidityId(poolAddress: Address, tokenAddress: Address, block: BigInt): string {
+  return poolAddress.toHexString().concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
 }
 
 function isUSDStable(asset: Address): boolean {

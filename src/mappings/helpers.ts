@@ -1,4 +1,4 @@
-import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, PoolSnapshot } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 import { ZERO_BD } from './constants';
@@ -28,19 +28,34 @@ export function createPoolShareEntity(pool: Pool, lpAddress: Address): void {
   let poolShare = new PoolShare(id);
 
   poolShare.userAddress = lpAddress.toHex();
-  poolShare.poolId = pool.id;
+  poolShare.poolAddress = pool.address.toHex();
   poolShare.balance = ZERO_BD;
   poolShare.save();
 }
 
-export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
-  return poolId.concat('-').concat(tokenAddress.toHexString());
+export class PoolIdDetails {
+  address: Address;
+  strategyType: i32;
+}
+
+export function poolIdDetails(poolId: Bytes): PoolIdDetails {
+  let address = Address.fromString(poolId.toHexString().slice(0, 42));
+  let strategyType = i32(parseInt(poolId.toHexString().slice(42, 46)));
+  return {
+    address,
+    strategyType,
+  };
+}
+
+export function getPoolTokenId(poolAddress: Address, tokenAddress: Address): string {
+  return poolAddress.toHexString().concat('-').concat(tokenAddress.toHexString());
 }
 // pool entity when created
-export function newPoolEntity(poolId: string): Pool {
-  let pool = new Pool(poolId);
+export function newPoolEntity(poolAddress: string, poolId: Bytes): Pool {
+  let pool = new Pool(poolAddress);
+  pool.poolId = poolId;
   pool.vaultID = '2';
-  pool.strategyType = i32(parseInt(poolId.slice(42, 46)));
+  pool.strategyType = poolIdDetails(poolId).strategyType;
   pool.tokensList = [];
   pool.totalWeight = ZERO_BD;
   pool.totalSwapVolume = ZERO_BD;
@@ -53,8 +68,8 @@ export function newPoolEntity(poolId: string): Pool {
   return pool;
 }
 
-export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
-  let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+export function createPoolTokenEntity(poolAddress: Address, tokenAddress: Address): void {
+  let poolTokenId = getPoolTokenId(poolAddress, tokenAddress);
 
   let token = ERC20.bind(tokenAddress);
   let symbol = '';
@@ -88,7 +103,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   }
 
   let poolToken = new PoolToken(poolTokenId);
-  poolToken.poolId = poolId;
+  poolToken.poolAddress = poolAddress.toHexString();
   poolToken.address = tokenAddress.toHexString();
   poolToken.name = name;
   poolToken.symbol = symbol;
@@ -99,12 +114,13 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
 }
 
 export function getTokenPriceId(
-  poolId: string,
+  poolAddress: Address,
   tokenAddress: Address,
   stableTokenAddress: Address,
   block: BigInt
 ): string {
-  return poolId
+  return poolAddress
+    .toHexString()
     .concat('-')
     .concat(tokenAddress.toHexString())
     .concat('-')
@@ -113,12 +129,12 @@ export function getTokenPriceId(
     .concat(block.toString());
 }
 
-export function createPoolSnapshot(poolId: string, timestamp: i32): void {
+export function createPoolSnapshot(poolAddress: Address, timestamp: i32): void {
   let dayTimestamp = timestamp - (timestamp % DAY); // Todays Timestamp
 
-  let pool = Pool.load(poolId);
+  let pool = Pool.load(poolAddress.toHexString());
   // Save pool snapshot
-  let snapshotId = poolId + '-' + dayTimestamp.toString();
+  let snapshotId = poolAddress.toHexString() + '-' + dayTimestamp.toString();
   let snapshot = new PoolSnapshot(snapshotId);
 
   if (!pool.tokensList) {
@@ -130,12 +146,12 @@ export function createPoolSnapshot(poolId: string, timestamp: i32): void {
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
     let tokenAddress = Address.fromString(token.toHexString());
-    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+    let poolTokenId = getPoolTokenId(poolAddress, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
     amounts[i] = poolToken.balance;
   }
 
-  snapshot.pool = poolId;
+  snapshot.pool = poolAddress.toHexString();
   snapshot.amounts = amounts;
   snapshot.totalShares = pool.totalShares;
   snapshot.swapVolume = ZERO_BD;
@@ -144,11 +160,11 @@ export function createPoolSnapshot(poolId: string, timestamp: i32): void {
   snapshot.save();
 }
 
-export function saveSwapToSnapshot(poolAddress: string, timestamp: i32, volume: BigDecimal, fees: BigDecimal): void {
+export function saveSwapToSnapshot(poolAddress: Address, timestamp: i32, volume: BigDecimal, fees: BigDecimal): void {
   let dayTimestamp = timestamp - (timestamp % DAY); // Todays timestamp
 
   // Save pool snapshot
-  let snapshotId = poolAddress + '-' + dayTimestamp.toString();
+  let snapshotId = poolAddress.toHexString() + '-' + dayTimestamp.toString();
   let snapshot = PoolSnapshot.load(snapshotId);
 
   if (!snapshot) {

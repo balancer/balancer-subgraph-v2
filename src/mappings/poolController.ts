@@ -1,7 +1,5 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
-import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
-import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
 import { PoolShare, Pool } from '../types/schema';
 import { tokenToDecimal, createPoolShareEntity, getPoolShareId } from './helpers';
@@ -14,11 +12,7 @@ import { ZERO_ADDRESS, ZERO_BD } from './constants';
 export function handleTransfer(event: Transfer): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let pool = Pool.load(poolAddress.toHexString()) as Pool;
 
   let isMint = event.params.from.toHex() == ZERO_ADDRESS;
   let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
@@ -30,8 +24,6 @@ export function handleTransfer(event: Transfer): void {
   let poolShareToId = getPoolShareId(poolAddress, event.params.to);
   let poolShareTo = PoolShare.load(poolShareToId);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
 
   let BPT_DECIMALS = 18;
 
@@ -81,11 +73,7 @@ export function handleTransfer(event: Transfer): void {
 export function handleTransferCCP(event: Transfer): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = ConvergentCurvePool.bind(poolAddress);
-
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let pool = Pool.load(poolAddress.toHexString()) as Pool;
 
   let isMint = event.params.from.toHex() == ZERO_ADDRESS;
   let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
@@ -97,8 +85,6 @@ export function handleTransferCCP(event: Transfer): void {
   let poolShareToId = getPoolShareId(poolAddress, event.params.to);
   let poolShareTo = PoolShare.load(poolShareToId);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
 
   let BPT_DECIMALS = 18;
 
