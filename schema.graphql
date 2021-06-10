@@ -26,7 +26,7 @@ type Pool @entity {
   swapFee: BigDecimal!
   owner: Bytes
 
-  totalWeight: BigDecimal!
+  totalWeight: BigDecimal
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
