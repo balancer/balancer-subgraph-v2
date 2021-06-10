@@ -93,7 +93,6 @@ export function handleNewStablePool(event: PoolCreated): void {
     let tokens = tokensCall.value.value0;
     let tokensList = pool.tokensList;
 
-
     for (let i: i32 = 0; i < tokens.length; i++) {
       let tokenAddress = tokens[i];
 
