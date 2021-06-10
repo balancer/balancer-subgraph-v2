@@ -107,6 +107,10 @@ dataSources:
         - Balancer
         - Pool
       abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: StablePoolFactory
           file: ./abis/StablePoolFactory.json
         - name: StablePool
@@ -156,6 +160,8 @@ templates:
       abis:
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
