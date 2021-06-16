@@ -78,8 +78,13 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let newAmount = poolToken.balance.plus(tokenAmountIn);
     poolToken.balance = newAmount;
     poolToken.save();
+  }
+
+  for (let i: i32 = 0; i < tokenAddresses.length; i++) {
+    let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
       updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+      break;
     }
   }
 
@@ -133,8 +138,13 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let newAmount = poolToken.balance.minus(tokenAmountOut);
     poolToken.balance = newAmount;
     poolToken.save();
+  }
+
+  for (let i: i32 = 0; i < tokenAddresses.length; i++) {
+    let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
       updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+      break;
     }
   }
 
