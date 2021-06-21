@@ -21,7 +21,7 @@ dataSources:
         - Pool
         - PoolToken
         - User
-        - UserBalance
+        - UserInternalBalance
         - PoolTokenizer
       abis:
         - name: Vault

@@ -5,7 +5,16 @@ import {
   PoolBalanceManaged,
   InternalBalanceChanged,
 } from '../types/Vault/Vault';
-import { Balancer, Pool, PoolToken, Swap, JoinExit, Investment, TokenPrice, UserBalance } from '../types/schema';
+import {
+  Balancer,
+  Pool,
+  PoolToken,
+  Swap,
+  JoinExit,
+  Investment,
+  TokenPrice,
+  UserInternalBalance,
+} from '../types/schema';
 import {
   tokenToDecimal,
   getPoolTokenId,
@@ -30,9 +39,9 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
   let token = event.params.token;
   let balanceId = userAddress.concat(token.toHexString());
 
-  let userBalance = UserBalance.load(balanceId);
+  let userBalance = UserInternalBalance.load(balanceId);
   if (userBalance == null) {
-    userBalance = new UserBalance(balanceId);
+    userBalance = new UserInternalBalance(balanceId);
 
     userBalance.userAddress = userAddress;
     userBalance.token = token;
