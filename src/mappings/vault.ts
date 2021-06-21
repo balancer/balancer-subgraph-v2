@@ -35,6 +35,8 @@ let ZERO = BigInt.fromI32(0);
  ************************************/
 
 export function handleInternalBalanceChange(event: InternalBalanceChanged): void {
+  createUserEntity(event.params.user);
+
   let userAddress = event.params.user.toHexString();
   let token = event.params.token;
   let balanceId = userAddress.concat(token.toHexString());
