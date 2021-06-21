@@ -5,6 +5,13 @@ import { ZERO_BD } from './constants';
 
 const DAY = 24 * 60 * 60;
 
+export function getTokenDecimals(tokenAddress: Address): i32 {
+  let token = ERC20.bind(tokenAddress);
+  let result = token.try_decimals();
+
+  return result.reverted ? 0 : result.value;
+}
+
 export function tokenToDecimal(amount: BigInt, decimals: i32): BigDecimal {
   let scale = BigInt.fromI32(10)
     .pow(decimals as u8)

@@ -1,6 +1,11 @@
 import { BigInt, BigDecimal, Address, log } from '@graphprotocol/graph-ts';
-import { Swap as SwapEvent, PoolBalanceChanged, PoolBalanceManaged } from '../types/Vault/Vault';
-import { Balancer, Pool, PoolToken, Swap, JoinExit, Investment, TokenPrice } from '../types/schema';
+import {
+  Swap as SwapEvent,
+  PoolBalanceChanged,
+  PoolBalanceManaged,
+  InternalBalanceChanged,
+} from '../types/Vault/Vault';
+import { Balancer, Pool, PoolToken, Swap, JoinExit, Investment, TokenPrice, UserBalance } from '../types/schema';
 import {
   tokenToDecimal,
   getPoolTokenId,
@@ -9,11 +14,36 @@ import {
   createPoolSnapshot,
   saveSwapToSnapshot,
   createUserEntity,
+  getTokenDecimals,
 } from './helpers';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
 
 let ZERO = BigInt.fromI32(0);
+
+/************************************
+ ******** INTERNAL BALANCES *********
+ ************************************/
+
+export function handleInternalBalanceChange(event: InternalBalanceChanged): void {
+  let userAddress = event.params.user.toHexString();
+  let token = event.params.token;
+  let balanceId = userAddress.concat(token.toHexString());
+
+  let userBalance = UserBalance.load(balanceId);
+  if (userBalance == null) {
+    userBalance = new UserBalance(balanceId);
+
+    userBalance.userAddress = userAddress;
+    userBalance.token = token;
+    userBalance.balance = ZERO_BD;
+  }
+
+  let transferAmount = tokenToDecimal(event.params.delta, getTokenDecimals(token));
+  userBalance.balance = userBalance.balance.plus(transferAmount);
+
+  userBalance.save();
+}
 
 /************************************
  ****** DEPOSITS & WITHDRAWALS ******
