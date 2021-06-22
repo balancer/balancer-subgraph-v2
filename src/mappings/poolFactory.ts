@@ -86,12 +86,36 @@ export function handleNewStablePool(event: PoolCreated): void {
   pool.factory = event.address;
   pool.owner = owner;
 
-  StablePoolTemplate.create(poolAddress);
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
 
-  let ampCall = poolContract.try_getAmplificationParameter();
-  let amp = ampCall.value;
-  pool.amp = amp;
-  pool.save();
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    let tokensList = pool.tokensList;
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      let tokenAddress = tokens[i];
+
+      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+
+      if (tokensList.indexOf(tokenAddress) == -1) {
+        tokensList.push(tokenAddress);
+      }
+      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
+      let poolToken = PoolToken.load(poolTokenId);
+
+      poolToken.save();
+    }
+
+    let ampCall = poolContract.try_getAmplificationParameter();
+    let amp = ampCall.value;
+    pool.amp = amp;
+
+    pool.tokensList = tokensList;
+    pool.save();
+  }
+
+  StablePoolTemplate.create(poolAddress);
 }
 
 export function handleNewCCPPool(event: PoolCreated): void {

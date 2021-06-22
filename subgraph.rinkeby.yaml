@@ -21,7 +21,7 @@ dataSources:
         - Pool
         - PoolToken
         - User
-        - UserBalance
+        - UserInternalBalance
         - PoolTokenizer
       abis:
         - name: Vault
@@ -37,6 +37,8 @@ dataSources:
           handler: handleBalanceChange
         - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256,int256)
           handler: handleBalanceManage
+        - event: InternalBalanceChanged(indexed address,indexed address,int256)
+          handler: handleInternalBalanceChange
   - kind: ethereum/contract
     name: WeightedPoolFactory
     network: rinkeby
