@@ -11,7 +11,7 @@ import { ZERO_ADDRESS, ZERO_BD } from './constants';
  *********** SWAP FEES ************
  ************************************/
 
- export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): void {
+export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): void {
   let poolAddress = event.address;
 
   // TODO - refactor so pool -> poolId doesn't require call
@@ -21,7 +21,7 @@ import { ZERO_ADDRESS, ZERO_BD } from './constants';
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  pool.swapFee = scaleDown(event.swapFeePercentage, 18);
+  pool.swapFee = scaleDown(event.params.swapFeePercentage, 18);
   pool.save();
 }
 
