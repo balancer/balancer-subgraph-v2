@@ -124,7 +124,7 @@ dataSources:
     #name: StablePoolFactory
     #network: mainnet
     #source:
-      #address: '0xaD9a0de4fda03eE4cdb07590B42D6469Ad1aBd85'
+      #address: '0xc66Ba2B6595D3613CCab350C886aCE23866EDe24'
       #abi: StablePoolFactory
       #startBlock: 12272146
     #mapping:

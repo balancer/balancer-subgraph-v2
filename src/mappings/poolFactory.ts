@@ -108,7 +108,9 @@ export function handleNewStablePool(event: PoolCreated): void {
     }
 
     let ampCall = poolContract.try_getAmplificationParameter();
-    let amp = ampCall.value;
+    let value = ampCall.value.value0;
+    let precision = ampCall.value.value2;
+    let amp = value.div(precision);
     pool.amp = amp;
 
     pool.tokensList = tokensList;

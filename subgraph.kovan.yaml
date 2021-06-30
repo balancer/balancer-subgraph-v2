@@ -97,7 +97,7 @@ dataSources:
     name: StablePoolFactory
     network: kovan
     source:
-      address: '0xA9B3f46761F3A47056F39724FB5D9560f3629fB8'
+      address: '0x751dfDAcE1AD995fF13c927f6f761C6604532c79'
       abi: StablePoolFactory
       startBlock: 25266622
     mapping:
