@@ -21,7 +21,7 @@ dataSources:
         - Pool
         - PoolToken
         - User
-        - UserBalance
+        - UserInternalBalance
         - PoolTokenizer
       abis:
         - name: Vault
@@ -37,6 +37,8 @@ dataSources:
           handler: handleBalanceChange
         - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256,int256)
           handler: handleBalanceManage
+        - event: InternalBalanceChanged(indexed address,indexed address,int256)
+          handler: handleInternalBalanceChange
   - kind: ethereum/contract
     name: ConvergentPoolFactory
     network: goerli
@@ -138,6 +140,8 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: StablePool
     network: goerli
@@ -161,6 +165,8 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: goerli
