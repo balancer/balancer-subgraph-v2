@@ -1,11 +1,29 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
-import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
+import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
 import { PoolShare, Pool } from '../types/schema';
-import { tokenToDecimal, createPoolShareEntity, getPoolShareId } from './helpers';
+import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers';
 import { ZERO_ADDRESS, ZERO_BD } from './constants';
+
+/************************************
+ *********** SWAP FEES ************
+ ************************************/
+
+export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapFee = scaleDown(event.params.swapFeePercentage, 18);
+  pool.save();
+}
 
 /************************************
  *********** POOL SHARES ************
