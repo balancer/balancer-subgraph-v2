@@ -62,8 +62,8 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
     pool.tokensList = tokensList;
     pool.totalWeight = totalWeight;
-    pool.save();
   }
+  pool.save();
 
   WeightedPoolTemplate.create(poolAddress);
 }
@@ -114,8 +114,8 @@ export function handleNewStablePool(event: PoolCreated): void {
     pool.amp = amp;
 
     pool.tokensList = tokensList;
-    pool.save();
   }
+  pool.save();
 
   StablePoolTemplate.create(poolAddress);
 }
@@ -176,8 +176,8 @@ export function handleNewCCPPool(event: PoolCreated): void {
     }
 
     pool.tokensList = tokensList;
-    pool.save();
   }
+  pool.save();
 
   CCPoolTemplate.create(poolAddress);
 }
