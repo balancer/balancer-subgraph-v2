@@ -191,6 +191,8 @@ templates:
       abis:
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
