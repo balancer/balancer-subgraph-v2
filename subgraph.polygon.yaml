@@ -99,7 +99,7 @@ dataSources:
     source:
       address: '0xc66Ba2B6595D3613CCab350C886aCE23866EDe24'
       abi: StablePoolFactory
-      startBlock: 16138680 
+      startBlock: 16138679 
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -164,6 +164,8 @@ templates:
       abis:
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
