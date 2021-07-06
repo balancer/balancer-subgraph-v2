@@ -99,7 +99,7 @@ dataSources:
     source:
       address: '0xc66Ba2B6595D3613CCab350C886aCE23866EDe24'
       abi: StablePoolFactory
-      startBlock: 16138679 
+      startBlock: 16138679
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
