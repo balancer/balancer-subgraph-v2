@@ -91,30 +91,21 @@ export function handleNewStablePool(event: PoolCreated): void {
 
   if (!tokensCall.reverted) {
     let tokens = tokensCall.value.value0;
-    let tokensList = pool.tokensList;
+    pool.tokensList = tokens;
 
     for (let i: i32 = 0; i < tokens.length; i++) {
-      let tokenAddress = tokens[i];
-
-      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
-
-      if (tokensList.indexOf(tokenAddress) == -1) {
-        tokensList.push(tokenAddress);
-      }
-      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
-      let poolToken = PoolToken.load(poolTokenId);
-
-      poolToken.save();
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
     }
+  }
 
-    let ampCall = poolContract.try_getAmplificationParameter();
+  let ampCall = poolContract.try_getAmplificationParameter();
+  if (!ampCall.reverted) {
     let value = ampCall.value.value0;
     let precision = ampCall.value.value2;
     let amp = value.div(precision);
     pool.amp = amp;
-
-    pool.tokensList = tokensList;
   }
+
   pool.save();
 
   StablePoolTemplate.create(poolAddress);
