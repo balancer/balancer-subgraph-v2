@@ -1,9 +1,9 @@
 import { ZERO_BD, VAULT_ADDRESS } from './constants';
-import { newPoolEntity, createPoolTokenEntity, getPoolTokenId, scaleDown } from './helpers';
+import { newPoolEntity, createPoolTokenEntity, scaleDown, loadPoolToken } from './helpers';
 
 import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { Balancer, Pool, PoolToken } from '../types/schema';
+import { Balancer, Pool } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -47,13 +47,12 @@ export function handleNewWeightedPool(event: PoolCreated): void {
       let tokenAddress = tokens[i];
       let weight = weights[i];
 
-      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
-
       if (tokensList.indexOf(tokenAddress) == -1) {
         tokensList.push(tokenAddress);
       }
+
       createPoolTokenEntity(poolId.toHexString(), tokenAddress);
-      let poolToken = PoolToken.load(poolTokenId);
+      let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
       poolToken.weight = scaleDown(weight, 18);
       poolToken.save();
 
@@ -156,13 +155,13 @@ export function handleNewCCPPool(event: PoolCreated): void {
     for (let i: i32 = 0; i < tokens.length; i++) {
       let tokenAddress = tokens[i];
 
-      let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
-
       if (tokensList.indexOf(tokenAddress) == -1) {
         tokensList.push(tokenAddress);
       }
+
       createPoolTokenEntity(poolId.toHexString(), tokenAddress);
-      let poolToken = PoolToken.load(poolTokenId);
+      let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+
       poolToken.save();
     }
 
