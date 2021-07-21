@@ -15,6 +15,33 @@ import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
+export function updatePoolWeights(poolId: string): void {
+  let pool = Pool.load(poolId);
+  let poolContract = WeightedPool.bind(pool.address as Address);
+
+  let tokensList = pool.tokensList;
+  let weightsCall = poolContract.try_getNormalizedWeights();
+  if (!weightsCall.reverted) {
+    let weights = weightsCall.value;
+    let totalWeight = ZERO_BD;
+
+    for (let i: i32 = 0; i < tokensList.length; i++) {
+      let tokenAddress = tokensList[i] as Address;
+      let weight = weights[i];
+
+      let poolToken = loadPoolToken(poolId, tokenAddress);
+      poolToken.weight = scaleDown(weight, 18);
+      poolToken.save();
+
+      totalWeight = totalWeight.plus(scaleDown(weight, 18));
+    }
+
+    pool.totalWeight = totalWeight;
+  }
+
+  pool.save();
+}
+
 export function handleNewWeightedPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
@@ -35,34 +62,27 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);
-  let weightsCall = poolContract.try_getNormalizedWeights();
 
-  if (!tokensCall.reverted && !weightsCall.reverted) {
+  if (!tokensCall.reverted) {
     let tokens = tokensCall.value.value0;
-    let weights = weightsCall.value;
     let tokensList = pool.tokensList;
-    let totalWeight = ZERO_BD;
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       let tokenAddress = tokens[i];
-      let weight = weights[i];
 
       if (tokensList.indexOf(tokenAddress) == -1) {
         tokensList.push(tokenAddress);
       }
 
       createPoolTokenEntity(poolId.toHexString(), tokenAddress);
-      let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
-      poolToken.weight = scaleDown(weight, 18);
-      poolToken.save();
-
-      totalWeight = totalWeight.plus(scaleDown(weight, 18));
     }
 
     pool.tokensList = tokensList;
-    pool.totalWeight = totalWeight;
   }
   pool.save();
+
+  // Load pool with initial weights
+  updatePoolWeights(poolId.toHexString());
 
   WeightedPoolTemplate.create(poolAddress);
 }
