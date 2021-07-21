@@ -16,6 +16,7 @@ import {
   getTokenDecimals,
   loadPoolToken,
 } from './helpers/misc';
+import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './helpers/constants';
 
@@ -225,6 +226,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (pool == null) {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
+  }
+
+  // LBPs' weights update over time so we need to update them after each swap
+  // TODO: change to only do this if the LBP is in the middle of an update
+  if (pool.poolType == 'LiquidityBootstrapping') {
+    updatePoolWeights(poolId.toHexString());
   }
 
   let tokenInAddress: Address = event.params.tokenIn;

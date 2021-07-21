@@ -16,7 +16,7 @@ import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
-export function handleNewWeightedPool(event: PoolCreated): void {
+export function createNewWeightedPool(event: PoolCreated): Pool {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
@@ -59,6 +59,17 @@ export function handleNewWeightedPool(event: PoolCreated): void {
   updatePoolWeights(poolId.toHexString());
 
   WeightedPoolTemplate.create(poolAddress);
+  return pool;
+}
+
+export function handleNewWeightedPool(event: PoolCreated): void {
+  createNewWeightedPool(event);
+}
+
+export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
+  let pool = createNewWeightedPool(event);
+  pool.poolType = 'Liquidity Bootstrapping';
+  pool.save();
 }
 
 export function handleNewStablePool(event: PoolCreated): void {
