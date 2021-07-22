@@ -24,6 +24,7 @@ type Pool @entity {
   strategyType: Int!
   symbol: String
   name: String
+  swapEnabled: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
 

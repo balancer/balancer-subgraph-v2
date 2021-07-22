@@ -250,3 +250,21 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransferCCP
+  - kind: ethereum/contract
+    name: LiquidityBootstrappingPool
+    network: mainnet
+    source:
+      abi: LiquidityBootstrappingPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+      abis:
+        - name: LiquidityBootstrappingPool
+          file: ./abis/LiquidityBootstrappingPool.json
+      eventHandlers:
+        - event: SwapEnabledSet(bool)
+          handler: handleSwapEnabledSet

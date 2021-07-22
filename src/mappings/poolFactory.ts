@@ -203,6 +203,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.createTime = event.block.timestamp.toI32();
     pool.address = poolAddress;
     pool.tx = event.transaction.hash;
+    pool.swapEnabled = true;
   }
 
   vault.poolCount = vault.poolCount + 1;

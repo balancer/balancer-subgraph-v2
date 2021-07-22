@@ -1,11 +1,30 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
+import { SwapEnabledSet } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
 import { PoolShare, Pool } from '../types/schema';
 import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers/misc';
 import { ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+
+/************************************
+ *********** SWAP ENABLED ***********
+ ************************************/
+
+export function handleSwapEnabledSet(event: SwapEnabledSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = event.params.swapEnabled;
+  pool.save();
+}
 
 /************************************
  *********** SWAP FEES ************
