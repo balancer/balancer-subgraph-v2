@@ -68,7 +68,7 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
 export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
   let pool = createNewWeightedPool(event);
-  pool.poolType = 'Liquidity Bootstrapping';
+  pool.poolType = 'LiquidityBootstrapping';
   pool.save();
 }
 
