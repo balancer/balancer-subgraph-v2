@@ -1,6 +1,6 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot } from '../types/schema';
-import { ERC20 } from '../types/Vault/ERC20';
+import { Pool, User, PoolToken, PoolShare, PoolSnapshot } from '../../types/schema';
+import { ERC20 } from '../../types/Vault/ERC20';
 import { ZERO_BD } from './constants';
 
 const DAY = 24 * 60 * 60;

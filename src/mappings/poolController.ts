@@ -4,8 +4,8 @@ import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/Weigh
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
 import { PoolShare, Pool } from '../types/schema';
-import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers';
-import { ZERO_ADDRESS, ZERO_BD } from './constants';
+import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers/misc';
+import { ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
 /************************************
  *********** SWAP FEES ************

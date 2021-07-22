@@ -15,9 +15,9 @@ import {
   createUserEntity,
   getTokenDecimals,
   loadPoolToken,
-} from './helpers';
+} from './helpers/misc';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { ZERO_BD } from './constants';
+import { ZERO_BD } from './helpers/constants';
 
 let ZERO = BigInt.fromI32(0);
 
