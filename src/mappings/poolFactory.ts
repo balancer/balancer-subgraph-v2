@@ -90,7 +90,7 @@ export function handleNewStablePool(event: PoolCreated): void {
 
   if (!tokensCall.reverted) {
     let tokens = tokensCall.value.value0;
-    pool.tokensList = tokens;
+    pool.tokensList = tokens as Bytes[];
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       createPoolTokenEntity(poolId.toHexString(), tokens[i]);
