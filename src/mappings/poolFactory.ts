@@ -186,8 +186,6 @@ function findOrInitializeVault(): Balancer {
 }
 
 function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool | null {
-  let vault = findOrInitializeVault();
-
   let poolAddress: Address = event.params.pool;
 
   let pool = Pool.load(poolId.toHexString());
@@ -198,10 +196,11 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.createTime = event.block.timestamp.toI32();
     pool.address = poolAddress;
     pool.tx = event.transaction.hash;
-  }
 
-  vault.poolCount = vault.poolCount + 1;
-  vault.save();
+    let vault = findOrInitializeVault();
+    vault.poolCount += 1;
+    vault.save();
+  }
 
   pool.save();
   return pool;
