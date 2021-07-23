@@ -16,7 +16,7 @@ import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
-export function createNewWeightedPool(event: PoolCreated): Pool {
+function createNewWeightedPool(event: PoolCreated): Pool {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
