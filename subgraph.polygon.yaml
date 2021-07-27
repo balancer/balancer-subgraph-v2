@@ -66,6 +66,60 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
+  - kind: ethereum/contract
+    name: WeightedPool2TokenFactory
+    network: matic
+    source:
+      address: '0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0'
+      abi: WeightedPoolFactory
+      startBlock: 15869090
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPoolFactory
+          file: ./abis/WeightedPoolFactory.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewWeightedPool
+  - kind: ethereum/contract
+    name: StablePoolFactory
+    network: matic
+    source:
+      address: '0xc66Ba2B6595D3613CCab350C886aCE23866EDe24'
+      abi: StablePoolFactory
+      startBlock: 16138679
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: StablePoolFactory
+          file: ./abis/StablePoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewStablePool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -110,6 +164,8 @@ templates:
       abis:
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
