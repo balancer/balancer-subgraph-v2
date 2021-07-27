@@ -48,6 +48,9 @@ type Pool @entity {
   shares: [PoolShare!] @derivedFrom(field: "poolId")
   historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
 
+  # LiquidityBootstrappingPool Only
+  weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
+
   # StablePool Only
   amp: BigInt
 
@@ -93,6 +96,16 @@ type UserInternalBalance @entity {
   userAddress: User
   token: Bytes!
   balance: BigDecimal!
+}
+
+type GradualWeightUpdate @entity {
+  id: ID!
+  poolId: Pool!
+  scheduledTimestamp: Int!
+  startTimestamp: Int!
+  endTimestamp: Int!
+  startWeights: [BigInt!]!
+  endWeights: [BigInt!]!
 }
 
 type Swap @entity {
