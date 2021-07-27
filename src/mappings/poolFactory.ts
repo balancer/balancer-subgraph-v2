@@ -10,6 +10,7 @@ import { Balancer, Pool } from '../types/schema';
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
+import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
@@ -71,6 +72,8 @@ export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
   let pool = createNewWeightedPool(event);
   pool.poolType = PoolType.LiquidityBootstrapping;
   pool.save();
+
+  LiquidityBootstrappingPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewStablePool(event: PoolCreated): void {
