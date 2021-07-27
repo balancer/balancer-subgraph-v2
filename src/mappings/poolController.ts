@@ -6,6 +6,7 @@ import {
   LiquidityBootstrappingPool,
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
+import { MetaStablePool, PriceRateCacheUpdated } from '../types/templates/MetaStablePool/MetaStablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
 import { PoolShare, Pool, GradualWeightUpdate } from '../types/schema';
@@ -68,6 +69,29 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
   pool.swapFee = scaleDown(event.params.swapFeePercentage, 18);
+  pool.save();
+}
+
+/************************************
+ ******** PRICE RATE UPDATE *********
+ ************************************/
+
+export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = MetaStablePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  let priceRateIndex = pool.tokensList.indexOf(event.params.token);
+  let priceRates = pool.priceRates;
+  // Might be wrong scaling? TODO: Check this
+  priceRates[priceRateIndex] = scaleDown(event.params.rate, 18);
+  pool.priceRates = priceRates;
+
   pool.save();
 }
 

@@ -12,6 +12,7 @@ type Balancer @entity {
 enum PoolType {
   Weighted
   Stable
+  MetaStable
   Element
   LiquidityBootstrapping
 }
@@ -53,6 +54,9 @@ type Pool @entity {
 
   # StablePool Only
   amp: BigInt
+
+  # MetaStablePool Only
+  priceRates: [BigDecimal!]
 
   # ConvergentCurvePool (Element) Only
   principalToken: Bytes

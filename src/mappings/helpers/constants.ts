@@ -8,6 +8,7 @@ export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export namespace PoolType {
   export const Weighted = 'Weighted';
   export const Stable = 'Stable';
+  export const MetaStable = 'MetaStable';
   export const Element = 'Element';
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
 }
