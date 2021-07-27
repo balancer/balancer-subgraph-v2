@@ -14,6 +14,7 @@ import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
+import { ERC20 } from '../types/Vault/ERC20';
 
 export function handleNewWeightedPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
@@ -198,6 +199,18 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.createTime = event.block.timestamp.toI32();
     pool.address = poolAddress;
     pool.tx = event.transaction.hash;
+
+    let bpt = ERC20.bind(poolAddress);
+
+    let nameCall = bpt.try_name();
+    if (!nameCall.reverted) {
+      pool.name = nameCall.value;
+    }
+
+    let symbolCall = bpt.try_symbol();
+    if (!symbolCall.reverted) {
+      pool.symbol = symbolCall.value;
+    }
   }
 
   vault.poolCount = vault.poolCount + 1;
