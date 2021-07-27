@@ -1,4 +1,4 @@
-import { ZERO_BD, VAULT_ADDRESS } from './helpers/constants';
+import { ZERO_BD, VAULT_ADDRESS, PoolType } from './helpers/constants';
 import { newPoolEntity, createPoolTokenEntity, scaleDown, loadPoolToken } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
@@ -30,7 +30,7 @@ function createNewWeightedPool(event: PoolCreated): Pool {
   let owner = ownerCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
-  pool.poolType = 'Weighted';
+  pool.poolType = PoolType.Weighted;
   pool.factory = event.address;
   pool.owner = owner;
 
@@ -68,7 +68,7 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
 export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
   let pool = createNewWeightedPool(event);
-  pool.poolType = 'LiquidityBootstrapping';
+  pool.poolType = PoolType.LiquidityBootstrapping;
   pool.save();
 }
 
@@ -86,7 +86,7 @@ export function handleNewStablePool(event: PoolCreated): void {
   let owner = ownerCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = 'Stable';
+  pool.poolType = PoolType.Stable;
   pool.factory = event.address;
   pool.owner = owner;
 
@@ -142,7 +142,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
   // let owner = ownerCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee) as Pool;
-  pool.poolType = 'Element';
+  pool.poolType = PoolType.Element;
   pool.factory = event.address;
   // pool.owner = owner;
   pool.principalToken = principalToken;

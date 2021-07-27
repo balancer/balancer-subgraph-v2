@@ -18,7 +18,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { ZERO_BD } from './helpers/constants';
+import { PoolType, ZERO_BD } from './helpers/constants';
 
 let ZERO = BigInt.fromI32(0);
 
@@ -230,7 +230,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // LBPs' weights update over time so we need to update them after each swap
   // TODO: change to only do this if the LBP is in the middle of an update
-  if (pool.poolType == 'LiquidityBootstrapping') {
+  if (pool.poolType == PoolType.LiquidityBootstrapping) {
     updatePoolWeights(poolId.toHexString());
   }
 
