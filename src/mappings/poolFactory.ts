@@ -60,12 +60,12 @@ function createNewWeightedPool(event: PoolCreated): Pool {
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
 
-  WeightedPoolTemplate.create(poolAddress);
   return pool;
 }
 
 export function handleNewWeightedPool(event: PoolCreated): void {
   createNewWeightedPool(event);
+  WeightedPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {

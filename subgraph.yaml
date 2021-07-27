@@ -263,8 +263,14 @@ templates:
       entities:
         - Pool
       abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: LiquidityBootstrappingPool
           file: ./abis/LiquidityBootstrappingPool.json
       eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
         - event: SwapEnabledSet(bool)
           handler: handleSwapEnabledSet
