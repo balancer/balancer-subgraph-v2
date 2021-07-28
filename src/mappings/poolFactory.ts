@@ -75,7 +75,7 @@ export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
   pool.poolType = PoolType.LiquidityBootstrapping;
   pool.save();
 
-  LiquidityBootstrappingPoolTemplate.create(pool.address);
+  LiquidityBootstrappingPoolTemplate.create(pool.address as Address);
 }
 
 export function handleNewStablePool(event: PoolCreated): void {
