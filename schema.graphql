@@ -56,7 +56,7 @@ type Pool @entity {
   amp: BigInt
 
   # MetaStablePool Only
-  priceRates: [BigDecimal!]
+  priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
 
   # ConvergentCurvePool (Element) Only
   principalToken: Bytes
@@ -78,6 +78,17 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
+}
+
+type PriceRateProvider @entity {
+  id: ID!
+  poolId: Pool!
+  token: PoolToken!
+  address: Bytes!
+  rate: BigDecimal!
+  lastCached: Int!
+  cacheDuration: Int!
+  cacheExpiry: Int!
 }
 
 type PoolShare @entity {

@@ -151,10 +151,6 @@ export function handleNewMetaStablePool(event: PoolCreated): void {
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       createPoolTokenEntity(poolId.toHexString(), tokens[i]);
-
-      // Fill initial price rates with zeros
-      // We initialise with real values later
-      pool.priceRates.push(ZERO_BD);
     }
   }
 

@@ -292,6 +292,7 @@ templates:
         - PoolShare
         - Swap
         - PoolToken
+        - PriceRateProvider
       abis:
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
