@@ -18,7 +18,7 @@ import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
 
-function createNewWeightedPool(event: PoolCreated): Pool {
+function createNewWeightedPool(event: PoolCreated): string {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
@@ -60,7 +60,7 @@ function createNewWeightedPool(event: PoolCreated): Pool {
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
 
-  return pool;
+  return poolId.toHexString();
 }
 
 export function handleNewWeightedPool(event: PoolCreated): void {
@@ -69,11 +69,13 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 }
 
 export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
-  let pool = createNewWeightedPool(event);
+  let poolId = createNewWeightedPool(event);
+
+  let pool = Pool.load(poolId);
   pool.poolType = PoolType.LiquidityBootstrapping;
   pool.save();
 
-  LiquidityBootstrappingPoolTemplate.create(event.params.pool);
+  LiquidityBootstrappingPoolTemplate.create(pool.address as Address);
 }
 
 export function handleNewStablePool(event: PoolCreated): void {

@@ -158,6 +158,7 @@ templates:
       file: ./src/mappings/poolController.ts
       entities:
         - Pool
+        - GradualWeightUpdate
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
@@ -170,3 +171,5 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: SwapEnabledSet(bool)
           handler: handleSwapEnabledSet
+        - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
+          handler: handleGradualWeightUpdateScheduled
