@@ -1,11 +1,57 @@
 import { BigInt } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
+import {
+  GradualWeightUpdateScheduled,
+  LiquidityBootstrappingPool,
+  SwapEnabledSet,
+} from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 
-import { PoolShare, Pool } from '../types/schema';
-import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers';
-import { ZERO_ADDRESS, ZERO_BD } from './constants';
+import { PoolShare, Pool, GradualWeightUpdate } from '../types/schema';
+import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers/misc';
+import { ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+
+/************************************
+ *********** SWAP ENABLED ***********
+ ************************************/
+
+export function handleSwapEnabledSet(event: SwapEnabledSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = event.params.swapEnabled;
+  pool.save();
+}
+
+/************************************
+ ********** WEIGHT UPDATES **********
+ ************************************/
+
+export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateScheduled): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = LiquidityBootstrappingPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
+  let weightUpdate = new GradualWeightUpdate(id);
+  weightUpdate.poolId = poolId.toHexString();
+  weightUpdate.scheduledTimestamp = event.block.timestamp.toI32();
+  weightUpdate.startTimestamp = event.params.startTime.toI32();
+  weightUpdate.endTimestamp = event.params.endTime.toI32();
+  weightUpdate.startWeights = event.params.startWeights;
+  weightUpdate.endWeights = event.params.endWeights;
+  weightUpdate.save();
+}
 
 /************************************
  *********** SWAP FEES ************

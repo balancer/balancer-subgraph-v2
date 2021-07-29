@@ -13,6 +13,7 @@ enum PoolType {
   Weighted
   Stable
   Element
+  LiquidityBootstrapping
 }
 
 type Pool @entity {
@@ -23,6 +24,7 @@ type Pool @entity {
   strategyType: Int!
   symbol: String
   name: String
+  swapEnabled: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
 
@@ -31,7 +33,7 @@ type Pool @entity {
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
   totalShares: BigDecimal!
-  
+
   createTime: Int!
   swapsCount: BigInt!
   holdersCount: BigInt!
@@ -45,6 +47,9 @@ type Pool @entity {
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
   historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
+
+  # LiquidityBootstrappingPool Only
+  weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
 
   # StablePool Only
   amp: BigInt
@@ -80,16 +85,27 @@ type PoolShare @entity {
 
 type User @entity {
   id: ID!
-  sharesOwned: [PoolShare!]  @derivedFrom(field: "userAddress")
-  swaps: [Swap!]  @derivedFrom(field: "userAddress")
-  userInternalBalances: [UserInternalBalance!]  @derivedFrom(field: "userAddress")
+  sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
+  swaps: [Swap!] @derivedFrom(field: "userAddress")
+  userInternalBalances: [UserInternalBalance!]
+    @derivedFrom(field: "userAddress")
 }
 
 type UserInternalBalance @entity {
-  id:  ID!
+  id: ID!
   userAddress: User
   token: Bytes!
   balance: BigDecimal!
+}
+
+type GradualWeightUpdate @entity {
+  id: ID!
+  poolId: Pool!
+  scheduledTimestamp: Int!
+  startTimestamp: Int!
+  endTimestamp: Int!
+  startWeights: [BigInt!]!
+  endWeights: [BigInt!]!
 }
 
 type Swap @entity {
@@ -128,7 +144,7 @@ type LatestPrice @entity {
   asset: Bytes!
   pricingAsset: Bytes! # address of stable asset
   poolId: Pool! # last pool which set price
-  price:  BigDecimal! # all the latest prices
+  price: BigDecimal! # all the latest prices
   block: BigInt! # last block that prices were updated
 }
 

@@ -1,8 +1,8 @@
-import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './constants';
-import { getTokenPriceId, loadPoolToken } from './helpers';
+import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './helpers/constants';
+import { getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD } from './constants';
+import { ZERO_BD } from './helpers/constants';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
