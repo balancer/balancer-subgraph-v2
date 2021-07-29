@@ -19,6 +19,7 @@ import { StablePool } from '../types/templates/StablePool/StablePool';
 import { MetaStablePool } from '../types/templates/MetaStablePool/MetaStablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
+import { getAmp } from './helpers/stable';
 
 function createNewWeightedPool(event: PoolCreated): string {
   let poolAddress: Address = event.params.pool;
@@ -110,13 +111,7 @@ export function handleNewStablePool(event: PoolCreated): void {
     }
   }
 
-  let ampCall = poolContract.try_getAmplificationParameter();
-  if (!ampCall.reverted) {
-    let value = ampCall.value.value0;
-    let precision = ampCall.value.value2;
-    let amp = value.div(precision);
-    pool.amp = amp;
-  }
+  pool.amp = getAmp(poolContract);
 
   pool.save();
 
@@ -154,13 +149,7 @@ export function handleNewMetaStablePool(event: PoolCreated): void {
     }
   }
 
-  let ampCall = poolContract.try_getAmplificationParameter();
-  if (!ampCall.reverted) {
-    let value = ampCall.value.value0;
-    let precision = ampCall.value.value2;
-    let amp = value.div(precision);
-    pool.amp = amp;
-  }
+  pool.amp = getAmp(poolContract as StablePool);
 
   pool.save();
 
