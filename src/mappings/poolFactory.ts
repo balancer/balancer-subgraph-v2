@@ -1,5 +1,5 @@
-import { ZERO_BD, VAULT_ADDRESS, PoolType } from './helpers/constants';
-import { newPoolEntity, createPoolTokenEntity, scaleDown } from './helpers/misc';
+import { ONE_BD, ZERO_BD, VAULT_ADDRESS, PoolType } from './helpers/constants';
+import { newPoolEntity, createPoolTokenEntity, scaleDown, loadPoolToken } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
@@ -146,6 +146,10 @@ export function handleNewMetaStablePool(event: PoolCreated): void {
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       createPoolTokenEntity(poolId.toHexString(), tokens[i]);
+
+      let poolToken = loadPoolToken(poolId.toHexString(), tokens[i]);
+      poolToken.priceRate = ONE_BD;
+      poolToken.save();
     }
   }
 
