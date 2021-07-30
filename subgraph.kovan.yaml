@@ -124,9 +124,9 @@ dataSources:
     name: MetaStablePoolFactory
     network: kovan
     source:
-      address: '0x66d954C6c5200c42a27a39230e905A648eB713AD'
+      address: '0x590E544e7Ca956Bb878F8C873E82e65550d67D2F'
       abi: MetaStablePoolFactory
-      startBlock: 26409138
+      startBlock: 26467363
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
