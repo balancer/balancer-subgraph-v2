@@ -15,7 +15,7 @@ import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/Conv
 import { PoolShare, Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
 
 import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown, loadPoolToken } from './helpers/misc';
-import { ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -88,6 +88,8 @@ export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
+  let blockTimestamp = event.block.timestamp.toI32();
+
   let providerId = poolId.toHexString().concat(event.params.token.toHexString());
   let provider = PriceRateProvider.load(providerId);
   if (provider == null) {
@@ -95,10 +97,10 @@ export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
     provider.poolId = poolId.toHexString();
     provider.token = event.params.token.toHexString();
 
-    // Remaining fields will be populated by `handlePriceRateCacheUpdated`
-    provider.rate = ZERO_BD;
-    provider.lastCached = 0;
-    provider.cacheExpiry = 0;
+    // Default to a rate of one, this should be updated in `handlePriceRateCacheUpdated` immediately
+    provider.rate = ONE_BD;
+    provider.lastCached = blockTimestamp;
+    provider.cacheExpiry = blockTimestamp + event.params.cacheDuration.toI32();
   }
 
   provider.address = event.params.provider;
