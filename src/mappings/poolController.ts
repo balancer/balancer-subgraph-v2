@@ -1,4 +1,4 @@
-import { BigInt } from '@graphprotocol/graph-ts';
+import { BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
@@ -6,10 +6,15 @@ import {
   LiquidityBootstrappingPool,
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
+import {
+  MetaStablePool,
+  PriceRateCacheUpdated,
+  PriceRateProviderSet,
+} from '../types/templates/MetaStablePool/MetaStablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
+import { PoolShare, Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
 
-import { PoolShare, Pool, GradualWeightUpdate } from '../types/schema';
-import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers/misc';
+import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown, loadPoolToken } from './helpers/misc';
 import { ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
 /************************************
@@ -69,6 +74,68 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
 
   pool.swapFee = scaleDown(event.params.swapFeePercentage, 18);
   pool.save();
+}
+
+/************************************
+ ******** PRICE RATE UPDATE *********
+ ************************************/
+
+export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = MetaStablePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let providerId = poolId.toHexString().concat(event.params.token.toHexString());
+  let provider = PriceRateProvider.load(providerId);
+  if (provider == null) {
+    provider = new PriceRateProvider(providerId);
+    provider.poolId = poolId.toHexString();
+    provider.token = event.params.token.toHexString();
+
+    // Remaining fields will be populated by `handlePriceRateCacheUpdated`
+    provider.rate = ZERO_BD;
+    provider.lastCached = 0;
+    provider.cacheExpiry = 0;
+  }
+
+  provider.address = event.params.provider;
+  provider.cacheDuration = event.params.cacheDuration.toI32();
+
+  provider.save();
+}
+
+export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = MetaStablePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let tokenAddress = event.params.token;
+  let providerId = poolId.toHexString().concat(tokenAddress.toHexString());
+  let provider = PriceRateProvider.load(providerId);
+  if (provider == null) {
+    log.warning('Provider not found in handlePriceRateCacheUpdated: {} {}', [
+      poolId.toHexString(),
+      event.params.token.toHexString(),
+    ]);
+    return;
+  }
+
+  provider.rate = scaleDown(event.params.rate, 18);
+  provider.lastCached = event.block.timestamp.toI32();
+  provider.cacheExpiry = event.block.timestamp.toI32() + provider.cacheDuration;
+
+  provider.save();
+
+  // Attach the rate onto the PoolToken entity as well
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  poolToken.priceRate = provider.rate;
+  poolToken.save();
 }
 
 /************************************

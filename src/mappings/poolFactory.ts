@@ -9,14 +9,17 @@ import { Balancer, Pool } from '../types/schema';
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
+import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
+import { MetaStablePool } from '../types/templates/MetaStablePool/MetaStablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
+import { getAmp } from './helpers/stable';
 
 function createNewWeightedPool(event: PoolCreated): string {
   let poolAddress: Address = event.params.pool;
@@ -108,17 +111,49 @@ export function handleNewStablePool(event: PoolCreated): void {
     }
   }
 
-  let ampCall = poolContract.try_getAmplificationParameter();
-  if (!ampCall.reverted) {
-    let value = ampCall.value.value0;
-    let precision = ampCall.value.value2;
-    let amp = value.div(precision);
-    pool.amp = amp;
-  }
+  pool.amp = getAmp(poolContract);
 
   pool.save();
 
   StablePoolTemplate.create(poolAddress);
+}
+
+// TODO: deduplicate code with Stable Pools
+export function handleNewMetaStablePool(event: PoolCreated): void {
+  let poolAddress: Address = event.params.pool;
+  let poolContract = MetaStablePool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let ownerCall = poolContract.try_getOwner();
+  let owner = ownerCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+  pool.poolType = PoolType.MetaStable;
+  pool.factory = event.address;
+  pool.owner = owner;
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    pool.tokensList = tokens as Bytes[];
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
+    }
+  }
+
+  pool.amp = getAmp(poolContract as StablePool);
+
+  pool.save();
+
+  MetaStablePoolTemplate.create(poolAddress);
 }
 
 export function handleNewCCPPool(event: PoolCreated): void {

@@ -18,9 +18,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { PoolType, ZERO_BD } from './helpers/constants';
-
-let ZERO = BigInt.fromI32(0);
+import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
 
 /************************************
  ******** INTERNAL BALANCES *********
