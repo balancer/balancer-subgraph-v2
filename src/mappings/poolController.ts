@@ -14,7 +14,14 @@ import {
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { PoolShare, Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
 
-import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown, loadPoolToken } from './helpers/misc';
+import {
+  tokenToDecimal,
+  createPoolShareEntity,
+  getPoolShareId,
+  scaleDown,
+  loadPoolToken,
+  getPoolTokenId,
+} from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
 /************************************
@@ -90,12 +97,13 @@ export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
 
   let blockTimestamp = event.block.timestamp.toI32();
 
-  let providerId = poolId.toHexString().concat(event.params.token.toHexString());
+  // Price rate providers and pooltokens share an ID
+  let providerId = getPoolTokenId(poolId.toHexString(), event.params.token);
   let provider = PriceRateProvider.load(providerId);
   if (provider == null) {
     provider = new PriceRateProvider(providerId);
     provider.poolId = poolId.toHexString();
-    provider.token = event.params.token.toHexString();
+    provider.token = providerId;
 
     // Default to a rate of one, this should be updated in `handlePriceRateCacheUpdated` immediately
     provider.rate = ONE_BD;
