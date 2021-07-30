@@ -14,7 +14,7 @@ import {
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { PoolShare, Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
 
-import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown } from './helpers/misc';
+import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown, loadPoolToken } from './helpers/misc';
 import { ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
 /************************************
@@ -115,7 +115,8 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let providerId = poolId.toHexString().concat(event.params.token.toHexString());
+  let tokenAddress = event.params.token;
+  let providerId = poolId.toHexString().concat(tokenAddress.toHexString());
   let provider = PriceRateProvider.load(providerId);
   if (provider == null) {
     log.warning('Provider not found in handlePriceRateCacheUpdated: {} {}', [
@@ -130,6 +131,11 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
   provider.cacheExpiry = event.block.timestamp.toI32() + provider.cacheDuration;
 
   provider.save();
+
+  // Attach the rate onto the PoolToken entity as well
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  poolToken.priceRate = provider.rate;
+  poolToken.save();
 }
 
 /************************************

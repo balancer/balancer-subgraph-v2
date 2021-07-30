@@ -78,6 +78,9 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
+
+  # MetaStablePool Only
+  priceRate: BigDecimal
 }
 
 type PriceRateProvider @entity {
