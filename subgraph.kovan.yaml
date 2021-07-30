@@ -123,15 +123,9 @@ dataSources:
     name: MetaStablePoolFactory
     network: kovan
     source:
-<<<<<<< HEAD
-      address: '0x590E544e7Ca956Bb878F8C873E82e65550d67D2F'
-      abi: MetaStablePoolFactory
-      startBlock: 26467363
-=======
       address: '0x66d954C6c5200c42a27a39230e905A648eB713AD'
       abi: MetaStablePoolFactory
       startBlock: 26409138
->>>>>>> Add support for tracking MetaStable Pools (#104)
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -147,13 +141,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: MetaStablePoolFactory
           file: ./abis/MetaStablePoolFactory.json
-<<<<<<< HEAD
-        - name: StablePool
-          file: ./abis/StablePool.json
-=======
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
->>>>>>> Add support for tracking MetaStable Pools (#104)
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewMetaStablePool
