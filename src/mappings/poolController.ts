@@ -14,16 +14,8 @@ import {
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { PoolShare, Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
 
-import {
-  tokenToDecimal,
-  createPoolShareEntity,
-  getPoolShareId,
-  scaleDown,
-  loadPoolToken,
-  getPoolTokenId,
-  loadPriceRateProvider,
-} from './helpers/misc';
-import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { tokenToDecimal, createPoolShareEntity, getPoolShareId, scaleDown, loadPoolToken } from './helpers/misc';
+import { ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -96,20 +88,17 @@ export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let blockTimestamp = event.block.timestamp.toI32();
-
-  let provider = loadPriceRateProvider(poolId.toHexString(), event.params.token);
+  let providerId = poolId.toHexString().concat(event.params.token.toHexString());
+  let provider = PriceRateProvider.load(providerId);
   if (provider == null) {
-    // Price rate providers and pooltokens share an ID
-    let providerId = getPoolTokenId(poolId.toHexString(), event.params.token);
     provider = new PriceRateProvider(providerId);
     provider.poolId = poolId.toHexString();
-    provider.token = providerId;
+    provider.token = event.params.token.toHexString();
 
-    // Default to a rate of one, this should be updated in `handlePriceRateCacheUpdated` immediately
-    provider.rate = ONE_BD;
-    provider.lastCached = blockTimestamp;
-    provider.cacheExpiry = blockTimestamp + event.params.cacheDuration.toI32();
+    // Remaining fields will be populated by `handlePriceRateCacheUpdated`
+    provider.rate = ZERO_BD;
+    provider.lastCached = 0;
+    provider.cacheExpiry = 0;
   }
 
   provider.address = event.params.provider;
@@ -126,7 +115,9 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let provider = loadPriceRateProvider(poolId.toHexString(), event.params.token);
+  let tokenAddress = event.params.token;
+  let providerId = poolId.toHexString().concat(tokenAddress.toHexString());
+  let provider = PriceRateProvider.load(providerId);
   if (provider == null) {
     log.warning('Provider not found in handlePriceRateCacheUpdated: {} {}', [
       poolId.toHexString(),
@@ -142,7 +133,7 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
   provider.save();
 
   // Attach the rate onto the PoolToken entity as well
-  let poolToken = loadPoolToken(poolId.toHexString(), event.params.token);
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
   poolToken.priceRate = provider.rate;
   poolToken.save();
 }

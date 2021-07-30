@@ -9,6 +9,17 @@ type Balancer @entity {
   totalSwapFee: BigDecimal!
 }
 
+<<<<<<< HEAD
+=======
+enum PoolType {
+  Weighted
+  Stable
+  MetaStable
+  Element
+  LiquidityBootstrapping
+}
+
+>>>>>>> Add support for tracking MetaStable Pools (#104)
 type Pool @entity {
   id: ID!
   address: Bytes!
@@ -71,6 +82,20 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
+
+  # MetaStablePool Only
+  priceRate: BigDecimal
+}
+
+type PriceRateProvider @entity {
+  id: ID!
+  poolId: Pool!
+  token: PoolToken!
+  address: Bytes!
+  rate: BigDecimal!
+  lastCached: Int!
+  cacheDuration: Int!
+  cacheExpiry: Int!
 }
 
 type PriceRateProvider @entity {

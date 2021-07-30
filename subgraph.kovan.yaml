@@ -123,9 +123,15 @@ dataSources:
     name: MetaStablePoolFactory
     network: kovan
     source:
+<<<<<<< HEAD
       address: '0x590E544e7Ca956Bb878F8C873E82e65550d67D2F'
       abi: MetaStablePoolFactory
       startBlock: 26467363
+=======
+      address: '0x66d954C6c5200c42a27a39230e905A648eB713AD'
+      abi: MetaStablePoolFactory
+      startBlock: 26409138
+>>>>>>> Add support for tracking MetaStable Pools (#104)
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -141,8 +147,13 @@ dataSources:
           file: ./abis/ERC20.json
         - name: MetaStablePoolFactory
           file: ./abis/MetaStablePoolFactory.json
+<<<<<<< HEAD
         - name: StablePool
           file: ./abis/StablePool.json
+=======
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
+>>>>>>> Add support for tracking MetaStable Pools (#104)
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewMetaStablePool
@@ -249,6 +260,38 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: PriceRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated
+  - kind: ethereum/contract
+    name: MetaStablePool
+    network: kovan
+    source:
+      abi: MetaStablePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - PriceRateProvider
+      abis:
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
