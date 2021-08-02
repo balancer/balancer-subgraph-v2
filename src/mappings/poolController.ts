@@ -21,6 +21,7 @@ import {
   scaleDown,
   loadPoolToken,
   getPoolTokenId,
+  loadPriceRateProvider,
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
@@ -97,10 +98,10 @@ export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
 
   let blockTimestamp = event.block.timestamp.toI32();
 
-  // Price rate providers and pooltokens share an ID
-  let providerId = getPoolTokenId(poolId.toHexString(), event.params.token);
-  let provider = PriceRateProvider.load(providerId);
+  let provider = loadPriceRateProvider(poolId.toHexString(), event.params.token);
   if (provider == null) {
+    // Price rate providers and pooltokens share an ID
+    let providerId = getPoolTokenId(poolId.toHexString(), event.params.token);
     provider = new PriceRateProvider(providerId);
     provider.poolId = poolId.toHexString();
     provider.token = providerId;
@@ -125,9 +126,7 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let tokenAddress = event.params.token;
-  let providerId = poolId.toHexString().concat(tokenAddress.toHexString());
-  let provider = PriceRateProvider.load(providerId);
+  let provider = loadPriceRateProvider(poolId.toHexString(), event.params.token);
   if (provider == null) {
     log.warning('Provider not found in handlePriceRateCacheUpdated: {} {}', [
       poolId.toHexString(),
@@ -143,7 +142,7 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
   provider.save();
 
   // Attach the rate onto the PoolToken entity as well
-  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  let poolToken = loadPoolToken(poolId.toHexString(), event.params.token);
   poolToken.priceRate = provider.rate;
   poolToken.save();
 }
