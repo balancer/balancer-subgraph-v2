@@ -271,6 +271,9 @@ templates:
       file: ./src/mappings/poolController.ts
       entities:
         - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
         - GradualWeightUpdate
       abis:
         - name: WeightedPool
