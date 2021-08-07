@@ -1,8 +1,16 @@
+<<<<<<< HEAD:src/mappings/helpers/constants.ts
 import { BigDecimal, BigInt, Address, dataSource } from '@graphprotocol/graph-ts';
+=======
+import { BigDecimal, Address, dataSource, BigInt } from '@graphprotocol/graph-ts';
+>>>>>>> 72eb880... feat: add entities:src/mappings/constants.ts
 
 export let ZERO = BigInt.fromI32(0);
 export let ZERO_BD = BigDecimal.fromString('0');
+<<<<<<< HEAD:src/mappings/helpers/constants.ts
 export let ONE_BD = BigDecimal.fromString('1');
+=======
+export let ZERO_BI = BigInt.fromI32(0);
+>>>>>>> 72eb880... feat: add entities:src/mappings/constants.ts
 
 export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
