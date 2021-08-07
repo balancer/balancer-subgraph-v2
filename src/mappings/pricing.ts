@@ -3,6 +3,7 @@ import { getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
+import { getToken } from './helpers/token.helpers';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -49,14 +50,18 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
       // Possibly update latest price
       if (latestPrice == null) {
+        // load in token entity to link up latest price relationship
+        let token = getToken(tokenAddress);
         latestPrice = new LatestPrice(latestPriceId);
         latestPrice.asset = tokenAddress;
         latestPrice.pricingAsset = pricingAsset;
+        token.latestPrice = latestPrice.id;
       }
       latestPrice.price = price;
       latestPrice.block = block;
       latestPrice.poolId = poolId;
       latestPrice.save();
+
     }
     if (price) {
       let poolTokenValue = price.times(poolTokenQuantity);
