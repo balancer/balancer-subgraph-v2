@@ -1,8 +1,8 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider, BalancerSnapshot, UserSnapshot } from '../../types/schema';
-import { ERC20 } from '../../types/Vault/ERC20';
-import { ZERO, ZERO_BD } from './constants';
-import { getToken } from './tokens';
+import { Pool, User, PoolToken, PoolShare, PoolSnapshot, LatestPrice, Token } from '../types/schema';
+import { ERC20 } from '../types/Vault/ERC20';
+import { ZERO_BD } from './constants';
+import { getToken } from './helpers/token.helpers';
 
 const DAY = 24 * 60 * 60;
 
@@ -62,15 +62,6 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
   return poolId.concat('-').concat(tokenAddress.toHexString());
 }
 
-export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken | null {
-  return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
-}
-
-export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
-  let poolTokenId = getPoolTokenId(poolId, tokenAddress);
-
-  // ensures that a token entity is created to track against
-  // pool tokens
   let token = getToken(tokenAddress);
 
   let poolToken = new PoolToken(poolTokenId);

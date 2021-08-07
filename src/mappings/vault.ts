@@ -19,7 +19,8 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
+import { ZERO_BD } from './constants';
+import { getToken } from './helpers/token.helpers';
 
 import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
 import { getBalancerSnapshot } from './helpers/misc';
@@ -88,8 +89,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let joinAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let poolToken = loadPoolToken(poolId, tokenAddress);
-    let joinAmount = scaleDown(amounts[i], poolToken.decimals);
+    let token = getToken(tokenAddress);
+    let joinAmount = scaleDown(amounts[i], token.decimals);
     joinAmounts[i] = joinAmount;
   }
   join.type = 'Join';
@@ -102,7 +103,9 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let poolToken = loadPoolToken(poolId, tokenAddress);
+    let token = getToken(tokenAddress);
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+    let poolToken = PoolToken.load(poolTokenId);
     // adding initial liquidity
     if (poolToken == null) {
       throw new Error('poolToken not found');
@@ -147,9 +150,8 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   let exitAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let poolToken = loadPoolToken(poolId, tokenAddress);
-
-    let exitAmount = scaleDown(amounts[i].neg(), poolToken.decimals);
+    let token = getToken(tokenAddress);
+    let exitAmount = scaleDown(amounts[i].neg(), token.decimals);
     exitAmounts[i] = exitAmount;
   }
   exit.type = 'Exit';
@@ -162,7 +164,9 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let poolToken = loadPoolToken(poolId, tokenAddress);
+    let token = getToken(tokenAddress);
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+    let poolToken = PoolToken.load(poolTokenId);
     // adding initial liquidity
     if (poolToken == null) {
       throw new Error('poolToken not found');
@@ -201,7 +205,9 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   //let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
 
-  let poolToken = loadPoolToken(poolId.toHexString(), token);
+  let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+  let poolToken = PoolToken.load(poolTokenId);
+  let token = getToken(tokenAddress);
 
   let managedDeltaAmount = tokenToDecimal(managedDelta, token.decimals);
 
@@ -245,8 +251,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   let swapId = transactionHash.toHexString().concat(logIndex.toString());
   let swap = new Swap(swapId);
 
-  let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress);
-  let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress);
+  let tokenIn = getToken(tokenInAddress);
+  let tokenOut = getToken(tokenOutAddress);
+
+  let poolTokenInId = getPoolTokenId(poolId.toHexString(), tokenInAddress);
+  let poolTokenIn = PoolToken.load(poolTokenInId);
 
   let tokenIn = getToken(tokenInAddress);
   let tokenOut = getToken(tokenOutAddress);

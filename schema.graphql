@@ -3,14 +3,7 @@ type _Schema_
     name: "tokenSearch"
     language: en
     algorithm: rank
-    include: [{ entity: "Token", fields: [{ name: "name" }, { name: "symbol" }] }]
-  )
-
-  @fulltext(
-    name: "poolSearch"
-    language: en
-    algorithm: rank
-    include: [{ entity: "Pool", fields: [{ name: "name" }] }]
+    include: [{ entity: "Pool", fields: [{ name: "name" }, { name: "symbol" }] }]
   )
 
 # Vault
@@ -101,31 +94,16 @@ type LatestPrice @entity {
   block: BigInt! # last block that prices were updated
 }
 
-# ERC20 Token with information about the token on the Balancer V2 platform
 type Token @entity {
   id: ID!
   symbol: String
   name: String
   decimals: Int!
-  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
-  totalBalanceNotional: BigDecimal!
-  totalVolumeUSD: BigDecimal! # total volume in fiat (usd)
-  totalVolumeNotional: BigDecimal!
-  totalSwapCount: BigInt!
+  totalBalance: BigDecimal! # total balance of tokens across balancer
+  totalVolume: BigDecimal! # total volume in fiat (usd)
+  totalTxCount: BigInt!
   poolCount: BigInt! # number of pools with this token
   latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
-}
-
-type TokenSnapshot @entity {
-  id: ID! # token address + dayId
-  token: Token!
-  timestamp: BigInt! # timestamp representing the start of day in UTC
-  totalVolumeUSD: BigDecimal! # amount of volume the token has moved on this day
-  totalVolumeNotional: BigDecimal! # underyling asset volume
-  poolCount: BigInt! # number of pools with this token
-  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
-  totalBalanceNotional: BigDecimal! # underlying asset balance
-  totalSwapCount: BigInt!
 }
 
 type PoolToken @entity {
