@@ -1,3 +1,11 @@
+type _Schema_
+  @fulltext(
+    name: "tokenSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Pool", fields: [{ name: "name" }, { name: "symbol" }] }]
+  )
+
 # Vault
 type Balancer @entity {
   id: ID!
@@ -9,8 +17,6 @@ type Balancer @entity {
   totalSwapFee: BigDecimal!
 }
 
-<<<<<<< HEAD
-=======
 enum PoolType {
   Weighted
   Stable
@@ -19,7 +25,6 @@ enum PoolType {
   LiquidityBootstrapping
 }
 
->>>>>>> Add support for tracking MetaStable Pools (#104)
 type Pool @entity {
   id: ID!
   address: Bytes!
@@ -68,14 +73,31 @@ type Pool @entity {
   unitSeconds: BigInt
 }
 
-type PoolToken @entity {
+type LatestPrice @entity {
   id: ID!
-  poolId: Pool!
+  asset: Bytes!
+  pricingAsset: Bytes! # address of stable asset
+  poolId: Pool! # last pool which set price
+  price:  BigDecimal! # all the latest prices
+  block: BigInt! # last block that prices were updated
+}
+
+type Token @entity {
+  id: ID!
   symbol: String
   name: String
   decimals: Int!
-  address: String!
-  priceRate: BigDecimal!
+  totalBalance: BigDecimal! # total balance of tokens across balancer
+  totalVolume: BigDecimal! # total volume in fiat (usd)
+  totalTxCount: BigInt!
+  poolCount: BigInt! # number of pools with this token
+  latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
+}
+
+type PoolToken @entity {
+  id: ID!
+  poolId: Pool!
+  token: Token!
   balance: BigDecimal!
   invested: BigDecimal!
   investments: [Investment!] @derivedFrom(field: "poolTokenId")
@@ -170,15 +192,6 @@ type JoinExit @entity {
   user: User!
   timestamp: Int!
   tx: Bytes!
-}
-
-type LatestPrice @entity {
-  id: ID!
-  asset: Bytes!
-  pricingAsset: Bytes! # address of stable asset
-  poolId: Pool! # last pool which set price
-  price: BigDecimal! # all the latest prices
-  block: BigInt! # last block that prices were updated
 }
 
 type PoolHistoricalLiquidity @entity {

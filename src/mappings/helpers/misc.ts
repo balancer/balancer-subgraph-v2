@@ -1,7 +1,8 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ONE_BD, ZERO_BD } from './constants';
+import { ZERO_BD } from './constants';
+import { getToken } from './token.helpers';
 
 const DAY = 24 * 60 * 60;
 
@@ -68,46 +69,12 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
 export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
   let poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
-  let token = ERC20.bind(tokenAddress);
-  let symbol = '';
-  let name = '';
-  let decimals = 18;
-
-  let symbolCall = token.try_symbol();
-  let nameCall = token.try_name();
-  let decimalCall = token.try_decimals();
-
-  if (symbolCall.reverted) {
-    // TODO
-    //const symbolBytesCall = tokenBytes.try_symbol();
-    //if (!symbolBytesCall.reverted) {
-    //symbol = symbolBytesCall.value.toString();
-  } else {
-    symbol = symbolCall.value;
-  }
-
-  if (nameCall.reverted) {
-    //const nameBytesCall = tokenBytes.try_name();
-    //if (!nameBytesCall.reverted) {
-    //name = nameBytesCall.value.toString();
-    //}
-  } else {
-    name = nameCall.value;
-  }
-
-  if (!decimalCall.reverted) {
-    decimals = decimalCall.value;
-  }
+  let token = getToken(tokenAddress);
 
   let poolToken = new PoolToken(poolTokenId);
   poolToken.poolId = poolId;
-  poolToken.address = tokenAddress.toHexString();
-  poolToken.name = name;
-  poolToken.symbol = symbol;
-  poolToken.decimals = decimals;
-  poolToken.balance = ZERO_BD;
   poolToken.invested = ZERO_BD;
-  poolToken.priceRate = ONE_BD;
+  poolToken.token = token.id;
   poolToken.save();
 }
 
