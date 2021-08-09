@@ -19,7 +19,7 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './helpers/constants';
-import { getToken, uptickSwapsForToken } from './helpers/token.helpers';
+import { SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/token.helpers';
 
 let ZERO = BigInt.fromI32(0);
 
@@ -299,6 +299,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   // updates token snapshots as well
   uptickSwapsForToken(tokenInAddress, event);
   uptickSwapsForToken(tokenOutAddress, event);
+
+  // update volume and balances for the tokens
+  // updates token snapshots as well
+  updateTokenBalances(tokenInAddress, swapValueUSD, tokenAmountIn, SWAP_IN, event);
+  updateTokenBalances(tokenOutAddress, swapValueUSD, tokenAmountOut, SWAP_OUT, event);
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
