@@ -27,7 +27,7 @@ import {
 } from './helpers';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
-import { getToken } from './helpers/token.helpers';
+import { getToken, updateTokenStatistics, uptickSwapsForToken } from './helpers/token.helpers';
 
 let ZERO = BigInt.fromI32(0);
 
@@ -122,6 +122,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     poolToken.save();
   }
 
+  // TODO: why are we looping twice?
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
@@ -306,6 +307,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   let newOutAmount = poolTokenOut.balance.minus(tokenAmountOut);
   poolTokenOut.balance = newOutAmount;
   poolTokenOut.save();
+
+  // update swap counts for token
+  // updates token snapshots as well
+  uptickSwapsForToken(tokenInAddress, event);
+  uptickSwapsForToken(tokenOutAddress, event);
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
