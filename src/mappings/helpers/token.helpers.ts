@@ -2,8 +2,7 @@ import { Address, BigDecimal, BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { Token, TokenSnapshot } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ZERO_BD, ZERO_BI } from '../constants';
-import { scaleDown } from '../helpers';
+import { ZERO_BD, ZERO_BI } from './constants';
 
 export function createToken(tokenAddress: Address): Token {
   let erc20token = ERC20.bind(tokenAddress);
@@ -47,7 +46,7 @@ export function getToken(tokenAddress: Address): Token {
 export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): TokenSnapshot {
   let timestamp = event.block.timestamp.toI32();
   let dayID = timestamp / 86400;
-  let id = tokenAddress + '-' + dayID.toString();
+  let id = tokenAddress.toHexString() + '-' + dayID.toString();
   let dayData = TokenSnapshot.load(id);
   let dayStartTimestamp = dayID * 86400;
   let token = getToken(tokenAddress);
