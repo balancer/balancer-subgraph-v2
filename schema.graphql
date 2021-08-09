@@ -12,6 +12,7 @@ type Balancer @entity {
 enum PoolType {
   Weighted
   Stable
+  MetaStable
   Element
   LiquidityBootstrapping
 }
@@ -54,6 +55,9 @@ type Pool @entity {
   # StablePool Only
   amp: BigInt
 
+  # MetaStablePool Only
+  priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
+
   # ConvergentCurvePool (Element) Only
   principalToken: Bytes
   baseToken: Bytes
@@ -74,6 +78,20 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
+
+  # MetaStablePool Only
+  priceRate: BigDecimal
+}
+
+type PriceRateProvider @entity {
+  id: ID!
+  poolId: Pool!
+  token: PoolToken!
+  address: Bytes!
+  rate: BigDecimal!
+  lastCached: Int!
+  cacheDuration: Int!
+  cacheExpiry: Int!
 }
 
 type PoolShare @entity {

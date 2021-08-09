@@ -1,6 +1,8 @@
-import { BigDecimal, Address, dataSource } from '@graphprotocol/graph-ts';
+import { BigDecimal, BigInt, Address, dataSource } from '@graphprotocol/graph-ts';
 
+export let ZERO = BigInt.fromI32(0);
 export let ZERO_BD = BigDecimal.fromString('0');
+export let ONE_BD = BigDecimal.fromString('1');
 
 export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -8,6 +10,7 @@ export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export namespace PoolType {
   export const Weighted = 'Weighted';
   export const Stable = 'Stable';
+  export const MetaStable = 'MetaStable';
   export const Element = 'Element';
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
 }

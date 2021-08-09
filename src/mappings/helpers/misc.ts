@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot } from '../../types/schema';
+import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { ZERO_BD } from './constants';
 
@@ -108,6 +108,10 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   poolToken.balance = ZERO_BD;
   poolToken.invested = ZERO_BD;
   poolToken.save();
+}
+
+export function loadPriceRateProvider(poolId: string, tokenAddress: Address): PriceRateProvider | null {
+  return PriceRateProvider.load(getPoolTokenId(poolId, tokenAddress));
 }
 
 export function getTokenPriceId(

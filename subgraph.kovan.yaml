@@ -121,6 +121,33 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePool
   - kind: ethereum/contract
+    name: MetaStablePoolFactory
+    network: kovan
+    source:
+      address: '0x590E544e7Ca956Bb878F8C873E82e65550d67D2F'
+      abi: MetaStablePoolFactory
+      startBlock: 26467363
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: MetaStablePoolFactory
+          file: ./abis/MetaStablePoolFactory.json
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewMetaStablePool
+  - kind: ethereum/contract
     name: LiquidityBootstrappingPoolFactory
     network: kovan
     source:
@@ -201,6 +228,38 @@ templates:
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
+    name: MetaStablePool
+    network: kovan
+    source:
+      abi: MetaStablePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - PriceRateProvider
+      abis:
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: PriceRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated
+  - kind: ethereum/contract
     name: LiquidityBootstrappingPool
     network: kovan
     source:
@@ -212,6 +271,9 @@ templates:
       file: ./src/mappings/poolController.ts
       entities:
         - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
         - GradualWeightUpdate
       abis:
         - name: WeightedPool
