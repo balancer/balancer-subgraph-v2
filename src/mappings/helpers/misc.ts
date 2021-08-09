@@ -62,6 +62,8 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
   return poolId.concat('-').concat(tokenAddress.toHexString());
 }
 
+  // ensures that a token entity is created to track against
+  // pool tokens
   let token = getToken(tokenAddress);
 
   let poolToken = new PoolToken(poolTokenId);

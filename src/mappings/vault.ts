@@ -20,7 +20,7 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './constants';
-import { getToken } from './helpers/token.helpers';
+import { getToken, updateTokenStatistics, uptickSwapsForToken } from './helpers/token.helpers';
 
 import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
 import { getBalancerSnapshot } from './helpers/misc';
@@ -318,23 +318,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   // updates token snapshots as well
   uptickSwapsForToken(tokenInAddress, event);
   uptickSwapsForToken(tokenOutAddress, event);
-
-  // update volume and balances for the tokens
-  // updates token snapshots as well
-  updateTokenBalances(tokenInAddress, swapValueUSD, tokenAmountIn, SWAP_IN, event);
-  updateTokenBalances(tokenOutAddress, swapValueUSD, tokenAmountOut, SWAP_OUT, event);
-
-  let user = getUser(event.transaction.from);
-  let userSnapshot = getUserSnapshot(event.transaction.from, blockTimestamp);
-
-  user.totalSwapVolume = user.totalSwapVolume.plus(swapValueUSD);
-  user.totalSwapFee = user.totalSwapFee.plus(swapFeesUSD);
-
-  userSnapshot.totalSwapVolume = user.totalSwapVolume.plus(swapValueUSD);
-  userSnapshot.totalSwapFee = user.totalSwapFee.plus(swapFeesUSD);
-
-  user.save();
-  userSnapshot.save();
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
