@@ -69,6 +69,8 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
 export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
   let poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
+  // ensures that a token entity is created to track against
+  // pool tokens
   let token = getToken(tokenAddress);
 
   let poolToken = new PoolToken(poolTokenId);
