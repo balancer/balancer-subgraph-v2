@@ -20,7 +20,9 @@ type Balancer @entity {
 enum PoolType {
   Weighted
   Stable
+  MetaStable
   Element
+  LiquidityBootstrapping
 }
 
 type Pool @entity {
@@ -31,6 +33,7 @@ type Pool @entity {
   strategyType: Int!
   symbol: String
   name: String
+  swapEnabled: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
 
@@ -39,7 +42,7 @@ type Pool @entity {
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
   totalShares: BigDecimal!
-  
+
   createTime: Int!
   swapsCount: BigInt!
   holdersCount: BigInt!
@@ -54,8 +57,14 @@ type Pool @entity {
   shares: [PoolShare!] @derivedFrom(field: "poolId")
   historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
 
+  # LiquidityBootstrappingPool Only
+  weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
+
   # StablePool Only
   amp: BigInt
+
+  # MetaStablePool Only
+  priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
 
   # ConvergentCurvePool (Element) Only
   principalToken: Bytes
@@ -110,6 +119,20 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
+
+  # MetaStablePool Only
+  priceRate: BigDecimal
+}
+
+type PriceRateProvider @entity {
+  id: ID!
+  poolId: Pool!
+  token: PoolToken!
+  address: Bytes!
+  rate: BigDecimal!
+  lastCached: Int!
+  cacheDuration: Int!
+  cacheExpiry: Int!
 }
 
 type PoolShare @entity {
@@ -121,16 +144,27 @@ type PoolShare @entity {
 
 type User @entity {
   id: ID!
-  sharesOwned: [PoolShare!]  @derivedFrom(field: "userAddress")
-  swaps: [Swap!]  @derivedFrom(field: "userAddress")
-  userInternalBalances: [UserInternalBalance!]  @derivedFrom(field: "userAddress")
+  sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
+  swaps: [Swap!] @derivedFrom(field: "userAddress")
+  userInternalBalances: [UserInternalBalance!]
+    @derivedFrom(field: "userAddress")
 }
 
 type UserInternalBalance @entity {
-  id:  ID!
+  id: ID!
   userAddress: User
   token: Bytes!
   balance: BigDecimal!
+}
+
+type GradualWeightUpdate @entity {
+  id: ID!
+  poolId: Pool!
+  scheduledTimestamp: Int!
+  startTimestamp: Int!
+  endTimestamp: Int!
+  startWeights: [BigInt!]!
+  endWeights: [BigInt!]!
 }
 
 type Swap @entity {

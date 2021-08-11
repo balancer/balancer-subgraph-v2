@@ -1,8 +1,8 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot, LatestPrice, Token } from '../types/schema';
-import { ERC20 } from '../types/Vault/ERC20';
+import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider } from '../../types/schema';
+import { ERC20 } from '../../types/Vault/ERC20';
 import { ZERO_BD } from './constants';
-import { getToken } from './helpers/token.helpers';
+import { getToken } from './token.helpers';
 
 const DAY = 24 * 60 * 60;
 
@@ -41,9 +41,6 @@ export function createPoolShareEntity(pool: Pool, lpAddress: Address): void {
   poolShare.save();
 }
 
-export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
-  return poolId.concat('-').concat(tokenAddress.toHexString());
-}
 // pool entity when created
 export function newPoolEntity(poolId: string): Pool {
   let pool = new Pool(poolId);
@@ -61,6 +58,14 @@ export function newPoolEntity(poolId: string): Pool {
   return pool;
 }
 
+export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
+  return poolId.concat('-').concat(tokenAddress.toHexString());
+}
+
+export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken | null {
+  return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
+}
+
 export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
   let poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
@@ -73,6 +78,10 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   poolToken.invested = ZERO_BD;
   poolToken.token = token.id;
   poolToken.save();
+}
+
+export function loadPriceRateProvider(poolId: string, tokenAddress: Address): PriceRateProvider | null {
+  return PriceRateProvider.load(getPoolTokenId(poolId, tokenAddress));
 }
 
 export function getTokenPriceId(
@@ -107,8 +116,8 @@ export function createPoolSnapshot(poolId: string, timestamp: i32): void {
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
     let tokenAddress = Address.fromString(token.toHexString());
-    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
-    let poolToken = PoolToken.load(poolTokenId);
+    let poolToken = loadPoolToken(poolId, tokenAddress);
+
     amounts[i] = poolToken.balance;
   }
 

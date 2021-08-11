@@ -1,9 +1,8 @@
-import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './constants';
-import { getTokenPriceId, getPoolTokenId } from './helpers';
+import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './helpers/constants';
+import { getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
-import { Pool, PoolToken, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD } from './constants';
-import { getToken } from './helpers/token.helpers';
+import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
+import { ZERO_BD } from './helpers/constants';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -31,8 +30,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   for (let j: i32 = 0; j < tokensList.length; j++) {
     let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
 
-    let poolTokenId: string = getPoolTokenId(poolId, tokenAddress);
-    let poolToken = PoolToken.load(poolTokenId);
+    let poolToken = loadPoolToken(poolId, tokenAddress);
 
     if (tokenAddress == pricingAsset) {
       poolValue = poolValue.plus(poolToken.balance);
