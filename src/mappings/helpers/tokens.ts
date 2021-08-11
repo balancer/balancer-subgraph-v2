@@ -2,7 +2,7 @@ import { Address, BigDecimal, BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { Token, TokenSnapshot } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ZERO_BD, ZERO_BI } from './constants';
+import { ZERO, ZERO_BD } from './constants';
 
 export function createToken(tokenAddress: Address): Token {
   let erc20token = ERC20.bind(tokenAddress);
@@ -25,10 +25,10 @@ export function createToken(tokenAddress: Address): Token {
   token.decimals = decimals;
   token.totalBalanceUSD = ZERO_BD;
   token.totalBalanceNotional = ZERO_BD;
-  token.totalSwapCount = ZERO_BI;
+  token.totalSwapCount = ZERO;
   token.totalVolumeUSD = ZERO_BD;
   token.totalVolumeNotional = ZERO_BD;
-  token.poolCount = ZERO_BI;
+  token.poolCount = ZERO;
   token.save();
   return token;
 }
@@ -37,7 +37,7 @@ export function createToken(tokenAddress: Address): Token {
 // with erc20 values
 export function getToken(tokenAddress: Address): Token {
   let token = Token.load(tokenAddress.toHexString());
-  if (!token) {
+  if (token == null) {
     token = createToken(tokenAddress);
   }
   return token!;
@@ -49,17 +49,17 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
   let id = tokenAddress.toHexString() + '-' + dayID.toString();
   let dayData = TokenSnapshot.load(id);
 
-  if (!dayData) {
+  if (dayData == null) {
     let dayStartTimestamp = dayID * 86400;
     let token = getToken(tokenAddress);
     dayData = new TokenSnapshot(id);
     dayData.timestamp = BigInt.fromI32(dayStartTimestamp);
-    dayData.totalSwapCount = ZERO_BI;
+    dayData.totalSwapCount = ZERO;
     dayData.totalBalanceUSD = ZERO_BD;
     dayData.totalBalanceNotional = ZERO_BD;
     dayData.totalVolumeUSD = ZERO_BD;
     dayData.totalVolumeNotional = ZERO_BD;
-    dayData.poolCount = ZERO_BI;
+    dayData.poolCount = ZERO;
     dayData.token = token.id;
     dayData.save();
   }
