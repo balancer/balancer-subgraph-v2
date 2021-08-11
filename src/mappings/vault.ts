@@ -19,7 +19,7 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { PoolType, ZERO_BD } from './helpers/constants';
-import { SWAP_IN, SWAP_OUT, updateTokenBalances, getToken, uptickSwapsForToken } from './helpers/token.helpers';
+import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
 
 let ZERO = BigInt.fromI32(0);
 
