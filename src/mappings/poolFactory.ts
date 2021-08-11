@@ -20,6 +20,7 @@ import { MetaStablePool } from '../types/templates/MetaStablePool/MetaStablePool
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
 import { getAmp } from './helpers/stable';
+import { getBalancerSnapshot } from './helpers/bvault';
 
 function createNewWeightedPool(event: PoolCreated): string {
   let poolAddress: Address = event.params.pool;
@@ -259,8 +260,13 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.save();
 
     let vault = findOrInitializeVault();
+    let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp);
+
     vault.poolCount += 1;
     vault.save();
+
+    vaultSnapshot.poolCount += 1;
+    vaultSnapshot.save();
   }
 
   return pool;
