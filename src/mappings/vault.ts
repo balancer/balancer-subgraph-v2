@@ -22,7 +22,7 @@ import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
 
 import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
-import { getBalancerSnapshot } from './helpers/misc';
+import { getBalancerSnapshot } from './helpers/bvault';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -119,7 +119,11 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
+<<<<<<< HEAD
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
+=======
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
+>>>>>>> update: add bal snapshot entities
       break;
     }
   }
@@ -179,7 +183,11 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
+<<<<<<< HEAD
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
+=======
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
+>>>>>>> update: add bal snapshot entities
       break;
     }
   }
@@ -342,7 +350,11 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
+<<<<<<< HEAD
     updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp, event.transaction.from);
+=======
+    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp);
+>>>>>>> update: add bal snapshot entities
   }
   if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
@@ -357,7 +369,11 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
+<<<<<<< HEAD
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp, event.transaction.from);
+=======
+    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
+>>>>>>> update: add bal snapshot entities
   }
 
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);

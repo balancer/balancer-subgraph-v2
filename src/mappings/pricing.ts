@@ -4,6 +4,7 @@ import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
 import { getToken } from './helpers/tokens';
+import { getBalancerSnapshot } from './helpers/bvault';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -12,7 +13,7 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32, userAddress: Address): void {
+export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: BigInt): void {
   let pool = Pool.load(poolId);
   if (pool == null) return;
 
@@ -85,6 +86,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   if (newPoolLiquidity && oldPoolLiquidity) {
     let vault = Balancer.load('2');
     let vaultSnapshot = getBalancerSnapshot('2', timestamp);
+<<<<<<< HEAD
     let userSnapshot = getUserSnapshot(userAddress, timestamp);
     let user = getUser(userAddress);
     let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
@@ -93,6 +95,16 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
     user.totalLiquidity = user.totalLiquidity.plus(liquidityChange);
     userSnapshot.totalLiquidity = userSnapshot.totalLiquidity.plus(liquidityChange);
+=======
+    let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
+
+    vaultSnapshot.totalLiquidity = vaultSnapshot.totalLiquidity.plus(liquidityChange);
+    vaultSnapshot.save();
+
+    vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
+    vault.save();
+
+>>>>>>> update: add bal snapshot entities
     pool.totalLiquidity = newPoolLiquidity;
     
     vault.save();
