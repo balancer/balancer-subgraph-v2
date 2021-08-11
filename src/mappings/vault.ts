@@ -251,11 +251,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   let swapId = transactionHash.toHexString().concat(logIndex.toString());
   let swap = new Swap(swapId);
 
-  let tokenIn = getToken(tokenInAddress);
-  let tokenOut = getToken(tokenOutAddress);
-
   let poolTokenInId = getPoolTokenId(poolId.toHexString(), tokenInAddress);
   let poolTokenIn = PoolToken.load(poolTokenInId);
+
+  let tokenIn = getToken(tokenInAddress);
+  let tokenOut = getToken(tokenOutAddress);
 
   let tokenIn = getToken(tokenInAddress);
   let tokenOut = getToken(tokenOutAddress);

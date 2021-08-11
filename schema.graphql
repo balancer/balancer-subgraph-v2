@@ -111,6 +111,7 @@ type Token @entity {
 
 type TokenSnapshot @entity {
   id: ID! # token address + dayId
+  token: Token!
   timestamp: BigInt! # timestamp representing the start of day in UTC
   totalVolumeUSD: BigDecimal! # amount of volume the token has moved on this day
   totalVolumeNotional: BigDecimal! # underyling asset volume
@@ -118,7 +119,6 @@ type TokenSnapshot @entity {
   totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
   totalBalanceNotional: BigDecimal! # underlying asset balance
   totalSwapCount: BigInt!
-  token: Token!
 }
 
 type PoolToken @entity {
