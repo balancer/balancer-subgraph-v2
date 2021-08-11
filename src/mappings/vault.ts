@@ -19,7 +19,7 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO_BD } from './helpers/constants';
-import { SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/token.helpers';
+import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/token.helpers';
 
 let ZERO = BigInt.fromI32(0);
 
@@ -246,6 +246,9 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress);
   let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress);
+
+  let tokenIn = getToken(tokenInAddress);
+  let tokenOut = getToken(tokenOutAddress);
 
   let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, tokenIn.decimals);
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, tokenOut.decimals);
