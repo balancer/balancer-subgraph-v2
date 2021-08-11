@@ -20,7 +20,8 @@ import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
 
-let ZERO = BigInt.fromI32(0);
+import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
+import { getBalancerSnapshot } from './helpers/bvault';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -115,7 +116,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
       break;
     }
   }
@@ -174,7 +175,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
       break;
     }
   }
@@ -285,9 +286,15 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // update vault total swap volume
   let vault = Balancer.load('2');
+  let vaultSnapshot = getBalancerSnapshot(vault.id, blockTimestamp);
+
   vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
   vault.totalSwapFee = vault.totalSwapFee.plus(swapFeesUSD);
   vault.save();
+
+  vaultSnapshot.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
+  vaultSnapshot.totalSwapFee = vault.totalSwapFee.plus(swapFeesUSD);
+  vaultSnapshot.save();
 
   let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
   poolTokenIn.balance = newInAmount;
@@ -326,7 +333,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
-    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress);
+    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp);
   }
   if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
@@ -341,7 +348,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
-    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress);
+    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
   }
 
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);

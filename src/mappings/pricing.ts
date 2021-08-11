@@ -3,11 +3,7 @@ import { getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
-<<<<<<< HEAD
-import { getToken } from './helpers/token.helpers';
-=======
 import { getToken } from './helpers/tokens';
->>>>>>> fix: build
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {

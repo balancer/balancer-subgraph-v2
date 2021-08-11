@@ -3,7 +3,14 @@ type _Schema_
     name: "tokenSearch"
     language: en
     algorithm: rank
-    include: [{ entity: "Pool", fields: [{ name: "name" }, { name: "symbol" }] }]
+    include: [{ entity: "Token", fields: [{ name: "name" }, { name: "symbol" }] }]
+  )
+
+  @fulltext(
+    name: "poolSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Pool", fields: [{ name: "name" }] }]
   )
 
 # Vault
@@ -12,6 +19,16 @@ type Balancer @entity {
   poolCount: Int!
   pools: [Pool!] @derivedFrom(field: "vaultID")
 
+  totalLiquidity: BigDecimal!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}
+
+type BalancerSnapshot @entity {
+  id: ID!
+  vault: Balancer!
+  timestamp: BigInt!
+  poolCount: Int!
   totalLiquidity: BigDecimal!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
