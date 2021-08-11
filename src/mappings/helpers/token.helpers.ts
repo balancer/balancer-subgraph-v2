@@ -48,10 +48,10 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
   let dayID = timestamp / 86400;
   let id = tokenAddress.toHexString() + '-' + dayID.toString();
   let dayData = TokenSnapshot.load(id);
-  let dayStartTimestamp = dayID * 86400;
-  let token = getToken(tokenAddress);
-
+  
   if (!dayData) {
+    let dayStartTimestamp = dayID * 86400;
+    let token = getToken(tokenAddress);
     dayData = new TokenSnapshot(id);
     dayData.timestamp = BigInt.fromI32(dayStartTimestamp);
     dayData.totalSwapCount = ZERO_BI;
@@ -64,7 +64,7 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     dayData.save();
   }
 
-  return dayData!;
+  return dayData as TokenSnapshot;
 }
 
 export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event): void {
