@@ -19,8 +19,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { ZERO_BD } from './constants';
-import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, updateTokenStatistics, uptickSwapsForToken } from './helpers/token.helpers';
+import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
 
 import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
 import { getBalancerSnapshot } from './helpers/misc';
