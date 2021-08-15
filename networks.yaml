@@ -130,9 +130,10 @@ polygon:
   # MetaStablePoolFactory:
   #   address: ""
   #   startBlock: 0
-  LiquidityBootstrappingPoolFactory:
-    address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
-    startBlock: 17116402
+  # LBPs are disabled due to indexing errors
+  # LiquidityBootstrappingPoolFactory:
+  #   address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
+  #   startBlock: 17116402
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
