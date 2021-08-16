@@ -1,9 +1,10 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './helpers/constants';
-import { getTokenPriceId, loadPoolToken } from './helpers/misc';
+import { getTokenPriceId, getUser, getUserSnapshot, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
 import { getToken } from './helpers/tokens';
+import { getBalancerSnapshot } from './helpers/misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -12,7 +13,7 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): void {
+export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32, userAddress: Address): void {
   let pool = Pool.load(poolId);
   if (pool == null) return;
 
@@ -84,10 +85,21 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   if (newPoolLiquidity && oldPoolLiquidity) {
     let vault = Balancer.load('2');
+    let vaultSnapshot = getBalancerSnapshot('2', timestamp);
+    let userSnapshot = getUserSnapshot(userAddress, timestamp);
+    let user = getUser(userAddress);
     let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
+
+    vaultSnapshot.totalLiquidity = vaultSnapshot.totalLiquidity.plus(liquidityChange);
     vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
-    vault.save();
+    user.totalLiquidity = user.totalLiquidity.plus(liquidityChange);
+    userSnapshot.totalLiquidity = userSnapshot.totalLiquidity.plus(liquidityChange);
     pool.totalLiquidity = newPoolLiquidity;
+    
+    vault.save();
+    vaultSnapshot.save();
+    user.save();
+    userSnapshot.save();
     pool.save();
   }
 }
