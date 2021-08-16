@@ -22,7 +22,7 @@ import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
 
 import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
-import { getBalancerSnapshot } from './helpers/bvault';
+import { getBalancerSnapshot } from './helpers/misc';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -120,10 +120,14 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
 =======
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
 >>>>>>> update: add bal snapshot entities
+=======
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
+>>>>>>> update: add remaining entities
       break;
     }
   }
@@ -184,10 +188,14 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
 =======
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
 >>>>>>> update: add bal snapshot entities
+=======
+      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
+>>>>>>> update: add remaining entities
       break;
     }
   }
@@ -331,6 +339,18 @@ export function handleSwapEvent(event: SwapEvent): void {
   updateTokenBalances(tokenInAddress, swapValueUSD, tokenAmountIn, SWAP_IN, event);
   updateTokenBalances(tokenOutAddress, swapValueUSD, tokenAmountOut, SWAP_OUT, event);
 
+  let user = getUser(event.transaction.from);
+  let userSnapshot = getUserSnapshot(event.transaction.from, blockTimestamp);
+
+  user.totalSwapVolume = user.totalSwapVolume.plus(swapValueUSD);
+  user.totalSwapFee = user.totalSwapFee.plus(swapFeesUSD);
+
+  userSnapshot.totalSwapVolume = user.totalSwapVolume.plus(swapValueUSD);
+  userSnapshot.totalSwapFee = user.totalSwapFee.plus(swapFeesUSD);
+
+  user.save();
+  userSnapshot.save();
+
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
   }
@@ -351,10 +371,14 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
 <<<<<<< HEAD
+<<<<<<< HEAD
     updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp, event.transaction.from);
 =======
     updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp);
 >>>>>>> update: add bal snapshot entities
+=======
+    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp, event.transaction.from);
+>>>>>>> update: add remaining entities
   }
   if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
@@ -370,10 +394,14 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
 <<<<<<< HEAD
+<<<<<<< HEAD
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp, event.transaction.from);
 =======
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
 >>>>>>> update: add bal snapshot entities
+=======
+    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp, event.transaction.from);
+>>>>>>> update: add remaining entities
   }
 
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);
