@@ -1,7 +1,7 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider } from '../../types/schema';
+import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider, BalancerSnapshot, UserSnapshot } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ZERO_BD } from './constants';
+import { ZERO, ZERO_BD } from './constants';
 import { getToken } from './tokens';
 
 const DAY = 24 * 60 * 60;
@@ -29,7 +29,7 @@ export function getPoolShareId(poolControllerAddress: Address, lpAddress: Addres
 }
 
 export function createPoolShareEntity(pool: Pool, lpAddress: Address): void {
-  createUserEntity(lpAddress);
+  getUser(lpAddress);
   let poolControllerAddress = Address.fromString(pool.address.toHexString());
 
   let id = getPoolShareId(poolControllerAddress, lpAddress);
@@ -146,10 +146,53 @@ export function saveSwapToSnapshot(poolAddress: string, timestamp: i32, volume: 
   snapshot.save();
 }
 
-export function createUserEntity(address: Address): void {
+export function getUser(address: Address): User {
   let addressHex = address.toHex();
-  if (User.load(addressHex) == null) {
+  let user = User.load(addressHex);
+  if (user == null) {
     let user = new User(addressHex);
     user.save();
   }
+  return user as User;
+}
+
+export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSnapshot {
+  let dayID = timestamp / 86400;
+  let id = vaultId + '-' + dayID.toString();
+  let snapshot = BalancerSnapshot.load(id);
+
+  if (snapshot == null) {
+      let dayStartTimestamp = dayID * 86400;
+      snapshot = new BalancerSnapshot(id);
+      snapshot.poolCount = 0;
+      snapshot.totalLiquidity = ZERO_BD;
+      snapshot.totalSwapFee = ZERO_BD;
+      snapshot.totalSwapVolume = ZERO_BD;
+      snapshot.vault = vaultId;
+      snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
+      snapshot.save();
+  }
+
+  return snapshot as BalancerSnapshot;
+}
+
+export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnapshot {
+  let dayID = timestamp / 86400;
+  let id = userAddress.toHexString() + '-' + dayID.toString();
+  let snapshot = UserSnapshot.load(id);
+
+  if (snapshot == null) {
+      let dayStartTimestamp = dayID * 86400;
+      snapshot = new UserSnapshot(id);
+
+      snapshot.totalLiquidity = ZERO_BD;
+      snapshot.totalSwapFee = ZERO_BD;
+      snapshot.totalSwapVolume = ZERO_BD;
+      snapshot.user = userAddress.toHexString();
+
+      snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
+      snapshot.save();
+  }
+
+  return snapshot as UserSnapshot;
 }

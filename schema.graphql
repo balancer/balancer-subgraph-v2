@@ -18,6 +18,7 @@ type Balancer @entity {
   id: ID!
   poolCount: Int!
   pools: [Pool!] @derivedFrom(field: "vaultID")
+  snapshots: [BalancerSnapshot!] @derivedFrom(field: "vault")
 
   totalLiquidity: BigDecimal!
   totalSwapVolume: BigDecimal!
@@ -73,6 +74,7 @@ type Pool @entity {
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
   historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
+  snapshots: [PoolSnapshot!] @derivedFrom(field: "pool")
 
   # LiquidityBootstrappingPool Only
   weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
@@ -174,8 +176,21 @@ type User @entity {
   id: ID!
   sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
   swaps: [Swap!] @derivedFrom(field: "userAddress")
+  snapshots: [UserSnapshot!] @derivedFrom(field: "user")
   userInternalBalances: [UserInternalBalance!]
     @derivedFrom(field: "userAddress")
+  totalLiquidity: BigDecimal!
+  totalSwapFee: BigDecimal!
+  totalSwapVolume: BigDecimal!
+}
+
+type UserSnapshot @entity {
+  id: ID!
+  timestamp: BigInt
+  user: User!
+  totalLiquidity: BigDecimal!
+  totalSwapFee: BigDecimal!
+  totalSwapVolume: BigDecimal!
 }
 
 type UserInternalBalance @entity {
