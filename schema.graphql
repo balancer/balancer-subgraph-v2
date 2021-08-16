@@ -3,7 +3,9 @@ type _Schema_
     name: "tokenSearch"
     language: en
     algorithm: rank
-    include: [{ entity: "Pool", fields: [{ name: "name" }, { name: "symbol" }] }]
+    include: [
+      { entity: "Pool", fields: [{ name: "name" }, { name: "symbol" }] }
+    ]
   )
 
 # Vault
@@ -11,7 +13,18 @@ type Balancer @entity {
   id: ID!
   poolCount: Int!
   pools: [Pool!] @derivedFrom(field: "vaultID")
+  snapshots: [BalancerSnapshot!] @derivedFrom(field: "vault")
 
+  totalLiquidity: BigDecimal!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}
+
+type BalancerSnapshot @entity {
+  id: ID!
+  vault: Balancer!
+  timestamp: BigInt!
+  poolCount: Int!
   totalLiquidity: BigDecimal!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
@@ -48,6 +61,7 @@ type Pool @entity {
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
   historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
+  snapshots: [PoolSnapshot!] @derivedFrom(field: "pool")
 
   # LiquidityBootstrappingPool Only
   weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
@@ -73,7 +87,7 @@ type LatestPrice @entity {
   asset: Bytes!
   pricingAsset: Bytes! # address of stable asset
   poolId: Pool! # last pool which set price
-  price:  BigDecimal! # all the latest prices
+  price: BigDecimal! # all the latest prices
   block: BigInt! # last block that prices were updated
 }
 
@@ -142,8 +156,21 @@ type User @entity {
   id: ID!
   sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
   swaps: [Swap!] @derivedFrom(field: "userAddress")
+  snapshots: [UserSnapshot!] @derivedFrom(field: "user")
   userInternalBalances: [UserInternalBalance!]
     @derivedFrom(field: "userAddress")
+  totalLiquidity: BigDecimal!
+  totalSwapFee: BigDecimal!
+  totalSwapVolume: BigDecimal!
+}
+
+type UserSnapshot @entity {
+  id: ID!
+  timestamp: BigInt
+  user: User!
+  totalLiquidity: BigDecimal!
+  totalSwapFee: BigDecimal!
+  totalSwapVolume: BigDecimal!
 }
 
 type UserInternalBalance @entity {

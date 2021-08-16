@@ -1,9 +1,10 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
-import { getTokenPriceId, loadPoolToken } from './helpers/misc';
+import { getTokenPriceId, getUser, getUserSnapshot, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
 import { getToken } from './helpers/tokens';
+import { getBalancerSnapshot } from './helpers/misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -12,7 +13,13 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): boolean {
+export function updatePoolLiquidity(
+  poolId: string,
+  block: BigInt,
+  pricingAsset: Address,
+  timestamp: i32,
+  userAddress: Address
+): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
 
@@ -61,7 +68,6 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       latestPrice.block = block;
       latestPrice.poolId = poolId;
       latestPrice.save();
-
     }
     if (price) {
       let poolTokenValue = price.times(poolTokenQuantity);
@@ -71,6 +77,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
   let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset) || ZERO_BD;
+  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
 
   // If the pool isn't empty but we have a zero USD value then it's likely that we have a bad pricing asset
   // Don't commit any changes and just report the failure.
@@ -89,15 +96,26 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   phl.poolShareValue = poolValue.div(pool.totalShares);
   phl.save();
 
+  let userSnapshot = getUserSnapshot(userAddress, timestamp);
+  userSnapshot.totalLiquidity = userSnapshot.totalLiquidity.plus(liquidityChange);
+  userSnapshot.save();
+
+  let vaultSnapshot = getBalancerSnapshot('2', timestamp);
+  vaultSnapshot.totalLiquidity = vaultSnapshot.totalLiquidity.plus(liquidityChange);
+  vaultSnapshot.save();
+
   // Update pool stats
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
 
   // Update global stats
   let vault = Balancer.load('2');
-  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
   vault.save();
+
+  let user = getUser(userAddress);
+  user.totalLiquidity = user.totalLiquidity.plus(liquidityChange);
+  user.save();
 
   return true;
 }
