@@ -137,3 +137,26 @@ polygon:
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
+arbitrum:
+  network: arbitrum-one
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 222832
+  WeightedPoolFactory:
+    address: "0x7dFdEF5f355096603419239CE743BfaF1120312B"
+    startBlock: 222863
+  WeightedPool2TokenFactory:
+    address: "0xCF0a32Bbef8F064969F21f7e02328FB577382018"
+    startBlock: 222864
+  StablePoolFactory:
+    address: "0x2433477A10FC5d31B9513C638F19eE85CaED53Fd"
+    startBlock: 222866
+  MetaStablePoolFactory:
+    address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
+    startBlock: 222868
+  LiquidityBootstrappingPoolFactory:
+    address: "0x142B9666a0a3A30477b052962ddA81547E7029ab"
+    startBlock: 222870
+  # ConvergentPoolFactory:
+  #   address: ""
+  #   startBlock: 0
