@@ -20,7 +20,7 @@ enum PoolType {
 type Pool @entity {
   id: ID!
   address: Bytes!
-  poolType: PoolType
+  poolType: String
   factory: Bytes
   strategyType: Int!
   symbol: String
