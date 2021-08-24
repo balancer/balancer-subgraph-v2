@@ -22,7 +22,6 @@ dataSources:
         - PoolToken
         - User
         - UserInternalBalance
-        - PoolTokenizer
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -124,9 +123,9 @@ dataSources:
     name: MetaStablePoolFactory
     network: mainnet
     source:
-      address: '0x66d954C6c5200c42a27a39230e905A648eB713AD' # TODO: UPDATE
+      address: '0x67d27634E44793fE63c467035E31ea8635117cd4'
       abi: MetaStablePoolFactory
-      startBlock: 12871780 # TODO: UPDATE
+      startBlock: 13011941
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -142,8 +141,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: MetaStablePoolFactory
           file: ./abis/MetaStablePoolFactory.json
-        - name: MetaStablePool
-          file: ./abis/MetaStablePool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewMetaStablePool
@@ -167,6 +166,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: LiquidityBootstrappingPoolFactory
           file: ./abis/LiquidityBootstrappingPoolFactory.json
         - name: LiquidityBootstrappingPool
@@ -243,10 +244,10 @@ templates:
         - Swap
         - PoolToken
       abis:
+        - name: WeightedPool # Necessary for Transfer handler
+          file: ./abis/WeightedPool.json
         - name: StablePool
           file: ./abis/StablePool.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
@@ -254,6 +255,38 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: MetaStablePool
+    network: mainnet
+    source:
+      abi: MetaStablePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - PriceRateProvider
+      abis:
+        - name: WeightedPool # Necessary for Transfer handler
+          file: ./abis/WeightedPool.json
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: PriceRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: mainnet

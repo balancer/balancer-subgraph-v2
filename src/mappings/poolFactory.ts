@@ -256,12 +256,12 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     if (!symbolCall.reverted) {
       pool.symbol = symbolCall.value;
     }
+    pool.save();
 
     let vault = findOrInitializeVault();
     vault.poolCount += 1;
     vault.save();
   }
 
-  pool.save();
   return pool;
 }
