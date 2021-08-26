@@ -9,18 +9,10 @@ type Balancer @entity {
   totalSwapFee: BigDecimal!
 }
 
-enum PoolType {
-  Weighted
-  Stable
-  MetaStable
-  Element
-  LiquidityBootstrapping
-}
-
 type Pool @entity {
   id: ID!
   address: Bytes!
-  poolType: PoolType
+  poolType: String
   factory: Bytes
   strategyType: Int!
   symbol: String

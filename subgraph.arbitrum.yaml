@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Vault
-    network: kovan
+    network: arbitrum-one
     source:
       address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
-      startBlock: 24226726
+      startBlock: 222832
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -40,11 +40,11 @@ dataSources:
           handler: handleInternalBalanceChange
   - kind: ethereum/contract
     name: WeightedPoolFactory
-    network: kovan
+    network: arbitrum-one
     source:
-      address: '0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9'
+      address: '0x7dFdEF5f355096603419239CE743BfaF1120312B'
       abi: WeightedPoolFactory
-      startBlock: 24226729
+      startBlock: 222863
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -67,11 +67,11 @@ dataSources:
           handler: handleNewWeightedPool
   - kind: ethereum/contract
     name: WeightedPool2TokenFactory
-    network: kovan
+    network: arbitrum-one
     source:
-      address: '0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0'
+      address: '0xCF0a32Bbef8F064969F21f7e02328FB577382018'
       abi: WeightedPoolFactory
-      startBlock: 24226729
+      startBlock: 222864
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -94,11 +94,11 @@ dataSources:
           handler: handleNewWeightedPool
   - kind: ethereum/contract
     name: StablePoolFactory
-    network: kovan
+    network: arbitrum-one
     source:
-      address: '0x751dfDAcE1AD995fF13c927f6f761C6604532c79'
+      address: '0x2433477A10FC5d31B9513C638F19eE85CaED53Fd'
       abi: StablePoolFactory
-      startBlock: 25266622
+      startBlock: 222866
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -121,11 +121,11 @@ dataSources:
           handler: handleNewStablePool
   - kind: ethereum/contract
     name: MetaStablePoolFactory
-    network: kovan
+    network: arbitrum-one
     source:
-      address: '0x590E544e7Ca956Bb878F8C873E82e65550d67D2F'
+      address: '0xEBFD5681977E38Af65A7487DC70B8221D089cCAD'
       abi: MetaStablePoolFactory
-      startBlock: 26467363
+      startBlock: 222868
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -148,11 +148,11 @@ dataSources:
           handler: handleNewMetaStablePool
   - kind: ethereum/contract
     name: LiquidityBootstrappingPoolFactory
-    network: kovan
+    network: arbitrum-one
     source:
-      address: '0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e'
+      address: '0x142B9666a0a3A30477b052962ddA81547E7029ab'
       abi: LiquidityBootstrappingPoolFactory
-      startBlock: 26275220
+      startBlock: 222870
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -178,7 +178,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: WeightedPool
-    network: kovan
+    network: arbitrum-one
     source:
       abi: WeightedPool
     mapping:
@@ -203,7 +203,7 @@ templates:
           handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: StablePool
-    network: kovan
+    network: arbitrum-one
     source:
       abi: StablePool
     mapping:
@@ -230,7 +230,7 @@ templates:
           handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: MetaStablePool
-    network: kovan
+    network: arbitrum-one
     source:
       abi: MetaStablePool
     mapping:
@@ -262,7 +262,7 @@ templates:
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
-    network: kovan
+    network: arbitrum-one
     source:
       abi: LiquidityBootstrappingPool
     mapping:
