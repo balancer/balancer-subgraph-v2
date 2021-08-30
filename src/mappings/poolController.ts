@@ -6,6 +6,7 @@ import {
   LiquidityBootstrappingPool,
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
+import { ManagementFeePercentageSet } from '../types/templates/InvestmentPool/InvestmentPool';
 import {
   MetaStablePool,
   PriceRateCacheUpdated,
@@ -81,6 +82,24 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
   pool.swapFee = scaleDown(event.params.swapFeePercentage, 18);
+  pool.save();
+}
+
+/************************************
+ ********* MANAGEMENT FEES **********
+ ************************************/
+
+export function handleManagementFeeSet(event: ManagementFeePercentageSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.managementFee = scaleDown(event.params.managementFee, 18);
   pool.save();
 }
 

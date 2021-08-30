@@ -1,4 +1,6 @@
-import { ZERO_BD, VAULT_ADDRESS, PoolType } from './helpers/constants';
+import { ZERO_BD, VAULT_ADDRESS } from './helpers/constants';
+import { PoolType } from './helpers/pools';
+
 import { newPoolEntity, createPoolTokenEntity, scaleDown } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
@@ -12,6 +14,7 @@ import { StablePool as StablePoolTemplate } from '../types/templates';
 import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
+import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
@@ -65,6 +68,11 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
   createWeightedLikePool(event, PoolType.LiquidityBootstrapping);
   LiquidityBootstrappingPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewInvestmentPool(event: PoolCreated): void {
+  createWeightedLikePool(event, PoolType.Investment);
+  InvestmentPoolTemplate.create(event.params.pool);
 }
 
 function createStableLikePool(event: PoolCreated, poolType: string): string {

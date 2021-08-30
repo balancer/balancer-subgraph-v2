@@ -6,15 +6,6 @@ export let ONE_BD = BigDecimal.fromString('1');
 
 export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace PoolType {
-  export const Weighted = 'Weighted';
-  export const Stable = 'Stable';
-  export const MetaStable = 'MetaStable';
-  export const Element = 'Element';
-  export const LiquidityBootstrapping = 'LiquidityBootstrapping';
-}
-
 export class AddressByNetwork {
   public mainnet: string;
   public kovan: string;

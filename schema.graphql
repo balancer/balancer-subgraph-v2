@@ -55,6 +55,9 @@ type Pool @entity {
   baseToken: Bytes
   expiryTime: BigInt
   unitSeconds: BigInt
+
+  # InvestmentPool Only
+  managementFee: BigDecimal
 }
 
 type PoolToken @entity {
