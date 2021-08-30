@@ -1,7 +1,7 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ZERO_BD } from './constants';
+import { ONE_BD, ZERO_BD } from './constants';
 
 const DAY = 24 * 60 * 60;
 
@@ -107,6 +107,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   poolToken.decimals = decimals;
   poolToken.balance = ZERO_BD;
   poolToken.invested = ZERO_BD;
+  poolToken.priceRate = ONE_BD;
   poolToken.save();
 }
 
