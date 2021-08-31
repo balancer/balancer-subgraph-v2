@@ -18,6 +18,16 @@ type Balancer @entity {
   totalSwapFee: BigDecimal!
 }
 
+type BalancerSnapshot @entity {
+  id: ID!
+  vault: Balancer!
+  timestamp: BigInt!
+  poolCount: Int!
+  totalLiquidity: BigDecimal!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}
+
 type Pool @entity {
   id: ID!
   address: Bytes!
