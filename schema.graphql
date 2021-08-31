@@ -109,6 +109,7 @@ type PoolToken @entity {
   poolId: Pool!
   token: Token!
   balance: BigDecimal!
+  priceRate: BigDecimal!
   invested: BigDecimal!
   investments: [Investment!] @derivedFrom(field: "poolTokenId")
 
