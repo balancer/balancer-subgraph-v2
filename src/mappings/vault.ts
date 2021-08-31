@@ -20,7 +20,8 @@ import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { isVariableWeightPool } from './helpers/pools';
 import { ZERO, ZERO_BD } from './helpers/constants';
-import { getToken, uptickSwapsForToken } from './helpers/token.helpers';
+import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
+
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -209,7 +210,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   let managedDelta = event.params.managedDelta;
 
   let token = getToken(tokenAddress);
-  let poolToken = loadPoolToken(poolId.toHexString(), token);
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
 
   let managedDeltaAmount = tokenToDecimal(managedDelta, token.decimals);
 
@@ -309,6 +310,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   // updates token snapshots as well
   uptickSwapsForToken(tokenInAddress, event);
   uptickSwapsForToken(tokenOutAddress, event);
+
+  // update volume and balances for the tokens
+  // updates token snapshots as well
+  updateTokenBalances(tokenInAddress, swapValueUSD, tokenAmountIn, SWAP_IN, event);
+  updateTokenBalances(tokenOutAddress, swapValueUSD, tokenAmountOut, SWAP_OUT, event);
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
