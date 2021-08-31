@@ -1,9 +1,9 @@
-import * as fs from 'fs-extra';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as glob from 'glob';
 
-const coreArtifactPath = path.resolve(__dirname, '../../core/pkg/core/artifacts');
-const outputPath = path.resolve(__dirname, '../abis');
+const coreArtifactPath = __dirname + '/../../core/pkg/core/artifacts';
+const outputPath = __dirname + '/../abis';
 
 const abiJSONfilenames = [
   'Vault',

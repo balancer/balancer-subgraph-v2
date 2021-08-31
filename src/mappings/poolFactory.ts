@@ -257,7 +257,6 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     if (!symbolCall.reverted) {
       pool.symbol = symbolCall.value;
     }
-    pool.save();
 
     let vault = findOrInitializeVault();
     let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp);
@@ -269,5 +268,6 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     vaultSnapshot.save();
   }
 
+  pool.save();
   return pool;
 }

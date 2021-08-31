@@ -22,6 +22,7 @@ dataSources:
         - PoolToken
         - User
         - UserInternalBalance
+        - PoolTokenizer
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -141,8 +142,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: MetaStablePoolFactory
           file: ./abis/MetaStablePoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewMetaStablePool
@@ -170,8 +171,6 @@ dataSources:
           file: ./abis/WeightedPool.json
         - name: LiquidityBootstrappingPoolFactory
           file: ./abis/LiquidityBootstrappingPoolFactory.json
-        - name: LiquidityBootstrappingPool
-          file: ./abis/LiquidityBootstrappingPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewLiquidityBootstrappingPool
@@ -217,10 +216,10 @@ templates:
         - Swap
         - PoolToken
       abis:
-        - name: WeightedPool # Necessary for Transfer handler
-          file: ./abis/WeightedPool.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
@@ -249,10 +248,10 @@ templates:
         - PoolToken
         - PriceRateProvider
       abis:
-        - name: WeightedPool # Necessary for Transfer handler
-          file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
