@@ -123,9 +123,9 @@ dataSources:
     name: MetaStablePoolFactory
     network: mainnet
     source:
-      address: '0x67d27634E44793fE63c467035E31ea8635117cd4'
+      address: '0x66d954C6c5200c42a27a39230e905A648eB713AD' # TODO: UPDATE
       abi: MetaStablePoolFactory
-      startBlock: 13011941
+      startBlock: 12871780 # TODO: UPDATE
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

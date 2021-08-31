@@ -117,15 +117,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-<<<<<<< HEAD
-<<<<<<< HEAD
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
-=======
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
->>>>>>> update: add bal snapshot entities
-=======
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
->>>>>>> update: add remaining entities
       break;
     }
   }
@@ -170,13 +162,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-<<<<<<< HEAD
-    let token = getToken(tokenAddress);
-    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
-    let poolToken = PoolToken.load(poolTokenId);
-=======
     let poolToken = loadPoolToken(poolId, tokenAddress);
->>>>>>> Revert "Merge branch 'add-qol-entities' of github.com:1saf/balancer-subgraph-v2 into add-qol-entities"
     // adding initial liquidity
     if (poolToken == null) {
       throw new Error('poolToken not found');
@@ -190,15 +176,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-<<<<<<< HEAD
-<<<<<<< HEAD
       updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
-=======
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
->>>>>>> update: add bal snapshot entities
-=======
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp, event.params.liquidityProvider);
->>>>>>> update: add remaining entities
       break;
     }
   }
@@ -223,13 +201,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   //let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
 
-<<<<<<< HEAD
-  let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
-  let poolToken = PoolToken.load(poolTokenId);
-  let token = getToken(tokenAddress);
-=======
   let poolToken = loadPoolToken(poolId.toHexString(), token);
->>>>>>> Revert "Merge branch 'add-qol-entities' of github.com:1saf/balancer-subgraph-v2 into add-qol-entities"
 
   let managedDeltaAmount = tokenToDecimal(managedDelta, token.decimals);
 
@@ -273,11 +245,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   let swapId = transactionHash.toHexString().concat(logIndex.toString());
   let swap = new Swap(swapId);
 
-  let poolTokenInId = getPoolTokenId(poolId.toHexString(), tokenInAddress);
-  let poolTokenIn = PoolToken.load(poolTokenInId);
-
-  let tokenIn = getToken(tokenInAddress);
-  let tokenOut = getToken(tokenOutAddress);
+  let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress);
+  let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress);
 
   let tokenIn = getToken(tokenInAddress);
   let tokenOut = getToken(tokenOutAddress);
@@ -377,15 +346,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
-<<<<<<< HEAD
-<<<<<<< HEAD
     updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp, event.transaction.from);
-=======
-    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp);
->>>>>>> update: add bal snapshot entities
-=======
-    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp, event.transaction.from);
->>>>>>> update: add remaining entities
   }
   if (isPricingAsset(tokenOutAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
@@ -400,15 +361,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
-<<<<<<< HEAD
-<<<<<<< HEAD
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp, event.transaction.from);
-=======
-    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
->>>>>>> update: add bal snapshot entities
-=======
-    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp, event.transaction.from);
->>>>>>> update: add remaining entities
   }
 
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);

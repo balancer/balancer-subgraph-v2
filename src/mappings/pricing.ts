@@ -86,8 +86,6 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   if (newPoolLiquidity && oldPoolLiquidity) {
     let vault = Balancer.load('2');
     let vaultSnapshot = getBalancerSnapshot('2', timestamp);
-<<<<<<< HEAD
-<<<<<<< HEAD
     let userSnapshot = getUserSnapshot(userAddress, timestamp);
     let user = getUser(userAddress);
     let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
@@ -96,23 +94,6 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
     user.totalLiquidity = user.totalLiquidity.plus(liquidityChange);
     userSnapshot.totalLiquidity = userSnapshot.totalLiquidity.plus(liquidityChange);
-=======
-=======
-    let userSnapshot = getUserSnapshot(userAddress, timestamp);
-    let user = getUser(userAddress);
->>>>>>> update: add remaining entities
-    let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
-
-    vaultSnapshot.totalLiquidity = vaultSnapshot.totalLiquidity.plus(liquidityChange);
-    vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
-<<<<<<< HEAD
-    vault.save();
-
->>>>>>> update: add bal snapshot entities
-=======
-    user.totalLiquidity = user.totalLiquidity.plus(liquidityChange);
-    userSnapshot.totalLiquidity = userSnapshot.totalLiquidity.plus(liquidityChange);
->>>>>>> update: add remaining entities
     pool.totalLiquidity = newPoolLiquidity;
     
     vault.save();

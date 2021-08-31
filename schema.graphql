@@ -35,6 +35,16 @@ type BalancerSnapshot @entity {
   totalSwapFee: BigDecimal!
 }
 
+type BalancerSnapshot @entity {
+  id: ID!
+  vault: Balancer!
+  timestamp: BigInt!
+  poolCount: Int!
+  totalLiquidity: BigDecimal!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}
+
 enum PoolType {
   Weighted
   Stable
