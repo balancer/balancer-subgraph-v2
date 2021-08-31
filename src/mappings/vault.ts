@@ -88,8 +88,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let joinAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let token = getToken(tokenAddress);
-    let joinAmount = scaleDown(amounts[i], token.decimals);
+    let poolToken = loadPoolToken(poolId, tokenAddress);
+    let joinAmount = scaleDown(amounts[i], poolToken.decimals);
     joinAmounts[i] = joinAmount;
   }
   join.type = 'Join';
@@ -102,7 +102,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let token = getToken(tokenAddress);
     let poolToken = loadPoolToken(poolId, tokenAddress);
     // adding initial liquidity
     if (poolToken == null) {
@@ -148,8 +147,9 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   let exitAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let token = getToken(tokenAddress);
-    let exitAmount = scaleDown(amounts[i].neg(), token.decimals);
+    let poolToken = loadPoolToken(poolId, tokenAddress);
+
+    let exitAmount = scaleDown(amounts[i].neg(), poolToken.decimals);
     exitAmounts[i] = exitAmount;
   }
   exit.type = 'Exit';
@@ -162,7 +162,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let token = getToken(tokenAddress);
     let poolToken = loadPoolToken(poolId, tokenAddress);
     // adding initial liquidity
     if (poolToken == null) {
@@ -202,8 +201,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   //let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
 
-  let token = getToken(tokenAddress);
-  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  let poolToken = loadPoolToken(poolId.toHexString(), token);
 
   let managedDeltaAmount = tokenToDecimal(managedDelta, token.decimals);
 
