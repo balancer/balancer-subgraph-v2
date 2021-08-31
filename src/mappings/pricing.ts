@@ -50,7 +50,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       price = latestPrice.price;
     }
     // note that we can only meaningfully report liquidity once assets are traded with
-    // the pricing assetd
+    // the pricing asset
     if (tokenPrice) {
       //value in terms of priceableAsset
       price = tokenPrice.price;
