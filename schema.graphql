@@ -35,16 +35,6 @@ type BalancerSnapshot @entity {
   totalSwapFee: BigDecimal!
 }
 
-type BalancerSnapshot @entity {
-  id: ID!
-  vault: Balancer!
-  timestamp: BigInt!
-  poolCount: Int!
-  totalLiquidity: BigDecimal!
-  totalSwapVolume: BigDecimal!
-  totalSwapFee: BigDecimal!
-}
-
 enum PoolType {
   Weighted
   Stable
@@ -151,17 +141,6 @@ type PoolToken @entity {
 
   # MetaStablePool Only
   priceRate: BigDecimal
-}
-
-type PriceRateProvider @entity {
-  id: ID!
-  poolId: Pool!
-  token: PoolToken!
-  address: Bytes!
-  rate: BigDecimal!
-  lastCached: Int!
-  cacheDuration: Int!
-  cacheExpiry: Int!
 }
 
 type PriceRateProvider @entity {
