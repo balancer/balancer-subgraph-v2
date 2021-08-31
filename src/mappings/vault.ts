@@ -88,8 +88,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let joinAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let token = getToken(tokenAddress);
-    let joinAmount = scaleDown(amounts[i], token.decimals);
+    let poolToken = loadPoolToken(poolId, tokenAddress);
+    let joinAmount = scaleDown(amounts[i], poolToken.decimals);
     joinAmounts[i] = joinAmount;
   }
   join.type = 'Join';
@@ -102,9 +102,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let token = getToken(tokenAddress);
-    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
-    let poolToken = PoolToken.load(poolTokenId);
+    let poolToken = loadPoolToken(poolId, tokenAddress);
     // adding initial liquidity
     if (poolToken == null) {
       throw new Error('poolToken not found');
@@ -157,8 +155,9 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   let exitAmounts = new Array<BigDecimal>(amounts.length);
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
-    let token = getToken(tokenAddress);
-    let exitAmount = scaleDown(amounts[i].neg(), token.decimals);
+    let poolToken = loadPoolToken(poolId, tokenAddress);
+
+    let exitAmount = scaleDown(amounts[i].neg(), poolToken.decimals);
     exitAmounts[i] = exitAmount;
   }
   exit.type = 'Exit';
@@ -171,9 +170,13 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
+<<<<<<< HEAD
     let token = getToken(tokenAddress);
     let poolTokenId = getPoolTokenId(poolId, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId);
+=======
+    let poolToken = loadPoolToken(poolId, tokenAddress);
+>>>>>>> Revert "Merge branch 'add-qol-entities' of github.com:1saf/balancer-subgraph-v2 into add-qol-entities"
     // adding initial liquidity
     if (poolToken == null) {
       throw new Error('poolToken not found');
@@ -220,9 +223,13 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   //let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
 
+<<<<<<< HEAD
   let poolTokenId = getPoolTokenId(poolId.toHexString(), tokenAddress);
   let poolToken = PoolToken.load(poolTokenId);
   let token = getToken(tokenAddress);
+=======
+  let poolToken = loadPoolToken(poolId.toHexString(), token);
+>>>>>>> Revert "Merge branch 'add-qol-entities' of github.com:1saf/balancer-subgraph-v2 into add-qol-entities"
 
   let managedDeltaAmount = tokenToDecimal(managedDelta, token.decimals);
 
