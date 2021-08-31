@@ -1,4 +1,4 @@
-import { BigDecimal, BigInt, Address, dataSource } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, dataSource, BigInt } from '@graphprotocol/graph-ts';
 
 export let ZERO = BigInt.fromI32(0);
 export let ZERO_BD = BigDecimal.fromString('0');
