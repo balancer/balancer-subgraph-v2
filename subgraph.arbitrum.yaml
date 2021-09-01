@@ -143,6 +143,8 @@ dataSources:
           file: ./abis/MetaStablePoolFactory.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewMetaStablePool
