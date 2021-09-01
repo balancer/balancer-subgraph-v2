@@ -11,19 +11,12 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): void {
+export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): boolean {
   let pool = Pool.load(poolId);
-  if (pool == null) return;
+  if (pool == null) return false;
 
   let tokensList: Bytes[] = pool.tokensList;
-  if (tokensList.length < 2) return;
-
-  let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
-  let phl = new PoolHistoricalLiquidity(phlId);
-  phl.poolId = poolId;
-  phl.pricingAsset = pricingAsset;
-  phl.block = block;
-  phl.poolTotalShares = pool.totalShares;
+  if (tokensList.length < 2) return false;
 
   let poolValue: BigDecimal = BigDecimal.fromString('0');
 
@@ -70,21 +63,38 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       poolValue = poolValue.plus(poolTokenValue);
     }
   }
-  phl.poolLiquidity = poolValue;
-  phl.poolShareValue = poolValue.div(pool.totalShares);
-  phl.save();
 
   let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
   let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset) || ZERO_BD;
 
-  if (newPoolLiquidity && oldPoolLiquidity) {
-    let vault = Balancer.load('2');
-    let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
-    vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
-    vault.save();
-    pool.totalLiquidity = newPoolLiquidity;
-    pool.save();
+  // If the pool isn't empty but we have a zero USD value then it's likely that we have a bad pricing asset
+  // Don't commit any changes and just report the failure.
+  if (poolValue.gt(ZERO_BD) != newPoolLiquidity.gt(ZERO_BD)) {
+    return false;
   }
+
+  // Take snapshot of pool state
+  let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
+  let phl = new PoolHistoricalLiquidity(phlId);
+  phl.poolId = poolId;
+  phl.pricingAsset = pricingAsset;
+  phl.block = block;
+  phl.poolTotalShares = pool.totalShares;
+  phl.poolLiquidity = poolValue;
+  phl.poolShareValue = poolValue.div(pool.totalShares);
+  phl.save();
+
+  // Update pool stats
+  pool.totalLiquidity = newPoolLiquidity;
+  pool.save();
+
+  // Update global stats
+  let vault = Balancer.load('2');
+  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
+  vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
+  vault.save();
+
+  return true;
 }
 
 export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal {
