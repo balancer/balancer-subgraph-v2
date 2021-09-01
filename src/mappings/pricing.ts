@@ -1,4 +1,4 @@
-import { PRICING_ASSETS, USD_STABLE_ASSETS, USDC, DAI } from './helpers/constants';
+import { PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
 import { getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
@@ -104,16 +104,12 @@ export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal
     usdValue = value;
   } else {
     // convert to USD
-    let pricingAssetInUSDId: string = getLatestPriceId(pricingAsset, USDC);
-    let pricingAssetInUSD = LatestPrice.load(pricingAssetInUSDId);
-
-    if (!pricingAssetInUSD) {
-      pricingAssetInUSDId = getLatestPriceId(pricingAsset, DAI);
-      pricingAssetInUSD = LatestPrice.load(pricingAssetInUSDId);
-    }
-
-    if (pricingAssetInUSD) {
-      usdValue = value.times(pricingAssetInUSD.price);
+    for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
+      let pricingAssetInUSD = LatestPrice.load(getLatestPriceId(pricingAsset, USD_STABLE_ASSETS[i]));
+      if (pricingAssetInUSD != null) {
+        usdValue = value.times(pricingAssetInUSD.price);
+        break;
+      }
     }
   }
 
@@ -129,7 +125,6 @@ function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, blo
 }
 
 function isUSDStable(asset: Address): boolean {
-  //for (let pa of PRICING_ASSETS) {
   for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
     if (USD_STABLE_ASSETS[i] == asset) return true;
   }
