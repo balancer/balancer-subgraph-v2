@@ -118,7 +118,7 @@ export function handleNewStablePool(event: PoolCreated): void {
 }
 
 export function handleNewMetaStablePool(event: PoolCreated): void {
-  createStableLikePool(event, PoolType.Stable);
+  createStableLikePool(event, PoolType.MetaStable);
   MetaStablePoolTemplate.create(event.params.pool);
 }
 
