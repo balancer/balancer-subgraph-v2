@@ -64,15 +64,13 @@ type PoolToken @entity {
   name: String
   decimals: Int!
   address: String!
+  priceRate: BigDecimal!
   balance: BigDecimal!
   invested: BigDecimal!
   investments: [Investment!] @derivedFrom(field: "poolTokenId")
 
   # WeightedPool Only
   weight: BigDecimal
-
-  # MetaStablePool Only
-  priceRate: BigDecimal
 }
 
 type PriceRateProvider @entity {

@@ -112,8 +112,12 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress);
-      break;
+      let success = updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+      // Some pricing assets may not have a route back to USD yet
+      // so we keep trying until we find one
+      if (success) {
+        break;
+      }
     }
   }
 
@@ -171,8 +175,12 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      updatePoolLiquidity(poolId, event.block.number, tokenAddress);
-      break;
+      let success = updatePoolLiquidity(poolId, event.block.number, tokenAddress);
+      // Some pricing assets may not have a route back to USD yet
+      // so we keep trying until we find one
+      if (success) {
+        break;
+      }
     }
   }
 
