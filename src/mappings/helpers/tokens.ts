@@ -28,7 +28,6 @@ export function createToken(tokenAddress: Address): Token {
   token.totalSwapCount = ZERO;
   token.totalVolumeUSD = ZERO_BD;
   token.totalVolumeNotional = ZERO_BD;
-  token.poolCount = ZERO;
   token.address = tokenAddress.toHexString();
   token.save();
   return token;
