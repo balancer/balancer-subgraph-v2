@@ -54,13 +54,12 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     let dayStartTimestamp = dayID * 86400;
     let token = getToken(tokenAddress);
     dayData = new TokenSnapshot(id);
-    dayData.timestamp = BigInt.fromI32(dayStartTimestamp);
+    dayData.timestamp = dayStartTimestamp;
     dayData.totalSwapCount = ZERO;
     dayData.totalBalanceUSD = ZERO_BD;
     dayData.totalBalanceNotional = ZERO_BD;
     dayData.totalVolumeUSD = ZERO_BD;
     dayData.totalVolumeNotional = ZERO_BD;
-    dayData.poolCount = ZERO;
     dayData.token = token.id;
     dayData.save();
   }
@@ -83,7 +82,13 @@ export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event
 export const SWAP_IN = 0;
 export const SWAP_OUT = 1;
 
-export function updateTokenBalances(tokenAddress: Address, usdBalance: BigDecimal, notionalBalance: BigDecimal, swapDirection: i32, event: SwapEvent): void {
+export function updateTokenBalances(
+  tokenAddress: Address,
+  usdBalance: BigDecimal,
+  notionalBalance: BigDecimal,
+  swapDirection: i32,
+  event: SwapEvent
+): void {
   let token = getToken(tokenAddress);
   let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
 
