@@ -20,7 +20,6 @@ import { MetaStablePool } from '../types/templates/MetaStablePool/MetaStablePool
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
 import { getAmp } from './helpers/stable';
-import { getBalancerSnapshot } from './helpers/misc';
 
 function createNewWeightedPool(event: PoolCreated): string {
   let poolAddress: Address = event.params.pool;

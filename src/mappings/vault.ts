@@ -22,8 +22,6 @@ import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { PoolType, ZERO_BD, ZERO } from './helpers/constants';
 import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
 
-import { getBalancerSnapshot } from './helpers/misc';
-
 /************************************
  ******** INTERNAL BALANCES *********
  ************************************/
