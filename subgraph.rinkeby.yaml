@@ -121,6 +121,35 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewLiquidityBootstrappingPool
+  - kind: ethereum/contract
+    name: InvestmentPoolFactory
+    network: rinkeby
+    source:
+      address: '0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca'
+      abi: InvestmentPoolFactory
+      startBlock: 9252383
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: InvestmentPoolFactory
+          file: ./abis/WeightedPoolFactory.json
+        - name: InvestmentPool
+          file: ./abis/InvestmentPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewInvestmentPool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -177,3 +206,35 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
+  - kind: ethereum/contract
+    name: InvestmentPool
+    network: rinkeby
+    source:
+      abi: InvestmentPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: InvestmentPool
+          file: ./abis/InvestmentPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: SwapEnabledSet(bool)
+          handler: handleSwapEnabledSet
+        - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
+          handler: handleGradualWeightUpdateScheduled
+        - event: ManagementFeePercentageSet(uint256)
+          handler: handleManagementFeePercentageSet
