@@ -1,7 +1,16 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider, BalancerSnapshot, UserSnapshot } from '../../types/schema';
+import {
+  Pool,
+  User,
+  PoolToken,
+  PoolShare,
+  PoolSnapshot,
+  PriceRateProvider,
+  BalancerSnapshot,
+  UserSnapshot,
+} from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ZERO_BD } from './constants';
+import { ONE_BD, ZERO_BD } from './constants';
 import { getToken } from './tokens';
 
 const DAY = 24 * 60 * 60;
@@ -163,15 +172,15 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   let snapshot = BalancerSnapshot.load(id);
 
   if (snapshot == null) {
-      let dayStartTimestamp = dayID * 86400;
-      snapshot = new BalancerSnapshot(id);
-      snapshot.poolCount = 0;
-      snapshot.totalLiquidity = ZERO_BD;
-      snapshot.totalSwapFee = ZERO_BD;
-      snapshot.totalSwapVolume = ZERO_BD;
-      snapshot.vault = vaultId;
-      snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
-      snapshot.save();
+    let dayStartTimestamp = dayID * 86400;
+    snapshot = new BalancerSnapshot(id);
+    snapshot.poolCount = 0;
+    snapshot.totalLiquidity = ZERO_BD;
+    snapshot.totalSwapFee = ZERO_BD;
+    snapshot.totalSwapVolume = ZERO_BD;
+    snapshot.vault = vaultId;
+    snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
+    snapshot.save();
   }
 
   return snapshot as BalancerSnapshot;
@@ -183,16 +192,16 @@ export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnaps
   let snapshot = UserSnapshot.load(id);
 
   if (snapshot == null) {
-      let dayStartTimestamp = dayID * 86400;
-      snapshot = new UserSnapshot(id);
+    let dayStartTimestamp = dayID * 86400;
+    snapshot = new UserSnapshot(id);
 
-      snapshot.totalLiquidity = ZERO_BD;
-      snapshot.totalSwapFee = ZERO_BD;
-      snapshot.totalSwapVolume = ZERO_BD;
-      snapshot.user = userAddress.toHexString();
+    snapshot.totalLiquidity = ZERO_BD;
+    snapshot.totalSwapFee = ZERO_BD;
+    snapshot.totalSwapVolume = ZERO_BD;
+    snapshot.user = userAddress.toHexString();
 
-      snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
-      snapshot.save();
+    snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
+    snapshot.save();
   }
 
   return snapshot as UserSnapshot;
