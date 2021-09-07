@@ -111,7 +111,6 @@ type TokenSnapshot @entity {
   timestamp: BigInt! # 
   totalVolumeUSD: BigDecimal!
   totalVolumeNotional: BigDecimal!
-  poolCount: BigInt!
   totalBalanceUSD: BigDecimal!
   totalBalanceNotional: BigDecimal!
   totalSwapCount: BigInt!
