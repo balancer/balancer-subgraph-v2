@@ -269,7 +269,6 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-  {{#if StablePoolFactory}}
   - kind: ethereum/contract
     name: StablePool
     network: {{network}}
@@ -297,8 +296,6 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-  {{/if}}
-  {{#if MetaStablePoolFactory}}
   - kind: ethereum/contract
     name: MetaStablePool
     network: {{network}}
@@ -331,8 +328,6 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
-  {{/if}}
-  {{#if ConvergentPoolFactory}}
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: {{network}}
@@ -356,8 +351,6 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransferCCP
-  {{/if}}
-  {{#if LiquidityBootstrappingPoolFactory}}
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
     network: {{network}}
@@ -388,8 +381,6 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
-  {{/if}}
-  {{#if InvestmentPoolFactory}}
   - kind: ethereum/contract
     name: InvestmentPool
     network: {{network}}
@@ -422,4 +413,4 @@ templates:
           handler: handleGradualWeightUpdateScheduled
         - event: ManagementFeePercentageSet(uint256)
           handler: handleManagementFeePercentageSet
-  {{/if}}
+ 

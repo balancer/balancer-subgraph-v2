@@ -292,6 +292,29 @@ templates:
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
+    name: ConvergentCurvePool
+    network: kovan
+    source:
+      abi: ConvergentCurvePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: ConvergentCurvePool
+          file: ./abis/ConvergentCurvePool.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransferCCP
+  - kind: ethereum/contract
     name: LiquidityBootstrappingPool
     network: kovan
     source:
@@ -353,3 +376,4 @@ templates:
           handler: handleGradualWeightUpdateScheduled
         - event: ManagementFeePercentageSet(uint256)
           handler: handleManagementFeePercentageSet
+ 
