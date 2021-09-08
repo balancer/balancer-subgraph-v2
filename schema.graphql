@@ -23,7 +23,7 @@ type Balancer @entity {
 type BalancerSnapshot @entity {
   id: ID!
   vault: Balancer!
-  timestamp: BigInt!
+  timestamp: Int!
   poolCount: Int!
   totalLiquidity: BigDecimal!
   totalSwapVolume: BigDecimal!

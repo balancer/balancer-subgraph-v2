@@ -183,7 +183,7 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
     snapshot.totalSwapFee = ZERO_BD;
     snapshot.totalSwapVolume = ZERO_BD;
     snapshot.vault = vaultId;
-    snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
+    snapshot.timestamp = dayStartTimestamp;
     snapshot.save();
   }
 
