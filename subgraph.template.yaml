@@ -183,6 +183,37 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewLiquidityBootstrappingPool
   {{/if}}
+  {{#if InvestmentPoolFactory}}
+  - kind: ethereum/contract
+    name: InvestmentPoolFactory
+    network: {{network}}
+    source:
+      address: '{{InvestmentPoolFactory.address}}'
+      abi: InvestmentPoolFactory
+      startBlock: {{InvestmentPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: InvestmentPoolFactory
+          file: ./abis/InvestmentPoolFactory.json
+        - name: InvestmentPool
+          file: ./abis/InvestmentPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewInvestmentPool
+  {{/if}}
   {{#if ConvergentPoolFactory}}
   - kind: ethereum/contract
     name: ConvergentPoolFactory
@@ -238,7 +269,6 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-  {{#if StablePoolFactory}}
   - kind: ethereum/contract
     name: StablePool
     network: {{network}}
@@ -266,8 +296,6 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-  {{/if}}
-  {{#if MetaStablePoolFactory}}
   - kind: ethereum/contract
     name: MetaStablePool
     network: {{network}}
@@ -300,8 +328,6 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
-  {{/if}}
-  {{#if ConvergentPoolFactory}}
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: {{network}}
@@ -325,8 +351,6 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransferCCP
-  {{/if}}
-  {{#if LiquidityBootstrappingPoolFactory}}
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
     network: {{network}}
@@ -357,4 +381,36 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
-  {{/if}}
+  - kind: ethereum/contract
+    name: InvestmentPool
+    network: {{network}}
+    source:
+      abi: InvestmentPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: InvestmentPool
+          file: ./abis/InvestmentPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: SwapEnabledSet(bool)
+          handler: handleSwapEnabledSet
+        - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
+          handler: handleGradualWeightUpdateScheduled
+        - event: ManagementFeePercentageChanged(uint256)
+          handler: handleManagementFeePercentageChanged
+ 

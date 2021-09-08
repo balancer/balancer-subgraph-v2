@@ -18,7 +18,8 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { PoolType, ZERO, ZERO_BD } from './helpers/constants';
+import { ZERO, ZERO_BD } from './helpers/constants';
+import { isVariableWeightPool } from './helpers/pools';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -234,9 +235,8 @@ export function handleSwapEvent(event: SwapEvent): void {
     return;
   }
 
-  // LBPs' weights update over time so we need to update them after each swap
-  // TODO: change to only do this if the LBP is in the middle of an update
-  if (pool.poolType == PoolType.LiquidityBootstrapping) {
+  // Some pools' weights update over time so we need to update them after each swap
+  if (isVariableWeightPool(pool as Pool)) {
     updatePoolWeights(poolId.toHexString());
   }
 
