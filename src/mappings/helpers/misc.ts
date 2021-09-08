@@ -162,6 +162,9 @@ export function getUser(address: Address): User {
   let user = User.load(addressHex);
   if (user == null) {
     let user = new User(addressHex);
+    user.totalLiquidity = ZERO_BD;
+    user.totalSwapFee = ZERO_BD;
+    user.totalSwapVolume = ZERO_BD;
     user.save();
   }
   return user as User;
