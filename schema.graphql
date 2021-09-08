@@ -98,8 +98,6 @@ type Token @entity {
   name: String
   decimals: Int!
   address: String!
-  totalVolume: BigDecimal! # total volume in fiat (usd)
-  totalTxCount: BigInt!
   totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
   totalBalanceNotional: BigDecimal!
   totalVolumeUSD: BigDecimal! # total volume in fiat (usd)
