@@ -84,6 +84,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
 
   let poolToken = new PoolToken(poolTokenId);
   poolToken.poolId = poolId;
+  poolToken.balance = ZERO_BD;
   poolToken.invested = ZERO_BD;
   poolToken.priceRate = ONE_BD;
   poolToken.token = token.id;
