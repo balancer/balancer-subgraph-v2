@@ -76,7 +76,7 @@ export function updatePoolLiquidity(
   }
 
   let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
-  let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset) || ZERO_BD;
+  let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset);
   let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
 
   // If the pool isn't empty but we have a zero USD value then it's likely that we have a bad pricing asset
@@ -121,7 +121,7 @@ export function updatePoolLiquidity(
 }
 
 export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal {
-  let usdValue: BigDecimal;
+  let usdValue: BigDecimal = ZERO_BD;
 
   if (isUSDStable(pricingAsset)) {
     usdValue = value;
