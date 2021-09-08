@@ -2,7 +2,7 @@ import { Address, BigDecimal, BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { Token, TokenSnapshot } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ZERO_BD, ZERO_BI } from './constants';
+import { ZERO_BD, ZERO } from './constants';
 
 export function createToken(tokenAddress: Address): Token {
   let erc20token = ERC20.bind(tokenAddress);
@@ -25,10 +25,10 @@ export function createToken(tokenAddress: Address): Token {
   token.decimals = decimals;
   token.totalBalanceUSD = ZERO_BD;
   token.totalBalanceNotional = ZERO_BD;
-  token.totalSwapCount = ZERO_BI;
+  token.totalSwapCount = ZERO;
   token.totalVolumeUSD = ZERO_BD;
   token.totalVolumeNotional = ZERO_BD;
-  token.poolCount = ZERO_BI;
+  token.poolCount = ZERO;
   token.save();
   return token;
 }
@@ -54,12 +54,12 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     let token = getToken(tokenAddress);
     dayData = new TokenSnapshot(id);
     dayData.timestamp = BigInt.fromI32(dayStartTimestamp);
-    dayData.totalSwapCount = ZERO_BI;
+    dayData.totalSwapCount = ZERO;
     dayData.totalBalanceUSD = ZERO_BD;
     dayData.totalBalanceNotional = ZERO_BD;
     dayData.totalVolumeUSD = ZERO_BD;
     dayData.totalVolumeNotional = ZERO_BD;
-    dayData.poolCount = ZERO_BI;
+    dayData.poolCount = ZERO;
     dayData.token = token.id;
     dayData.save();
   }
@@ -82,7 +82,13 @@ export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event
 export const SWAP_IN = 0;
 export const SWAP_OUT = 1;
 
-export function updateTokenBalances(tokenAddress: Address, usdBalance: BigDecimal, notionalBalance: BigDecimal, swapDirection: i32, event: SwapEvent): void {
+export function updateTokenBalances(
+  tokenAddress: Address,
+  usdBalance: BigDecimal,
+  notionalBalance: BigDecimal,
+  swapDirection: i32,
+  event: SwapEvent
+): void {
   let token = getToken(tokenAddress);
   let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
 
