@@ -372,6 +372,6 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
-        - event: ManagementFeePercentageSet(uint256)
-          handler: handleManagementFeePercentageSet
+        - event: ManagementFeePercentageChanged(uint256)
+          handler: handleManagementFeePercentageChanged
  

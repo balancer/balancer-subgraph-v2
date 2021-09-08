@@ -3,10 +3,9 @@ import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
-  LiquidityBootstrappingPool,
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
-import { ManagementFeePercentageSet } from '../types/templates/InvestmentPool/InvestmentPool';
+import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
 import {
   MetaStablePool,
   PriceRateCacheUpdated,
@@ -52,7 +51,7 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
   let poolAddress = event.address;
 
   // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = LiquidityBootstrappingPool.bind(poolAddress);
+  let poolContract = WeightedPool.bind(poolAddress);
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
@@ -89,7 +88,7 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
  ********* MANAGEMENT FEES **********
  ************************************/
 
-export function handleManagementFeeSet(event: ManagementFeePercentageSet): void {
+export function handleManagementFeePercentageChanged(event: ManagementFeePercentageChanged): void {
   let poolAddress = event.address;
 
   // TODO - refactor so pool -> poolId doesn't require call
@@ -99,7 +98,7 @@ export function handleManagementFeeSet(event: ManagementFeePercentageSet): void 
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  pool.managementFee = scaleDown(event.params.managementFee, 18);
+  pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
   pool.save();
 }
 
