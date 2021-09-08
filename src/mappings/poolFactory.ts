@@ -22,7 +22,6 @@ import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
 import { getAmp } from './helpers/stable';
-import { getBalancerSnapshot } from './helpers/misc';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
   let poolAddress: Address = event.params.pool;
