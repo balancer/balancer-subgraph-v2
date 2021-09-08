@@ -311,7 +311,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenOutAddress);
     tokenPrice.poolId = poolId.toHexString();
     tokenPrice.block = block;
-    tokenPrice.timestamp = BigInt.fromI32(blockTimestamp);
+    tokenPrice.timestamp = blockTimestamp;
     tokenPrice.asset = tokenOutAddress;
     tokenPrice.amount = tokenAmountIn;
     tokenPrice.pricingAsset = tokenInAddress;
@@ -326,7 +326,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenInAddress);
     tokenPrice.poolId = poolId.toHexString();
     tokenPrice.block = block;
-    tokenPrice.timestamp = BigInt.fromI32(blockTimestamp);
+    tokenPrice.timestamp = blockTimestamp;
     tokenPrice.asset = tokenInAddress;
     tokenPrice.amount = tokenAmountOut;
     tokenPrice.pricingAsset = tokenOutAddress;
