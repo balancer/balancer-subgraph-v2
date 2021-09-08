@@ -41,7 +41,7 @@ export function getToken(tokenAddress: Address): Token {
   if (token == null) {
     token = createToken(tokenAddress);
   }
-  return token!;
+  return token as Token;
 }
 
 export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): TokenSnapshot {
