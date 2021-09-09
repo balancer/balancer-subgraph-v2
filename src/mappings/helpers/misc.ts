@@ -214,7 +214,10 @@ export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnaps
 }
 
 export function getTradePair(token0Address: Address, token1Address: Address): TradePair {
-  let sortedAddressses = [token0Address.toHexString(), token1Address.toHexString()].sort();
+  let sortedAddressses = new Array<string>(2);
+  sortedAddressses.push(token0Address.toHexString());
+  sortedAddressses.push(token1Address.toHexString());
+
   let tradePairId = sortedAddressses[0] + "-" + sortedAddressses[1];
   let tradePair = TradePair.load(tradePairId);
   if (tradePair == null) {
