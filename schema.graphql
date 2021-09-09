@@ -256,3 +256,20 @@ type PoolSnapshot @entity {
   swapFees: BigDecimal!
   timestamp: Int!
 }
+
+type TradePair @entity {
+  "Token Address - Token Address"
+  id: ID!
+  token0: Token!
+  token1: Token!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}
+
+type TradePairSnapshot @entity {
+  id: ID!
+  pair: TradePair!
+  timestamp: Int!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}

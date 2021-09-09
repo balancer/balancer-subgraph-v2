@@ -8,6 +8,8 @@ import {
   PriceRateProvider,
   BalancerSnapshot,
   UserSnapshot,
+  TradePair,
+  TradePairSnapshot,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { ONE_BD, ZERO_BD } from './constants';
@@ -161,7 +163,7 @@ export function getUser(address: Address): User {
   let addressHex = address.toHex();
   let user = User.load(addressHex);
   if (user == null) {
-    let user = new User(addressHex);
+    user = new User(addressHex);
     user.totalLiquidity = ZERO_BD;
     user.totalSwapFee = ZERO_BD;
     user.totalSwapVolume = ZERO_BD;
@@ -209,4 +211,34 @@ export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnaps
   }
 
   return snapshot as UserSnapshot;
+}
+
+export function getTradePair(token0Address: Address, token1Address: Address): TradePair {
+  let sortedAddressses = [token0Address.toHexString(), token1Address.toHexString()].sort();
+  let tradePairId = sortedAddressses[0] + "-" + sortedAddressses[1];
+  let tradePair = TradePair.load(tradePairId);
+  if (tradePair == null) {
+    tradePair = new TradePair(tradePairId);
+    tradePair.token0 = sortedAddressses[0];
+    tradePair.token1 = sortedAddressses[1];
+    tradePair.totalSwapFee = ZERO_BD;
+    tradePair.totalSwapVolume = ZERO_BD;
+    tradePair.save();
+  }
+  return tradePair as TradePair;
+}
+
+export function getTradePairSnapshot(tradePairId: string, timestamp: i32): TradePairSnapshot {
+  let dayID = timestamp / 86400;
+  let id = tradePairId + '-' + dayID.toString();
+  let snapshot = TradePairSnapshot.load(id);
+  if (!snapshot) {
+    snapshot = new TradePairSnapshot(id);
+    snapshot.pair = tradePairId;
+    snapshot.timestamp = dayID;
+    snapshot.totalSwapVolume = ZERO_BD;
+    snapshot.totalSwapFee = ZERO_BD;
+    snapshot.save();
+  }
+  return snapshot as TradePairSnapshot;
 }

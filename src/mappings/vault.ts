@@ -16,6 +16,8 @@ import {
   getTokenDecimals,
   loadPoolToken,
   getUserSnapshot,
+  getTradePair,
+  getTradePairSnapshot,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
@@ -113,7 +115,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     poolToken.save();
   }
 
-  // TODO: why are we looping twice?
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
@@ -330,15 +331,23 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let user = getUser(event.transaction.from);
   let userSnapshot = getUserSnapshot(event.transaction.from, blockTimestamp);
+  let tradePair = getTradePair(tokenInAddress, tokenOutAddress);
+  let tradePairSnapshot = getTradePairSnapshot(tradePair.id, blockTimestamp);
 
   user.totalSwapVolume = user.totalSwapVolume.plus(swapValueUSD);
   user.totalSwapFee = user.totalSwapFee.plus(swapFeesUSD);
+  tradePair.totalSwapVolume = tradePair.totalSwapVolume.plus(swapValueUSD);
+  tradePair.totalSwapFee = tradePair.totalSwapFee.plus(swapFeesUSD);
 
-  userSnapshot.totalSwapVolume = user.totalSwapVolume.plus(swapValueUSD);
-  userSnapshot.totalSwapFee = user.totalSwapFee.plus(swapFeesUSD);
+  userSnapshot.totalSwapVolume = userSnapshot.totalSwapVolume.plus(swapValueUSD);
+  userSnapshot.totalSwapFee = userSnapshot.totalSwapFee.plus(swapFeesUSD);
+  tradePairSnapshot.totalSwapVolume = tradePairSnapshot.totalSwapVolume.plus(swapValueUSD);
+  tradePairSnapshot.totalSwapFee = tradePairSnapshot.totalSwapFee.plus(swapFeesUSD);
 
   user.save();
   userSnapshot.save();
+  tradePair.save();
+  tradePairSnapshot.save();
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
