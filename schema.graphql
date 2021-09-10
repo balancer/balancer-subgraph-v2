@@ -16,6 +16,7 @@ type Balancer @entity {
   snapshots: [BalancerSnapshot!] @derivedFrom(field: "vault")
 
   totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 }
@@ -26,6 +27,7 @@ type BalancerSnapshot @entity {
   timestamp: Int!
   poolCount: Int!
   totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 }
@@ -159,6 +161,7 @@ type User @entity {
   totalLiquidity: BigDecimal!
   totalSwapFee: BigDecimal!
   totalSwapVolume: BigDecimal!
+  totalSwapCount: BigInt!
 }
 
 type UserSnapshot @entity {
@@ -168,6 +171,7 @@ type UserSnapshot @entity {
   totalLiquidity: BigDecimal!
   totalSwapFee: BigDecimal!
   totalSwapVolume: BigDecimal!
+  totalSwapCount: BigInt!
 }
 
 type UserInternalBalance @entity {
@@ -254,6 +258,7 @@ type PoolSnapshot @entity {
   totalShares: BigDecimal!
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
+  swapCount: BigInt!
   timestamp: Int!
 }
 

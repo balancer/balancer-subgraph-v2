@@ -12,7 +12,7 @@ import {
   TradePairSnapshot,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ONE_BD, ZERO_BD } from './constants';
+import { ONE, ONE_BD, ZERO, ZERO_BD } from './constants';
 import { getToken } from './tokens';
 
 const DAY = 24 * 60 * 60;
@@ -156,6 +156,7 @@ export function saveSwapToSnapshot(poolAddress: string, timestamp: i32, volume: 
 
   snapshot.swapVolume = snapshot.swapVolume.plus(volume);
   snapshot.swapFees = snapshot.swapFees.plus(fees);
+  snapshot.swapCount = snapshot.swapCount.plus(ONE);
   snapshot.save();
 }
 
@@ -184,6 +185,7 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
     snapshot.totalLiquidity = ZERO_BD;
     snapshot.totalSwapFee = ZERO_BD;
     snapshot.totalSwapVolume = ZERO_BD;
+    snapshot.totalSwapCount = ZERO;
     snapshot.vault = vaultId;
     snapshot.timestamp = dayStartTimestamp;
     snapshot.save();
@@ -204,6 +206,7 @@ export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnaps
     snapshot.totalLiquidity = ZERO_BD;
     snapshot.totalSwapFee = ZERO_BD;
     snapshot.totalSwapVolume = ZERO_BD;
+    snapshot.totalSwapCount = ZERO;
     snapshot.user = userAddress.toHexString();
 
     snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
@@ -219,7 +222,7 @@ export function getTradePair(token0Address: Address, token1Address: Address): Tr
   sortedAddressses[1] = token1Address.toHexString();
   sortedAddressses.sort();
 
-  let tradePairId = sortedAddressses[0] + "-" + sortedAddressses[1];
+  let tradePairId = sortedAddressses[0] + '-' + sortedAddressses[1];
   let tradePair = TradePair.load(tradePairId);
   if (tradePair == null) {
     tradePair = new TradePair(tradePairId);
