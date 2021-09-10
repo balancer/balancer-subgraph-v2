@@ -221,7 +221,7 @@ export function getTradePair(token0Address: Address, token1Address: Address): Tr
   sortedAddressses.push(token0Address.toHexString());
   sortedAddressses.push(token1Address.toHexString());
 
-  let tradePairId = sortedAddressses[0] + "-" + sortedAddressses[1];
+  let tradePairId = sortedAddressses[0] + '-' + sortedAddressses[1];
   let tradePair = TradePair.load(tradePairId);
   if (tradePair == null) {
     tradePair = new TradePair(tradePairId);
