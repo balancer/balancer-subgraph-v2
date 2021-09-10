@@ -1,4 +1,4 @@
-import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, BigInt, log } from '@graphprotocol/graph-ts';
 import {
   Pool,
   User,
@@ -215,8 +215,9 @@ export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnaps
 
 export function getTradePair(token0Address: Address, token1Address: Address): TradePair {
   let sortedAddressses = new Array<string>(2);
-  sortedAddressses.push(token0Address.toHexString());
-  sortedAddressses.push(token1Address.toHexString());
+  sortedAddressses[0] = token0Address.toHexString();
+  sortedAddressses[1] = token1Address.toHexString();
+  sortedAddressses.sort();
 
   let tradePairId = sortedAddressses[0] + "-" + sortedAddressses[1];
   let tradePair = TradePair.load(tradePairId);
