@@ -258,6 +258,7 @@ type PoolSnapshot @entity {
   totalShares: BigDecimal!
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
+  swapCount: BigInt!
   timestamp: Int!
 }
 

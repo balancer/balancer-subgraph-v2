@@ -297,7 +297,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // update pool swapsCount
   // let pool = Pool.load(poolId.toHex());
-  pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
+  pool.swapsCount = pool.swapsCount.plus(ONE);
   pool.totalSwapVolume = pool.totalSwapVolume.plus(swapValueUSD);
 
   let swapFee = pool.swapFee;

@@ -12,7 +12,7 @@ import {
   TradePairSnapshot,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ONE_BD, ZERO, ZERO_BD } from './constants';
+import { ONE, ONE_BD, ZERO, ZERO_BD } from './constants';
 import { getToken } from './tokens';
 
 const DAY = 24 * 60 * 60;
@@ -156,6 +156,7 @@ export function saveSwapToSnapshot(poolAddress: string, timestamp: i32, volume: 
 
   snapshot.swapVolume = snapshot.swapVolume.plus(volume);
   snapshot.swapFees = snapshot.swapFees.plus(fees);
+  snapshot.swapCount = snapshot.swapCount.plus(ONE);
   snapshot.save();
 }
 
