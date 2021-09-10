@@ -16,6 +16,7 @@ type Balancer @entity {
   snapshots: [BalancerSnapshot!] @derivedFrom(field: "vault")
 
   totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 }
@@ -26,6 +27,7 @@ type BalancerSnapshot @entity {
   timestamp: Int!
   poolCount: Int!
   totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 }

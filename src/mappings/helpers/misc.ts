@@ -184,6 +184,7 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
     snapshot.totalLiquidity = ZERO_BD;
     snapshot.totalSwapFee = ZERO_BD;
     snapshot.totalSwapVolume = ZERO_BD;
+    snapshot.totalSwapCount = ZERO;
     snapshot.vault = vaultId;
     snapshot.timestamp = dayStartTimestamp;
     snapshot.save();
