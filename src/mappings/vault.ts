@@ -22,7 +22,7 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { isVariableWeightPool } from './helpers/pools';
-import { ZERO, ZERO_BD } from './helpers/constants';
+import { ONE, ZERO, ZERO_BD } from './helpers/constants';
 import { getToken, SWAP_IN, SWAP_OUT, updateTokenBalances, uptickSwapsForToken } from './helpers/tokens';
 
 /************************************
@@ -330,23 +330,25 @@ export function handleSwapEvent(event: SwapEvent): void {
   updateTokenBalances(tokenOutAddress, swapValueUSD, tokenAmountOut, SWAP_OUT, event);
 
   let user = getUser(event.transaction.from);
-  let userSnapshot = getUserSnapshot(event.transaction.from, blockTimestamp);
-  let tradePair = getTradePair(tokenInAddress, tokenOutAddress);
-  let tradePairSnapshot = getTradePairSnapshot(tradePair.id, blockTimestamp);
-
   user.totalSwapVolume = user.totalSwapVolume.plus(swapValueUSD);
   user.totalSwapFee = user.totalSwapFee.plus(swapFeesUSD);
-  tradePair.totalSwapVolume = tradePair.totalSwapVolume.plus(swapValueUSD);
-  tradePair.totalSwapFee = tradePair.totalSwapFee.plus(swapFeesUSD);
+  user.totalSwapCount = user.totalSwapCount.plus(ONE);
+  user.save();
 
+  let userSnapshot = getUserSnapshot(event.transaction.from, blockTimestamp);
   userSnapshot.totalSwapVolume = userSnapshot.totalSwapVolume.plus(swapValueUSD);
   userSnapshot.totalSwapFee = userSnapshot.totalSwapFee.plus(swapFeesUSD);
+  userSnapshot.totalSwapCount = userSnapshot.totalSwapCount.plus(ONE);
+  userSnapshot.save();
+
+  let tradePair = getTradePair(tokenInAddress, tokenOutAddress);
+  tradePair.totalSwapVolume = tradePair.totalSwapVolume.plus(swapValueUSD);
+  tradePair.totalSwapFee = tradePair.totalSwapFee.plus(swapFeesUSD);
+  tradePair.save();
+
+  let tradePairSnapshot = getTradePairSnapshot(tradePair.id, blockTimestamp);
   tradePairSnapshot.totalSwapVolume = tradePairSnapshot.totalSwapVolume.plus(swapValueUSD);
   tradePairSnapshot.totalSwapFee = tradePairSnapshot.totalSwapFee.plus(swapFeesUSD);
-
-  user.save();
-  userSnapshot.save();
-  tradePair.save();
   tradePairSnapshot.save();
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {

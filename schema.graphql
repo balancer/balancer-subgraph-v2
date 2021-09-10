@@ -159,6 +159,7 @@ type User @entity {
   totalLiquidity: BigDecimal!
   totalSwapFee: BigDecimal!
   totalSwapVolume: BigDecimal!
+  totalSwapCount: BigInt!
 }
 
 type UserSnapshot @entity {
@@ -168,6 +169,7 @@ type UserSnapshot @entity {
   totalLiquidity: BigDecimal!
   totalSwapFee: BigDecimal!
   totalSwapVolume: BigDecimal!
+  totalSwapCount: BigInt!
 }
 
 type UserInternalBalance @entity {

@@ -12,7 +12,7 @@ import {
   TradePairSnapshot,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ONE_BD, ZERO_BD } from './constants';
+import { ONE_BD, ZERO, ZERO_BD } from './constants';
 import { getToken } from './tokens';
 
 const DAY = 24 * 60 * 60;
@@ -204,6 +204,7 @@ export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnaps
     snapshot.totalLiquidity = ZERO_BD;
     snapshot.totalSwapFee = ZERO_BD;
     snapshot.totalSwapVolume = ZERO_BD;
+    snapshot.totalSwapCount = ZERO;
     snapshot.user = userAddress.toHexString();
 
     snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
