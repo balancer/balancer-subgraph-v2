@@ -22,6 +22,7 @@ import {
   loadPoolToken,
   getPoolTokenId,
   loadPriceRateProvider,
+  updatePoolShareSnapshotFromShare,
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
@@ -233,6 +234,12 @@ export function handleTransfer(event: Transfer): void {
     pool.holdersCount = pool.holdersCount.minus(BigInt.fromI32(1));
   }
 
+  if (poolShareFrom != null) {
+    updatePoolShareSnapshotFromShare(poolShareFrom!, event.block.timestamp.toI32());
+  }
+  if (poolShareTo != null) {
+    updatePoolShareSnapshotFromShare(poolShareTo!, event.block.timestamp.toI32());
+  }
   pool.save();
 }
 

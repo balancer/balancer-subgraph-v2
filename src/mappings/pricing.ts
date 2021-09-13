@@ -95,10 +95,6 @@ export function updatePoolLiquidity(
   phl.poolShareValue = poolValue.div(pool.totalShares);
   phl.save();
 
-  let userSnapshot = getUserSnapshot(userAddress, timestamp);
-  userSnapshot.totalLiquidity = userSnapshot.totalLiquidity.plus(liquidityChange);
-  userSnapshot.save();
-
   let vaultSnapshot = getBalancerSnapshot('2', timestamp);
   vaultSnapshot.totalLiquidity = vaultSnapshot.totalLiquidity.plus(liquidityChange);
   vaultSnapshot.save();
@@ -111,10 +107,6 @@ export function updatePoolLiquidity(
   let vault = Balancer.load('2');
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
   vault.save();
-
-  let user = getUser(userAddress);
-  user.totalLiquidity = user.totalLiquidity.plus(liquidityChange);
-  user.save();
 
   return true;
 }

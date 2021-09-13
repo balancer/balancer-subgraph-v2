@@ -151,6 +151,14 @@ type PoolShare @entity {
   balance: BigDecimal!
 }
 
+type PoolShareSnapshot @entity {
+  id: ID!
+  userSnapshot: UserSnapshot!
+  poolId: Pool!
+  balance: BigDecimal!
+  timestamp: Int!
+}
+
 type User @entity {
   id: ID!
   sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
@@ -158,7 +166,6 @@ type User @entity {
   snapshots: [UserSnapshot!] @derivedFrom(field: "user")
   userInternalBalances: [UserInternalBalance!]
     @derivedFrom(field: "userAddress")
-  totalLiquidity: BigDecimal!
   totalSwapFee: BigDecimal!
   totalSwapVolume: BigDecimal!
   totalSwapCount: BigInt!
@@ -168,10 +175,10 @@ type UserSnapshot @entity {
   id: ID!
   timestamp: BigInt
   user: User!
-  totalLiquidity: BigDecimal!
-  totalSwapFee: BigDecimal!
-  totalSwapVolume: BigDecimal!
-  totalSwapCount: BigInt!
+  swapFee: BigDecimal!
+  swapVolume: BigDecimal!
+  swapCount: BigInt!
+  sharesOwned: [PoolShareSnapshot!] @derivedFrom(field: "userSnapshot")
 }
 
 type UserInternalBalance @entity {

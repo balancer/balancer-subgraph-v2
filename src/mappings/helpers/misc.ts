@@ -10,6 +10,7 @@ import {
   UserSnapshot,
   TradePair,
   TradePairSnapshot,
+  PoolShareSnapshot,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { ONE, ONE_BD, ZERO, ZERO_BD } from './constants';
@@ -40,16 +41,42 @@ export function getPoolShareId(poolControllerAddress: Address, lpAddress: Addres
 }
 
 export function createPoolShareEntity(pool: Pool, lpAddress: Address): void {
-  getUser(lpAddress);
+  let user = getUser(lpAddress);
   let poolControllerAddress = Address.fromString(pool.address.toHexString());
 
   let id = getPoolShareId(poolControllerAddress, lpAddress);
   let poolShare = new PoolShare(id);
 
-  poolShare.userAddress = lpAddress.toHex();
+  poolShare.userAddress = user.id;
   poolShare.poolId = pool.id;
   poolShare.balance = ZERO_BD;
   poolShare.save();
+}
+
+export function getPoolShareSnapshot(poolId: string, lpAddress: Address, timestamp: i32): PoolShareSnapshot {
+  let userSnapshot = getUserSnapshot(lpAddress, timestamp);
+  let pool = Pool.load(poolId);
+  let poolControllerAddress = Address.fromString(pool.address.toHexString());
+  let dayID = timestamp / 86400;
+  let id = getPoolShareId(poolControllerAddress, lpAddress) + '-' + dayID.toString();
+  let poolShareSnapshot = PoolShareSnapshot.load(id);
+
+  if (poolShareSnapshot == null) {
+    let dayStartTimestamp = dayID * 86400;
+    poolShareSnapshot = new PoolShareSnapshot(id);
+    poolShareSnapshot.poolId = pool.id;
+    poolShareSnapshot.balance = ZERO_BD;
+    poolShareSnapshot.timestamp =  dayStartTimestamp;
+    poolShareSnapshot.userSnapshot = userSnapshot.id
+    poolShareSnapshot.save();
+  }
+  return poolShareSnapshot as PoolShareSnapshot;
+}
+
+export function updatePoolShareSnapshotFromShare(poolShare: PoolShare, timestamp: i32): void {
+  let poolShareSnapshot = getPoolShareSnapshot(poolShare.poolId, Address.fromHexString(poolShare.userAddress) as Address, timestamp);
+  poolShareSnapshot.balance = poolShare.balance;
+  poolShareSnapshot.save();
 }
 
 // pool entity when created
@@ -165,7 +192,6 @@ export function getUser(address: Address): User {
   let user = User.load(addressHex);
   if (user == null) {
     user = new User(addressHex);
-    user.totalLiquidity = ZERO_BD;
     user.totalSwapFee = ZERO_BD;
     user.totalSwapVolume = ZERO_BD;
     user.save();
@@ -203,10 +229,9 @@ export function getUserSnapshot(userAddress: Address, timestamp: i32): UserSnaps
     let dayStartTimestamp = dayID * 86400;
     snapshot = new UserSnapshot(id);
 
-    snapshot.totalLiquidity = ZERO_BD;
-    snapshot.totalSwapFee = ZERO_BD;
-    snapshot.totalSwapVolume = ZERO_BD;
-    snapshot.totalSwapCount = ZERO;
+    snapshot.swapFee = ZERO_BD;
+    snapshot.swapVolume = ZERO_BD;
+    snapshot.swapCount = ZERO;
     snapshot.user = userAddress.toHexString();
 
     snapshot.timestamp = BigInt.fromI32(dayStartTimestamp);
