@@ -167,6 +167,7 @@ export function createPoolSnapshot(poolId: string, timestamp: i32): void {
   snapshot.swapVolume = ZERO_BD;
   snapshot.swapFees = pool.totalSwapFee;
   snapshot.timestamp = dayTimestamp;
+  snapshot.swapCount = ZERO;
   snapshot.save();
 }
 
@@ -194,6 +195,7 @@ export function getUser(address: Address): User {
     user = new User(addressHex);
     user.totalSwapFee = ZERO_BD;
     user.totalSwapVolume = ZERO_BD;
+    user.totalSwapCount = ZERO;
     user.save();
   }
   return user as User;
