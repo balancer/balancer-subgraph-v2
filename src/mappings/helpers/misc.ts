@@ -272,10 +272,11 @@ export function getTradePairSnapshot(tradePairId: string, timestamp: i32): Trade
   let snapshot = TradePairSnapshot.load(id);
   if (!snapshot) {
     snapshot = new TradePairSnapshot(id);
+    let dayStartTimestamp = dayID * 86400;
     snapshot.pair = tradePairId;
-    snapshot.timestamp = dayID;
-    snapshot.totalSwapVolume = ZERO_BD;
-    snapshot.totalSwapFee = ZERO_BD;
+    snapshot.timestamp = dayStartTimestamp;
+    snapshot.swapVolume = ZERO_BD;
+    snapshot.swapFee = ZERO_BD;
     snapshot.save();
   }
   return snapshot as TradePairSnapshot;

@@ -286,6 +286,6 @@ type TradePairSnapshot @entity {
   id: ID!
   pair: TradePair!
   timestamp: Int!
-  totalSwapVolume: BigDecimal!
-  totalSwapFee: BigDecimal!
+  swapVolume: BigDecimal!
+  swapFee: BigDecimal!
 }

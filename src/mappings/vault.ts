@@ -355,8 +355,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   tradePair.save();
 
   let tradePairSnapshot = getTradePairSnapshot(tradePair.id, blockTimestamp);
-  tradePairSnapshot.totalSwapVolume = tradePairSnapshot.totalSwapVolume.plus(swapValueUSD);
-  tradePairSnapshot.totalSwapFee = tradePairSnapshot.totalSwapFee.plus(swapFeesUSD);
+  tradePairSnapshot.swapVolume = tradePairSnapshot.swapVolume.plus(swapValueUSD);
+  tradePairSnapshot.swapFee = tradePairSnapshot.swapFee.plus(swapFeesUSD);
   tradePairSnapshot.save();
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
