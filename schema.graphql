@@ -19,6 +19,7 @@ type Balancer @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+     
 }
 
 type BalancerSnapshot @entity {
@@ -128,7 +129,10 @@ type PoolToken @entity {
   priceRate: BigDecimal!
   invested: BigDecimal!
   investments: [Investment!] @derivedFrom(field: "poolTokenId")
-
+  decimals: Int!
+  address: String!
+  name: String
+  symbol: String
   # WeightedPool Only
   weight: BigDecimal
 }
