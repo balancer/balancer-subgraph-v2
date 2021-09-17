@@ -148,7 +148,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
   // let ownerCall = poolContract.try_getOwner();
   // let owner = ownerCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee) as Pool;
+  let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = PoolType.Element;
   pool.factory = event.address;
   // pool.owner = owner;
@@ -183,7 +183,7 @@ function findOrInitializeVault(): Balancer {
   vault.totalLiquidity = ZERO_BD;
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
-  return vault as Balancer;
+  return vault;
 }
 
 function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool {

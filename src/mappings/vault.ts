@@ -253,7 +253,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   }
 
   // Some pools' weights update over time so we need to update them after each swap
-  if (isVariableWeightPool(pool as Pool)) {
+  if (isVariableWeightPool(pool)) {
     updatePoolWeights(poolId.toHexString());
   }
 
