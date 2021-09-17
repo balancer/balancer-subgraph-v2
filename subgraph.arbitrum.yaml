@@ -278,13 +278,15 @@ templates:
         - Swap
         - PoolToken
       abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: ConvergentCurvePool
           file: ./abis/ConvergentCurvePool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransferCCP
+          handler: handleTransfer
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
     network: arbitrum-one
