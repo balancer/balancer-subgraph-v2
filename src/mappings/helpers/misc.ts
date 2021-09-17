@@ -2,6 +2,7 @@ import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
 import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { ONE_BD, ZERO_BD } from './constants';
+import { getPoolAddress } from './pools';
 
 const DAY = 24 * 60 * 60;
 
@@ -10,10 +11,6 @@ export function getTokenDecimals(tokenAddress: Address): i32 {
   let result = token.try_decimals();
 
   return result.reverted ? 0 : result.value;
-}
-
-function getPoolAddress(poolId: string): Address {
-  return changetype<Address>(Address.fromHexString(poolId.slice(0, 42)));
 }
 
 export function tokenToDecimal(amount: BigInt, decimals: i32): BigDecimal {
