@@ -12,16 +12,15 @@ import {
   PriceRateProviderSet,
 } from '../types/templates/MetaStablePool/MetaStablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
-import { PoolShare, Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
+import { Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
 
 import {
   tokenToDecimal,
-  createPoolShareEntity,
-  getPoolShareId,
   scaleDown,
   loadPoolToken,
   getPoolTokenId,
   loadPriceRateProvider,
+  getPoolShare,
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 
@@ -161,6 +160,7 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
 
   // Attach the rate onto the PoolToken entity as well
   let poolToken = loadPoolToken(poolId.toHexString(), event.params.token);
+  if (poolToken == null) return;
   poolToken.priceRate = provider.rate;
   poolToken.save();
 }
@@ -181,12 +181,10 @@ export function handleTransfer(event: Transfer): void {
   let isMint = event.params.from.toHex() == ZERO_ADDRESS;
   let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
 
-  let poolShareFromId = getPoolShareId(poolAddress, event.params.from);
-  let poolShareFrom = PoolShare.load(poolShareFromId);
+  let poolShareFrom = getPoolShare(poolId.toHexString(), event.params.from);
   let poolShareFromBalance = poolShareFrom == null ? ZERO_BD : poolShareFrom.balance;
 
-  let poolShareToId = getPoolShareId(poolAddress, event.params.to);
-  let poolShareTo = PoolShare.load(poolShareToId);
+  let poolShareTo = getPoolShare(poolId.toHexString(), event.params.to);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
@@ -194,33 +192,17 @@ export function handleTransfer(event: Transfer): void {
   let BPT_DECIMALS = 18;
 
   if (isMint) {
-    if (poolShareTo == null) {
-      createPoolShareEntity(pool, event.params.to);
-      poolShareTo = PoolShare.load(poolShareToId);
-    }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
     pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
   } else if (isBurn) {
-    if (poolShareFrom == null) {
-      createPoolShareEntity(pool, event.params.from);
-      poolShareFrom = PoolShare.load(poolShareFromId);
-    }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareFrom.save();
     pool.totalShares = pool.totalShares.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
   } else {
-    if (poolShareTo == null) {
-      createPoolShareEntity(pool, event.params.to);
-      poolShareTo = PoolShare.load(poolShareToId);
-    }
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
 
-    if (poolShareFrom == null) {
-      createPoolShareEntity(pool, event.params.from);
-      poolShareFrom = PoolShare.load(poolShareFromId);
-    }
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareFrom.save();
   }

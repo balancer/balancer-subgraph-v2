@@ -46,7 +46,7 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string {
 
   if (!tokensCall.reverted) {
     let tokens = tokensCall.value.value0;
-    pool.tokensList = tokens as Bytes[];
+    pool.tokensList = changetype<Bytes[]>(tokens);
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       createPoolTokenEntity(poolId.toHexString(), tokens[i]);
@@ -98,7 +98,7 @@ function createStableLikePool(event: PoolCreated, poolType: string): string {
 
   if (!tokensCall.reverted) {
     let tokens = tokensCall.value.value0;
-    pool.tokensList = tokens as Bytes[];
+    pool.tokensList = changetype<Bytes[]>(tokens);
 
     for (let i: i32 = 0; i < tokens.length; i++) {
       createPoolTokenEntity(poolId.toHexString(), tokens[i]);
@@ -186,7 +186,7 @@ function findOrInitializeVault(): Balancer {
   return vault as Balancer;
 }
 
-function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool | null {
+function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool {
   let poolAddress: Address = event.params.pool;
 
   let pool = Pool.load(poolId.toHexString());

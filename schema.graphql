@@ -63,8 +63,8 @@ type Pool @entity {
 type PoolToken @entity {
   id: ID!
   poolId: Pool!
-  symbol: String
-  name: String
+  symbol: String!
+  name: String!
   decimals: Int!
   address: String!
   priceRate: BigDecimal!
