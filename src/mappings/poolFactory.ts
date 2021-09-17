@@ -162,19 +162,11 @@ export function handleNewCCPPool(event: PoolCreated): void {
 
   if (!tokensCall.reverted) {
     let tokens = tokensCall.value.value0;
-    let tokensList = pool.tokensList;
+    pool.tokensList = changetype<Bytes[]>(tokens);
 
     for (let i: i32 = 0; i < tokens.length; i++) {
-      let tokenAddress = tokens[i];
-
-      if (tokensList.indexOf(tokenAddress) == -1) {
-        tokensList.push(tokenAddress);
-      }
-
-      createPoolTokenEntity(poolId.toHexString(), tokenAddress);
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
     }
-
-    pool.tokensList = tokensList;
   }
   pool.save();
 
