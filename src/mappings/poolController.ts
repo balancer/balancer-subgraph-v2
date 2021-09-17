@@ -11,7 +11,6 @@ import {
   PriceRateCacheUpdated,
   PriceRateProviderSet,
 } from '../types/templates/MetaStablePool/MetaStablePool';
-import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
 
 import {
