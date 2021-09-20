@@ -1,4 +1,4 @@
-import { BigDecimal, Address, BigInt, log } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
 import {
   Pool,
   User,
@@ -66,15 +66,19 @@ export function getPoolShareSnapshot(poolId: string, lpAddress: Address, timesta
     poolShareSnapshot = new PoolShareSnapshot(id);
     poolShareSnapshot.poolId = pool.id;
     poolShareSnapshot.balance = ZERO_BD;
-    poolShareSnapshot.timestamp =  dayStartTimestamp;
-    poolShareSnapshot.userSnapshot = userSnapshot.id
+    poolShareSnapshot.timestamp = dayStartTimestamp;
+    poolShareSnapshot.userSnapshot = userSnapshot.id;
     poolShareSnapshot.save();
   }
   return poolShareSnapshot as PoolShareSnapshot;
 }
 
 export function updatePoolShareSnapshotFromShare(poolShare: PoolShare, timestamp: i32): void {
-  let poolShareSnapshot = getPoolShareSnapshot(poolShare.poolId, Address.fromHexString(poolShare.userAddress) as Address, timestamp);
+  let poolShareSnapshot = getPoolShareSnapshot(
+    poolShare.poolId,
+    Address.fromHexString(poolShare.userAddress) as Address,
+    timestamp
+  );
   poolShareSnapshot.balance = poolShare.balance;
   poolShareSnapshot.save();
 }

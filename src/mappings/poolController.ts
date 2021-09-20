@@ -235,10 +235,10 @@ export function handleTransfer(event: Transfer): void {
   }
 
   if (poolShareFrom != null) {
-    updatePoolShareSnapshotFromShare(poolShareFrom!, event.block.timestamp.toI32());
+    updatePoolShareSnapshotFromShare(poolShareFrom as PoolShare, event.block.timestamp.toI32());
   }
   if (poolShareTo != null) {
-    updatePoolShareSnapshotFromShare(poolShareTo!, event.block.timestamp.toI32());
+    updatePoolShareSnapshotFromShare(poolShareTo as PoolShare, event.block.timestamp.toI32());
   }
   pool.save();
 }

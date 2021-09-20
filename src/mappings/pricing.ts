@@ -1,5 +1,5 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
-import { getTokenPriceId, getUser, getUserSnapshot, loadPoolToken } from './helpers/misc';
+import { getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
@@ -13,13 +13,7 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(
-  poolId: string,
-  block: BigInt,
-  pricingAsset: Address,
-  timestamp: i32,
-  userAddress: Address
-): boolean {
+export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
 
