@@ -11,6 +11,9 @@ import {
   TradePair,
   TradePairSnapshot,
   PoolShareSnapshot,
+  TradePairPrice,
+  BatchSwap,
+  Swap,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { ONE, ONE_BD, ZERO, ZERO_BD } from './constants';
@@ -280,4 +283,41 @@ export function getTradePairSnapshot(tradePairId: string, timestamp: i32): Trade
     snapshot.save();
   }
   return snapshot as TradePairSnapshot;
+}
+
+export function getTradePairPrice(tradePairId: string, timestamp: i32): TradePairPrice {
+  let dayID = timestamp / 86400;
+  let id = tradePairId + '-price-' + dayID.toString();
+  let priceEntity = TradePairPrice.load(id);
+  if (!priceEntity) {
+    priceEntity = new TradePairPrice(id);
+    let dayStartTimestamp = dayID * 86400;
+    priceEntity.pair = tradePairId;
+    priceEntity.timestamp = dayStartTimestamp;
+    priceEntity.price = ZERO_BD;
+    priceEntity.save();
+  }
+  return priceEntity as TradePairPrice;
+}
+
+export function createBatchSwap(swap: Swap): BatchSwap {
+  let batchSwap = new BatchSwap(swap.tx.toHexString());
+  batchSwap.timestamp = swap.timestamp;
+  batchSwap.tokenIn = swap.tokenIn.toHexString();
+  batchSwap.tokenOut = swap.tokenOut.toHexString();
+  batchSwap.tokenAmountIn = swap.tokenAmountIn;
+  batchSwap.tokenAmountOut = swap.tokenAmountOut;
+  batchSwap.user = swap.userAddress;
+  batchSwap.swaps = [];
+  batchSwap.matchingTokens = false;
+  batchSwap.save();
+  return batchSwap as BatchSwap;
+}
+
+export function getBatchSwap(swap: Swap): BatchSwap {
+  let batchSwap = BatchSwap.load(swap.tx.toHexString());
+  if (batchSwap == null) {
+    batchSwap = createBatchSwap(swap);
+  }
+  return batchSwap as BatchSwap;
 }

@@ -215,6 +215,20 @@ type Swap @entity {
   userAddress: User!
   timestamp: Int!
   tx: Bytes!
+  batch: BatchSwap!
+}
+
+type BatchSwap @entity {
+  id: ID!
+  tokenIn: Token
+  tokenOut: Token
+  tokenAmountIn: BigDecimal
+  tokenAmountOut: BigDecimal
+  user: User!
+  timestamp: Int!
+  swaps: [Swap!]!
+  "If the tokenIn and tokenOut are the same tokens"
+  matchingTokens: Boolean
 }
 
 enum InvestType {
@@ -288,4 +302,13 @@ type TradePairSnapshot @entity {
   timestamp: Int!
   swapVolume: BigDecimal!
   swapFee: BigDecimal!
+}
+
+"Pair price data is snapshot on an hourly entity"
+type TradePairPrice @entity {
+  id: ID!
+  pair: TradePair!
+  timestamp: Int!
+  "Price in terms of token0"
+  price: BigDecimal!
 }

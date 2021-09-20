@@ -5,7 +5,16 @@ import {
   PoolBalanceManaged,
   InternalBalanceChanged,
 } from '../types/Vault/Vault';
-import { Balancer, Pool, Swap, JoinExit, Investment, TokenPrice, UserInternalBalance } from '../types/schema';
+import {
+  Balancer,
+  Pool,
+  Swap,
+  JoinExit,
+  Investment,
+  TokenPrice,
+  UserInternalBalance,
+  BatchSwap,
+} from '../types/schema';
 import {
   tokenToDecimal,
   getTokenPriceId,
@@ -19,6 +28,9 @@ import {
   getTradePair,
   getTradePairSnapshot,
   getBalancerSnapshot,
+  getTradePairPrice,
+  getBatchSwap,
+  createBatchSwap,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
@@ -275,6 +287,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, tokenIn.decimals);
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, tokenOut.decimals);
 
+  let blockTimestamp = event.block.timestamp.toI32();
+
   swap.tokenIn = tokenInAddress;
   swap.tokenInSym = tokenIn.symbol;
   swap.tokenAmountIn = tokenAmountIn;
@@ -287,10 +301,42 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.userAddress = event.transaction.from.toHex();
   swap.poolId = poolId.toHex();
 
-  let blockTimestamp = event.block.timestamp.toI32();
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
+  swap.batch = transactionHash.toHexString();
   swap.save();
+
+
+  let batchSwap = getBatchSwap(swap);
+  if (batchSwap.tokenIn == tokenInAddress.toHexString()) {
+    batchSwap.tokenAmountIn = batchSwap.tokenAmountIn.plus(tokenAmountIn);
+  }
+  
+  let swaps = batchSwap.swaps;
+  // the sum of amount of token out for the tokenOut in this swap
+  // under the same tx hash
+  let batchedTotalTokenAmountOut = tokenAmountOut;
+  for (let i = 0; i < swaps.length; i++) {
+    let _swap = Swap.load(swaps[i]);
+    if (tokenOutAddress.toHexString() == _swap.tokenOut.toHexString()) {
+      batchedTotalTokenAmountOut = batchedTotalTokenAmountOut.plus(_swap.tokenAmountOut);
+    }
+  }
+
+  batchSwap.tokenOut = tokenOutAddress.toHexString();
+  batchSwap.tokenAmountOut = batchedTotalTokenAmountOut;
+
+  if (batchSwap.tokenIn == batchSwap.tokenOut) {
+    batchSwap.matchingTokens = true;
+  }
+
+  // push the swap to list of swaps after performing the totals
+  // calc as we do not want to iterate over the current swap
+  // and load in the swap again
+  swaps.push(swap.id);
+  batchSwap.swaps = swaps;
+  batchSwap.user = event.transaction.from.toHexString();
+  batchSwap.save();
 
   let swapValueUSD =
     valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
@@ -349,19 +395,30 @@ export function handleSwapEvent(event: SwapEvent): void {
   userSnapshot.swapCount = userSnapshot.swapCount.plus(ONE);
   userSnapshot.save();
 
-  let tradePair = getTradePair(tokenInAddress, tokenOutAddress);
-  tradePair.totalSwapVolume = tradePair.totalSwapVolume.plus(swapValueUSD);
-  tradePair.totalSwapFee = tradePair.totalSwapFee.plus(swapFeesUSD);
-  tradePair.save();
-
-  let tradePairSnapshot = getTradePairSnapshot(tradePair.id, blockTimestamp);
-  tradePairSnapshot.swapVolume = tradePairSnapshot.swapVolume.plus(swapValueUSD);
-  tradePairSnapshot.swapFee = tradePairSnapshot.swapFee.plus(swapFeesUSD);
-  tradePairSnapshot.save();
+  // trade pairs calculated on batchswaps
+  if (batchSwap.tokenIn != batchSwap.tokenOut) {
+    let tradePair = getTradePair(tokenInAddress, tokenOutAddress);
+    tradePair.totalSwapVolume = tradePair.totalSwapVolume.plus(swapValueUSD);
+    tradePair.totalSwapFee = tradePair.totalSwapFee.plus(swapFeesUSD);
+    tradePair.save();
+  
+    let tradePairSnapshot = getTradePairSnapshot(tradePair.id, blockTimestamp);
+    tradePairSnapshot.swapVolume = tradePairSnapshot.swapVolume.plus(swapValueUSD);
+    tradePairSnapshot.swapFee = tradePairSnapshot.swapFee.plus(swapFeesUSD);
+    tradePairSnapshot.save();
+  }
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
   }
+
+  let tradePairPrice = getTradePairPrice(tradePair.id, blockTimestamp);
+  if (tokenInAddress.toHexString() == tradePair.token0) {
+    tradePairPrice.price = tokenAmountOut.div(tokenAmountIn);
+  } else if (tokenInAddress.toHexString() == tradePair.token1) {
+    tradePairPrice.price = tokenAmountIn.div(tokenAmountOut);
+  }
+  tradePairPrice.save();
 
   // Capture price
   let block = event.block.number;
