@@ -1,3 +1,4 @@
+import { Address } from '@graphprotocol/graph-ts';
 import { Pool } from '../../types/schema';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -12,4 +13,8 @@ export namespace PoolType {
 
 export function isVariableWeightPool(pool: Pool): boolean {
   return pool.poolType == PoolType.LiquidityBootstrapping || pool.poolType == PoolType.Investment;
+}
+
+export function getPoolAddress(poolId: string): Address {
+  return changetype<Address>(Address.fromHexString(poolId.slice(0, 42)));
 }

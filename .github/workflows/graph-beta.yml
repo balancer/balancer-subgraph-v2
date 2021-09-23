@@ -19,7 +19,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.0
+      - uses: gtaschuk/graph-deploy@v0.1.5
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-beta-v2"
@@ -39,7 +39,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.0
+      - uses: gtaschuk/graph-deploy@v0.1.5
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-kovan-v2-beta"
@@ -59,7 +59,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.0
+      - uses: gtaschuk/graph-deploy@v0.1.5
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-polygon-v2-beta"
@@ -79,7 +79,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.0
+      - uses: gtaschuk/graph-deploy@v0.1.5
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-arbitrum-v2-beta"

@@ -24,6 +24,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
 
     let poolToken = loadPoolToken(poolId, tokenAddress);
+    if (poolToken == null) continue;
 
     if (tokenAddress == pricingAsset) {
       poolValue = poolValue.plus(poolToken.balance);
@@ -89,7 +90,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   pool.save();
 
   // Update global stats
-  let vault = Balancer.load('2');
+  let vault = Balancer.load('2') as Balancer;
   let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
   vault.save();
@@ -98,7 +99,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 }
 
 export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal {
-  let usdValue: BigDecimal;
+  let usdValue = ZERO_BD;
 
   if (isUSDStable(pricingAsset)) {
     usdValue = value;

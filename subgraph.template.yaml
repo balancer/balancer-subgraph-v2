@@ -13,7 +13,7 @@ dataSources:
       startBlock: {{Vault.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/vault.ts
       entities:
@@ -47,7 +47,7 @@ dataSources:
       startBlock: {{WeightedPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -74,7 +74,7 @@ dataSources:
       startBlock: {{WeightedPool2TokenFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -102,7 +102,7 @@ dataSources:
       startBlock: {{StablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -131,7 +131,7 @@ dataSources:
       startBlock: {{MetaStablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -162,7 +162,7 @@ dataSources:
       startBlock: {{LiquidityBootstrappingPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -193,7 +193,7 @@ dataSources:
       startBlock: {{InvestmentPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -224,7 +224,7 @@ dataSources:
       startBlock: {{ConvergentPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -251,7 +251,7 @@ templates:
       abi: WeightedPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -276,7 +276,7 @@ templates:
       abi: StablePool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -303,7 +303,7 @@ templates:
       abi: MetaStablePool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -335,7 +335,7 @@ templates:
       abi: ConvergentCurvePool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -344,13 +344,15 @@ templates:
         - Swap
         - PoolToken
       abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: ConvergentCurvePool
           file: ./abis/ConvergentCurvePool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransferCCP
+          handler: handleTransfer
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
     network: {{network}}
@@ -358,7 +360,7 @@ templates:
       abi: LiquidityBootstrappingPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -388,7 +390,7 @@ templates:
       abi: InvestmentPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
