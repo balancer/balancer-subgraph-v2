@@ -18,9 +18,9 @@ mainnet:
   LiquidityBootstrappingPoolFactory:
     address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
     startBlock: 12871780
-  # InvestmentPoolFactory:
-  #   address: ""
-  #   startBlock: 0
+  InvestmentPoolFactory:
+    address: "0x48767F9F868a4A7b86A90736632F6E44C2df7fa9"
+    startBlock: 13279079
   ConvergentPoolFactory:
     address: "0xb7561f547F3207eDb42A6AfA42170Cd47ADD17BD"
     startBlock: 12686198
@@ -146,9 +146,9 @@ polygon:
   # LiquidityBootstrappingPoolFactory:
   #   address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
   #   startBlock: 17116402
-  # InvestmentPoolFactory:
-  #   address: ""
-  #   startBlock: 0
+  InvestmentPoolFactory:
+    address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
+    startBlock: 19404118
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
@@ -172,9 +172,9 @@ arbitrum:
   LiquidityBootstrappingPoolFactory:
     address: "0x142B9666a0a3A30477b052962ddA81547E7029ab"
     startBlock: 222870
-  # InvestmentPoolFactory:
-  #   address: ""
-  #   startBlock: 0
+  InvestmentPoolFactory:
+    address: "0xaCd615B3705B9c880E4E7293f1030B34e57B4c1c"
+    startBlock: 1488052
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
