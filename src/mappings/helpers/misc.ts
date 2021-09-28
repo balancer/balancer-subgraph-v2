@@ -46,7 +46,7 @@ export function getPoolShare(poolId: string, lpAddress: Address): PoolShare {
   if (poolShare == null) {
     return createPoolShareEntity(poolId, lpAddress);
   }
-  return poolShare;
+  return poolShare as PoolShare;
 }
 
 export function createPoolShareEntity(poolId: string, lpAddress: Address): PoolShare {

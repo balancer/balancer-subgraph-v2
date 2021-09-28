@@ -210,8 +210,8 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
     token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
 
-    tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.minus(tokenAmountOut);
-    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.minus(tokenAmountOutUSD);
+    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
 
     poolToken.balance = newAmount;
     poolToken.save();
@@ -278,7 +278,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   createUserEntity(event.transaction.from);
   let poolId = event.params.poolId;
 
-  let pool = Pool.load(poolId.toHex());
+  let pool = Pool.load(poolId.toHex()) as Pool;
   if (pool == null) {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
