@@ -234,7 +234,6 @@ export function createToken(tokenAddress: Address): Token {
   token.totalSwapCount = ZERO;
   token.totalVolumeUSD = ZERO_BD;
   token.totalVolumeNotional = ZERO_BD;
-  token.poolCount = ZERO;
   token.address = tokenAddress.toHexString();
   token.save();
   return token;
@@ -261,11 +260,11 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     let token = getToken(tokenAddress);
     dayData = new TokenSnapshot(id);
     dayData.timestamp = dayStartTimestamp;
-    dayData.totalSwapCount = ZERO;
-    dayData.totalBalanceUSD = ZERO_BD;
-    dayData.totalBalanceNotional = ZERO_BD;
-    dayData.totalVolumeUSD = ZERO_BD;
-    dayData.totalVolumeNotional = ZERO_BD;
+    dayData.swapCount = ZERO;
+    dayData.balanceUSD = ZERO_BD;
+    dayData.balanceNotional = ZERO_BD;
+    dayData.volumeUSD = ZERO_BD;
+    dayData.volumeNotional = ZERO_BD;
     dayData.token = token.id;
     dayData.save();
   }
@@ -281,7 +280,7 @@ export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event
 
   // update the snapshots
   let snapshot = getTokenSnapshot(tokenAddress, event);
-  snapshot.totalSwapCount = token.totalSwapCount.plus(BigInt.fromI32(1));
+  snapshot.swapCount = token.totalSwapCount.plus(BigInt.fromI32(1));
   snapshot.save();
 }
 
