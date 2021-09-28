@@ -22,6 +22,10 @@ dataSources:
         - PoolToken
         - User
         - UserInternalBalance
+        - Token
+        - TokenSnapshot
+        - TradePair
+        - TradePairSnapshot
       abis:
         - name: Vault
           file: ./abis/Vault.json
