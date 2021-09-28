@@ -28,7 +28,9 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO, ZERO_BD } from './helpers/constants';
-import { isVariableWeightPool } from './helpers/pools';
+import { isStableLikePool, isVariableWeightPool } from './helpers/pools';
+import { getAmp, updateAmpFactor } from './helpers/stable';
+import { StablePool } from '../types/templates/StablePool/StablePool';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -252,9 +254,12 @@ export function handleSwapEvent(event: SwapEvent): void {
     return;
   }
 
-  // Some pools' weights update over time so we need to update them after each swap
   if (isVariableWeightPool(pool)) {
+    // Some pools' weights update over time so we need to update them after each swap
     updatePoolWeights(poolId.toHexString());
+  } else if (isStableLikePool(pool)) {
+    // Stablelike pools' amplification factors update over time so we need to update them after each swap
+    updateAmpFactor(pool);
   }
 
   let tokenInAddress: Address = event.params.tokenIn;
