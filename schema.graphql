@@ -201,18 +201,15 @@ type PoolSnapshot @entity {
 
 type Token @entity {
   id: ID!
-  poolId: Pool!
   symbol: String
   name: String
   decimals: Int!
   address: String!
-  priceRate: BigDecimal!
   totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
   totalBalanceNotional: BigDecimal!
   totalVolumeUSD: BigDecimal! # total volume in fiat (usd)
   totalVolumeNotional: BigDecimal!
   totalSwapCount: BigInt!
-  poolCount: BigInt! # number of pools with this token
   latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
 }
 
@@ -220,11 +217,11 @@ type TokenSnapshot @entity {
   id: ID! # token address + dayId
   token: Token!
   timestamp: Int! # timestamp representing the start of day in UTC
-  totalVolumeUSD: BigDecimal! # amount of volume the token has moved on this day
-  totalVolumeNotional: BigDecimal! # underyling asset volume
-  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
-  totalBalanceNotional: BigDecimal! # underlying asset balance
-  totalSwapCount: BigInt!
+  volumeUSD: BigDecimal! # amount of volume the token has moved on this day
+  volumeNotional: BigDecimal! # underyling asset volume
+  balanceUSD: BigDecimal! # total balance of tokens across balancer
+  balanceNotional: BigDecimal! # underlying asset balance
+  swapCount: BigInt!
 }
 
 type TradePair @entity {

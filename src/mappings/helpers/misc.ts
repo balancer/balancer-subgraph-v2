@@ -1,5 +1,16 @@
 import { BigDecimal, Address, BigInt, ethereum } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider, Token, TokenSnapshot } from '../../types/schema';
+import {
+  Pool,
+  User,
+  PoolToken,
+  PoolShare,
+  PoolSnapshot,
+  PriceRateProvider,
+  Token,
+  TokenSnapshot,
+  TradePair,
+  TradePairSnapshot,
+} from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
@@ -286,24 +297,59 @@ export function updateTokenBalances(
 
   if (swapDirection == SWAP_IN) {
     token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
-    tokenSnapshot.totalBalanceNotional = tokenSnapshot.totalBalanceNotional.plus(notionalBalance);
+    tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.plus(notionalBalance);
 
     token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
-    tokenSnapshot.totalBalanceUSD = tokenSnapshot.totalBalanceUSD.plus(usdBalance);
+    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.plus(usdBalance);
   } else if (swapDirection == SWAP_OUT) {
     token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
-    tokenSnapshot.totalBalanceNotional = tokenSnapshot.totalBalanceNotional.minus(notionalBalance);
+    tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.minus(notionalBalance);
 
     token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
-    tokenSnapshot.totalBalanceUSD = tokenSnapshot.totalBalanceUSD.minus(usdBalance);
+    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.minus(usdBalance);
   }
 
   token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
-  tokenSnapshot.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
+  tokenSnapshot.volumeUSD = tokenSnapshot.volumeUSD.plus(usdBalance);
 
   token.totalVolumeNotional = token.totalVolumeNotional.plus(notionalBalance);
-  tokenSnapshot.totalVolumeNotional = token.totalVolumeNotional.plus(notionalBalance);
+  tokenSnapshot.volumeNotional = tokenSnapshot.volumeNotional.plus(notionalBalance);
 
   token.save();
   tokenSnapshot.save();
+}
+
+export function getTradePair(token0Address: Address, token1Address: Address): TradePair {
+  let sortedAddressses = new Array<string>(2);
+  sortedAddressses[0] = token0Address.toHexString();
+  sortedAddressses[1] = token1Address.toHexString();
+  sortedAddressses.sort();
+
+  let tradePairId = sortedAddressses[0] + '-' + sortedAddressses[1];
+  let tradePair = TradePair.load(tradePairId);
+  if (tradePair == null) {
+    tradePair = new TradePair(tradePairId);
+    tradePair.token0 = sortedAddressses[0];
+    tradePair.token1 = sortedAddressses[1];
+    tradePair.totalSwapFee = ZERO_BD;
+    tradePair.totalSwapVolume = ZERO_BD;
+    tradePair.save();
+  }
+  return tradePair as TradePair;
+}
+
+export function getTradePairSnapshot(tradePairId: string, timestamp: i32): TradePairSnapshot {
+  let dayID = timestamp / 86400;
+  let id = tradePairId + '-' + dayID.toString();
+  let snapshot = TradePairSnapshot.load(id);
+  if (!snapshot) {
+    snapshot = new TradePairSnapshot(id);
+    let dayStartTimestamp = dayID * 86400;
+    snapshot.pair = tradePairId;
+    snapshot.timestamp = dayStartTimestamp;
+    snapshot.swapVolume = ZERO_BD;
+    snapshot.swapFee = ZERO_BD;
+    snapshot.save();
+  }
+  return snapshot as TradePairSnapshot;
 }
