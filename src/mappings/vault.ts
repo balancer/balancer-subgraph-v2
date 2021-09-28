@@ -127,9 +127,13 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
     let tokenAmountIn = tokenToDecimal(amounts[i], poolToken.decimals);
     let newAmount = poolToken.balance.plus(tokenAmountIn);
+    let tokenAmountInUSD = valueInUSD(tokenAmountIn, tokenAddress);
 
     token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
+    token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
+
     tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.plus(tokenAmountIn);
+    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.plus(tokenAmountInUSD);
 
     poolToken.balance = newAmount;
     poolToken.save();
@@ -194,15 +198,20 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let poolToken = loadPoolToken(poolId, tokenAddress);
     let token = getToken(tokenAddress);
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
+
     // adding initial liquidity
     if (poolToken == null) {
       throw new Error('poolToken not found');
     }
     let tokenAmountOut = tokenToDecimal(amounts[i].neg(), poolToken.decimals);
+    let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
     let newAmount = poolToken.balance.minus(tokenAmountOut);
 
     token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
+    token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
+
     tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.minus(tokenAmountOut);
+    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.minus(tokenAmountOutUSD);
 
     poolToken.balance = newAmount;
     poolToken.save();
