@@ -7,7 +7,7 @@ type Balancer @entity {
   totalLiquidity: BigDecimal!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
-  totalSwapCount: BigDecimal!
+  totalSwapCount: BigInt!
 }
 
 type Pool @entity {

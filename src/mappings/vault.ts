@@ -309,7 +309,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
   vault.totalSwapFee = vault.totalSwapFee.plus(swapFeesUSD);
-  vault.totalSwapCount = vault.totalSwapCount.plus(ONE_BD);
+  vault.totalSwapCount = vault.totalSwapCount.plus(BigInt.fromI32(1));
 
   vault.totalSwapVolume = vault.totalSwapVolume;
   vault.totalSwapFee = vault.totalSwapFee;

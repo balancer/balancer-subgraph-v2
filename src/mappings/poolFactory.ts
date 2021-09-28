@@ -1,4 +1,4 @@
-import { ZERO_BD, VAULT_ADDRESS } from './helpers/constants';
+import { ZERO_BD, VAULT_ADDRESS, ZERO } from './helpers/constants';
 import { PoolType } from './helpers/pools';
 
 import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot } from './helpers/misc';
@@ -183,7 +183,7 @@ function findOrInitializeVault(): Balancer {
   vault.totalLiquidity = ZERO_BD;
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
-  vault.totalSwapCount = ZERO_BD;
+  vault.totalSwapCount = ZERO;
   return vault;
 }
 
