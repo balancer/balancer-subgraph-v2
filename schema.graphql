@@ -219,9 +219,9 @@ type TokenSnapshot @entity {
   timestamp: Int! # timestamp representing the start of day in UTC
   volumeUSD: BigDecimal! # amount of volume the token has moved on this day
   volumeNotional: BigDecimal! # underyling asset volume
-  balanceUSD: BigDecimal! # total balance of tokens across balancer
-  balanceNotional: BigDecimal! # underlying asset balance
-  swapCount: BigInt!
+  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
+  totalBalanceNotional: BigDecimal! # underlying asset balance
+  totalSwapCount: BigInt!
 }
 
 type TradePair @entity {

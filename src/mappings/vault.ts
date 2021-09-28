@@ -132,8 +132,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
     token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
 
-    tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.plus(tokenAmountIn);
-    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.plus(tokenAmountInUSD);
+    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
 
     poolToken.balance = newAmount;
     poolToken.save();

@@ -263,9 +263,9 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     let token = getToken(tokenAddress);
     dayData = new TokenSnapshot(id);
     dayData.timestamp = dayStartTimestamp;
-    dayData.swapCount = ZERO;
-    dayData.balanceUSD = ZERO_BD;
-    dayData.balanceNotional = ZERO_BD;
+    dayData.totalSwapCount = token.totalSwapCount;
+    dayData.totalBalanceUSD = token.totalBalanceUSD;
+    dayData.totalBalanceNotional = token.totalBalanceNotional;
     dayData.volumeUSD = ZERO_BD;
     dayData.volumeNotional = ZERO_BD;
     dayData.token = token.id;
@@ -283,7 +283,7 @@ export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event
 
   // update the snapshots
   let snapshot = getTokenSnapshot(tokenAddress, event);
-  snapshot.swapCount = token.totalSwapCount.plus(BigInt.fromI32(1));
+  snapshot.totalSwapCount = token.totalSwapCount;
   snapshot.save();
 }
 
@@ -299,16 +299,16 @@ export function updateTokenBalances(
 
   if (swapDirection == SWAP_IN) {
     token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
-    tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.plus(notionalBalance);
+    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
 
     token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
-    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.plus(usdBalance);
+    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
   } else if (swapDirection == SWAP_OUT) {
     token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
-    tokenSnapshot.balanceNotional = tokenSnapshot.balanceNotional.minus(notionalBalance);
+    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
 
     token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
-    tokenSnapshot.balanceUSD = tokenSnapshot.balanceUSD.minus(usdBalance);
+    tokenSnapshot.totalBalanceUSD = tokenSnapshot.totalBalanceUSD.minus(usdBalance);
   }
 
   token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
