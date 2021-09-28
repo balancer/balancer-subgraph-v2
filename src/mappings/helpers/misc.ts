@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider } from '../../types/schema';
+import { Pool, User, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider, BalancerSnapshot, Balancer } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { ONE_BD, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
@@ -196,4 +196,28 @@ export function createUserEntity(address: Address): void {
     let user = new User(addressHex);
     user.save();
   }
+}
+
+export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSnapshot {
+  let dayID = timestamp / 86400;
+  let id = vaultId + '-' + dayID.toString();
+  let snapshot = BalancerSnapshot.load(id);
+  // we know that the vault should be created by this call
+  let vault = Balancer.load('2') as Balancer;
+
+  if (snapshot == null) {
+    let dayStartTimestamp = dayID * 86400;
+    snapshot = new BalancerSnapshot(id);
+    snapshot.poolCount = 0;
+
+    snapshot.totalLiquidity = vault.totalLiquidity;
+    snapshot.totalSwapFee = vault.totalSwapFee;
+    snapshot.totalSwapVolume = vault.totalSwapVolume;
+    snapshot.totalSwapCount = vault.totalSwapCount;
+    snapshot.vault = vaultId;
+    snapshot.timestamp = dayStartTimestamp;
+    snapshot.save();
+  }
+
+  return snapshot as BalancerSnapshot;
 }

@@ -1,5 +1,5 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
-import { getTokenPriceId, loadPoolToken } from './helpers/misc';
+import { getBalancerSnapshot, getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
@@ -11,7 +11,7 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): boolean {
+export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
 
@@ -91,9 +91,14 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   // Update global stats
   let vault = Balancer.load('2') as Balancer;
+  let vaultSnapshot = getBalancerSnapshot(vault.id, timestamp);
   let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
+
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
+  vaultSnapshot.totalLiquidity = vault.totalLiquidity;
+
   vault.save();
+  vaultSnapshot.save();
 
   return true;
 }

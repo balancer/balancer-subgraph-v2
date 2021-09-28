@@ -7,6 +7,7 @@ type Balancer @entity {
   totalLiquidity: BigDecimal!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+  totalSwapCount: BigDecimal!
 }
 
 type Pool @entity {
@@ -196,4 +197,15 @@ type PoolSnapshot @entity {
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
   timestamp: Int!
+}
+
+type BalancerSnapshot @entity {
+  id: ID!
+  vault: Balancer!
+  timestamp: Int!
+  poolCount: Int!
+  totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
 }
