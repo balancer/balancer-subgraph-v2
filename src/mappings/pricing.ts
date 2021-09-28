@@ -1,5 +1,5 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
-import { getTokenPriceId, loadPoolToken } from './helpers/misc';
+import { getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
@@ -38,6 +38,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     let price: BigDecimal;
     let latestPriceId = getLatestPriceId(tokenAddress, pricingAsset);
     let latestPrice = LatestPrice.load(latestPriceId);
+    let token = getToken(tokenAddress);
 
     if (tokenPrice == null && latestPrice != null) {
       price = latestPrice.price;
@@ -58,6 +59,9 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       latestPrice.block = block;
       latestPrice.poolId = poolId;
       latestPrice.save();
+
+      token.latestPrice = latestPrice.id;
+      token.save();
     }
     if (price) {
       let poolTokenValue = price.times(poolTokenQuantity);
