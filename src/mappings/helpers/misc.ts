@@ -208,7 +208,7 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   if (snapshot == null) {
     let dayStartTimestamp = dayID * 86400;
     snapshot = new BalancerSnapshot(id);
-    snapshot.poolCount = 0;
+    snapshot.poolCount = vault.poolCount;
 
     snapshot.totalLiquidity = vault.totalLiquidity;
     snapshot.totalSwapFee = vault.totalSwapFee;
