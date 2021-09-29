@@ -125,7 +125,7 @@ function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, blo
   return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
 }
 
-function isUSDStable(asset: Address): boolean {
+export function isUSDStable(asset: Address): boolean {
   for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
     if (USD_STABLE_ASSETS[i] == asset) return true;
   }
