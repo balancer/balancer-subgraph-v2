@@ -291,11 +291,9 @@ export function handleSwapEvent(event: SwapEvent): void {
   let swapValueUSD = ZERO_BD;
   if (isUSDStable(tokenOutAddress)) {
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-  }
-  else if (isUSDStable(tokenInAddress)) {
+  } else if (isUSDStable(tokenInAddress)) {
     swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-  }
-  else {
+  } else {
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
   }
 
