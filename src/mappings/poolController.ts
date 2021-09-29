@@ -24,6 +24,7 @@ import {
   getPoolShare,
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { updateAmpFactor } from './helpers/stable';
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -95,17 +96,21 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
   // TODO - refactor so pool -> poolId doesn't require call
   let poolContract = WeightedPool.bind(poolAddress);
   let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolId = poolIdCall.value.toHexString();
 
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let ampUpdate = new AmpUpdate(id);
-  ampUpdate.poolId = poolId.toHexString();
+  ampUpdate.poolId = poolId;
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   ampUpdate.startTimestamp = event.block.timestamp.toI32();
   ampUpdate.endTimestamp = event.block.timestamp.toI32();
   ampUpdate.startAmp = event.params.currentValue;
   ampUpdate.endAmp = event.params.currentValue;
   ampUpdate.save();
+
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
+  updateAmpFactor(pool);
 }
 
 /************************************
