@@ -142,10 +142,9 @@ polygon:
   # MetaStablePoolFactory:
   #   address: ""
   #   startBlock: 0
-  # LBPs are disabled due to indexing errors
-  # LiquidityBootstrappingPoolFactory:
-  #   address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
-  #   startBlock: 17116402
+  LiquidityBootstrappingPoolFactory:
+    address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
+    startBlock: 17116402
   InvestmentPoolFactory:
     address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
     startBlock: 19404118
