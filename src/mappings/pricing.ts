@@ -67,6 +67,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
   let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset) || ZERO_BD;
+  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
 
   // If the pool isn't empty but we have a zero USD value then it's likely that we have a bad pricing asset
   // Don't commit any changes and just report the failure.
@@ -91,12 +92,10 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   // Update global stats
   let vault = Balancer.load('2') as Balancer;
-  let vaultSnapshot = getBalancerSnapshot(vault.id, timestamp);
-  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
-
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
   vault.save();
 
+  let vaultSnapshot = getBalancerSnapshot(vault.id, timestamp);
   vaultSnapshot.totalLiquidity = vault.totalLiquidity;
   vaultSnapshot.save();
 
