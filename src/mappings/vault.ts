@@ -28,7 +28,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { ONE_BD, ZERO, ZERO_BD } from './helpers/constants';
+import { ZERO, ZERO_BD } from './helpers/constants';
 import { isVariableWeightPool } from './helpers/pools';
 
 /************************************
@@ -310,13 +310,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
   vault.totalSwapFee = vault.totalSwapFee.plus(swapFeesUSD);
   vault.totalSwapCount = vault.totalSwapCount.plus(BigInt.fromI32(1));
-
-  vault.totalSwapVolume = vault.totalSwapVolume;
-  vault.totalSwapFee = vault.totalSwapFee;
-  vault.totalSwapCount = vault.totalSwapCount;
-
-  vaultSnapshot.save();
   vault.save();
+
+  vaultSnapshot.totalSwapVolume = vault.totalSwapVolume;
+  vaultSnapshot.totalSwapFee = vault.totalSwapFee;
+  vaultSnapshot.totalSwapCount = vault.totalSwapCount;
+  vaultSnapshot.save();
 
   let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
   poolTokenIn.balance = newInAmount;
