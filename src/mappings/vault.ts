@@ -29,8 +29,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO, ZERO_BD } from './helpers/constants';
 import { isStableLikePool, isVariableWeightPool } from './helpers/pools';
-import { getAmp, updateAmpFactor } from './helpers/stable';
-import { StablePool } from '../types/templates/StablePool/StablePool';
+import { updateAmpFactor } from './helpers/stable';
 
 /************************************
  ******** INTERNAL BALANCES *********
