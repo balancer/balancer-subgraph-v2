@@ -95,9 +95,9 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
 
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
-  vaultSnapshot.totalLiquidity = vault.totalLiquidity;
-
   vault.save();
+
+  vaultSnapshot.totalLiquidity = vault.totalLiquidity;
   vaultSnapshot.save();
 
   return true;
