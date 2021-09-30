@@ -118,8 +118,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
-    let token = getToken(tokenAddress);
-    let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
 
     // adding initial liquidity
     if (poolToken == null) {
@@ -129,10 +127,12 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let newAmount = poolToken.balance.plus(tokenAmountIn);
     let tokenAmountInUSD = valueInUSD(tokenAmountIn, tokenAddress);
 
+    let token = getToken(tokenAddress);
     token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
     token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
     token.save();
 
+    let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
     tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
     tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
     tokenSnapshot.save();
@@ -196,21 +196,21 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
-    let token = getToken(tokenAddress);
-    let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
 
     // adding initial liquidity
     if (poolToken == null) {
       throw new Error('poolToken not found');
     }
     let tokenAmountOut = tokenToDecimal(amounts[i].neg(), poolToken.decimals);
-    let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
     let newAmount = poolToken.balance.minus(tokenAmountOut);
+    let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
 
+    let token = getToken(tokenAddress);
     token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
     token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
     token.save();
 
+    let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
     tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
     tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
     tokenSnapshot.save();
@@ -294,8 +294,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
-  let swapId = transactionHash.toHexString().concat(logIndex.toString());
-  let swap = new Swap(swapId);
+  let blockTimestamp = event.block.timestamp.toI32();
 
   let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress) as PoolToken;
   let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress) as PoolToken;
@@ -303,6 +302,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, poolTokenIn.decimals);
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, poolTokenOut.decimals);
 
+  let swapId = transactionHash.toHexString().concat(logIndex.toString());
+  let swap = new Swap(swapId);
   swap.tokenIn = tokenInAddress;
   swap.tokenInSym = poolTokenIn.symbol;
   swap.tokenAmountIn = tokenAmountIn;
@@ -315,7 +316,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.userAddress = event.transaction.from.toHex();
   swap.poolId = poolId.toHex();
 
-  let blockTimestamp = event.block.timestamp.toI32();
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
   swap.save();
