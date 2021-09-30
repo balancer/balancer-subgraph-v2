@@ -131,14 +131,14 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
     token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
     token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
+    token.save();
 
     tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
     tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.save();
 
     poolToken.balance = newAmount;
     poolToken.save();
-    token.save();
-    tokenSnapshot.save();
   }
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -209,14 +209,14 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 
     token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
     token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
+    token.save();
 
     tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
     tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.save();
 
     poolToken.balance = newAmount;
     poolToken.save();
-    token.save();
-    tokenSnapshot.save();
   }
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
