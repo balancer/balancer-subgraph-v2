@@ -26,7 +26,7 @@ import {
   loadPoolToken,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
-import { isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
+import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO, ZERO_BD } from './helpers/constants';
 import { isVariableWeightPool } from './helpers/pools';
 
@@ -288,8 +288,14 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tx = transactionHash;
   swap.save();
 
-  let swapValueUSD =
-    valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
+  let swapValueUSD = ZERO_BD;
+  if (isUSDStable(tokenOutAddress)) {
+    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+  } else if (isUSDStable(tokenInAddress)) {
+    swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+  } else {
+    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
+  }
 
   // update pool swapsCount
   // let pool = Pool.load(poolId.toHex());
