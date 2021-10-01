@@ -214,11 +214,10 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.save();
 
     let vault = findOrInitializeVault();
-    let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
-
     vault.poolCount += 1;
     vault.save();
 
+    let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
     vaultSnapshot.poolCount += 1;
     vaultSnapshot.save();
   }

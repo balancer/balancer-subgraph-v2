@@ -305,13 +305,12 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // update vault total swap volume
   let vault = Balancer.load('2') as Balancer;
-  let vaultSnapshot = getBalancerSnapshot(vault.id, blockTimestamp);
-
   vault.totalSwapVolume = vault.totalSwapVolume.plus(swapValueUSD);
   vault.totalSwapFee = vault.totalSwapFee.plus(swapFeesUSD);
   vault.totalSwapCount = vault.totalSwapCount.plus(BigInt.fromI32(1));
   vault.save();
 
+  let vaultSnapshot = getBalancerSnapshot(vault.id, blockTimestamp);
   vaultSnapshot.totalSwapVolume = vault.totalSwapVolume;
   vaultSnapshot.totalSwapFee = vault.totalSwapFee;
   vaultSnapshot.totalSwapCount = vault.totalSwapCount;

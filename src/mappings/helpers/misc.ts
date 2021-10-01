@@ -211,12 +211,12 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   let dayID = timestamp / 86400;
   let id = vaultId + '-' + dayID.toString();
   let snapshot = BalancerSnapshot.load(id);
-  // we know that the vault should be created by this call
-  let vault = Balancer.load('2') as Balancer;
 
   if (snapshot == null) {
     let dayStartTimestamp = dayID * 86400;
     snapshot = new BalancerSnapshot(id);
+    // we know that the vault should be created by this call
+    let vault = Balancer.load('2') as Balancer;
     snapshot.poolCount = vault.poolCount;
 
     snapshot.totalLiquidity = vault.totalLiquidity;
