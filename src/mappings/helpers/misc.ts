@@ -316,17 +316,17 @@ export function updateTokenBalances(
 }
 
 export function getTradePair(token0Address: Address, token1Address: Address): TradePair {
-  let sortedAddressses = new Array<string>(2);
-  sortedAddressses[0] = token0Address.toHexString();
-  sortedAddressses[1] = token1Address.toHexString();
-  sortedAddressses.sort();
+  let sortedAddresses = new Array<string>(2);
+  sortedAddresses[0] = token0Address.toHexString();
+  sortedAddresses[1] = token1Address.toHexString();
+  sortedAddresses.sort();
 
-  let tradePairId = sortedAddressses[0] + '-' + sortedAddressses[1];
+  let tradePairId = sortedAddresses[0] + '-' + sortedAddresses[1];
   let tradePair = TradePair.load(tradePairId);
   if (tradePair == null) {
     tradePair = new TradePair(tradePairId);
-    tradePair.token0 = sortedAddressses[0];
-    tradePair.token1 = sortedAddressses[1];
+    tradePair.token0 = sortedAddresses[0];
+    tradePair.token1 = sortedAddresses[1];
     tradePair.totalSwapFee = ZERO_BD;
     tradePair.totalSwapVolume = ZERO_BD;
     tradePair.save();
