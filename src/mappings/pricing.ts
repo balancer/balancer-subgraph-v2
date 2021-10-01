@@ -1,5 +1,5 @@
 import { PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
-import { getTokenPriceId, loadPoolToken } from './helpers/misc';
+import { getBalancerSnapshot, getTokenPriceId, loadPoolToken } from './helpers/misc';
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD } from './helpers/constants';
@@ -11,7 +11,7 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address): boolean {
+export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
 
@@ -67,6 +67,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
   let newPoolLiquidity: BigDecimal = valueInUSD(poolValue, pricingAsset) || ZERO_BD;
+  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
 
   // If the pool isn't empty but we have a zero USD value then it's likely that we have a bad pricing asset
   // Don't commit any changes and just report the failure.
@@ -91,9 +92,12 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   // Update global stats
   let vault = Balancer.load('2') as Balancer;
-  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
   vault.save();
+
+  let vaultSnapshot = getBalancerSnapshot(vault.id, timestamp);
+  vaultSnapshot.totalLiquidity = vault.totalLiquidity;
+  vaultSnapshot.save();
 
   return true;
 }
