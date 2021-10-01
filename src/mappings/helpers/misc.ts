@@ -295,29 +295,23 @@ export function updateTokenBalances(
   event: SwapEvent
 ): void {
   let token = getToken(tokenAddress);
-  let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
 
   if (swapDirection == SWAP_IN) {
     token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-
     token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
-    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
   } else if (swapDirection == SWAP_OUT) {
     token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-
     token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
-    tokenSnapshot.totalBalanceUSD = tokenSnapshot.totalBalanceUSD.minus(usdBalance);
   }
 
   token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
-  tokenSnapshot.volumeUSD = tokenSnapshot.volumeUSD.plus(usdBalance);
-
-  token.totalVolumeNotional = token.totalVolumeNotional.plus(notionalBalance);
-  tokenSnapshot.volumeNotional = tokenSnapshot.volumeNotional.plus(notionalBalance);
-
   token.save();
+
+  let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
+  tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
+  tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+  tokenSnapshot.volumeNotional = token.totalVolumeNotional;
+  tokenSnapshot.volumeUSD = token.totalVolumeUSD;
   tokenSnapshot.save();
 }
 
