@@ -5,9 +5,9 @@ type Balancer @entity {
   pools: [Pool!] @derivedFrom(field: "vaultID")
 
   totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
-  totalSwapCount: BigInt!
 }
 
 type Pool @entity {
