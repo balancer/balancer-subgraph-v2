@@ -63,6 +63,7 @@ type Pool @entity {
 type PoolToken @entity {
   id: ID!
   poolId: Pool!
+  token: Token!
   symbol: String!
   name: String!
   decimals: Int!
@@ -74,7 +75,6 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
-  token: Token!
 }
 
 type PriceRateProvider @entity {
