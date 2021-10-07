@@ -310,8 +310,8 @@ export function updateTokenBalances(
   let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
   tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
   tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
-  tokenSnapshot.volumeNotional = token.totalVolumeNotional;
-  tokenSnapshot.volumeUSD = token.totalVolumeUSD;
+  tokenSnapshot.totalVolumeNotional = token.totalVolumeNotional;
+  tokenSnapshot.totalVolumeUSD = token.totalVolumeUSD;
   tokenSnapshot.save();
 }
 
