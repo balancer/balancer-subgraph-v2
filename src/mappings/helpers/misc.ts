@@ -266,8 +266,8 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     dayData.totalSwapCount = token.totalSwapCount;
     dayData.totalBalanceUSD = token.totalBalanceUSD;
     dayData.totalBalanceNotional = token.totalBalanceNotional;
-    dayData.volumeUSD = ZERO_BD;
-    dayData.volumeNotional = ZERO_BD;
+    dayData.totalVolumeUSD = ZERO_BD;
+    dayData.totalVolumeNotional = ZERO_BD;
     dayData.token = token.id;
     dayData.save();
   }
