@@ -38,7 +38,6 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     let price: BigDecimal;
     let latestPriceId = getLatestPriceId(tokenAddress, pricingAsset);
     let latestPrice = LatestPrice.load(latestPriceId);
-    let token = getToken(tokenAddress);
 
     if (tokenPrice == null && latestPrice != null) {
       price = latestPrice.price;
@@ -60,6 +59,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       latestPrice.poolId = poolId;
       latestPrice.save();
 
+      let token = getToken(tokenAddress);
       token.latestPrice = latestPrice.id;
       token.save();
     }

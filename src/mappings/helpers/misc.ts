@@ -266,8 +266,8 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     dayData.totalSwapCount = token.totalSwapCount;
     dayData.totalBalanceUSD = token.totalBalanceUSD;
     dayData.totalBalanceNotional = token.totalBalanceNotional;
-    dayData.totalVolumeUSD = ZERO_BD;
-    dayData.totalVolumeNotional = ZERO_BD;
+    dayData.totalVolumeUSD = token.totalVolumeUSD;
+    dayData.totalVolumeNotional = token.totalVolumeNotional;
     dayData.token = token.id;
     dayData.save();
   }
@@ -338,13 +338,14 @@ export function getTradePairSnapshot(tradePairId: string, timestamp: i32): Trade
   let dayID = timestamp / 86400;
   let id = tradePairId + '-' + dayID.toString();
   let snapshot = TradePairSnapshot.load(id);
-  if (!snapshot) {
+  let tradePair = TradePair.load(tradePairId);
+  if (!snapshot && tradePair != null) {
     snapshot = new TradePairSnapshot(id);
     let dayStartTimestamp = dayID * 86400;
     snapshot.pair = tradePairId;
     snapshot.timestamp = dayStartTimestamp;
-    snapshot.swapVolume = ZERO_BD;
-    snapshot.swapFee = ZERO_BD;
+    snapshot.totalSwapVolume = tradePair.totalSwapVolume;
+    snapshot.totalSwapFee = tradePair.totalSwapFee;
     snapshot.save();
   }
   return snapshot as TradePairSnapshot;
