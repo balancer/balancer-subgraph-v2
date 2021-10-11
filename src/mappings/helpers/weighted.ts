@@ -1,9 +1,10 @@
-import { ZERO_BD } from './constants';
-import { scaleDown, loadPoolToken } from './misc';
+import { Address } from '@graphprotocol/graph-ts';
 
 import { Pool } from '../../types/schema';
 import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
-import { Address } from '@graphprotocol/graph-ts';
+
+import { ZERO_BD } from './constants';
+import { scaleDown, loadPoolToken } from './misc';
 
 export function updatePoolWeights(poolId: string): void {
   let pool = Pool.load(poolId);

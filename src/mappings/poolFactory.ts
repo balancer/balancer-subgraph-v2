@@ -184,7 +184,7 @@ function findOrInitializeVault(): Balancer {
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
   vault.totalSwapCount = ZERO;
-  return vault;
+  return vault as Balancer;
 }
 
 function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool {
@@ -222,5 +222,5 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     vaultSnapshot.save();
   }
 
-  return pool;
+  return pool as Pool;
 }

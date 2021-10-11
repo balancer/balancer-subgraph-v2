@@ -1,4 +1,4 @@
-import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, BigInt, ethereum } from '@graphprotocol/graph-ts';
 import {
   Pool,
   User,
@@ -6,11 +6,16 @@ import {
   PoolShare,
   PoolSnapshot,
   PriceRateProvider,
+  Token,
+  TokenSnapshot,
+  TradePair,
+  TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { ONE_BD, ZERO_BD } from './constants';
+import { Swap as SwapEvent } from '../../types/Vault/Vault';
+import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
 
 const DAY = 24 * 60 * 60;
@@ -43,7 +48,7 @@ export function getPoolShare(poolId: string, lpAddress: Address): PoolShare {
   if (poolShare == null) {
     return createPoolShareEntity(poolId, lpAddress);
   }
-  return poolShare;
+  return poolShare as PoolShare;
 }
 
 export function createPoolShareEntity(poolId: string, lpAddress: Address): PoolShare {
@@ -119,6 +124,8 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   }
 
   let poolToken = new PoolToken(poolTokenId);
+  // ensures token entity is created
+  let _token = getToken(tokenAddress);
   poolToken.poolId = poolId;
   poolToken.address = tokenAddress.toHexString();
   poolToken.name = name;
@@ -127,6 +134,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   poolToken.balance = ZERO_BD;
   poolToken.invested = ZERO_BD;
   poolToken.priceRate = ONE_BD;
+  poolToken.token = _token.id;
   poolToken.save();
 }
 
@@ -205,6 +213,144 @@ export function createUserEntity(address: Address): void {
     let user = new User(addressHex);
     user.save();
   }
+}
+
+export function createToken(tokenAddress: Address): Token {
+  let erc20token = ERC20.bind(tokenAddress);
+  let token = new Token(tokenAddress.toHexString());
+  let name = '';
+  let symbol = '';
+  let decimals = 0;
+
+  // attempt to retrieve erc20 values
+  let maybeName = erc20token.try_name();
+  let maybeSymbol = erc20token.try_symbol();
+  let maybeDecimals = erc20token.try_decimals();
+
+  if (!maybeName.reverted) name = maybeName.value;
+  if (!maybeSymbol.reverted) symbol = maybeSymbol.value;
+  if (!maybeDecimals.reverted) decimals = maybeDecimals.value;
+
+  token.name = name;
+  token.symbol = symbol;
+  token.decimals = decimals;
+  token.totalBalanceUSD = ZERO_BD;
+  token.totalBalanceNotional = ZERO_BD;
+  token.totalSwapCount = ZERO;
+  token.totalVolumeUSD = ZERO_BD;
+  token.totalVolumeNotional = ZERO_BD;
+  token.address = tokenAddress.toHexString();
+  token.save();
+  return token;
+}
+
+// this will create the token entity and populate
+// with erc20 values
+export function getToken(tokenAddress: Address): Token {
+  let token = Token.load(tokenAddress.toHexString());
+  if (token == null) {
+    token = createToken(tokenAddress);
+  }
+  return token as Token;
+}
+
+export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): TokenSnapshot {
+  let timestamp = event.block.timestamp.toI32();
+  let dayID = timestamp / 86400;
+  let id = tokenAddress.toHexString() + '-' + dayID.toString();
+  let dayData = TokenSnapshot.load(id);
+
+  if (dayData == null) {
+    let dayStartTimestamp = dayID * 86400;
+    let token = getToken(tokenAddress);
+    dayData = new TokenSnapshot(id);
+    dayData.timestamp = dayStartTimestamp;
+    dayData.totalSwapCount = token.totalSwapCount;
+    dayData.totalBalanceUSD = token.totalBalanceUSD;
+    dayData.totalBalanceNotional = token.totalBalanceNotional;
+    dayData.totalVolumeUSD = token.totalVolumeUSD;
+    dayData.totalVolumeNotional = token.totalVolumeNotional;
+    dayData.token = token.id;
+    dayData.save();
+  }
+
+  return dayData as TokenSnapshot;
+}
+
+export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event): void {
+  let token = getToken(tokenAddress);
+  // update the overall swap count for the token
+  token.totalSwapCount = token.totalSwapCount.plus(BigInt.fromI32(1));
+  token.save();
+
+  // update the snapshots
+  let snapshot = getTokenSnapshot(tokenAddress, event);
+  snapshot.totalSwapCount = token.totalSwapCount;
+  snapshot.save();
+}
+
+export function updateTokenBalances(
+  tokenAddress: Address,
+  usdBalance: BigDecimal,
+  notionalBalance: BigDecimal,
+  swapDirection: i32,
+  event: SwapEvent
+): void {
+  let token = getToken(tokenAddress);
+
+  if (swapDirection == SWAP_IN) {
+    token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
+    token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
+  } else if (swapDirection == SWAP_OUT) {
+    token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
+    token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
+  }
+
+  token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
+  token.save();
+
+  let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
+  tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
+  tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+  tokenSnapshot.totalVolumeNotional = token.totalVolumeNotional;
+  tokenSnapshot.totalVolumeUSD = token.totalVolumeUSD;
+  tokenSnapshot.save();
+}
+
+export function getTradePair(token0Address: Address, token1Address: Address): TradePair {
+  let sortedAddresses = new Array<string>(2);
+  sortedAddresses[0] = token0Address.toHexString();
+  sortedAddresses[1] = token1Address.toHexString();
+  sortedAddresses.sort();
+
+  let tradePairId = sortedAddresses[0] + '-' + sortedAddresses[1];
+  let tradePair = TradePair.load(tradePairId);
+  if (tradePair == null) {
+    tradePair = new TradePair(tradePairId);
+    tradePair.token0 = sortedAddresses[0];
+    tradePair.token1 = sortedAddresses[1];
+    tradePair.totalSwapFee = ZERO_BD;
+    tradePair.totalSwapVolume = ZERO_BD;
+    tradePair.save();
+  }
+  return tradePair as TradePair;
+}
+
+export function getTradePairSnapshot(tradePairId: string, timestamp: i32): TradePairSnapshot {
+  let dayID = timestamp / 86400;
+  let id = tradePairId + '-' + dayID.toString();
+  let snapshot = TradePairSnapshot.load(id);
+  let tradePair = TradePair.load(tradePairId);
+  if (!snapshot && tradePair != null) {
+    snapshot = new TradePairSnapshot(id);
+    let dayStartTimestamp = dayID * 86400;
+    snapshot.pair = tradePairId;
+    snapshot.timestamp = dayStartTimestamp;
+    snapshot.totalSwapVolume = tradePair.totalSwapVolume;
+    snapshot.totalSwapFee = tradePair.totalSwapFee;
+    snapshot.save();
+  }
+  return snapshot as TradePairSnapshot;
 }
 
 export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSnapshot {
