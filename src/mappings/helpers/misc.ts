@@ -12,9 +12,9 @@ import {
   TradePairSnapshot,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
+import { Swap as SwapEvent } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
-import { Swap as SwapEvent } from '../../types/Vault/Vault';
 
 const DAY = 24 * 60 * 60;
 
