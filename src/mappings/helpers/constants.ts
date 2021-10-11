@@ -86,7 +86,7 @@ let daiAddressByNetwork: AddressByNetwork = {
   goerli: '0x78dEca24CBa286C0f8d56370f5406B48cFCE2f86',
   rinkeby: '0xc3dbf84Abb494ce5199D5d4D815b10EC29529ff8',
   polygon: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
-  arbitrum: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', // DAI not deployed yet so lets just use USDC
+  arbitrum: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
   dev: '0x5C0E66606eAbEC1df45E2ADd26C5DF8C0895a397',
 };
 

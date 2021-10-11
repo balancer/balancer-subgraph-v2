@@ -26,6 +26,7 @@ dataSources:
         - TokenSnapshot
         - TradePair
         - TradePairSnapshot
+        - BalancerSnapshot
       abis:
         - name: Vault
           file: ./abis/Vault.json

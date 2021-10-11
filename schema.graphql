@@ -5,6 +5,7 @@ type Balancer @entity {
   pools: [Pool!] @derivedFrom(field: "vaultID")
 
   totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 }
@@ -237,6 +238,17 @@ type TradePairSnapshot @entity {
   id: ID!
   pair: TradePair!
   timestamp: Int!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}
+
+type BalancerSnapshot @entity {
+  id: ID!
+  vault: Balancer!
+  timestamp: Int!
+  poolCount: Int!
+  totalLiquidity: BigDecimal!
+  totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 }
