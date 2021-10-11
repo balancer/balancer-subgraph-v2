@@ -217,10 +217,10 @@ type TokenSnapshot @entity {
   id: ID! # token address + dayId
   token: Token!
   timestamp: Int! # timestamp representing the start of day in UTC
-  totalVolumeUSD: BigDecimal! # amount of volume the token has moved on this day
-  totalVolumeNotional: BigDecimal! # underyling asset volume
   totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
   totalBalanceNotional: BigDecimal! # underlying asset balance
+  totalVolumeUSD: BigDecimal! # amount of volume the token has moved on this day
+  totalVolumeNotional: BigDecimal! # underyling asset volume
   totalSwapCount: BigInt!
 }
 
@@ -239,4 +239,4 @@ type TradePairSnapshot @entity {
   timestamp: Int!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
-} 
+}
