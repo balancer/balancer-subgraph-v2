@@ -21,7 +21,6 @@ import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
-import { getAmp } from './helpers/stable';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
   let poolAddress: Address = event.params.pool;
@@ -104,8 +103,6 @@ function createStableLikePool(event: PoolCreated, poolType: string): string {
       createPoolTokenEntity(poolId.toHexString(), tokens[i]);
     }
   }
-
-  pool.amp = getAmp(poolContract);
 
   pool.save();
 
