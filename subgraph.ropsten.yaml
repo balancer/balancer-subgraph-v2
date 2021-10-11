@@ -150,6 +150,10 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: AmpUpdateStarted(uint256,uint256,uint256,uint256)
+          handler: handleAmpUpdateStarted
+        - event: AmpUpdateStopped(uint256)
+          handler: handleAmpUpdateStopped
   - kind: ethereum/contract
     name: MetaStablePool
     network: ropsten

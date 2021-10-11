@@ -7,11 +7,13 @@ import {
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
 import {
+  AmpUpdateStarted,
+  AmpUpdateStopped,
   MetaStablePool,
   PriceRateCacheUpdated,
   PriceRateProviderSet,
 } from '../types/templates/MetaStablePool/MetaStablePool';
-import { Pool, PriceRateProvider, GradualWeightUpdate } from '../types/schema';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -22,6 +24,7 @@ import {
   getPoolShare,
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { updateAmpFactor } from './helpers/stable';
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -62,6 +65,52 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
   weightUpdate.startWeights = event.params.startWeights;
   weightUpdate.endWeights = event.params.endWeights;
   weightUpdate.save();
+}
+
+/************************************
+ *********** AMP UPDATES ************
+ ************************************/
+
+export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
+  let ampUpdate = new AmpUpdate(id);
+  ampUpdate.poolId = poolId.toHexString();
+  ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
+  ampUpdate.startTimestamp = event.params.startTime.toI32();
+  ampUpdate.endTimestamp = event.params.endTime.toI32();
+  ampUpdate.startAmp = event.params.startValue;
+  ampUpdate.endAmp = event.params.endValue;
+  ampUpdate.save();
+}
+
+export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value.toHexString();
+
+  let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
+  let ampUpdate = new AmpUpdate(id);
+  ampUpdate.poolId = poolId;
+  ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
+  ampUpdate.startTimestamp = event.block.timestamp.toI32();
+  ampUpdate.endTimestamp = event.block.timestamp.toI32();
+  ampUpdate.startAmp = event.params.currentValue;
+  ampUpdate.endAmp = event.params.currentValue;
+  ampUpdate.save();
+
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
+  updateAmpFactor(pool);
 }
 
 /************************************

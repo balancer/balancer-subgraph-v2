@@ -15,6 +15,10 @@ export function isVariableWeightPool(pool: Pool): boolean {
   return pool.poolType == PoolType.LiquidityBootstrapping || pool.poolType == PoolType.Investment;
 }
 
+export function isStableLikePool(pool: Pool): boolean {
+  return pool.poolType == PoolType.Stable || pool.poolType == PoolType.MetaStable;
+}
+
 export function getPoolAddress(poolId: string): Address {
   return changetype<Address>(Address.fromHexString(poolId.slice(0, 42)));
 }
