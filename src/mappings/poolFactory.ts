@@ -22,7 +22,7 @@ import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
 
-function createWeightedLikePool(event: PoolCreated, poolType: string): string {
+function createNewPool(event: PoolCreated, poolType: string): string {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
@@ -60,62 +60,27 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string {
 }
 
 export function handleNewWeightedPool(event: PoolCreated): void {
-  createWeightedLikePool(event, PoolType.Weighted);
+  createNewPool(event, PoolType.Weighted);
   WeightedPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
-  createWeightedLikePool(event, PoolType.LiquidityBootstrapping);
+  createNewPool(event, PoolType.LiquidityBootstrapping);
   LiquidityBootstrappingPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewInvestmentPool(event: PoolCreated): void {
-  createWeightedLikePool(event, PoolType.Investment);
+  createNewPool(event, PoolType.Investment);
   InvestmentPoolTemplate.create(event.params.pool);
 }
 
-function createStableLikePool(event: PoolCreated, poolType: string): string {
-  let poolAddress: Address = event.params.pool;
-  let poolContract = StablePool.bind(poolAddress);
-
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let swapFeeCall = poolContract.try_getSwapFeePercentage();
-  let swapFee = swapFeeCall.value;
-
-  let ownerCall = poolContract.try_getOwner();
-  let owner = ownerCall.value;
-
-  let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = poolType;
-  pool.factory = event.address;
-  pool.owner = owner;
-
-  let vaultContract = Vault.bind(VAULT_ADDRESS);
-  let tokensCall = vaultContract.try_getPoolTokens(poolId);
-
-  if (!tokensCall.reverted) {
-    let tokens = tokensCall.value.value0;
-    pool.tokensList = changetype<Bytes[]>(tokens);
-
-    for (let i: i32 = 0; i < tokens.length; i++) {
-      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
-    }
-  }
-
-  pool.save();
-
-  return poolId.toHexString();
-}
-
 export function handleNewStablePool(event: PoolCreated): void {
-  createStableLikePool(event, PoolType.Stable);
+  createNewPool(event, PoolType.Stable);
   StablePoolTemplate.create(event.params.pool);
 }
 
 export function handleNewMetaStablePool(event: PoolCreated): void {
-  createStableLikePool(event, PoolType.MetaStable);
+  createNewPool(event, PoolType.MetaStable);
   MetaStablePoolTemplate.create(event.params.pool);
 }
 

@@ -121,6 +121,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: StablePoolFactory
           file: ./abis/StablePoolFactory.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: StablePool
           file: ./abis/StablePool.json
       eventHandlers:
@@ -148,8 +150,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: MetaStablePoolFactory
           file: ./abis/MetaStablePoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
       eventHandlers:
