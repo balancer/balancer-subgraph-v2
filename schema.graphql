@@ -59,6 +59,10 @@ type Pool @entity {
 
   # InvestmentPool Only
   managementFee: BigDecimal
+
+  # LinearPool Only
+  lowerTarget: BigDecimal
+  upperTarget: BigDecimal
 }
 
 type PoolToken @entity {

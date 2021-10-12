@@ -22,6 +22,7 @@ import {
   getPoolTokenId,
   loadPriceRateProvider,
   getPoolShare,
+  getToken,
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -211,6 +212,25 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
   if (poolToken == null) return;
   poolToken.priceRate = provider.rate;
   poolToken.save();
+}
+
+/************************************
+ ******** LINEAR TARGET SET *********
+ ************************************/
+
+export function handleLinearTargetsSet(event: TargetsSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = LinearPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let token = getToken(event.params.token);
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.lowerTarget = scaleDown(event.params.lowerTarget, token.decimals);
+  pool.upperTarget = scaleDown(event.params.upperTarget, token.decimals);
+  pool.save();
 }
 
 /************************************

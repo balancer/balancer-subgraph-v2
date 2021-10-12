@@ -84,6 +84,11 @@ export function handleNewMetaStablePool(event: PoolCreated): void {
   MetaStablePoolTemplate.create(event.params.pool);
 }
 
+export function handleNewLinearPool(event: PoolCreated): void {
+  createNewPool(event, PoolType.Linear);
+  LinearPoolTemplate.create(event.params.pool);
+}
+
 export function handleNewCCPPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
 

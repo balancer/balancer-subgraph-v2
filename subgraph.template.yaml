@@ -161,6 +161,37 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewMetaStablePool
   {{/if}}
+  {{#if LinearPoolFactory}}
+  - kind: ethereum/contract
+    name: LinearPoolFactory
+    network: {{network}}
+    source:
+      address: '{{LinearPoolFactory.address}}'
+      abi: LinearPoolFactory
+      startBlock: {{LinearPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: LinearPoolFactory
+          file: ./abis/LinearPoolFactory.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewLinearPool
+  {{/if}}
   {{#if LiquidityBootstrappingPoolFactory}}
   - kind: ethereum/contract
     name: LiquidityBootstrappingPoolFactory
@@ -330,6 +361,38 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: PriceRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated
+  - kind: ethereum/contract
+    name: LinearPool
+    network: {{network}}
+    source:
+      abi: LinearPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - PriceRateProvider
+      abis:
+        - name: WeightedPool # Necessary for Transfer handler
+          file: ./abis/WeightedPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
         - name: BalancerPoolToken
           file: ./abis/BalancerPoolToken.json
       eventHandlers:
