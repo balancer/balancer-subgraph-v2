@@ -301,8 +301,15 @@ export function handleSwapEvent(event: SwapEvent): void {
   let transactionHash = event.transaction.hash;
   let blockTimestamp = event.block.timestamp.toI32();
 
-  let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress) as PoolToken;
-  let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress) as PoolToken;
+  let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress);
+  let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress);
+  if (poolTokenIn == null || poolTokenOut == null) {
+    log.warning('PoolToken not found in handleSwapEvent: (tokenIn: {}), (tokenOut: {})', [
+      tokenInAddress.toHexString(),
+      tokenOutAddress.toHexString(),
+    ]);
+    return;
+  }
 
   let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, poolTokenIn.decimals);
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, poolTokenOut.decimals);
