@@ -5,16 +5,7 @@ import {
   PoolBalanceManaged,
   InternalBalanceChanged,
 } from '../types/Vault/Vault';
-import {
-  Balancer,
-  Pool,
-  Swap,
-  JoinExit,
-  Investment,
-  TokenPrice,
-  UserInternalBalance,
-  PoolToken,
-} from '../types/schema';
+import { Balancer, Pool, Swap, JoinExit, Investment, TokenPrice, UserInternalBalance } from '../types/schema';
 import {
   tokenToDecimal,
   getTokenPriceId,
@@ -280,7 +271,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   createUserEntity(event.transaction.from);
   let poolId = event.params.poolId;
 
-  let pool = Pool.load(poolId.toHex()) as Pool;
+  let pool = Pool.load(poolId.toHexString());
   if (pool == null) {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
@@ -301,8 +292,15 @@ export function handleSwapEvent(event: SwapEvent): void {
   let transactionHash = event.transaction.hash;
   let blockTimestamp = event.block.timestamp.toI32();
 
-  let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress) as PoolToken;
-  let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress) as PoolToken;
+  let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress);
+  let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress);
+  if (poolTokenIn == null || poolTokenOut == null) {
+    log.warning('PoolToken not found in handleSwapEvent: (tokenIn: {}), (tokenOut: {})', [
+      tokenInAddress.toHexString(),
+      tokenOutAddress.toHexString(),
+    ]);
+    return;
+  }
 
   let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, poolTokenIn.decimals);
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, poolTokenOut.decimals);
