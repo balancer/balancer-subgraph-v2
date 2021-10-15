@@ -5,16 +5,7 @@ import {
   PoolBalanceManaged,
   InternalBalanceChanged,
 } from '../types/Vault/Vault';
-import {
-  Balancer,
-  Pool,
-  Swap,
-  JoinExit,
-  Investment,
-  TokenPrice,
-  UserInternalBalance,
-  PoolToken,
-} from '../types/schema';
+import { Balancer, Pool, Swap, JoinExit, Investment, TokenPrice, UserInternalBalance } from '../types/schema';
 import {
   tokenToDecimal,
   getTokenPriceId,
