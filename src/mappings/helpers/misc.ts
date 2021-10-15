@@ -347,8 +347,8 @@ export function getTradePairSnapshot(tradePairId: string, timestamp: i32): Trade
     snapshot = new TradePairSnapshot(id);
     snapshot.pair = tradePairId;
     snapshot.timestamp = dayStartTimestamp;
-    snapshot.totalSwapVolume = tradePair?.totalSwapVolume ?? ZERO_BD;
-    snapshot.totalSwapFee = tradePair?.totalSwapFee ?? ZERO_BD;
+    snapshot.totalSwapVolume = tradePair != null ? tradePair.totalSwapVolume : ZERO_BD;
+    snapshot.totalSwapFee = tradePair != null ? tradePair.totalSwapFee : ZERO_BD;
     snapshot.save();
   }
   return snapshot;
