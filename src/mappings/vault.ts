@@ -280,7 +280,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   createUserEntity(event.transaction.from);
   let poolId = event.params.poolId;
 
-  let pool = Pool.load(poolId.toHex()) as Pool;
+  let pool = Pool.load(poolId.toHexString());
   if (pool == null) {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
