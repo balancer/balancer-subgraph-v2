@@ -48,7 +48,7 @@ export function getPoolShare(poolId: string, lpAddress: Address): PoolShare {
   if (poolShare == null) {
     return createPoolShareEntity(poolId, lpAddress);
   }
-  return poolShare as PoolShare;
+  return poolShare;
 }
 
 export function createPoolShareEntity(poolId: string, lpAddress: Address): PoolShare {
@@ -251,7 +251,7 @@ export function getToken(tokenAddress: Address): Token {
   if (token == null) {
     token = createToken(tokenAddress);
   }
-  return token as Token;
+  return token;
 }
 
 export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): TokenSnapshot {
@@ -274,7 +274,7 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
     dayData.save();
   }
 
-  return dayData as TokenSnapshot;
+  return dayData;
 }
 
 export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event): void {
@@ -333,7 +333,7 @@ export function getTradePair(token0Address: Address, token1Address: Address): Tr
     tradePair.totalSwapVolume = ZERO_BD;
     tradePair.save();
   }
-  return tradePair as TradePair;
+  return tradePair;
 }
 
 export function getTradePairSnapshot(tradePairId: string, timestamp: i32): TradePairSnapshot {
@@ -351,7 +351,7 @@ export function getTradePairSnapshot(tradePairId: string, timestamp: i32): Trade
     snapshot.totalSwapFee = tradePair?.totalSwapFee ?? ZERO_BD;
     snapshot.save();
   }
-  return snapshot as TradePairSnapshot;
+  return snapshot;
 }
 
 export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSnapshot {
@@ -375,5 +375,5 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
     snapshot.save();
   }
 
-  return snapshot as BalancerSnapshot;
+  return snapshot;
 }

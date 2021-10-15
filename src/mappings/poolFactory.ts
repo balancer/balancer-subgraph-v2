@@ -172,7 +172,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
 
 function findOrInitializeVault(): Balancer {
   let vault: Balancer | null = Balancer.load('2');
-  if (vault !== null) return vault as Balancer;
+  if (vault != null) return vault;
 
   // if no vault yet, set up blank initial
   vault = new Balancer('2');
@@ -181,7 +181,7 @@ function findOrInitializeVault(): Balancer {
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
   vault.totalSwapCount = ZERO;
-  return vault as Balancer;
+  return vault;
 }
 
 function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool {
@@ -219,5 +219,5 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     vaultSnapshot.save();
   }
 
-  return pool as Pool;
+  return pool;
 }
