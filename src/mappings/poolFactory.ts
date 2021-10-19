@@ -15,11 +15,13 @@ import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
+import { LinearPool as LinearPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
+import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { ERC20 } from '../types/Vault/ERC20';
 import { getAmp } from './helpers/stable';
 
@@ -171,6 +173,47 @@ export function handleNewCCPPool(event: PoolCreated): void {
   pool.save();
 
   CCPoolTemplate.create(poolAddress);
+}
+
+export function handleNewLinearPool(event: PoolCreated): void {
+  let poolAddress: Address = event.params.pool;
+
+  let poolContract = LinearPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+
+  pool.poolType = PoolType.Linear;
+  pool.factory = event.address;
+
+  let mainTokenCall = poolContract.try_getMainToken();
+  pool.mainToken = mainTokenCall.value;
+  let wrappedTokenCall = poolContract.try_getWrappedToken();
+  pool.wrappedToken = wrappedTokenCall.value;
+
+  let targetsCall = poolContract.try_getTargets();
+  pool.lowerTarget = targetsCall.value.value0;
+  pool.upperTarget = targetsCall.value.value1;
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    pool.tokensList = changetype<Bytes[]>(tokens);
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
+    }
+  }
+  pool.save();
+
+  LinearPoolTemplate.create(poolAddress);
 }
 
 function findOrInitializeVault(): Balancer {
