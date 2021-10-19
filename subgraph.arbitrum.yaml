@@ -379,4 +379,30 @@ templates:
           handler: handleGradualWeightUpdateScheduled
         - event: ManagementFeePercentageChanged(uint256)
           handler: handleManagementFeePercentageChanged
- 
+  - kind: ethereum/contract
+    name: LinearPool
+    network: arbitrum-one
+    source:
+      abi: LinearPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: TargetsSet(uint256,uint256)
+          handler: handleTargetsSet
+
