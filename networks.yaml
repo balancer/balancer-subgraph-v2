@@ -50,6 +50,9 @@ kovan:
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
+  LinearPoolFactory:
+    address: "0x59D59eDc3546e740aDB102e1B9593692C96d69c8"
+    startBlock: 27718195
 rinkeby:
   network: rinkeby
   Vault:
