@@ -340,6 +340,8 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: LinearPool
           file: ./abis/LinearPool.json
       eventHandlers:
