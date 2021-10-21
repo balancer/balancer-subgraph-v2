@@ -266,6 +266,32 @@ templates:
         - event: ManagementFeePercentageChanged(uint256)
           handler: handleManagementFeePercentageChanged
   - kind: ethereum/contract
+    name: PhantomStablePool
+    network: ropsten
+    source:
+      abi: PhantomStablePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: PhantomStablePool
+          file: ./abis/PhantomStablePool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
     name: LinearPool
     network: ropsten
     source:
