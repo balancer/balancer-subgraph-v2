@@ -244,6 +244,35 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewCCPPool
   {{/if}}
+  {{#if PhantomStablePoolFactory}}
+  - kind: ethereum/contract
+    name: PhantomStablePoolFactory
+    network: {{network}}
+    source:
+      address: '{{PhantomStablePoolFactory.address}}'
+      abi: PhantomStablePoolFactory
+      startBlock: {{PhantomStablePoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PhantomStablePoolFactory
+          file: ./abis/PhantomStablePoolFactory.json
+        - name: PhantomStablePool
+          file: ./abis/PhantomStablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewPhantomStablePool
+  {{/if}}
   {{#if LinearPoolFactory}}
   - kind: ethereum/contract
     name: LinearPoolFactory
@@ -445,6 +474,32 @@ templates:
           handler: handleGradualWeightUpdateScheduled
         - event: ManagementFeePercentageChanged(uint256)
           handler: handleManagementFeePercentageChanged
+  - kind: ethereum/contract
+    name: PhantomStablePool
+    network: {{network}}
+    source:
+      abi: PhantomStablePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: PhantomStablePool
+          file: ./abis/PhantomStablePool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: LinearPool
     network: {{network}}
