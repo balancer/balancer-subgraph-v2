@@ -225,10 +225,10 @@ export function handleNewLinearPool(event: PoolCreated): void {
   pool.poolType = PoolType.Linear;
   pool.factory = event.address;
 
-  let mainTokenCall = poolContract.try_getMainToken();
-  pool.mainToken = mainTokenCall.value;
-  let wrappedTokenCall = poolContract.try_getWrappedToken();
-  pool.wrappedToken = wrappedTokenCall.value;
+  let mainIndexCall = poolContract.try_getMainIndex();
+  pool.mainIndex = mainIndexCall.value.toI32();
+  let wrappedIndexCall = poolContract.try_getWrappedIndex();
+  pool.wrappedIndex = wrappedIndexCall.value.toI32();
 
   let targetsCall = poolContract.try_getTargets();
   pool.lowerTarget = targetsCall.value.value0;
