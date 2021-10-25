@@ -211,7 +211,7 @@ dataSources:
     name: PhantomStablePoolFactory
     network: kovan
     source:
-      address: '0x9EBAC658F60E5355D9E343F67eC6f7A9540ffE3a'
+      address: '0xcd7F93C86f30B90a181f81934FA4f281c7bfF246'
       abi: PhantomStablePoolFactory
       startBlock: 27712556
     mapping:
