@@ -321,16 +321,26 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
-  swap.save();
 
   let swapValueUSD = ZERO_BD;
+  let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+  let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
   if (isUSDStable(tokenOutAddress)) {
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
   } else if (isUSDStable(tokenInAddress)) {
     swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
   } else {
-    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
+    if (tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD)) {
+      swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(BigDecimal.fromString('2'));
+    } else if (tokenInSwapValueUSD.gt(ZERO_BD)) {
+      swapValueUSD = tokenInSwapValueUSD;
+    } else if (tokenOutSwapValueUSD.gt(ZERO_BD)) {
+      swapValueUSD = tokenOutSwapValueUSD;
+    }
   }
+
+  swap.valueUSD = swapValueUSD;
+  swap.save();
 
   // update pool swapsCount
   // let pool = Pool.load(poolId.toHex());
