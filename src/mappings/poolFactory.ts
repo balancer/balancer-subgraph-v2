@@ -1,7 +1,7 @@
-import { ZERO_BD, VAULT_ADDRESS } from './helpers/constants';
+import { ZERO_BD, VAULT_ADDRESS, ZERO } from './helpers/constants';
 import { PoolType } from './helpers/pools';
 
-import { newPoolEntity, createPoolTokenEntity, scaleDown } from './helpers/misc';
+import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
@@ -21,7 +21,6 @@ import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { ERC20 } from '../types/Vault/ERC20';
-import { getAmp } from './helpers/stable';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
   let poolAddress: Address = event.params.pool;
@@ -105,8 +104,6 @@ function createStableLikePool(event: PoolCreated, poolType: string): string {
     }
   }
 
-  pool.amp = getAmp(poolContract);
-
   pool.save();
 
   return poolId.toHexString();
@@ -175,7 +172,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
 
 function findOrInitializeVault(): Balancer {
   let vault: Balancer | null = Balancer.load('2');
-  if (vault !== null) return vault as Balancer;
+  if (vault != null) return vault;
 
   // if no vault yet, set up blank initial
   vault = new Balancer('2');
@@ -183,6 +180,7 @@ function findOrInitializeVault(): Balancer {
   vault.totalLiquidity = ZERO_BD;
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
+  vault.totalSwapCount = ZERO;
   return vault;
 }
 
@@ -215,6 +213,10 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     let vault = findOrInitializeVault();
     vault.poolCount += 1;
     vault.save();
+
+    let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
+    vaultSnapshot.poolCount += 1;
+    vaultSnapshot.save();
   }
 
   return pool;

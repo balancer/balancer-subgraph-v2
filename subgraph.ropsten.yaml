@@ -22,6 +22,11 @@ dataSources:
         - PoolToken
         - User
         - UserInternalBalance
+        - Token
+        - TokenSnapshot
+        - TradePair
+        - TradePairSnapshot
+        - BalancerSnapshot
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -29,6 +34,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
       eventHandlers:
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent
@@ -145,6 +152,10 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: AmpUpdateStarted(uint256,uint256,uint256,uint256)
+          handler: handleAmpUpdateStarted
+        - event: AmpUpdateStopped(uint256)
+          handler: handleAmpUpdateStopped
   - kind: ethereum/contract
     name: MetaStablePool
     network: ropsten
