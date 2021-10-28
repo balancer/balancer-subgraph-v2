@@ -410,8 +410,11 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.pricingAsset = tokenInAddress;
 
     if (tokenInWeight && tokenOutWeight) {
+      // As the swap is with a WeightedPool, we can easily calculate the spot price between the two tokens
+      // based on the pool's weights and updated balances after the swap.
       tokenPrice.price = newInAmount.div(tokenInWeight).div(newOutAmount.div(tokenOutWeight));
     } else {
+      // Otherwise we can get a simple measure of the price from the ratio of amount in vs amount out
       tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     }
 
@@ -430,8 +433,11 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.pricingAsset = tokenOutAddress;
 
     if (tokenInWeight && tokenOutWeight) {
+      // As the swap is with a WeightedPool, we can easily calculate the spot price between the two tokens
+      // based on the pool's weights and updated balances after the swap.
       tokenPrice.price = newOutAmount.div(tokenOutWeight).div(newInAmount.div(tokenInWeight));
     } else {
+      // Otherwise we can get a simple measure of the price from the ratio of amount out vs amount in
       tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     }
 
