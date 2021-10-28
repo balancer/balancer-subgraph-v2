@@ -395,6 +395,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   }
 
   // Capture price
+  // TODO: refactor these if statements using a helper function
   let block = event.block.number;
   let tokenInWeight = poolTokenIn.weight;
   let tokenOutWeight = poolTokenOut.weight;
