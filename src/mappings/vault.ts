@@ -305,25 +305,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, poolTokenIn.decimals);
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, poolTokenOut.decimals);
 
-  let swapId = transactionHash.toHexString().concat(logIndex.toString());
-  let swap = new Swap(swapId);
-  swap.tokenIn = tokenInAddress;
-  swap.tokenInSym = poolTokenIn.symbol;
-  swap.tokenAmountIn = tokenAmountIn;
-
-  swap.tokenOut = tokenOutAddress;
-  swap.tokenOutSym = poolTokenOut.symbol;
-  swap.tokenAmountOut = tokenAmountOut;
-
-  swap.caller = event.transaction.from;
-  swap.userAddress = event.transaction.from.toHex();
-  swap.poolId = poolId.toHex();
-
-  swap.timestamp = blockTimestamp;
-  swap.tx = transactionHash;
-
   let swapValueUSD = ZERO_BD;
-
   if (isUSDStable(tokenOutAddress)) {
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
   } else if (isUSDStable(tokenInAddress)) {
@@ -336,7 +318,24 @@ export function handleSwapEvent(event: SwapEvent): void {
     swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(divisor);
   }
 
+  let swapId = transactionHash.toHexString().concat(logIndex.toString());
+  let swap = new Swap(swapId);
+  swap.tokenIn = tokenInAddress;
+  swap.tokenInSym = poolTokenIn.symbol;
+  swap.tokenAmountIn = tokenAmountIn;
+
+  swap.tokenOut = tokenOutAddress;
+  swap.tokenOutSym = poolTokenOut.symbol;
+  swap.tokenAmountOut = tokenAmountOut;
+
   swap.valueUSD = swapValueUSD;
+
+  swap.caller = event.transaction.from;
+  swap.userAddress = event.transaction.from.toHex();
+  swap.poolId = poolId.toHex();
+
+  swap.timestamp = blockTimestamp;
+  swap.tx = transactionHash;
   swap.save();
 
   // update pool swapsCount
