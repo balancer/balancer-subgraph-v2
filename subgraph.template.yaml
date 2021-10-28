@@ -267,6 +267,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: PhantomStablePoolFactory
           file: ./abis/PhantomStablePoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
         - name: PhantomStablePool
           file: ./abis/PhantomStablePool.json
       eventHandlers:
