@@ -48,7 +48,7 @@ type Pool @entity {
   # StablePool Only
   amp: BigInt
 
-  # MetaStablePool Only
+  # MetaStablePool and LinearPool Only
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
 
   # ConvergentCurvePool (Element) Only
