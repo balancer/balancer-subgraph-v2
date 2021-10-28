@@ -25,7 +25,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './helpers/constants';
+import { SWAP_IN, SWAP_OUT, ZERO, ZERO_BD, ONE_BD } from './helpers/constants';
 import { isStableLikePool, isVariableWeightPool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 
@@ -323,20 +323,17 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tx = transactionHash;
 
   let swapValueUSD = ZERO_BD;
-  let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-  let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+
   if (isUSDStable(tokenOutAddress)) {
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
   } else if (isUSDStable(tokenInAddress)) {
     swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
   } else {
-    if (tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD)) {
-      swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(BigDecimal.fromString('2'));
-    } else if (tokenInSwapValueUSD.gt(ZERO_BD)) {
-      swapValueUSD = tokenInSwapValueUSD;
-    } else if (tokenOutSwapValueUSD.gt(ZERO_BD)) {
-      swapValueUSD = tokenOutSwapValueUSD;
-    }
+    let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+    let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+    let divisor =
+      tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD) ? BigDecimal.fromString('2') : ONE_BD;
+    swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(divisor);
   }
 
   swap.valueUSD = swapValueUSD;
