@@ -4,7 +4,7 @@ import { PoolType } from './helpers/pools';
 import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool } from '../types/schema';
 
@@ -126,7 +126,13 @@ export function handleNewMetaStablePool(event: PoolCreated): void {
 }
 
 export function handleNewPhantomStablePool(event: PoolCreated): void {
-  createStableLikePool(event, PoolType.PhantomStable);
+  let poolId = createStableLikePool(event, PoolType.PhantomStable);
+  let pool = Pool.load(poolId);
+  if (pool) {
+    let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
+    pool.totalShares = pool.totalShares.minus(maxTokenBalance);
+    pool.save();
+  }
   PhantomStablePoolTemplate.create(event.params.pool);
 }
 
@@ -217,6 +223,8 @@ export function handleNewLinearPool(event: PoolCreated): void {
       createPoolTokenEntity(poolId.toHexString(), tokens[i]);
     }
   }
+  let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
+  pool.totalShares = pool.totalShares.minus(maxTokenBalance);
   pool.save();
 
   LinearPoolTemplate.create(poolAddress);
