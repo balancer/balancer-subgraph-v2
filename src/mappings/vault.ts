@@ -29,7 +29,7 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
 import { ZERO, ZERO_BD } from './helpers/constants';
-import { isVariableWeightPool } from './helpers/pools';
+import { hasVirtualSupply, isVariableWeightPool } from './helpers/pools';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -256,6 +256,16 @@ export function handleSwapEvent(event: SwapEvent): void {
   // Some pools' weights update over time so we need to update them after each swap
   if (isVariableWeightPool(pool)) {
     updatePoolWeights(poolId.toHexString());
+  }
+
+  // Update virtual supply
+  if (hasVirtualSupply(pool)) {
+    if (event.params.tokenIn == pool.address) {
+      pool.totalShares = pool.totalShares.minus(tokenToDecimal(event.params.amountIn, 18));
+    }
+    if (event.params.tokenOut == pool.address) {
+      pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.amountOut, 18));
+    }
   }
 
   let tokenInAddress: Address = event.params.tokenIn;
