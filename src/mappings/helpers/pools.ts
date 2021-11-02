@@ -17,6 +17,10 @@ export function isVariableWeightPool(pool: Pool): boolean {
   return pool.poolType == PoolType.LiquidityBootstrapping || pool.poolType == PoolType.Investment;
 }
 
+export function hasVirtualSupply(pool: Pool): boolean {
+  return pool.poolType == PoolType.Linear || pool.poolType == PoolType.PhantomStable;
+}
+
 export function getPoolAddress(poolId: string): Address {
   return changetype<Address>(Address.fromHexString(poolId.slice(0, 42)));
 }
