@@ -136,7 +136,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   }
 
   // Update virtual supply
-  if (pool.poolType == 'PhantomStable') {
+  if (pool.poolType == 'StablePhantom') {
     let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
     if (pool.totalShares.equals(maxTokenBalance)) {
       let initialBpt = ZERO_BD;

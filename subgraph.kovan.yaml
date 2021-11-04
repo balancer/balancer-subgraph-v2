@@ -208,11 +208,11 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewInvestmentPool
   - kind: ethereum/contract
-    name: PhantomStablePoolFactory
+    name: StablePhantomPoolFactory
     network: kovan
     source:
       address: '0xcd7F93C86f30B90a181f81934FA4f281c7bfF246'
-      abi: PhantomStablePoolFactory
+      abi: StablePhantomPoolFactory
       startBlock: 27712556
     mapping:
       kind: ethereum/events
@@ -227,15 +227,15 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: PhantomStablePoolFactory
-          file: ./abis/PhantomStablePoolFactory.json
+        - name: StablePhantomPoolFactory
+          file: ./abis/StablePhantomPoolFactory.json
         - name: StablePool
           file: ./abis/StablePool.json
-        - name: PhantomStablePool
-          file: ./abis/PhantomStablePool.json
+        - name: StablePhantomPool
+          file: ./abis/StablePhantomPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewPhantomStablePool
+          handler: handleNewStablePhantomPool
   - kind: ethereum/contract
     name: LinearPoolFactory
     network: kovan
@@ -436,10 +436,10 @@ templates:
         - event: ManagementFeePercentageChanged(uint256)
           handler: handleManagementFeePercentageChanged
   - kind: ethereum/contract
-    name: PhantomStablePool
+    name: StablePhantomPool
     network: kovan
     source:
-      abi: PhantomStablePool
+      abi: StablePhantomPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -456,8 +456,8 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: PhantomStablePool
-          file: ./abis/PhantomStablePool.json
+        - name: StablePhantomPool
+          file: ./abis/StablePhantomPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

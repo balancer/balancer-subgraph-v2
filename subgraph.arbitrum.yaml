@@ -380,10 +380,10 @@ templates:
         - event: ManagementFeePercentageChanged(uint256)
           handler: handleManagementFeePercentageChanged
   - kind: ethereum/contract
-    name: PhantomStablePool
+    name: StablePhantomPool
     network: arbitrum-one
     source:
-      abi: PhantomStablePool
+      abi: StablePhantomPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -400,8 +400,8 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: PhantomStablePool
-          file: ./abis/PhantomStablePool.json
+        - name: StablePhantomPool
+          file: ./abis/StablePhantomPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

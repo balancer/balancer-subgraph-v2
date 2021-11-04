@@ -9,7 +9,7 @@ export namespace PoolType {
   export const Element = 'Element';
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
   export const Investment = 'Investment';
-  export const PhantomStable = 'PhantomStable';
+  export const StablePhantom = 'StablePhantom';
   export const Linear = 'Linear';
 }
 
@@ -18,7 +18,7 @@ export function isVariableWeightPool(pool: Pool): boolean {
 }
 
 export function hasVirtualSupply(pool: Pool): boolean {
-  return pool.poolType == PoolType.Linear || pool.poolType == PoolType.PhantomStable;
+  return pool.poolType == PoolType.Linear || pool.poolType == PoolType.StablePhantom;
 }
 
 export function getPoolAddress(poolId: string): Address {

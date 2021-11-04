@@ -12,7 +12,7 @@ import { Balancer, Pool } from '../types/schema';
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
 import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
-import { PhantomStablePool as PhantomStablePoolTemplate } from '../types/templates';
+import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
@@ -125,9 +125,9 @@ export function handleNewMetaStablePool(event: PoolCreated): void {
   MetaStablePoolTemplate.create(event.params.pool);
 }
 
-export function handleNewPhantomStablePool(event: PoolCreated): void {
-  createStableLikePool(event, PoolType.PhantomStable);
-  PhantomStablePoolTemplate.create(event.params.pool);
+export function handleNewStablePhantomPool(event: PoolCreated): void {
+  createStableLikePool(event, PoolType.StablePhantom);
+  StablePhantomPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewCCPPool(event: PoolCreated): void {

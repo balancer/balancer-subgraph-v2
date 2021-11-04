@@ -50,7 +50,7 @@ kovan:
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
-  PhantomStablePoolFactory:
+  StablePhantomPoolFactory:
     address: "0xcd7F93C86f30B90a181f81934FA4f281c7bfF246"
     startBlock: 27712556
   LinearPoolFactory:
