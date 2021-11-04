@@ -425,6 +425,8 @@ templates:
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
         - name: PhantomStablePool
           file: ./abis/PhantomStablePool.json
       eventHandlers:
@@ -432,6 +434,10 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: TokenRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: TokenRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
     name: LinearPool
     network: mainnet
