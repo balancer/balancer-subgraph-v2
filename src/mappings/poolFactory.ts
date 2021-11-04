@@ -126,13 +126,7 @@ export function handleNewMetaStablePool(event: PoolCreated): void {
 }
 
 export function handleNewPhantomStablePool(event: PoolCreated): void {
-  let poolId = createStableLikePool(event, PoolType.PhantomStable);
-  let pool = Pool.load(poolId);
-  if (pool) {
-    let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
-    pool.totalShares = pool.totalShares.minus(maxTokenBalance);
-    pool.save();
-  }
+  createStableLikePool(event, PoolType.PhantomStable);
   PhantomStablePoolTemplate.create(event.params.pool);
 }
 

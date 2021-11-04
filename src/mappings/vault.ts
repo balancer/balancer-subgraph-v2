@@ -135,6 +135,21 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
   }
 
+  // Update virtual supply
+  if (pool.poolType == 'PhantomStable') {
+    let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
+    if (pool.totalShares.equals(maxTokenBalance)) {
+      let initialBpt = ZERO_BD;
+      for (let i: i32 = 0; i < tokenAddresses.length; i++) {
+        if (tokenAddresses[i] == pool.address) {
+          initialBpt = scaleDown(amounts[i], 18);
+        }
+      }
+      pool.totalShares = maxTokenBalance.minus(initialBpt);
+      pool.save();
+    }
+  }
+
   createPoolSnapshot(poolId, blockTimestamp);
 }
 
