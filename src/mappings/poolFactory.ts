@@ -1,4 +1,4 @@
-import { ZERO_BD, VAULT_ADDRESS, ZERO } from './helpers/constants';
+import { ZERO_BD, VAULT_ADDRESS, ZERO, ZERO_ADDRESS } from './helpers/constants';
 import { PoolType } from './helpers/pools';
 
 import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot } from './helpers/misc';
@@ -142,13 +142,10 @@ export function handleNewCCPPool(event: PoolCreated): void {
   let unitSecondsCall = poolContract.try_unitSeconds();
   let unitSeconds = unitSecondsCall.value;
 
-  // let ownerCall = poolContract.try_getOwner();
-  // let owner = ownerCall.value;
-
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = PoolType.Element;
   pool.factory = event.address;
-  // pool.owner = owner;
+  pool.owner = Address.fromString(ZERO_ADDRESS);
   pool.principalToken = principalToken;
   pool.baseToken = baseToken;
   pool.expiryTime = expiryTime;

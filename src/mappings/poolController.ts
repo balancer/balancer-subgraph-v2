@@ -1,6 +1,10 @@
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
-import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
+import {
+  WeightedPool,
+  SwapFeePercentageChanged,
+  PausedStateChanged,
+} from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
   SwapEnabledSet,
@@ -25,6 +29,24 @@ import {
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
+
+/************************************
+ *********** PAUSED STATE ***********
+ ************************************/
+
+export function handlePausedStateChanged(event: PausedStateChanged): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = !event.params.paused;
+  pool.save();
+}
 
 /************************************
  *********** SWAP ENABLED ***********
