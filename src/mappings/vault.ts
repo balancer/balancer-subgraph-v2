@@ -374,11 +374,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   uptickSwapsForToken(tokenInAddress, event);
   uptickSwapsForToken(tokenOutAddress, event);
 
-  // update volume and balances for the tokens
-  // updates token snapshots as well
-  updateTokenBalances(tokenInAddress, swapValueUSD, tokenAmountIn, SWAP_IN, event);
-  updateTokenBalances(tokenOutAddress, swapValueUSD, tokenAmountOut, SWAP_OUT, event);
-
   let tradePair = getTradePair(tokenInAddress, tokenOutAddress);
   tradePair.totalSwapVolume = tradePair.totalSwapVolume.plus(swapValueUSD);
   tradePair.totalSwapFee = tradePair.totalSwapFee.plus(swapFeesUSD);
@@ -451,4 +446,10 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   createPoolSnapshot(poolId.toHexString(), blockTimestamp);
   saveSwapToSnapshot(poolId.toHexString(), blockTimestamp, swapValueUSD, swapFeesUSD);
+
+  // update volume and balances for the tokens
+  // updates token snapshots as well
+  // This must occur after the tokens' prices are updated to reflect this swap
+  updateTokenBalances(tokenInAddress, swapValueUSD, tokenAmountIn, SWAP_IN, event);
+  updateTokenBalances(tokenOutAddress, swapValueUSD, tokenAmountOut, SWAP_OUT, event);
 }
