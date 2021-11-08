@@ -125,8 +125,6 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
     network: ropsten
@@ -158,8 +156,6 @@ templates:
           handler: handleAmpUpdateStarted
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
     network: ropsten
@@ -192,8 +188,6 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: ropsten
@@ -249,8 +243,6 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
     network: ropsten
@@ -283,6 +275,4 @@ templates:
           handler: handleGradualWeightUpdateScheduled
         - event: ManagementFeePercentageChanged(uint256)
           handler: handleManagementFeePercentageChanged
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
  

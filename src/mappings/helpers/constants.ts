@@ -70,16 +70,6 @@ let usdcAddressByNetwork: AddressByNetwork = {
   dev: '0x7c0c5AdA758cf764EcD6bAC05b63b2482f90bBB2',
 };
 
-let usdtAddressByNetwork: AddressByNetwork = {
-  mainnet: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-  kovan: '0xcC08220af469192C53295fDd34CFb8DF29aa17AB',
-  goerli: '0x78dEca24CBa286C0f8d56370f5406B48cFCE2f86',
-  rinkeby: '0xc3dbf84Abb494ce5199D5d4D815b10EC29529ff8',
-  polygon: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
-  arbitrum: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
-  dev: '0x7c0c5AdA758cf764EcD6bAC05b63b2482f90bBB2',
-};
-
 let balAddressByNetwork: AddressByNetwork = {
   mainnet: '0xba100000625a3754423978a60c9317c58a424e3D',
   kovan: '0x41286Bb1D3E870f3F750eB7E1C25d7E48c8A1Ac7',
@@ -123,9 +113,8 @@ export let WETH: Address = forNetwork(wethAddressByNetwork, network);
 export let WBTC: Address = forNetwork(wbtcAddressByNetwork, network);
 export let USD: Address = forNetwork(usdAddressByNetwork, network);
 export let USDC: Address = forNetwork(usdcAddressByNetwork, network);
-export let USDT: Address = forNetwork(usdtAddressByNetwork, network);
 export let BAL: Address = forNetwork(balAddressByNetwork, network);
 export let DAI: Address = forNetwork(daiAddressByNetwork, network);
 
-export let PRICING_ASSETS: Address[] = [WETH, WBTC, USDC, DAI, USDT, BAL];
-export let USD_STABLE_ASSETS: Address[] = [USDC, DAI, USDT];
+export let PRICING_ASSETS: Address[] = [WETH, WBTC, USDC, DAI, BAL];
+export let USD_STABLE_ASSETS: Address[] = [USDC, DAI];

@@ -20,7 +20,7 @@ type Pool @entity {
   name: String
   swapEnabled: Boolean!
   swapFee: BigDecimal!
-  owner: Bytes!
+  owner: Bytes
 
   totalWeight: BigDecimal
   totalSwapVolume: BigDecimal!
@@ -140,7 +140,6 @@ type Swap @entity {
   tokenOutSym: String!
   tokenAmountIn: BigDecimal!
   tokenAmountOut: BigDecimal!
-  valueUSD: BigDecimal!
   poolId: Pool!
   userAddress: User!
   timestamp: Int!
