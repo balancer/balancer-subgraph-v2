@@ -18,7 +18,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   let tokensList: Bytes[] = pool.tokensList;
   if (tokensList.length < 2) return false;
 
-  let poolValue: BigDecimal = ZERO_BD;
+  let poolValue: BigDecimal = BigDecimal.fromString('0');
 
   for (let j: i32 = 0; j < tokensList.length; j++) {
     let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
@@ -35,7 +35,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     // compare any new token price with the last price
     let tokenPriceId = getTokenPriceId(poolId, tokenAddress, pricingAsset, block);
     let tokenPrice = TokenPrice.load(tokenPriceId);
-    let price: BigDecimal = ZERO_BD;
+    let price: BigDecimal;
     let latestPriceId = getLatestPriceId(tokenAddress, pricingAsset);
     let latestPrice = LatestPrice.load(latestPriceId);
 

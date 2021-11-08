@@ -25,7 +25,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { SWAP_IN, SWAP_OUT, ZERO, ZERO_BD, ONE_BD } from './helpers/constants';
+import { SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './helpers/constants';
 import { isStableLikePool, isVariableWeightPool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 
@@ -305,19 +305,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   let tokenAmountIn: BigDecimal = scaleDown(event.params.amountIn, poolTokenIn.decimals);
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, poolTokenOut.decimals);
 
-  let swapValueUSD = ZERO_BD;
-  if (isUSDStable(tokenOutAddress)) {
-    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-  } else if (isUSDStable(tokenInAddress)) {
-    swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-  } else {
-    let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-    let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-    let divisor =
-      tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD) ? BigDecimal.fromString('2') : ONE_BD;
-    swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(divisor);
-  }
-
   let swapId = transactionHash.toHexString().concat(logIndex.toString());
   let swap = new Swap(swapId);
   swap.tokenIn = tokenInAddress;
@@ -328,8 +315,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tokenOutSym = poolTokenOut.symbol;
   swap.tokenAmountOut = tokenAmountOut;
 
-  swap.valueUSD = swapValueUSD;
-
   swap.caller = event.transaction.from;
   swap.userAddress = event.transaction.from.toHex();
   swap.poolId = poolId.toHex();
@@ -337,6 +322,15 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
   swap.save();
+
+  let swapValueUSD = ZERO_BD;
+  if (isUSDStable(tokenOutAddress)) {
+    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+  } else if (isUSDStable(tokenInAddress)) {
+    swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+  } else {
+    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress) || valueInUSD(tokenAmountIn, tokenInAddress) || ZERO_BD;
+  }
 
   // update pool swapsCount
   // let pool = Pool.load(poolId.toHex());
@@ -395,10 +389,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   }
 
   // Capture price
-  // TODO: refactor these if statements using a helper function
   let block = event.block.number;
-  let tokenInWeight = poolTokenIn.weight;
-  let tokenOutWeight = poolTokenOut.weight;
   if (isPricingAsset(tokenInAddress)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, block);
     let tokenPrice = new TokenPrice(tokenPriceId);
@@ -410,15 +401,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.amount = tokenAmountIn;
     tokenPrice.pricingAsset = tokenInAddress;
 
-    if (tokenInWeight && tokenOutWeight) {
-      // As the swap is with a WeightedPool, we can easily calculate the spot price between the two tokens
-      // based on the pool's weights and updated balances after the swap.
-      tokenPrice.price = newInAmount.div(tokenInWeight).div(newOutAmount.div(tokenOutWeight));
-    } else {
-      // Otherwise we can get a simple measure of the price from the ratio of amount in vs amount out
-      tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
-    }
-
+    tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp);
   }
@@ -433,15 +416,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.amount = tokenAmountOut;
     tokenPrice.pricingAsset = tokenOutAddress;
 
-    if (tokenInWeight && tokenOutWeight) {
-      // As the swap is with a WeightedPool, we can easily calculate the spot price between the two tokens
-      // based on the pool's weights and updated balances after the swap.
-      tokenPrice.price = newOutAmount.div(tokenOutWeight).div(newInAmount.div(tokenInWeight));
-    } else {
-      // Otherwise we can get a simple measure of the price from the ratio of amount out vs amount in
-      tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
-    }
-
+    tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
   }
