@@ -12,10 +12,10 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
+  LatestPrice,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
+import { ONE_BD, TokenBalanceEvent, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
 
 const DAY = 24 * 60 * 60;
@@ -87,6 +87,16 @@ export function getPoolTokenId(poolId: string, tokenAddress: Address): string {
 
 export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken | null {
   return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
+}
+
+export function loadRequiredPoolToken(poolId: string, tokenAddress: Address): PoolToken {
+  const poolToken = loadPoolToken(poolId, tokenAddress);
+
+  if (poolToken == null) {
+    throw new Error('poolToken not found');
+  }
+
+  return poolToken;
 }
 
 export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
@@ -291,30 +301,49 @@ export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event
 
 export function updateTokenBalances(
   tokenAddress: Address,
-  usdBalance: BigDecimal,
   notionalBalance: BigDecimal,
-  swapDirection: i32,
-  event: SwapEvent
+  tokenBalanceEvent: TokenBalanceEvent,
+  event: ethereum.Event
 ): void {
   let token = getToken(tokenAddress);
 
-  if (swapDirection == SWAP_IN) {
-    token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
-  } else if (swapDirection == SWAP_OUT) {
-    token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
+  switch (tokenBalanceEvent) {
+    case TokenBalanceEvent.SWAP_IN:
+      token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
+      token.totalVolumeNotional = token.totalVolumeNotional.plus(notionalBalance);
+      break;
+    case TokenBalanceEvent.SWAP_OUT:
+      token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
+      token.totalVolumeNotional = token.totalVolumeNotional.plus(notionalBalance);
+      break;
+    case TokenBalanceEvent.JOIN:
+      token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
+      break;
+    case TokenBalanceEvent.EXIT:
+      token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
+      break;
   }
 
-  token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
-  token.save();
+  let latestPriceId = token.latestPrice;
+
+  if (latestPriceId) {
+    let latestPrice = LatestPrice.load(latestPriceId);
+
+    if (latestPrice) {
+      //we try to always repeg the balanceUSD and volumeUSD based on the current asset priceUSD
+      token.totalBalanceUSD = token.totalBalanceNotional.times(latestPrice.priceUSD);
+      token.totalVolumeUSD = token.totalVolumeNotional.times(latestPrice.priceUSD);
+    }
+  }
 
   let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
   tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-  tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
   tokenSnapshot.totalVolumeNotional = token.totalVolumeNotional;
+  tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
   tokenSnapshot.totalVolumeUSD = token.totalVolumeUSD;
+
   tokenSnapshot.save();
+  token.save();
 }
 
 export function getTradePair(token0Address: Address, token1Address: Address): TradePair {

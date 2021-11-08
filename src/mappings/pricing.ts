@@ -57,6 +57,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       latestPrice.price = price;
       latestPrice.block = block;
       latestPrice.poolId = poolId;
+      latestPrice.priceUSD = tokenPrice.priceUSD;
       latestPrice.save();
 
       let token = getToken(tokenAddress);
