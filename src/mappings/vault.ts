@@ -428,6 +428,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // update volume and balances for the tokens
   // updates token snapshots as well
+  // we need to do this after updatePoolLiquidity as that is where the latestPrice gets updated
   updateTokenBalances(tokenInAddress, tokenAmountIn, TokenBalanceEvent.SWAP_IN, event);
   updateTokenBalances(tokenOutAddress, tokenAmountOut, TokenBalanceEvent.SWAP_OUT, event);
 }
