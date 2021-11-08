@@ -12,6 +12,7 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
+  LatestPrice,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
@@ -289,6 +290,19 @@ export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event
   snapshot.save();
 }
 
+export function recalculateTokenBalanceUSD(token: Token): BigDecimal {
+  let latestPriceId = token.latestPrice;
+  if (latestPriceId) {
+    let latestPrice = LatestPrice.load(latestPriceId);
+
+    if (latestPrice) {
+      // we try to always repeg the balanceUSD based on the current asset priceUSD
+      return token.totalBalanceNotional.times(latestPrice.priceUSD);
+    }
+  }
+  return token.totalBalanceUSD;
+}
+
 export function updateTokenBalances(
   tokenAddress: Address,
   usdBalance: BigDecimal,
@@ -300,10 +314,10 @@ export function updateTokenBalances(
 
   if (swapDirection == SWAP_IN) {
     token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
+    token.totalBalanceUSD = recalculateTokenBalanceUSD(token);
   } else if (swapDirection == SWAP_OUT) {
     token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
+    token.totalBalanceUSD = recalculateTokenBalanceUSD(token);
   }
 
   token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);

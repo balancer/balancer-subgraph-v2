@@ -22,6 +22,7 @@ import {
   getTradePairSnapshot,
   getTradePair,
   getBalancerSnapshot,
+  recalculateTokenBalanceUSD,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
@@ -118,11 +119,10 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
     let tokenAmountIn = tokenToDecimal(amounts[i], poolToken.decimals);
     let newAmount = poolToken.balance.plus(tokenAmountIn);
-    let tokenAmountInUSD = valueInUSD(tokenAmountIn, tokenAddress);
 
     let token = getToken(tokenAddress);
     token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
+    token.totalBalanceUSD = recalculateTokenBalanceUSD(token);
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
@@ -196,14 +196,13 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
     let tokenAmountOut = tokenToDecimal(amounts[i].neg(), poolToken.decimals);
     let newAmount = poolToken.balance.minus(tokenAmountOut);
-    let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
 
     poolToken.balance = newAmount;
     poolToken.save();
 
     let token = getToken(tokenAddress);
     token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
+    token.totalBalanceUSD = recalculateTokenBalanceUSD(token);
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
