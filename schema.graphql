@@ -169,6 +169,7 @@ type LatestPrice @entity {
   pricingAsset: Bytes! # address of stable asset
   poolId: Pool! # last pool which set price
   price: BigDecimal! # all the latest prices
+  priceUSD: BigDecimal!
   block: BigInt! # last block that prices were updated
 }
 
@@ -189,6 +190,7 @@ type TokenPrice @entity {
   amount: BigDecimal!
   pricingAsset: Bytes! # address of stable asset
   price: BigDecimal!
+  priceUSD: BigDecimal!
   block: BigInt!
   timestamp: Int!
 }

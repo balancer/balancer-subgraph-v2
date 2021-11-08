@@ -419,6 +419,8 @@ export function handleSwapEvent(event: SwapEvent): void {
       tokenPrice.price = tokenAmountIn.div(tokenAmountOut);
     }
 
+    tokenPrice.priceUSD = valueInUSD(tokenPrice.price, tokenInAddress);
+
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp);
   }
@@ -441,6 +443,8 @@ export function handleSwapEvent(event: SwapEvent): void {
       // Otherwise we can get a simple measure of the price from the ratio of amount out vs amount in
       tokenPrice.price = tokenAmountOut.div(tokenAmountIn);
     }
+
+    tokenPrice.priceUSD = valueInUSD(tokenPrice.price, tokenOutAddress);
 
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
