@@ -161,6 +161,7 @@ type JoinExit @entity {
   user: User!
   timestamp: Int!
   tx: Bytes!
+  valueUSD: BigDecimal!
 }
 
 type LatestPrice @entity {
