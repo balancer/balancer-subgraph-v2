@@ -22,7 +22,9 @@ export function hasVirtualSupply(pool: Pool): boolean {
 }
 
 export function isStableLikePool(pool: Pool): boolean {
-  return pool.poolType == PoolType.Stable || pool.poolType == PoolType.MetaStable;
+  return (
+    pool.poolType == PoolType.Stable || pool.poolType == PoolType.MetaStable || pool.poolType == PoolType.StablePhantom
+  );
 }
 
 export function getPoolAddress(poolId: string): Address {
