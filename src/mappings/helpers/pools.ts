@@ -19,6 +19,7 @@ export function isVariableWeightPool(pool: Pool): boolean {
 
 export function hasVirtualSupply(pool: Pool): boolean {
   return pool.poolType == PoolType.Linear || pool.poolType == PoolType.StablePhantom;
+}
 
 export function isStableLikePool(pool: Pool): boolean {
   return pool.poolType == PoolType.Stable || pool.poolType == PoolType.MetaStable;
