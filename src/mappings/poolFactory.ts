@@ -1,4 +1,4 @@
-import { ZERO_BD, VAULT_ADDRESS, ZERO } from './helpers/constants';
+import { ZERO_BD, VAULT_ADDRESS, ZERO, ZERO_ADDRESS } from './helpers/constants';
 import { PoolType } from './helpers/pools';
 
 import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot } from './helpers/misc';
@@ -24,7 +24,6 @@ import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { ERC20 } from '../types/Vault/ERC20';
-import { getAmp } from './helpers/stable';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
   let poolAddress: Address = event.params.pool;
@@ -108,8 +107,6 @@ function createStableLikePool(event: PoolCreated, poolType: string): string {
     }
   }
 
-  pool.amp = getAmp(poolContract);
-
   pool.save();
 
   return poolId.toHexString();
@@ -153,13 +150,10 @@ export function handleNewCCPPool(event: PoolCreated): void {
   let unitSecondsCall = poolContract.try_unitSeconds();
   let unitSeconds = unitSecondsCall.value;
 
-  // let ownerCall = poolContract.try_getOwner();
-  // let owner = ownerCall.value;
-
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = PoolType.Element;
   pool.factory = event.address;
-  // pool.owner = owner;
+  pool.owner = Address.fromString(ZERO_ADDRESS);
   pool.principalToken = principalToken;
   pool.baseToken = baseToken;
   pool.expiryTime = expiryTime;
@@ -226,7 +220,7 @@ export function handleNewLinearPool(event: PoolCreated): void {
 
 function findOrInitializeVault(): Balancer {
   let vault: Balancer | null = Balancer.load('2');
-  if (vault !== null) return vault as Balancer;
+  if (vault != null) return vault;
 
   // if no vault yet, set up blank initial
   vault = new Balancer('2');

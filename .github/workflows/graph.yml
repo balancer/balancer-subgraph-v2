@@ -7,6 +7,7 @@ on:
 jobs:
   deploy-kovan:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -27,6 +28,7 @@ jobs:
           graph_config_file: "subgraph.kovan.yaml"
   deploy-rinkeby:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -47,6 +49,7 @@ jobs:
           graph_config_file: "subgraph.rinkeby.yaml"
   deploy-goerli:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -67,6 +70,7 @@ jobs:
           graph_config_file: "subgraph.goerli.yaml"
   deploy-mainnet:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -87,6 +91,7 @@ jobs:
           graph_config_file: "subgraph.yaml"
   deploy-polygon:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -107,6 +112,7 @@ jobs:
           graph_config_file: "subgraph.polygon.yaml"
   deploy-arbitrum:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node

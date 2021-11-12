@@ -20,7 +20,7 @@ type Pool @entity {
   name: String
   swapEnabled: Boolean!
   swapFee: BigDecimal!
-  owner: Bytes
+  owner: Bytes!
 
   totalWeight: BigDecimal
   totalSwapVolume: BigDecimal!
@@ -70,6 +70,7 @@ type Pool @entity {
 type PoolToken @entity {
   id: ID!
   poolId: Pool!
+  token: Token!
   symbol: String!
   name: String!
   decimals: Int!
@@ -126,6 +127,16 @@ type GradualWeightUpdate @entity {
   endWeights: [BigInt!]!
 }
 
+type AmpUpdate @entity {
+  id: ID!
+  poolId: Pool!
+  scheduledTimestamp: Int!
+  startTimestamp: Int!
+  endTimestamp: Int!
+  startAmp: BigInt!
+  endAmp: BigInt!
+}
+
 type Swap @entity {
   id: ID!
   caller: Bytes!
@@ -135,6 +146,7 @@ type Swap @entity {
   tokenOutSym: String!
   tokenAmountIn: BigDecimal!
   tokenAmountOut: BigDecimal!
+  valueUSD: BigDecimal!
   poolId: Pool!
   userAddress: User!
   timestamp: Int!
@@ -203,6 +215,48 @@ type PoolSnapshot @entity {
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
   timestamp: Int!
+}
+
+type Token @entity {
+  id: ID!
+  symbol: String
+  name: String
+  decimals: Int!
+  address: String!
+  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
+  totalBalanceNotional: BigDecimal!
+  totalVolumeUSD: BigDecimal! # total volume in fiat (usd)
+  totalVolumeNotional: BigDecimal!
+  totalSwapCount: BigInt!
+  latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
+}
+
+type TokenSnapshot @entity {
+  id: ID! # token address + dayId
+  token: Token!
+  timestamp: Int! # timestamp representing the start of day in UTC
+  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
+  totalBalanceNotional: BigDecimal! # underlying asset balance
+  totalVolumeUSD: BigDecimal! # amount of volume the token has moved on this day
+  totalVolumeNotional: BigDecimal! # underyling asset volume
+  totalSwapCount: BigInt!
+}
+
+type TradePair @entity {
+  "Token Address - Token Address"
+  id: ID!
+  token0: Token!
+  token1: Token!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
+}
+
+type TradePairSnapshot @entity {
+  id: ID!
+  pair: TradePair!
+  timestamp: Int!
+  totalSwapVolume: BigDecimal!
+  totalSwapFee: BigDecimal!
 }
 
 type BalancerSnapshot @entity {

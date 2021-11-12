@@ -67,12 +67,12 @@ rinkeby:
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 8510540
-  # StablePoolFactory:
-  #   address: ""
-  #   startBlock: 0
-  # MetaStablePoolFactory:
-  #   address: ""
-  #   startBlock: 0
+  StablePoolFactory:
+    address: "0xc66Ba2B6595D3613CCab350C886aCE23866EDe24"
+    startBlock: 8822477
+  MetaStablePoolFactory:
+    address: "0x751dfDAcE1AD995fF13c927f6f761C6604532c79"
+    startBlock: 9027779
   LiquidityBootstrappingPoolFactory:
     address: "0xdcdbf71A870cc60C6F9B621E28a7D3Ffd6Dd4965"
     startBlock: 8976588
@@ -145,9 +145,9 @@ polygon:
   StablePoolFactory:
     address: "0xc66Ba2B6595D3613CCab350C886aCE23866EDe24"
     startBlock: 16138679
-  # MetaStablePoolFactory:
-  #   address: ""
-  #   startBlock: 0
+  MetaStablePoolFactory:
+    address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
+    startBlock: 17913016
   LiquidityBootstrappingPoolFactory:
     address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
     startBlock: 17116402

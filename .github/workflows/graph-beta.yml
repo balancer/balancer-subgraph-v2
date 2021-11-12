@@ -7,6 +7,7 @@ on:
 jobs:
   deploy-beta:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -27,6 +28,7 @@ jobs:
           graph_config_file: "subgraph.yaml"
   deploy-kovan-beta:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -47,6 +49,7 @@ jobs:
           graph_config_file: "subgraph.kovan.yaml"
   deploy-polygon-beta:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
@@ -67,6 +70,7 @@ jobs:
           graph_config_file: "subgraph.polygon.yaml"
   deploy-arbitrum-beta:
     runs-on: ubuntu-latest
+    environment: graph
     steps:
       - uses: actions/checkout@v2
       - name: Install node
