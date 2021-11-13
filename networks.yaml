@@ -139,9 +139,9 @@ polygon:
   StablePoolFactory:
     address: "0xc66Ba2B6595D3613CCab350C886aCE23866EDe24"
     startBlock: 16138679
-  # MetaStablePoolFactory:
-  #   address: ""
-  #   startBlock: 0
+  MetaStablePoolFactory:
+    address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
+    startBlock: 17913016
   LiquidityBootstrappingPoolFactory:
     address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
     startBlock: 17116402
