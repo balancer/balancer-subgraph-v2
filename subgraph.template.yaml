@@ -390,6 +390,8 @@ templates:
       abis:
         - name: WeightedPool # Necessary for Transfer handler
           file: ./abis/WeightedPool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
         - name: BalancerPoolToken
@@ -399,6 +401,10 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: AmpUpdateStarted(uint256,uint256,uint256,uint256)
+          handler: handleAmpUpdateStarted
+        - event: AmpUpdateStopped(uint256)
+          handler: handleAmpUpdateStopped
         - event: PriceRateProviderSet(indexed address,indexed address,uint256)
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
@@ -515,6 +521,8 @@ templates:
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
         - name: StablePhantomPool
@@ -524,6 +532,10 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: AmpUpdateStarted(uint256,uint256,uint256,uint256)
+          handler: handleAmpUpdateStarted
+        - event: AmpUpdateStopped(uint256)
+          handler: handleAmpUpdateStopped
         - event: TokenRateProviderSet(indexed address,indexed address,uint256)
           handler: handlePriceRateProviderSet
         - event: TokenRateCacheUpdated(indexed address,uint256)
