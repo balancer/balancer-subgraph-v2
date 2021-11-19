@@ -17,6 +17,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   let tokensList: Bytes[] = pool.tokensList;
   if (tokensList.length < 2) return false;
+  if (hasVirtualSupply(pool) && pool.address == pricingAsset) return false;
 
   let poolValue: BigDecimal = ZERO_BD;
 
