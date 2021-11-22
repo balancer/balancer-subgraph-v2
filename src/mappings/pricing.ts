@@ -1,8 +1,8 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
+import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
+import { hasVirtualSupply } from './helpers/pools';
 import { getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
-import { ZERO_BD } from './helpers/constants';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -17,6 +17,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
 
   let tokensList: Bytes[] = pool.tokensList;
   if (tokensList.length < 2) return false;
+  if (hasVirtualSupply(pool) && pool.address == pricingAsset) return false;
 
   let poolValue: BigDecimal = ZERO_BD;
 
@@ -62,6 +63,10 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       let token = getToken(tokenAddress);
       token.latestPrice = latestPrice.id;
       token.save();
+    }
+    // Exclude virtual supply from pool value
+    if (hasVirtualSupply(pool) && pool.address == tokenAddress) {
+      continue;
     }
     if (price) {
       let poolTokenValue = price.times(poolTokenQuantity);

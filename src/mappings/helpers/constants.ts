@@ -100,6 +100,66 @@ let daiAddressByNetwork: AddressByNetwork = {
   dev: '0x5C0E66606eAbEC1df45E2ADd26C5DF8C0895a397',
 };
 
+let altDaiAddressByNetwork: AddressByNetwork = {
+  mainnet: '',
+  kovan: '0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD',
+  goerli: '',
+  rinkeby: '',
+  polygon: '',
+  arbitrum: '',
+  dev: '',
+};
+
+let altUsdcAddressByNetwork: AddressByNetwork = {
+  mainnet: '',
+  kovan: '0xe22da380ee6B445bb8273C81944ADEB6E8450422',
+  goerli: '',
+  rinkeby: '',
+  polygon: '',
+  arbitrum: '',
+  dev: '',
+};
+
+let altUsdtAddressByNetwork: AddressByNetwork = {
+  mainnet: '',
+  kovan: '0x13512979ADE267AB5100878E2e0f485B568328a4',
+  goerli: '',
+  rinkeby: '',
+  polygon: '',
+  arbitrum: '',
+  dev: '',
+};
+
+let linearDaiAddressByNetwork: AddressByNetwork = {
+  mainnet: '',
+  kovan: '0xCd32a460b6fEcd053582E43B07ed6e2C04e15369',
+  goerli: '',
+  rinkeby: '',
+  polygon: '',
+  arbitrum: '',
+  dev: '',
+};
+
+let linearUsdcAddressByNetwork: AddressByNetwork = {
+  mainnet: '',
+  kovan: '0x3d1B554f1B1d1B6108b601FF22fea9c90fdfe50D',
+  goerli: '',
+  rinkeby: '',
+  polygon: '',
+  arbitrum: '',
+  dev: '',
+};
+
+let linearUsdtAddressByNetwork: AddressByNetwork = {
+  mainnet: '',
+  kovan: '0x6A8C3239695613C0710DC971310b36F9b81E115e',
+  goerli: '',
+  rinkeby: '',
+  polygon: '',
+  arbitrum: '',
+  dev: '',
+};
+
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
   if (network == 'mainnet') {
     return Address.fromString(addressByNetwork.mainnet);
@@ -127,5 +187,25 @@ export let USDT: Address = forNetwork(usdtAddressByNetwork, network);
 export let BAL: Address = forNetwork(balAddressByNetwork, network);
 export let DAI: Address = forNetwork(daiAddressByNetwork, network);
 
-export let PRICING_ASSETS: Address[] = [WETH, WBTC, USDC, DAI, USDT, BAL];
-export let USD_STABLE_ASSETS: Address[] = [USDC, DAI, USDT];
+let ALT_DAI = forNetwork(altDaiAddressByNetwork, network);
+let ALT_USDC = forNetwork(altUsdcAddressByNetwork, network);
+let ALT_USDT = forNetwork(altUsdtAddressByNetwork, network);
+let LINEAR_DAI = forNetwork(linearDaiAddressByNetwork, network);
+let LINEAR_USDC = forNetwork(linearUsdcAddressByNetwork, network);
+let LINEAR_USDT = forNetwork(linearUsdtAddressByNetwork, network);
+
+export let PRICING_ASSETS: Address[] = [
+  WETH,
+  WBTC,
+  USDC,
+  DAI,
+  USDT,
+  BAL,
+  ALT_DAI,
+  ALT_USDC,
+  ALT_USDT,
+  LINEAR_DAI,
+  LINEAR_USDC,
+  LINEAR_USDT,
+];
+export let USD_STABLE_ASSETS: Address[] = [USDC, DAI, USDT, ALT_DAI, ALT_USDC, ALT_USDT];

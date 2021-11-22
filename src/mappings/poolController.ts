@@ -10,6 +10,7 @@ import {
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
+import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
   AmpUpdateStopped,
@@ -168,6 +169,25 @@ export function handleManagementFeePercentageChanged(event: ManagementFeePercent
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
   pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
+  pool.save();
+}
+
+/************************************
+ ************* TARGETS **************
+ ************************************/
+
+export function handleTargetsSet(event: TargetsSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.lowerTarget = event.params.lowerTarget;
+  pool.upperTarget = event.params.upperTarget;
   pool.save();
 }
 
