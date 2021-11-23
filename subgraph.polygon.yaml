@@ -477,3 +477,4 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
+
