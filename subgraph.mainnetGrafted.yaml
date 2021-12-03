@@ -1,21 +1,19 @@
 specVersion: 0.0.2
 description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
-{{#if graft}}
 graft:
-  base: {{graft.base}}
-  block: {{graft.block}}
-{{/if}}
+  base: QmeZZKPJm3dqqLJboNwLEBDnPxiCBhjiEBoEq24HfkQznq
+  block: 13730248
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: Vault
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{Vault.address}}'
+      address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
-      startBlock: {{Vault.startBlock}}
+      startBlock: 12272146
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -52,11 +50,11 @@ dataSources:
           handler: handleInternalBalanceChange
   - kind: ethereum/contract
     name: WeightedPoolFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{WeightedPoolFactory.address}}'
+      address: '0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9'
       abi: WeightedPoolFactory
-      startBlock: {{WeightedPoolFactory.startBlock}}
+      startBlock: 12272146
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -79,11 +77,11 @@ dataSources:
           handler: handleNewWeightedPool
   - kind: ethereum/contract
     name: WeightedPool2TokenFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{WeightedPool2TokenFactory.address}}'
+      address: '0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0'
       abi: WeightedPoolFactory
-      startBlock: {{WeightedPool2TokenFactory.startBlock}}
+      startBlock: 12272146
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -104,14 +102,13 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
-  {{#if StablePoolFactory}}
   - kind: ethereum/contract
     name: StablePoolFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{StablePoolFactory.address}}'
+      address: '0xc66Ba2B6595D3613CCab350C886aCE23866EDe24'
       abi: StablePoolFactory
-      startBlock: {{StablePoolFactory.startBlock}}
+      startBlock: 12703127
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -132,15 +129,13 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePool
-  {{/if}}
-  {{#if MetaStablePoolFactory}}
   - kind: ethereum/contract
     name: MetaStablePoolFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{MetaStablePoolFactory.address}}'
+      address: '0x67d27634E44793fE63c467035E31ea8635117cd4'
       abi: MetaStablePoolFactory
-      startBlock: {{MetaStablePoolFactory.startBlock}}
+      startBlock: 13011941
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -163,15 +158,13 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewMetaStablePool
-  {{/if}}
-  {{#if LiquidityBootstrappingPoolFactory}}
   - kind: ethereum/contract
     name: LiquidityBootstrappingPoolFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{LiquidityBootstrappingPoolFactory.address}}'
+      address: '0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE'
       abi: LiquidityBootstrappingPoolFactory
-      startBlock: {{LiquidityBootstrappingPoolFactory.startBlock}}
+      startBlock: 12871780
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -194,15 +187,13 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewLiquidityBootstrappingPool
-  {{/if}}
-  {{#if graft}}
   - kind: ethereum/contract
     name: TempLiquidityBootstrappingPoolFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{TempLiquidityBootstrappingPoolFactory.address}}'
+      address: '0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e'
       abi: LiquidityBootstrappingPoolFactory
-      startBlock: {{TempLiquidityBootstrappingPoolFactory.startBlock}}
+      startBlock: 13730248
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -225,15 +216,13 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewLiquidityBootstrappingPool
-  {{/if}}
-  {{#if InvestmentPoolFactory}}
   - kind: ethereum/contract
     name: InvestmentPoolFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{InvestmentPoolFactory.address}}'
+      address: '0x48767F9F868a4A7b86A90736632F6E44C2df7fa9'
       abi: InvestmentPoolFactory
-      startBlock: {{InvestmentPoolFactory.startBlock}}
+      startBlock: 13279079
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -256,15 +245,13 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewInvestmentPool
-  {{/if}}
-  {{#if ConvergentPoolFactory}}
   - kind: ethereum/contract
     name: ConvergentPoolFactory
-    network: {{network}}
+    network: mainnet
     source:
-      address: '{{ConvergentPoolFactory.address}}'
+      address: '0xb7561f547F3207eDb42A6AfA42170Cd47ADD17BD'
       abi: ConvergentPoolFactory
-      startBlock: {{ConvergentPoolFactory.startBlock}}
+      startBlock: 12686198
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -285,11 +272,10 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewCCPPool
-  {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
-    network: {{network}}
+    network: mainnet
     source:
       abi: WeightedPool
     mapping:
@@ -314,7 +300,7 @@ templates:
           handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: StablePool
-    network: {{network}}
+    network: mainnet
     source:
       abi: StablePool
     mapping:
@@ -345,7 +331,7 @@ templates:
           handler: handleAmpUpdateStopped
   - kind: ethereum/contract
     name: MetaStablePool
-    network: {{network}}
+    network: mainnet
     source:
       abi: MetaStablePool
     mapping:
@@ -377,7 +363,7 @@ templates:
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
     name: ConvergentCurvePool
-    network: {{network}}
+    network: mainnet
     source:
       abi: ConvergentCurvePool
     mapping:
@@ -402,7 +388,7 @@ templates:
           handler: handleTransfer
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
-    network: {{network}}
+    network: mainnet
     source:
       abi: LiquidityBootstrappingPool
     mapping:
@@ -432,7 +418,7 @@ templates:
           handler: handleGradualWeightUpdateScheduled
   - kind: ethereum/contract
     name: InvestmentPool
-    network: {{network}}
+    network: mainnet
     source:
       abi: InvestmentPool
     mapping:
