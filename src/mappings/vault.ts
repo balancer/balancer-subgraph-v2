@@ -11,7 +11,6 @@ import {
   getTokenPriceId,
   scaleDown,
   createPoolSnapshot,
-  saveSwapToSnapshot,
   createUserEntity,
   getTokenDecimals,
   loadPoolToken,
@@ -24,8 +23,8 @@ import {
   getBalancerSnapshot,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
-import { isUSDStable, isPricingAsset, updatePoolLiquidity, valueInUSD } from './pricing';
-import { SWAP_IN, SWAP_OUT, ZERO, ZERO_BD, ONE_BD } from './helpers/constants';
+import { isPricingAsset, updatePoolLiquidity, valueInUSD, swapValueInUSD } from './pricing';
+import { SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './helpers/constants';
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 
@@ -161,7 +160,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
   }
 
-  createPoolSnapshot(poolId, blockTimestamp);
+  createPoolSnapshot(pool, blockTimestamp);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -239,7 +238,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
-  createPoolSnapshot(poolId, blockTimestamp);
+  createPoolSnapshot(pool, blockTimestamp);
 }
 
 /************************************
@@ -310,6 +309,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     }
   }
 
+  let poolAddress = pool.address;
   let tokenInAddress: Address = event.params.tokenIn;
   let tokenOutAddress: Address = event.params.tokenOut;
 
@@ -331,16 +331,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   let tokenAmountOut: BigDecimal = scaleDown(event.params.amountOut, poolTokenOut.decimals);
 
   let swapValueUSD = ZERO_BD;
-  if (isUSDStable(tokenOutAddress)) {
-    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-  } else if (isUSDStable(tokenInAddress)) {
-    swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-  } else {
-    let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-    let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-    let divisor =
-      tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD) ? BigDecimal.fromString('2') : ONE_BD;
-    swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(divisor);
+  let swapFeesUSD = ZERO_BD;
+
+  if (poolAddress != tokenInAddress && poolAddress != tokenOutAddress) {
+    let swapFee = pool.swapFee;
+    swapValueUSD = swapValueInUSD(tokenInAddress, tokenAmountIn, tokenOutAddress, tokenAmountOut);
+    swapFeesUSD = swapValueUSD.times(swapFee);
   }
 
   let swapId = transactionHash.toHexString().concat(logIndex.toString());
@@ -367,9 +363,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   // let pool = Pool.load(poolId.toHex());
   pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
   pool.totalSwapVolume = pool.totalSwapVolume.plus(swapValueUSD);
-
-  let swapFee = pool.swapFee;
-  let swapFeesUSD = swapValueUSD.times(swapFee);
   pool.totalSwapFee = pool.totalSwapFee.plus(swapFeesUSD);
 
   pool.save();
@@ -471,6 +464,5 @@ export function handleSwapEvent(event: SwapEvent): void {
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
   }
 
-  createPoolSnapshot(poolId.toHexString(), blockTimestamp);
-  saveSwapToSnapshot(poolId.toHexString(), blockTimestamp, swapValueUSD, swapFeesUSD);
+  createPoolSnapshot(pool, blockTimestamp);
 }

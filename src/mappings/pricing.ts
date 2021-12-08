@@ -1,6 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
+import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD } from './helpers/constants';
 import { hasVirtualSupply } from './helpers/pools';
 import { getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
 
@@ -128,6 +128,29 @@ export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal
   }
 
   return usdValue;
+}
+
+export function swapValueInUSD(
+  tokenInAddress: Address,
+  tokenAmountIn: BigDecimal,
+  tokenOutAddress: Address,
+  tokenAmountOut: BigDecimal
+): BigDecimal {
+  let swapValueUSD = ZERO_BD;
+
+  if (isUSDStable(tokenOutAddress)) {
+    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+  } else if (isUSDStable(tokenInAddress)) {
+    swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+  } else {
+    let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+    let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+    let divisor =
+      tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD) ? BigDecimal.fromString('2') : ONE_BD;
+    swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(divisor);
+  }
+
+  return swapValueUSD;
 }
 
 function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
