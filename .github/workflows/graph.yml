@@ -88,7 +88,7 @@ jobs:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2"
           graph_account: "balancer-labs"
-          graph_config_file: "subgraph.yaml"
+          graph_config_file: "subgraph.mainnetGrafted.yaml"
   deploy-polygon:
     runs-on: ubuntu-latest
     environment: graph
@@ -109,7 +109,7 @@ jobs:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-polygon-v2"
           graph_account: "balancer-labs"
-          graph_config_file: "subgraph.polygon.yaml"
+          graph_config_file: "subgraph.polygonGrafted.yaml"
   deploy-arbitrum:
     runs-on: ubuntu-latest
     environment: graph
