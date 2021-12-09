@@ -1,7 +1,7 @@
 import { ZERO_BD, VAULT_ADDRESS, ZERO } from './helpers/constants';
 import { PoolType } from './helpers/pools';
 
-import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot } from './helpers/misc';
+import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
@@ -200,8 +200,8 @@ export function handleNewLinearPool(event: PoolCreated): void {
   pool.wrappedIndex = wrappedIndexCall.value.toI32();
 
   let targetsCall = poolContract.try_getTargets();
-  pool.lowerTarget = targetsCall.value.value0;
-  pool.upperTarget = targetsCall.value.value1;
+  pool.lowerTarget = tokenToDecimal(targetsCall.value.value0, 18);
+  pool.upperTarget = tokenToDecimal(targetsCall.value.value1, 18);
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);

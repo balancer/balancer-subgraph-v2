@@ -63,8 +63,8 @@ type Pool @entity {
   # LinearPool Only
   mainIndex: Int
   wrappedIndex: Int
-  lowerTarget: BigInt
-  upperTarget: BigInt
+  lowerTarget: BigDecimal
+  upperTarget: BigDecimal
 }
 
 type PoolToken @entity {
