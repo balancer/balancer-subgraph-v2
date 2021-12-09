@@ -269,6 +269,62 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewCCPPool
+  - kind: ethereum/contract
+    name: StablePhantomPoolFactory
+    network: mainnet
+    source:
+      address: '0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2'
+      abi: StablePhantomPoolFactory
+      startBlock: 13766527
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: StablePhantomPoolFactory
+          file: ./abis/StablePhantomPoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+        - name: StablePhantomPool
+          file: ./abis/StablePhantomPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewStablePhantomPool
+  - kind: ethereum/contract
+    name: LinearPoolFactory
+    network: mainnet
+    source:
+      address: '0xD7FAD3bd59D6477cbe1BE7f646F7f1BA25b230f8'
+      abi: LinearPoolFactory
+      startBlock: 13766443
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: LinearPoolFactory
+          file: ./abis/LinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewLinearPool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
