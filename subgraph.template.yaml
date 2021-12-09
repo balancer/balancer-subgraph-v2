@@ -317,14 +317,14 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePhantomPool
   {{/if}}
-  {{#if LinearPoolFactory}}
+  {{#if AaveLinearPoolFactory}}
   - kind: ethereum/contract
-    name: LinearPoolFactory
+    name: AaveLinearPoolFactory
     network: {{network}}
     source:
-      address: '{{LinearPoolFactory.address}}'
-      abi: LinearPoolFactory
-      startBlock: {{LinearPoolFactory.startBlock}}
+      address: '{{AaveLinearPoolFactory.address}}'
+      abi: AaveLinearPoolFactory
+      startBlock: {{AaveLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -338,10 +338,10 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: LinearPoolFactory
-          file: ./abis/LinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
+        - name: AaveLinearPoolFactory
+          file: ./abis/AaveLinearPoolFactory.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewLinearPool
@@ -569,10 +569,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: LinearPool
+    name: AaveLinearPool
     network: {{network}}
     source:
-      abi: LinearPool
+      abi: AaveLinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -589,16 +589,12 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: TargetsSet(uint256,uint256)
+        - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
-        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
-          handler: handlePriceRateProviderSet
-        - event: PriceRateCacheUpdated(indexed address,uint256)
-          handler: handlePriceRateCacheUpdated
