@@ -164,8 +164,8 @@ export function handleTargetsSet(event: TargetsSet): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  pool.lowerTarget = event.params.lowerTarget;
-  pool.upperTarget = event.params.upperTarget;
+  pool.lowerTarget = tokenToDecimal(event.params.lowerTarget, 18);
+  pool.upperTarget = tokenToDecimal(event.params.upperTarget, 18);
   pool.save();
 }
 
