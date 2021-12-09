@@ -47,27 +47,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "lowerTarget",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
         "name": "upperTarget",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
         "name": "swapFeePercentage",
-        "type": "uint256"
-      },
-      {
-        "internalType": "contract IRateProvider",
-        "name": "wrappedTokenRateProvider",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "wrappedTokenRateCacheDuration",
         "type": "uint256"
       },
       {
@@ -85,6 +70,37 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCreationCode",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCreationCodeContracts",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "contractA",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "contractB",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

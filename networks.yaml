@@ -30,7 +30,7 @@ mainnet:
   StablePhantomPoolFactory:
     address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
     startBlock: 13766527
-  LinearPoolFactory:
+  AaveLinearPoolFactory:
     address: "0xD7FAD3bd59D6477cbe1BE7f646F7f1BA25b230f8"
     startBlock: 13766443
 kovan:
@@ -62,7 +62,7 @@ kovan:
   StablePhantomPoolFactory:
     address: "0x6c7F4D97269eCE163fd08D5C2584A21E4a33934c"
     startBlock: 28677262
-  LinearPoolFactory:
+  AaveLinearPoolFactory:
     address: "0x94522C4586cb15E08AFF943545Fb2c8Ca7f508cE"
     startBlock: 28677003
 rinkeby:
@@ -169,7 +169,7 @@ polygon:
   StablePhantomPoolFactory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22288478
-  LinearPoolFactory:
+  AaveLinearPoolFactory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 22287712
 arbitrum:
@@ -230,6 +230,6 @@ polygonGrafted:
   StablePhantomPoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 3682166
-  LinearPoolFactory:
+  AaveLinearPoolFactory:
     address: "0xdcdbf71A870cc60C6F9B621E28a7D3Ffd6Dd4965"
     startBlock: 3681582
