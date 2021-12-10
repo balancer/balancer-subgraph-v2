@@ -195,7 +195,7 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewLiquidityBootstrappingPool
   {{/if}}
-  {{#if graft}}
+  {{#if TempLiquidityBootstrappingPoolFactory}}
   - kind: ethereum/contract
     name: TempLiquidityBootstrappingPoolFactory
     network: {{network}}
