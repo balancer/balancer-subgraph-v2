@@ -100,6 +100,16 @@ let daiAddressByNetwork: AddressByNetwork = {
   dev: '0x5C0E66606eAbEC1df45E2ADd26C5DF8C0895a397',
 };
 
+let mkrAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2',
+  kovan: '0xef13C0c8abcaf5767160018d268f9697aE4f5375',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x6f7C932e7684666C9fd1d44527765433e01fF61d',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
 let altDaiAddressByNetwork: AddressByNetwork = {
   mainnet: '0x0000000000000000000000000000000000000000',
   kovan: '0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD',
@@ -189,6 +199,7 @@ export let USDC: Address = forNetwork(usdcAddressByNetwork, network);
 export let USDT: Address = forNetwork(usdtAddressByNetwork, network);
 export let BAL: Address = forNetwork(balAddressByNetwork, network);
 export let DAI: Address = forNetwork(daiAddressByNetwork, network);
+export let MKR: Address = forNetwork(mkrAddressByNetwork, network);
 
 let ALT_DAI = forNetwork(altDaiAddressByNetwork, network);
 let ALT_USDC = forNetwork(altUsdcAddressByNetwork, network);
@@ -204,6 +215,7 @@ export let PRICING_ASSETS: Address[] = [
   DAI,
   USDT,
   BAL,
+  MKR,
   ALT_DAI,
   ALT_USDC,
   ALT_USDT,
