@@ -131,8 +131,7 @@ let altUsdtAddressByNetwork: AddressByNetwork = {
 };
 
 let linearDaiAddressByNetwork: AddressByNetwork = {
-  // TODO - update mainnet address after final deployment
-  mainnet: '0xa3823e50f20982656557a4a6a9c06ba5467ae908',
+  mainnet: '0x804CdB9116a10bB78768D3252355a1b18067bF8f',
   kovan: '0xfcccb77a946b6a3bd59d149f083b5bfbb8004d6d',
   goerli: '0x0000000000000000000000000000000000000000',
   rinkeby: '0x0000000000000000000000000000000000000000',
@@ -142,8 +141,7 @@ let linearDaiAddressByNetwork: AddressByNetwork = {
 };
 
 let linearUsdcAddressByNetwork: AddressByNetwork = {
-  // TODO - update mainnet address after final deployment
-  mainnet: '0x652d486b80c461c397b0d95612a404da936f3db3',
+  mainnet: '0x9210F1204b5a24742Eba12f710636D76240dF3d0',
   kovan: '0x0bbd32b14a6503ee20f87df38cf2d5d3b59ea2f5',
   goerli: '0x0000000000000000000000000000000000000000',
   rinkeby: '0x0000000000000000000000000000000000000000',
@@ -153,8 +151,7 @@ let linearUsdcAddressByNetwork: AddressByNetwork = {
 };
 
 let linearUsdtAddressByNetwork: AddressByNetwork = {
-  // TODO - update mainnet address after final deployment
-  mainnet: '0xe6bcc79f328eec93d4ec8f7ed35534d9ab549faa',
+  mainnet: '0x2BBf681cC4eb09218BEe85EA2a5d3D13Fa40fC0C',
   kovan: '0xe667d48618e71c2a02e4a1b66ed9def1426938b6',
   goerli: '0x0000000000000000000000000000000000000000',
   rinkeby: '0x0000000000000000000000000000000000000000',
