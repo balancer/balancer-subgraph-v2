@@ -202,7 +202,7 @@ polygonGrafted:
   network: matic
   graft:
     block: 22067480
-    base: QmaHWFyXwkmBi5YT86iqv6TUTAjUZamzJ6zL4tQ25f1aT1
+    base: QmPMtE2kTdnpJxBDix65gK4pZgtdgTe8qyzDktQTTjc1Zi
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
