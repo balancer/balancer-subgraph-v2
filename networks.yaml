@@ -44,6 +44,9 @@ kovan:
   LiquidityBootstrappingPoolFactory:
     address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
     startBlock: 26275220
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x1B57f637Ce3408f1f834b0b70f9A595b062DAea7"
+    startBlock: 28609783
   InvestmentPoolFactory:
     address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
     startBlock: 27098599
