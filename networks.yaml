@@ -18,12 +18,21 @@ mainnet:
   LiquidityBootstrappingPoolFactory:
     address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
     startBlock: 12871780
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
+    startBlock: 13730248
   InvestmentPoolFactory:
     address: "0x48767F9F868a4A7b86A90736632F6E44C2df7fa9"
     startBlock: 13279079
   ConvergentPoolFactory:
     address: "0xb7561f547F3207eDb42A6AfA42170Cd47ADD17BD"
     startBlock: 12686198
+  StablePhantomPoolFactory:
+    address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
+    startBlock: 13766527
+  AaveLinearPoolFactory:
+    address: "0xD7FAD3bd59D6477cbe1BE7f646F7f1BA25b230f8"
+    startBlock: 13766443
 kovan:
   network: kovan
   Vault:
@@ -51,11 +60,11 @@ kovan:
   #   address: ""
   #   startBlock: 0
   StablePhantomPoolFactory:
-    address: "0xcd7F93C86f30B90a181f81934FA4f281c7bfF246"
-    startBlock: 27712556
-  LinearPoolFactory:
-    address: "0x59D59eDc3546e740aDB102e1B9593692C96d69c8"
-    startBlock: 27718195
+    address: "0x6c7F4D97269eCE163fd08D5C2584A21E4a33934c"
+    startBlock: 28677262
+  AaveLinearPoolFactory:
+    address: "0x94522C4586cb15E08AFF943545Fb2c8Ca7f508cE"
+    startBlock: 28677003
 rinkeby:
   network: rinkeby
   Vault:
@@ -157,6 +166,12 @@ polygon:
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
+  StablePhantomPoolFactory:
+    address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
+    startBlock: 22288478
+  AaveLinearPoolFactory:
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 22287712
 arbitrum:
   network: arbitrum-one
   Vault:
@@ -183,3 +198,38 @@ arbitrum:
   # ConvergentPoolFactory:
   #   address: ""
   #   startBlock: 0
+polygonGrafted:
+  network: matic
+  graft:
+    block: 22067480
+    base: QmaHWFyXwkmBi5YT86iqv6TUTAjUZamzJ6zL4tQ25f1aT1
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 15832990
+  WeightedPoolFactory:
+    address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
+    startBlock: 15832998
+  WeightedPool2TokenFactory:
+    address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
+    startBlock: 15869090
+  StablePoolFactory:
+    address: "0xc66Ba2B6595D3613CCab350C886aCE23866EDe24"
+    startBlock: 16138679
+  MetaStablePoolFactory:
+    address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
+    startBlock: 17913016
+  LiquidityBootstrappingPoolFactory:
+    address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
+    startBlock: 17116402
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x41B953164995c11C81DA73D212ED8Af25741b7Ac"
+    startBlock: 22067480
+  InvestmentPoolFactory:
+    address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
+    startBlock: 19404118
+  StablePhantomPoolFactory:
+    address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
+    startBlock: 3682166
+  AaveLinearPoolFactory:
+    address: "0xdcdbf71A870cc60C6F9B621E28a7D3Ffd6Dd4965"
+    startBlock: 3681582

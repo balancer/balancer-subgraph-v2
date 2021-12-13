@@ -239,8 +239,6 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
     network: arbitrum-one
@@ -272,8 +270,6 @@ templates:
           handler: handleAmpUpdateStarted
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
     network: arbitrum-one
@@ -312,8 +308,6 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: arbitrum-one
@@ -369,8 +363,6 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
     network: arbitrum-one
@@ -444,10 +436,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: LinearPool
+    name: AaveLinearPool
     network: arbitrum-one
     source:
-      abi: LinearPool
+      abi: AaveLinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -464,16 +456,12 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: TargetsSet(uint256,uint256)
+        - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
-        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
-          handler: handlePriceRateProviderSet
-        - event: PriceRateCacheUpdated(indexed address,uint256)
-          handler: handlePriceRateCacheUpdated
