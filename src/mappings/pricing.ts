@@ -1,6 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD } from './helpers/constants';
+import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, WETH } from './helpers/constants';
 import { hasVirtualSupply } from './helpers/pools';
 import { getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
 
@@ -111,18 +111,42 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   return true;
 }
 
+export function valueInETH(value: BigDecimal, asset: Address): BigDecimal {
+  let ethValue = ZERO_BD;
+
+  let assetInETH = LatestPrice.load(getLatestPriceId(asset, WETH));
+  if (assetInETH != null) {
+    ethValue = value.times(assetInETH.price);
+  }
+
+  return ethValue;
+}
+
 export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal {
   let usdValue = ZERO_BD;
 
   if (isUSDStable(pricingAsset)) {
     usdValue = value;
   } else {
-    // convert to USD
+    // try to convert directly to USD
     for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
       let pricingAssetInUSD = LatestPrice.load(getLatestPriceId(pricingAsset, USD_STABLE_ASSETS[i]));
       if (pricingAssetInUSD != null) {
         usdValue = value.times(pricingAssetInUSD.price);
-        break;
+        return usdValue;
+      }
+    }
+
+    // convert to WETH if there's no pool with pricingAsset and stablecoin
+    let ethValue = valueInETH(value, pricingAsset);
+    if (ethValue == ZERO_BD) return usdValue;
+
+    // and finally convert from WETH to USD
+    for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
+      let pricingAssetInUSD = LatestPrice.load(getLatestPriceId(WETH, USD_STABLE_ASSETS[i]));
+      if (pricingAssetInUSD != null) {
+        usdValue = ethValue.times(pricingAssetInUSD.price);
+        return usdValue;
       }
     }
   }
