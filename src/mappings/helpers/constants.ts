@@ -50,6 +50,16 @@ let wbtcAddressByNetwork: AddressByNetwork = {
   dev: '0xcD80986f08d776CE41698c47f705CDc99dDBfB0A',
 };
 
+let aaveAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+  kovan: '0xB597cd8D3217ea6477232F9217fa70837ff667Af',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0xBf6f1a1C0D494313d0053BDd97714330b6FdAff3',
+  polygon: '0xD6DF932A45C0f255f85145f286eA0b292B21C90B',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+}
+
 let usdAddressByNetwork: AddressByNetwork = {
   mainnet: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48', // USDC
   kovan: '0xc2569dd7d0fd715B054fBf16E75B001E5c0C1115',
@@ -184,6 +194,7 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
 export let VAULT_ADDRESS = forNetwork(vaultAddressByNetwork, network);
 export let WETH: Address = forNetwork(wethAddressByNetwork, network);
 export let WBTC: Address = forNetwork(wbtcAddressByNetwork, network);
+export let AAVE: Address = forNetwork(aaveAddressByNetwork, network);
 export let USD: Address = forNetwork(usdAddressByNetwork, network);
 export let USDC: Address = forNetwork(usdcAddressByNetwork, network);
 export let USDT: Address = forNetwork(usdtAddressByNetwork, network);
@@ -200,6 +211,7 @@ let LINEAR_USDT = forNetwork(linearUsdtAddressByNetwork, network);
 export let PRICING_ASSETS: Address[] = [
   WETH,
   WBTC,
+  AAVE,
   USDC,
   DAI,
   USDT,
