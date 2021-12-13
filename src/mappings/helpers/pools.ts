@@ -10,7 +10,7 @@ export namespace PoolType {
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
   export const Investment = 'Investment';
   export const StablePhantom = 'StablePhantom';
-  export const Linear = 'AaveLinear';
+  export const Linear = 'Linear';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {

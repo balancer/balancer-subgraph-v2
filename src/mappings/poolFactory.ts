@@ -1,7 +1,7 @@
-import { ZERO_BD, VAULT_ADDRESS, ZERO } from './helpers/constants';
+import { ZERO_BD, VAULT_ADDRESS, ZERO, ZERO_ADDRESS } from './helpers/constants';
 import { PoolType } from './helpers/pools';
 
-import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
+import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
@@ -16,13 +16,13 @@ import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templat
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
-import { AaveLinearPool as LinearPoolTemplate } from '../types/templates';
+import { LinearPool as LinearPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
-import { AaveLinearPool } from '../types/templates/AaveLinearPool/AaveLinearPool';
+import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
@@ -150,13 +150,10 @@ export function handleNewCCPPool(event: PoolCreated): void {
   let unitSecondsCall = poolContract.try_unitSeconds();
   let unitSeconds = unitSecondsCall.value;
 
-  // let ownerCall = poolContract.try_getOwner();
-  // let owner = ownerCall.value;
-
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = PoolType.Element;
   pool.factory = event.address;
-  // pool.owner = owner;
+  pool.owner = Address.fromString(ZERO_ADDRESS);
   pool.principalToken = principalToken;
   pool.baseToken = baseToken;
   pool.expiryTime = expiryTime;
@@ -181,7 +178,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
 export function handleNewLinearPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
 
-  let poolContract = AaveLinearPool.bind(poolAddress);
+  let poolContract = LinearPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -200,8 +197,8 @@ export function handleNewLinearPool(event: PoolCreated): void {
   pool.wrappedIndex = wrappedIndexCall.value.toI32();
 
   let targetsCall = poolContract.try_getTargets();
-  pool.lowerTarget = tokenToDecimal(targetsCall.value.value0, 18);
-  pool.upperTarget = tokenToDecimal(targetsCall.value.value1, 18);
+  pool.lowerTarget = targetsCall.value.value0;
+  pool.upperTarget = targetsCall.value.value1;
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);

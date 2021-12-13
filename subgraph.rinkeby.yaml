@@ -239,6 +239,8 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
     network: rinkeby
@@ -270,6 +272,8 @@ templates:
           handler: handleAmpUpdateStarted
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
     network: rinkeby
@@ -308,6 +312,8 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: rinkeby
@@ -363,6 +369,8 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
     network: rinkeby
@@ -436,10 +444,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: AaveLinearPool
+    name: LinearPool
     network: rinkeby
     source:
-      abi: AaveLinearPool
+      abi: LinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -456,12 +464,16 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: TargetsSet(indexed address,uint256,uint256)
+        - event: TargetsSet(uint256,uint256)
           handler: handleTargetsSet
+        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: PriceRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated

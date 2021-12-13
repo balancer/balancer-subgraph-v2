@@ -1,10 +1,5 @@
 specVersion: 0.0.2
 description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
-{{#if graft}}
-graft:
-  base: {{graft.base}}
-  block: {{graft.block}}
-{{/if}}
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
@@ -195,37 +190,6 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewLiquidityBootstrappingPool
   {{/if}}
-  {{#if TempLiquidityBootstrappingPoolFactory}}
-  - kind: ethereum/contract
-    name: TempLiquidityBootstrappingPoolFactory
-    network: {{network}}
-    source:
-      address: '{{TempLiquidityBootstrappingPoolFactory.address}}'
-      abi: LiquidityBootstrappingPoolFactory
-      startBlock: {{TempLiquidityBootstrappingPoolFactory.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: LiquidityBootstrappingPoolFactory
-          file: ./abis/LiquidityBootstrappingPoolFactory.json
-        - name: LiquidityBootstrappingPool
-          file: ./abis/LiquidityBootstrappingPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewLiquidityBootstrappingPool
-  {{/if}}
   {{#if InvestmentPoolFactory}}
   - kind: ethereum/contract
     name: InvestmentPoolFactory
@@ -317,14 +281,14 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePhantomPool
   {{/if}}
-  {{#if AaveLinearPoolFactory}}
+  {{#if LinearPoolFactory}}
   - kind: ethereum/contract
-    name: AaveLinearPoolFactory
+    name: LinearPoolFactory
     network: {{network}}
     source:
-      address: '{{AaveLinearPoolFactory.address}}'
-      abi: AaveLinearPoolFactory
-      startBlock: {{AaveLinearPoolFactory.startBlock}}
+      address: '{{LinearPoolFactory.address}}'
+      abi: LinearPoolFactory
+      startBlock: {{LinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -338,10 +302,10 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: AaveLinearPoolFactory
-          file: ./abis/AaveLinearPoolFactory.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
+        - name: LinearPoolFactory
+          file: ./abis/LinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewLinearPool
@@ -372,6 +336,8 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
     network: {{network}}
@@ -403,6 +369,8 @@ templates:
           handler: handleAmpUpdateStarted
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
     network: {{network}}
@@ -441,6 +409,8 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: {{network}}
@@ -496,6 +466,8 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
     network: {{network}}
@@ -569,10 +541,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: AaveLinearPool
+    name: LinearPool
     network: {{network}}
     source:
-      abi: AaveLinearPool
+      abi: LinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -589,12 +561,16 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: TargetsSet(indexed address,uint256,uint256)
+        - event: TargetsSet(uint256,uint256)
           handler: handleTargetsSet
+        - event: PriceRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: PriceRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated
