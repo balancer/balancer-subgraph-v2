@@ -20,7 +20,7 @@ type Pool @entity {
   name: String
   swapEnabled: Boolean!
   swapFee: BigDecimal!
-  owner: Bytes!
+  owner: Bytes
 
   totalWeight: BigDecimal
   totalSwapVolume: BigDecimal!
@@ -63,8 +63,8 @@ type Pool @entity {
   # LinearPool Only
   mainIndex: Int
   wrappedIndex: Int
-  lowerTarget: BigInt
-  upperTarget: BigInt
+  lowerTarget: BigDecimal
+  upperTarget: BigDecimal
 }
 
 type PoolToken @entity {
@@ -146,7 +146,6 @@ type Swap @entity {
   tokenOutSym: String!
   tokenAmountIn: BigDecimal!
   tokenAmountOut: BigDecimal!
-  valueUSD: BigDecimal!
   poolId: Pool!
   userAddress: User!
   timestamp: Int!
@@ -214,7 +213,6 @@ type PoolSnapshot @entity {
   totalShares: BigDecimal!
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
-  liquidity: BigDecimal!
   timestamp: Int!
 }
 

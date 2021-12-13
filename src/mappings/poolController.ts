@@ -1,16 +1,12 @@
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
-import {
-  WeightedPool,
-  SwapFeePercentageChanged,
-  PausedStateChanged,
-} from '../types/templates/WeightedPool/WeightedPool';
+import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
-import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
+import { TargetsSet } from '../types/templates/AaveLinearPool/AaveLinearPool';
 import {
   AmpUpdateStarted,
   AmpUpdateStopped,
@@ -30,24 +26,6 @@ import {
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
-
-/************************************
- *********** PAUSED STATE ***********
- ************************************/
-
-export function handlePausedStateChanged(event: PausedStateChanged): void {
-  let poolAddress = event.address;
-
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  pool.swapEnabled = !event.params.paused;
-  pool.save();
-}
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -186,8 +164,8 @@ export function handleTargetsSet(event: TargetsSet): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  pool.lowerTarget = event.params.lowerTarget;
-  pool.upperTarget = event.params.upperTarget;
+  pool.lowerTarget = tokenToDecimal(event.params.lowerTarget, 18);
+  pool.upperTarget = tokenToDecimal(event.params.upperTarget, 18);
   pool.save();
 }
 
