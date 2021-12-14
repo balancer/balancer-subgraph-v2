@@ -48,7 +48,7 @@ type Pool @entity {
   # StablePool Only
   amp: BigInt
 
-  # MetaStablePool Only
+  # MetaStablePool and LinearPool Only
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
 
   # ConvergentCurvePool (Element) Only
@@ -59,6 +59,12 @@ type Pool @entity {
 
   # InvestmentPool Only
   managementFee: BigDecimal
+
+  # LinearPool Only
+  mainIndex: Int
+  wrappedIndex: Int
+  lowerTarget: BigDecimal
+  upperTarget: BigDecimal
 }
 
 type PoolToken @entity {
@@ -207,6 +213,7 @@ type PoolSnapshot @entity {
   totalShares: BigDecimal!
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
+  liquidity: BigDecimal!
   timestamp: Int!
 }
 

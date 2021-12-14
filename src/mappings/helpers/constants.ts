@@ -70,6 +70,16 @@ let usdcAddressByNetwork: AddressByNetwork = {
   dev: '0x7c0c5AdA758cf764EcD6bAC05b63b2482f90bBB2',
 };
 
+let usdtAddressByNetwork: AddressByNetwork = {
+  mainnet: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+  kovan: '0xcC08220af469192C53295fDd34CFb8DF29aa17AB',
+  goerli: '0x78dEca24CBa286C0f8d56370f5406B48cFCE2f86',
+  rinkeby: '0xc3dbf84Abb494ce5199D5d4D815b10EC29529ff8',
+  polygon: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F',
+  arbitrum: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
+  dev: '0x7c0c5AdA758cf764EcD6bAC05b63b2482f90bBB2',
+};
+
 let balAddressByNetwork: AddressByNetwork = {
   mainnet: '0xba100000625a3754423978a60c9317c58a424e3D',
   kovan: '0x41286Bb1D3E870f3F750eB7E1C25d7E48c8A1Ac7',
@@ -88,6 +98,66 @@ let daiAddressByNetwork: AddressByNetwork = {
   polygon: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
   arbitrum: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
   dev: '0x5C0E66606eAbEC1df45E2ADd26C5DF8C0895a397',
+};
+
+let altDaiAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x0000000000000000000000000000000000000000',
+  kovan: '0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x0000000000000000000000000000000000000000',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
+let altUsdcAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x0000000000000000000000000000000000000000',
+  kovan: '0xe22da380ee6B445bb8273C81944ADEB6E8450422',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x0000000000000000000000000000000000000000',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
+let altUsdtAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x0000000000000000000000000000000000000000',
+  kovan: '0x13512979ADE267AB5100878E2e0f485B568328a4',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x0000000000000000000000000000000000000000',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
+let linearDaiAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x804CdB9116a10bB78768D3252355a1b18067bF8f',
+  kovan: '0xfcccb77a946b6a3bd59d149f083b5bfbb8004d6d',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x0000000000000000000000000000000000000000',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
+let linearUsdcAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x9210F1204b5a24742Eba12f710636D76240dF3d0',
+  kovan: '0x0bbd32b14a6503ee20f87df38cf2d5d3b59ea2f5',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x0000000000000000000000000000000000000000',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
+let linearUsdtAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x2BBf681cC4eb09218BEe85EA2a5d3D13Fa40fC0C',
+  kovan: '0xe667d48618e71c2a02e4a1b66ed9def1426938b6',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x0000000000000000000000000000000000000000',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
 };
 
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
@@ -113,8 +183,29 @@ export let WETH: Address = forNetwork(wethAddressByNetwork, network);
 export let WBTC: Address = forNetwork(wbtcAddressByNetwork, network);
 export let USD: Address = forNetwork(usdAddressByNetwork, network);
 export let USDC: Address = forNetwork(usdcAddressByNetwork, network);
+export let USDT: Address = forNetwork(usdtAddressByNetwork, network);
 export let BAL: Address = forNetwork(balAddressByNetwork, network);
 export let DAI: Address = forNetwork(daiAddressByNetwork, network);
 
-export let PRICING_ASSETS: Address[] = [WETH, WBTC, USDC, DAI, BAL];
-export let USD_STABLE_ASSETS: Address[] = [USDC, DAI];
+let ALT_DAI = forNetwork(altDaiAddressByNetwork, network);
+let ALT_USDC = forNetwork(altUsdcAddressByNetwork, network);
+let ALT_USDT = forNetwork(altUsdtAddressByNetwork, network);
+let LINEAR_DAI = forNetwork(linearDaiAddressByNetwork, network);
+let LINEAR_USDC = forNetwork(linearUsdcAddressByNetwork, network);
+let LINEAR_USDT = forNetwork(linearUsdtAddressByNetwork, network);
+
+export let PRICING_ASSETS: Address[] = [
+  WETH,
+  WBTC,
+  USDC,
+  DAI,
+  USDT,
+  BAL,
+  ALT_DAI,
+  ALT_USDC,
+  ALT_USDT,
+  LINEAR_DAI,
+  LINEAR_USDC,
+  LINEAR_USDT,
+];
+export let USD_STABLE_ASSETS: Address[] = [USDC, DAI, USDT, ALT_DAI, ALT_USDC, ALT_USDT];
