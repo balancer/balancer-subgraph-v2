@@ -442,6 +442,4 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
   }
-
-  createPoolSnapshot(pool, blockTimestamp);
 }
