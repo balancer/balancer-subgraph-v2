@@ -10,7 +10,6 @@ import {
   tokenToDecimal,
   getTokenPriceId,
   scaleDown,
-  createPoolSnapshot,
   createUserEntity,
   getTokenDecimals,
   loadPoolToken,
@@ -159,8 +158,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       pool.save();
     }
   }
-
-  createPoolSnapshot(pool, blockTimestamp);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -237,8 +234,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
       }
     }
   }
-
-  createPoolSnapshot(pool, blockTimestamp);
 }
 
 /************************************
@@ -442,6 +437,4 @@ export function handleSwapEvent(event: SwapEvent): void {
     tokenPrice.save();
     updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
   }
-
-  createPoolSnapshot(pool, blockTimestamp);
 }
