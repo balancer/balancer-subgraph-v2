@@ -1,8 +1,8 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD } from './helpers/constants';
-import { hasVirtualSupply } from './helpers/pools';
-import { getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
+import { hasVirtualSupply, PoolType } from './helpers/pools';
+import { createPoolSnapshot, getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -46,7 +46,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     // note that we can only meaningfully report liquidity once assets are traded with
     // the pricing asset
     if (tokenPrice) {
-      //value in terms of priceableAsset
+      // value in terms of priceableAsset
       price = tokenPrice.price;
 
       // Possibly update latest price
@@ -63,11 +63,23 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       let token = getToken(tokenAddress);
       token.latestPrice = latestPrice.id;
       token.save();
+    } else if (pool.poolType == PoolType.StablePhantom) {
+      // try to estimate token price in terms of pricing asset
+      let pricingAssetInUSD = valueInUSD(ONE_BD, pricingAsset);
+      let currentTokenInUSD = valueInUSD(ONE_BD, tokenAddress);
+
+      if (pricingAssetInUSD.equals(ZERO_BD) || currentTokenInUSD.equals(ZERO_BD)) {
+        continue;
+      }
+
+      price = currentTokenInUSD.div(pricingAssetInUSD);
     }
+
     // Exclude virtual supply from pool value
     if (hasVirtualSupply(pool) && pool.address == tokenAddress) {
       continue;
     }
+
     if (price) {
       let poolTokenValue = price.times(poolTokenQuantity);
       poolValue = poolValue.plus(poolTokenValue);
@@ -98,6 +110,9 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   // Update pool stats
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
+
+  // Create or update pool daily snapshot
+  createPoolSnapshot(pool, timestamp);
 
   // Update global stats
   let vault = Balancer.load('2') as Balancer;
