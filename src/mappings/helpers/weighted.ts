@@ -16,22 +16,25 @@ export function updatePoolWeights(poolId: string): void {
   let weightsCall = poolContract.try_getNormalizedWeights();
   if (!weightsCall.reverted) {
     let weights = weightsCall.value;
-    let totalWeight = ZERO_BD;
 
-    for (let i: i32 = 0; i < tokensList.length; i++) {
-      let tokenAddress = changetype<Address>(tokensList[i]);
-      let weight = weights[i];
+    if (weights.length == tokensList.length) {
+      let totalWeight = ZERO_BD;
 
-      let poolToken = loadPoolToken(poolId, tokenAddress);
-      if (poolToken != null) {
-        poolToken.weight = scaleDown(weight, 18);
-        poolToken.save();
+      for (let i = 0; i < tokensList.length; i++) {
+        let tokenAddress = changetype<Address>(tokensList[i]);
+        let weight = weights[i];
+
+        let poolToken = loadPoolToken(poolId, tokenAddress);
+        if (poolToken != null) {
+          poolToken.weight = scaleDown(weight, 18);
+          poolToken.save();
+        }
+
+        totalWeight = totalWeight.plus(scaleDown(weight, 18));
       }
 
-      totalWeight = totalWeight.plus(scaleDown(weight, 18));
+      pool.totalWeight = totalWeight;
     }
-
-    pool.totalWeight = totalWeight;
   }
 
   pool.save();
