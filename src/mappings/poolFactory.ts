@@ -32,13 +32,10 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let swapFeeCall = poolContract.try_getSwapFeePercentage();
-  let swapFee = swapFeeCall.value;
-
   let ownerCall = poolContract.try_getOwner();
   let owner = ownerCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
+  let pool = handleNewPool(event, poolId);
   pool.poolType = poolType;
   pool.factory = event.address;
   pool.owner = owner;
@@ -84,13 +81,10 @@ function createStableLikePool(event: PoolCreated, poolType: string): string {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let swapFeeCall = poolContract.try_getSwapFeePercentage();
-  let swapFee = swapFeeCall.value;
-
   let ownerCall = poolContract.try_getOwner();
   let owner = ownerCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
+  let pool = handleNewPool(event, poolId);
   pool.poolType = poolType;
   pool.factory = event.address;
   pool.owner = owner;
@@ -135,9 +129,6 @@ export function handleNewCCPPool(event: PoolCreated): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let swapFeeCall = poolContract.try_percentFee();
-  let swapFee = swapFeeCall.value;
-
   let principalTokenCall = poolContract.try_bond();
   let principalToken = principalTokenCall.value;
 
@@ -153,7 +144,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
   // let ownerCall = poolContract.try_getOwner();
   // let owner = ownerCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
+  let pool = handleNewPool(event, poolId);
   pool.poolType = PoolType.Element;
   pool.factory = event.address;
   // pool.owner = owner;
@@ -186,10 +177,7 @@ export function handleNewLinearPool(event: PoolCreated): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let swapFeeCall = poolContract.try_getSwapFeePercentage();
-  let swapFee = swapFeeCall.value;
-
-  let pool = handleNewPool(event, poolId, swapFee);
+  let pool = handleNewPool(event, poolId);
 
   pool.poolType = PoolType.Linear;
   pool.factory = event.address;
@@ -198,10 +186,6 @@ export function handleNewLinearPool(event: PoolCreated): void {
   pool.mainIndex = mainIndexCall.value.toI32();
   let wrappedIndexCall = poolContract.try_getWrappedIndex();
   pool.wrappedIndex = wrappedIndexCall.value.toI32();
-
-  let targetsCall = poolContract.try_getTargets();
-  pool.lowerTarget = tokenToDecimal(targetsCall.value.value0, 18);
-  pool.upperTarget = tokenToDecimal(targetsCall.value.value1, 18);
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);
@@ -235,14 +219,16 @@ function findOrInitializeVault(): Balancer {
   return vault;
 }
 
-function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool {
+function handleNewPool(event: PoolCreated, poolId: Bytes): Pool {
   let poolAddress: Address = event.params.pool;
 
   let pool = Pool.load(poolId.toHexString());
   if (pool == null) {
     pool = newPoolEntity(poolId.toHexString());
 
-    pool.swapFee = scaleDown(swapFee, 18);
+    // relies on swapFeePercentageChanged event
+    pool.swapFee = ZERO_BD;
+
     pool.createTime = event.block.timestamp.toI32();
     pool.address = poolAddress;
     pool.tx = event.transaction.hash;
