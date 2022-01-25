@@ -121,8 +121,8 @@ type GradualWeightUpdate @entity {
   id: ID!
   poolId: Pool!
   scheduledTimestamp: Int!
-  startTimestamp: Int!
-  endTimestamp: Int!
+  startTimestamp: BigInt!
+  endTimestamp: BigInt!
   startWeights: [BigInt!]!
   endWeights: [BigInt!]!
 }
@@ -131,8 +131,8 @@ type AmpUpdate @entity {
   id: ID!
   poolId: Pool!
   scheduledTimestamp: Int!
-  startTimestamp: Int!
-  endTimestamp: Int!
+  startTimestamp: BigInt!
+  endTimestamp: BigInt!
   startAmp: BigInt!
   endAmp: BigInt!
 }

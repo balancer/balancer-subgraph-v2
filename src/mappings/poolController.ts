@@ -61,8 +61,8 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
   let weightUpdate = new GradualWeightUpdate(id);
   weightUpdate.poolId = poolId.toHexString();
   weightUpdate.scheduledTimestamp = event.block.timestamp.toI32();
-  weightUpdate.startTimestamp = event.params.startTime.toI32();
-  weightUpdate.endTimestamp = event.params.endTime.toI32();
+  weightUpdate.startTimestamp = event.params.startTime;
+  weightUpdate.endTimestamp = event.params.endTime;
   weightUpdate.startWeights = event.params.startWeights;
   weightUpdate.endWeights = event.params.endWeights;
   weightUpdate.save();
@@ -84,8 +84,8 @@ export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
   let ampUpdate = new AmpUpdate(id);
   ampUpdate.poolId = poolId.toHexString();
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
-  ampUpdate.startTimestamp = event.params.startTime.toI32();
-  ampUpdate.endTimestamp = event.params.endTime.toI32();
+  ampUpdate.startTimestamp = event.params.startTime;
+  ampUpdate.endTimestamp = event.params.endTime;
   ampUpdate.startAmp = event.params.startValue;
   ampUpdate.endAmp = event.params.endValue;
   ampUpdate.save();
@@ -103,8 +103,8 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
   let ampUpdate = new AmpUpdate(id);
   ampUpdate.poolId = poolId;
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
-  ampUpdate.startTimestamp = event.block.timestamp.toI32();
-  ampUpdate.endTimestamp = event.block.timestamp.toI32();
+  ampUpdate.startTimestamp = event.block.timestamp;
+  ampUpdate.endTimestamp = event.block.timestamp;
   ampUpdate.startAmp = event.params.currentValue;
   ampUpdate.endAmp = event.params.currentValue;
   ampUpdate.save();
