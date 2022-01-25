@@ -163,6 +163,9 @@ polygon:
   LiquidityBootstrappingPoolFactory:
     address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
     startBlock: 17116402
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x41B953164995c11C81DA73D212ED8Af25741b7Ac"
+    startBlock: 22067480
   InvestmentPoolFactory:
     address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
     startBlock: 19404118
@@ -195,6 +198,9 @@ arbitrum:
   LiquidityBootstrappingPoolFactory:
     address: "0x142B9666a0a3A30477b052962ddA81547E7029ab"
     startBlock: 222870
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x1802953277FD955f9a254B80Aa0582f193cF1d77"
+    startBlock: 4859669
   InvestmentPoolFactory:
     address: "0xaCd615B3705B9c880E4E7293f1030B34e57B4c1c"
     startBlock: 1488052

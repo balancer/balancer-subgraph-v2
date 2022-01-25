@@ -47,27 +47,27 @@ jobs:
           graph_subgraph_name: "balancer-kovan-v2-beta"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.kovan.yaml"
-  #deploy-polygon-beta:
-    #runs-on: ubuntu-latest
-    #environment: graph
-    #steps:
-      #- uses: actions/checkout@v2
-      #- name: Install node
-        #uses: actions/setup-node@v1
-        #with:
-          #node-version: 14
-      #- name: Install
-        #run: yarn --frozen-lockfile
-      #- name: Codegen
-        #run: yarn codegen
-      #- name: Build
-        #run: yarn build
-      #- uses: gtaschuk/graph-deploy@v0.1.5
-        #with:
-          #graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          #graph_subgraph_name: "balancer-polygon-v2-beta"
-          #graph_account: "balancer-labs"
-          #graph_config_file: "subgraph.polygonGrafted.yaml"
+  deploy-polygon-beta:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.5
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-polygon-v2-beta"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.polygon.yaml"
   deploy-arbitrum-beta:
     runs-on: ubuntu-latest
     environment: graph
