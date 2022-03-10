@@ -298,6 +298,29 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewLinearPool
+    - kind: ethereum/contract
+    name: Gyro2PoolFactory
+    network: kovan
+    source:
+      address: '0xba9519ce545aEe8d4Df51a3914CC22AB85E90CeA'
+      abi: Gyro2PoolFactory
+      startBlock: 30120881
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewGyro2Pool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -550,3 +573,28 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
+  - kind: ethereum/contract
+    name: Gyro2Pool
+    network: kovan
+    source:
+      abi: Gyro2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: Gyro2Pool
+          file: ./abis/Gyro2Pool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+   

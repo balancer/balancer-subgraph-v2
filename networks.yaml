@@ -68,6 +68,9 @@ kovan:
   AaveLinearPoolFactory:
     address: "0x94522C4586cb15E08AFF943545Fb2c8Ca7f508cE"
     startBlock: 28677003
+  Gyro2PoolFactory:
+    address: "0xba9519ce545aEe8d4Df51a3914CC22AB85E90CeA"
+    startBlock: 30120881
 rinkeby:
   network: rinkeby
   Vault:
