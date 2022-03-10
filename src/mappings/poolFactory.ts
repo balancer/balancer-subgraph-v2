@@ -223,7 +223,7 @@ export function handleNewLinearPool(event: PoolCreated): void {
   LinearPoolTemplate.create(poolAddress);
 }
 
-export function handleNewGyro2Pool(event: PoolCreated): void {
+function createGyroLikePool(event: PoolCreated) {
   let poolAddress: Address = event.params.pool;
 
   let poolContract = Gyro2Pool.bind(poolAddress);
@@ -256,8 +256,11 @@ export function handleNewGyro2Pool(event: PoolCreated): void {
   }
 
   pool.save();
+}
 
-  Gyro2PoolTemplate.create(poolAddress);
+export function handleNewGyro2Pool(event: PoolCreated): void {
+  createGyroLikePool(event);
+  Gyro2PoolTemplate.create(event.params.pool);
 }
 
 function findOrInitializeVault(): Balancer {
