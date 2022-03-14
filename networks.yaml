@@ -169,9 +169,6 @@ polygon:
   InvestmentPoolFactory:
     address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
     startBlock: 19404118
-  # ConvergentPoolFactory:
-  #   address: ""
-  #   startBlock: 0
   StablePhantomPoolFactory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22288478
@@ -207,9 +204,6 @@ arbitrum:
   InvestmentPoolFactory:
     address: "0xaCd615B3705B9c880E4E7293f1030B34e57B4c1c"
     startBlock: 1488052
-  # ConvergentPoolFactory:
-  #   address: ""
-  #   startBlock: 0
 polygonGrafted:
   network: matic
   graft:
@@ -240,11 +234,11 @@ polygonGrafted:
     address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
     startBlock: 19404118
   StablePhantomPoolFactory:
-    address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
-    startBlock: 3682166
+    address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
+    startBlock: 22288478
   AaveLinearPoolFactory:
-    address: "0xdcdbf71A870cc60C6F9B621E28a7D3Ffd6Dd4965"
-    startBlock: 3681582
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 22287712
   ERC4626LinearPoolFactory:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
