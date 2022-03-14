@@ -353,7 +353,7 @@ dataSources:
     source:
       address: '{{ERC4626LinearPoolFactory.address}}'
       abi: ERC4626LinearPoolFactory
-      startBlock: {{AaveLinearPoolFactory.startBlock}}
+      startBlock: {{ERC4626LinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
