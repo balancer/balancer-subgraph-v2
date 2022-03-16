@@ -347,7 +347,7 @@ dataSources:
           handler: handleNewLinearPool
   {{/if}}
   {{#if Gyro2PoolFactory}}
-    - kind: ethereum/contract
+  - kind: ethereum/contract
     name: Gyro2PoolFactory
     network: {{network}}
     source:
@@ -367,6 +367,10 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: Gyro2Pool
+          file: ./abis/Gyro2Pool.json
+        - name: Gyro2PoolFactory
+          file: ./abis/Gyro2PoolFactory.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewGyro2Pool

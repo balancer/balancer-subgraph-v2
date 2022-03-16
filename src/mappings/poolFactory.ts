@@ -223,7 +223,7 @@ export function handleNewLinearPool(event: PoolCreated): void {
   LinearPoolTemplate.create(poolAddress);
 }
 
-function createGyroLikePool(event: PoolCreated) {
+function createGyroLikePool(event: PoolCreated): string {
   let poolAddress: Address = event.params.pool;
 
   let poolContract = Gyro2Pool.bind(poolAddress);
@@ -256,6 +256,8 @@ function createGyroLikePool(event: PoolCreated) {
   }
 
   pool.save();
+
+  return poolId.toHexString();
 }
 
 export function handleNewGyro2Pool(event: PoolCreated): void {
