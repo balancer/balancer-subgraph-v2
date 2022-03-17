@@ -646,6 +646,8 @@ templates:
       abis:
         - name: Gyro2Pool
           file: ./abis/Gyro2Pool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
