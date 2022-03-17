@@ -293,6 +293,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: AaveLinearPoolFactory
           file: ./abis/AaveLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
         - name: AaveLinearPool
           file: ./abis/AaveLinearPool.json
       eventHandlers:
@@ -304,7 +306,7 @@ dataSources:
     source:
       address: '0xC6bD2497332d24094eC16a7261eec5C412B5a2C1'
       abi: ERC4626LinearPoolFactory
-      startBlock: 22287712
+      startBlock: 25772863
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -320,6 +322,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: ERC4626LinearPoolFactory
           file: ./abis/ERC4626LinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
         - name: ERC4626LinearPool
           file: ./abis/ERC4626LinearPool.json
       eventHandlers:
@@ -548,10 +552,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: AaveLinearPool
+    name: LinearPool
     network: matic
     source:
-      abi: AaveLinearPool
+      abi: LinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -568,8 +572,8 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

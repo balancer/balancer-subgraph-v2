@@ -322,10 +322,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: AaveLinearPool
+    name: LinearPool
     network: ropsten
     source:
-      abi: AaveLinearPool
+      abi: LinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -342,8 +342,8 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

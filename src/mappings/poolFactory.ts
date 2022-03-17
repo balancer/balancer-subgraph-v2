@@ -16,13 +16,13 @@ import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templat
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
-import { AaveLinearPool as LinearPoolTemplate } from '../types/templates';
+import { LinearPool as LinearPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
-import { AaveLinearPool } from '../types/templates/AaveLinearPool/AaveLinearPool';
+import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
@@ -181,7 +181,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
 export function handleNewLinearPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
 
-  let poolContract = AaveLinearPool.bind(poolAddress);
+  let poolContract = LinearPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
