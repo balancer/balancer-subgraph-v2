@@ -299,7 +299,7 @@ dataSources:
           file: ./abis/AaveLinearPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewLinearPool
+          handler: handleNewAaveLinearPool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
