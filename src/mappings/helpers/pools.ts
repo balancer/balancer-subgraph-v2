@@ -19,7 +19,11 @@ export function isVariableWeightPool(pool: Pool): boolean {
 }
 
 export function hasVirtualSupply(pool: Pool): boolean {
-  return pool.poolType == PoolType.AaveLinear || pool.poolType == PoolType.ERC4626Linear || pool.poolType == PoolType.StablePhantom;
+  return (
+    pool.poolType == PoolType.AaveLinear ||
+    pool.poolType == PoolType.ERC4626Linear ||
+    pool.poolType == PoolType.StablePhantom
+  );
 }
 
 export function isStableLikePool(pool: Pool): boolean {
