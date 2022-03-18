@@ -240,8 +240,8 @@ function createGyroLikePool(event: PoolCreated): string {
   pool.factory = event.address;
 
   let sqrtParamsCall = poolContract.try_getSqrtParameters();
-  pool.sqrtAlpha = sqrtParamsCall.value[0];
-  pool.sqrtBeta = sqrtParamsCall.value[1];
+  pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
+  pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);

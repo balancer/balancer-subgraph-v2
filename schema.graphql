@@ -67,8 +67,8 @@ type Pool @entity {
   upperTarget: BigDecimal
 
   # Gyro2Pool Only
-  sqrtAlpha: BigInt
-  sqrtBeta: BigInt
+  sqrtAlpha: BigDecimal
+  sqrtBeta: BigDecimal
 }
 
 type PoolToken @entity {
