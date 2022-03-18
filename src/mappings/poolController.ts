@@ -6,7 +6,7 @@ import {
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
-import { TargetsSet } from '../types/templates/AaveLinearPool/AaveLinearPool';
+import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
   AmpUpdateStopped,
