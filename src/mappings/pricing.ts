@@ -80,7 +80,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
       continue;
     }
 
-    if (price) {
+    if (price.gt(ZERO_BD)) {
       let poolTokenValue = price.times(poolTokenQuantity);
       poolValue = poolValue.plus(poolTokenValue);
     }
