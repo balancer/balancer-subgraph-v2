@@ -1,6 +1,6 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
-import { StablePool } from '../../types/templates/StablePool/StablePool';
+import { Pool } from '../types/schema';
+import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ZERO } from './constants';
 
 export function updateAmpFactor(pool: Pool): void {

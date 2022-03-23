@@ -1,7 +1,7 @@
 import { Address } from '@graphprotocol/graph-ts';
 
-import { Pool } from '../../types/schema';
-import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
+import { Pool } from '../types/schema';
+import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 
 import { ZERO_BD } from './constants';
 import { scaleDown, loadPoolToken } from './misc';

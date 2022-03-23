@@ -1,5 +1,5 @@
 import { Address } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
+import { Pool } from '../types/schema';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PoolType {

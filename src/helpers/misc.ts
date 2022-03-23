@@ -12,13 +12,22 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
-} from '../../types/schema';
-import { ERC20 } from '../../types/Vault/ERC20';
-import { Swap as SwapEvent } from '../../types/Vault/Vault';
+} from '../types/schema';
+import { WeightedPool } from '../types/templates';
+import { ERC20 } from '../types/Vault/ERC20';
+import { Swap as SwapEvent } from '../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
 
 const DAY = 24 * 60 * 60;
+
+export function getPoolId(poolAddress: Address): string {
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value.toHexString();
+
+  return poolId;
+}
 
 export function getTokenDecimals(tokenAddress: Address): i32 {
   let token = ERC20.bind(tokenAddress);
@@ -277,8 +286,7 @@ export function updateTokenBalances(
   tokenAddress: Address,
   usdBalance: BigDecimal,
   notionalBalance: BigDecimal,
-  swapDirection: i32,
-  event: SwapEvent
+  swapDirection: i32
 ): void {
   let token = getToken(tokenAddress);
 
@@ -292,7 +300,10 @@ export function updateTokenBalances(
 
   token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
   token.save();
+}
 
+export function updateTokenSnapshots(tokenAddress: Address, event: SwapEvent): void {
+  let token = getToken(tokenAddress);
   let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
   tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
   tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
