@@ -20,18 +20,25 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/vault.ts
+      {{#if full}}
+      file: ./src/mappings/full/vault.ts
+      {{else}}
+      file: ./src/mappings/core/vault.ts
+      {{/if}}
       entities:
         - Balancer
+        - Swap
         - Pool
         - PoolToken
         - User
         - UserInternalBalance
         - Token
-        - TokenSnapshot
         - TradePair
+        {{#if full}}
+        - TokenSnapshot
         - TradePairSnapshot
         - BalancerSnapshot
+        {{/if}}
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -50,6 +57,7 @@ dataSources:
           handler: handleBalanceManage
         - event: InternalBalanceChanged(indexed address,indexed address,int256)
           handler: handleInternalBalanceChange
+  {{#if WeightedPoolFactory}}
   - kind: ethereum/contract
     name: WeightedPoolFactory
     network: {{network}}
@@ -61,7 +69,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -77,6 +89,8 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
+  {{/if}}
+  {{#if WeightedPool2TokenFactory}}
   - kind: ethereum/contract
     name: WeightedPool2TokenFactory
     network: {{network}}
@@ -88,7 +102,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -104,6 +122,7 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
+  {{/if}}
   {{#if StablePoolFactory}}
   - kind: ethereum/contract
     name: StablePoolFactory
@@ -116,7 +135,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -145,7 +168,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -176,7 +203,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -207,7 +238,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -238,7 +273,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -269,7 +308,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -298,7 +341,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -329,7 +376,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -360,7 +411,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}
       entities:
         - Balancer
         - Pool
@@ -389,11 +444,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
       abis:
         - name: WeightedPool
@@ -414,11 +472,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
       abis:
         - name: WeightedPool # Necessary for Transfer handler
@@ -445,11 +506,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
         - PriceRateProvider
       abis:
@@ -483,11 +547,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
       abis:
         - name: WeightedPool
@@ -508,11 +575,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
         - GradualWeightUpdate
       abis:
@@ -538,11 +608,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
         - GradualWeightUpdate
       abis:
@@ -572,11 +645,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
         - GradualWeightUpdate
       abis:
@@ -610,11 +686,14 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
-        - Swap
         - PoolToken
         - GradualWeightUpdate
       abis:

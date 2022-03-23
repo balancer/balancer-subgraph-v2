@@ -13,7 +13,12 @@ const generateManifests = async (): Promise<void> => {
   const template = fs.readFileSync('subgraph.template.yaml').toString();
   Object.entries(networks).forEach(([network, config]) => {
     fs.writeFileSync(
-      `subgraph${network === 'mainnet' ? '' : `.${network}`}.yaml`,
+      `subgraph${network === 'mainnet' ? '' : `.${network}`}.core.yaml`,
+      Handlebars.compile(template)(config)
+    );
+    config.full = true;
+    fs.writeFileSync(
+      `subgraph${network === 'mainnet' ? '' : `.${network}`}.full.yaml`,
       Handlebars.compile(template)(config)
     );
   });
