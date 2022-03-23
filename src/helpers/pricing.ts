@@ -1,8 +1,8 @@
-import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
-import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
+import { Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
+import { Pool, Balancer, LatestPrice } from '../types/schema';
 import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD } from './constants';
 import { hasVirtualSupply, PoolType } from './pools';
-import { createPoolSnapshot, getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './misc';
+import { getToken, loadPoolToken } from './misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -11,7 +11,7 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32): boolean {
+export function updatePoolLiquidity(poolId: string, pricingAsset: Address): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
 
@@ -33,32 +33,15 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     }
     let poolTokenQuantity: BigDecimal = poolToken.balance;
 
-    // compare any new token price with the last price
-    let tokenPriceId = getTokenPriceId(poolId, tokenAddress, pricingAsset, block);
-    let tokenPrice = TokenPrice.load(tokenPriceId);
     let price: BigDecimal = ZERO_BD;
     let latestPriceId = getLatestPriceId(tokenAddress, pricingAsset);
     let latestPrice = LatestPrice.load(latestPriceId);
 
-    if (tokenPrice == null && latestPrice != null) {
-      price = latestPrice.price;
-    }
     // note that we can only meaningfully report liquidity once assets are traded with
     // the pricing asset
-    if (tokenPrice) {
+    if (latestPrice != null) {
       // value in terms of priceableAsset
-      price = tokenPrice.price;
-
-      // Possibly update latest price
-      if (latestPrice == null) {
-        latestPrice = new LatestPrice(latestPriceId);
-        latestPrice.asset = tokenAddress;
-        latestPrice.pricingAsset = pricingAsset;
-      }
-      latestPrice.price = price;
-      latestPrice.block = block;
-      latestPrice.poolId = poolId;
-      latestPrice.save();
+      price = latestPrice.price;
 
       let token = getToken(tokenAddress);
       token.latestPrice = latestPrice.id;
@@ -96,32 +79,14 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     return false;
   }
 
-  // Take snapshot of pool state
-  let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
-  let phl = new PoolHistoricalLiquidity(phlId);
-  phl.poolId = poolId;
-  phl.pricingAsset = pricingAsset;
-  phl.block = block;
-  phl.poolTotalShares = pool.totalShares;
-  phl.poolLiquidity = poolValue;
-  phl.poolShareValue = pool.totalShares.gt(ZERO_BD) ? poolValue.div(pool.totalShares) : ZERO_BD;
-  phl.save();
-
   // Update pool stats
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
-
-  // Create or update pool daily snapshot
-  createPoolSnapshot(pool, timestamp);
 
   // Update global stats
   let vault = Balancer.load('2') as Balancer;
   vault.totalLiquidity = vault.totalLiquidity.plus(liquidityChange);
   vault.save();
-
-  let vaultSnapshot = getBalancerSnapshot(vault.id, timestamp);
-  vaultSnapshot.totalLiquidity = vault.totalLiquidity;
-  vaultSnapshot.save();
 
   return true;
 }
@@ -168,12 +133,8 @@ export function swapValueInUSD(
   return swapValueUSD;
 }
 
-function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
+export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): string {
   return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
-}
-
-function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
-  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
 }
 
 export function isUSDStable(asset: Address): boolean {

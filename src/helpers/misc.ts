@@ -1,4 +1,4 @@
-import { BigDecimal, Address, BigInt, ethereum } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, BigInt, ethereum, log } from '@graphprotocol/graph-ts';
 import {
   Pool,
   User,
@@ -12,12 +12,14 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
+  Swap,
 } from '../types/schema';
 import { WeightedPool } from '../types/templates';
 import { ERC20 } from '../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
+import { swapValueInUSD } from './pricing';
 
 const DAY = 24 * 60 * 60;
 
@@ -45,6 +47,10 @@ export function tokenToDecimal(amount: BigInt, decimals: i32): BigDecimal {
 
 export function scaleDown(num: BigInt, decimals: i32): BigDecimal {
   return num.divDecimal(BigInt.fromI32(10).pow(u8(decimals)).toBigDecimal());
+}
+
+export function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
+  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
 }
 
 export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {
@@ -270,11 +276,15 @@ export function getTokenSnapshot(tokenAddress: Address, event: ethereum.Event): 
   return dayData;
 }
 
-export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event): void {
+export function uptickSwapsForToken(tokenAddress: Address): void {
   let token = getToken(tokenAddress);
   // update the overall swap count for the token
   token.totalSwapCount = token.totalSwapCount.plus(BigInt.fromI32(1));
   token.save();
+}
+
+export function uptickSwapsForTokenSnapshot(tokenAddress: Address, event: ethereum.Event): void {
+  let token = getToken(tokenAddress);
 
   // update the snapshots
   let snapshot = getTokenSnapshot(tokenAddress, event);
