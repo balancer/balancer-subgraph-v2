@@ -88,6 +88,9 @@ rinkeby:
   LiquidityBootstrappingPoolFactory:
     address: "0xdcdbf71A870cc60C6F9B621E28a7D3Ffd6Dd4965"
     startBlock: 8976588
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x41B953164995c11C81DA73D212ED8Af25741b7Ac"
+    startBlock: 9746969
   InvestmentPoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 9252383
