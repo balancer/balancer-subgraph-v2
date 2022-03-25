@@ -12,14 +12,12 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
-  Swap,
 } from '../types/schema';
-import { WeightedPool } from '../types/templates';
+import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { ERC20 } from '../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
-import { swapValueInUSD } from './pricing';
 
 const DAY = 24 * 60 * 60;
 
