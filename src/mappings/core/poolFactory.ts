@@ -1,7 +1,13 @@
 import { ZERO_BD, VAULT_ADDRESS, ZERO } from '../../helpers/constants';
 import { PoolType } from '../../helpers/pools';
 
-import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
+import {
+  newPoolEntity,
+  createPoolTokenEntity,
+  scaleDown,
+  getBalancerSnapshot,
+  tokenToDecimal,
+} from '../../helpers/misc';
 import { updatePoolWeights } from '../../helpers/weighted';
 
 import { BigInt, Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
@@ -272,10 +278,6 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     let vault = findOrInitializeVault();
     vault.poolCount += 1;
     vault.save();
-
-    let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
-    vaultSnapshot.poolCount += 1;
-    vaultSnapshot.save();
   }
 
   return pool;
