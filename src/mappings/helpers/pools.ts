@@ -10,8 +10,13 @@ export namespace PoolType {
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
   export const Investment = 'Investment';
   export const StablePhantom = 'StablePhantom';
+<<<<<<< HEAD
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
+=======
+  export const Linear = 'AaveLinear';
+  export const Gyro2 = 'Gyro2';
+>>>>>>> gyrostable-dev
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {
