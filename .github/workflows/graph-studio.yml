@@ -2,7 +2,7 @@ name: Deploy Graph
 
 on:
   push:
-    branches: subgraph-studio
+    branches: master
 
 jobs:
   deploy-studio:
