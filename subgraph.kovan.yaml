@@ -8,7 +8,7 @@ dataSources:
     name: Vault
     network: kovan
     source:
-      address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
+      address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
       abi: Vault
       startBlock: 24226726
     mapping:
@@ -49,7 +49,7 @@ dataSources:
     name: WeightedPoolFactory
     network: kovan
     source:
-      address: '0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9'
+      address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
       abi: WeightedPoolFactory
       startBlock: 24226729
     mapping:
@@ -76,7 +76,7 @@ dataSources:
     name: WeightedPool2TokenFactory
     network: kovan
     source:
-      address: '0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0'
+      address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
       abi: WeightedPoolFactory
       startBlock: 24226729
     mapping:
@@ -103,7 +103,7 @@ dataSources:
     name: StablePoolFactory
     network: kovan
     source:
-      address: '0x751dfDAcE1AD995fF13c927f6f761C6604532c79'
+      address: "0x751dfDAcE1AD995fF13c927f6f761C6604532c79"
       abi: StablePoolFactory
       startBlock: 25266622
     mapping:
@@ -130,7 +130,7 @@ dataSources:
     name: MetaStablePoolFactory
     network: kovan
     source:
-      address: '0x590E544e7Ca956Bb878F8C873E82e65550d67D2F'
+      address: "0x590E544e7Ca956Bb878F8C873E82e65550d67D2F"
       abi: MetaStablePoolFactory
       startBlock: 26467363
     mapping:
@@ -159,7 +159,7 @@ dataSources:
     name: LiquidityBootstrappingPoolFactory
     network: kovan
     source:
-      address: '0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e'
+      address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
       abi: LiquidityBootstrappingPoolFactory
       startBlock: 26275220
     mapping:
@@ -188,7 +188,7 @@ dataSources:
     name: TempLiquidityBootstrappingPoolFactory
     network: kovan
     source:
-      address: '0x1B57f637Ce3408f1f834b0b70f9A595b062DAea7'
+      address: "0x1B57f637Ce3408f1f834b0b70f9A595b062DAea7"
       abi: LiquidityBootstrappingPoolFactory
       startBlock: 28609783
     mapping:
@@ -217,7 +217,7 @@ dataSources:
     name: InvestmentPoolFactory
     network: kovan
     source:
-      address: '0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2'
+      address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
       abi: InvestmentPoolFactory
       startBlock: 27098599
     mapping:
@@ -246,7 +246,7 @@ dataSources:
     name: StablePhantomPoolFactory
     network: kovan
     source:
-      address: '0x6c7F4D97269eCE163fd08D5C2584A21E4a33934c'
+      address: "0x6c7F4D97269eCE163fd08D5C2584A21E4a33934c"
       abi: StablePhantomPoolFactory
       startBlock: 28677262
     mapping:
@@ -275,7 +275,7 @@ dataSources:
     name: AaveLinearPoolFactory
     network: kovan
     source:
-      address: '0x94522C4586cb15E08AFF943545Fb2c8Ca7f508cE'
+      address: "0x94522C4586cb15E08AFF943545Fb2c8Ca7f508cE"
       abi: AaveLinearPoolFactory
       startBlock: 28677003
     mapping:
@@ -293,6 +293,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: AaveLinearPoolFactory
           file: ./abis/AaveLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
         - name: AaveLinearPool
           file: ./abis/AaveLinearPool.json
       eventHandlers:
@@ -302,7 +304,7 @@ dataSources:
     name: Gyro2PoolFactory
     network: kovan
     source:
-      address: '0xba9519ce545aEe8d4Df51a3914CC22AB85E90CeA'
+      address: "0xba9519ce545aEe8d4Df51a3914CC22AB85E90CeA"
       abi: Gyro2PoolFactory
       startBlock: 30120881
     mapping:
@@ -575,10 +577,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: AaveLinearPool
+    name: LinearPool
     network: kovan
     source:
-      abi: AaveLinearPool
+      abi: LinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -595,8 +597,8 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

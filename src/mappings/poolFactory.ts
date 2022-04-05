@@ -16,7 +16,7 @@ import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templat
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
-import { AaveLinearPool as LinearPoolTemplate } from '../types/templates';
+import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 
@@ -24,7 +24,7 @@ import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
-import { AaveLinearPool } from '../types/templates/AaveLinearPool/AaveLinearPool';
+import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { ERC20 } from '../types/Vault/ERC20';
@@ -182,10 +182,18 @@ export function handleNewCCPPool(event: PoolCreated): void {
   CCPoolTemplate.create(poolAddress);
 }
 
-export function handleNewLinearPool(event: PoolCreated): void {
+export function handleNewAaveLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear);
+}
+
+export function handleNewERC4626LinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ERC4626Linear);
+}
+
+function handleNewLinearPool(event: PoolCreated, poolType: string): void {
   let poolAddress: Address = event.params.pool;
 
-  let poolContract = AaveLinearPool.bind(poolAddress);
+  let poolContract = LinearPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -195,7 +203,7 @@ export function handleNewLinearPool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee);
 
-  pool.poolType = PoolType.Linear;
+  pool.poolType = poolType;
   pool.factory = event.address;
 
   let mainIndexCall = poolContract.try_getMainIndex();
