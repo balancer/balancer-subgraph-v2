@@ -18,6 +18,7 @@ import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { AaveLinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
+import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
@@ -25,6 +26,7 @@ import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { AaveLinearPool } from '../types/templates/AaveLinearPool/AaveLinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
@@ -223,10 +225,10 @@ export function handleNewLinearPool(event: PoolCreated): void {
   LinearPoolTemplate.create(poolAddress);
 }
 
-function createGyroLikePool(event: PoolCreated): string {
+function createGyroLikePool(event: PoolCreated, id: string): string {
   let poolAddress: Address = event.params.pool;
 
-  let poolContract = Gyro2Pool.bind(poolAddress);
+  let poolContract = id === 'Gyro2' ? Gyro2Pool.bind(poolAddress) : Gyro3Pool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -236,12 +238,18 @@ function createGyroLikePool(event: PoolCreated): string {
 
   let pool = handleNewPool(event, poolId, swapFee);
 
-  pool.poolType = PoolType.Gyro2;
   pool.factory = event.address;
 
-  let sqrtParamsCall = poolContract.try_getSqrtParameters();
-  pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
-  pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
+  if (id === 'Gyro2') {
+    pool.poolType = PoolType.Gyro2;
+    let sqrtParamsCall = (poolContract as Gyro2Pool).try_getSqrtParameters();
+    pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
+    pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
+  } else {
+    pool.poolType = PoolType.Gyro3;
+    let root3AlphaCall = (poolContract as Gyro3Pool).try_getRoot3Alpha();
+    pool.root3Alpha = scaleDown(root3AlphaCall.value, 18);
+  }
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);
@@ -261,8 +269,13 @@ function createGyroLikePool(event: PoolCreated): string {
 }
 
 export function handleNewGyro2Pool(event: PoolCreated): void {
-  createGyroLikePool(event);
+  createGyroLikePool(event, 'Gyro2');
   Gyro2PoolTemplate.create(event.params.pool);
+}
+
+export function handleNewGyro3Pool(event: PoolCreated): void {
+  createGyroLikePool(event, 'Gyro3');
+  Gyro3PoolTemplate.create(event.params.pool);
 }
 
 function findOrInitializeVault(): Balancer {

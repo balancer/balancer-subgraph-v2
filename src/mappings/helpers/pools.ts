@@ -12,6 +12,7 @@ export namespace PoolType {
   export const StablePhantom = 'StablePhantom';
   export const Linear = 'AaveLinear';
   export const Gyro2 = 'Gyro2';
+  export const Gyro3 = 'Gyro3';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {
