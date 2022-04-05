@@ -225,10 +225,10 @@ export function handleNewLinearPool(event: PoolCreated): void {
   LinearPoolTemplate.create(poolAddress);
 }
 
-function createGyroLikePool(event: PoolCreated, id: string): string {
+function createGyro2LikePool(event: PoolCreated): string {
   let poolAddress: Address = event.params.pool;
 
-  let poolContract = id === 'Gyro2' ? Gyro2Pool.bind(poolAddress) : Gyro3Pool.bind(poolAddress);
+  let poolContract = Gyro2Pool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -240,16 +240,46 @@ function createGyroLikePool(event: PoolCreated, id: string): string {
 
   pool.factory = event.address;
 
-  if (id === 'Gyro2') {
-    pool.poolType = PoolType.Gyro2;
-    let sqrtParamsCall = (poolContract as Gyro2Pool).try_getSqrtParameters();
-    pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
-    pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
-  } else {
-    pool.poolType = PoolType.Gyro3;
-    let root3AlphaCall = (poolContract as Gyro3Pool).try_getRoot3Alpha();
-    pool.root3Alpha = scaleDown(root3AlphaCall.value, 18);
+  pool.poolType = PoolType.Gyro2;
+  let sqrtParamsCall = poolContract.try_getSqrtParameters();
+  pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
+  pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    pool.tokensList = changetype<Bytes[]>(tokens);
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
+    }
   }
+
+  pool.save();
+
+  return poolId.toHexString();
+}
+
+function createGyro3LikePool(event: PoolCreated): string {
+  let poolAddress: Address = event.params.pool;
+
+  let poolContract = Gyro3Pool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+
+  pool.factory = event.address;
+
+  pool.poolType = PoolType.Gyro3;
+  let root3AlphaCall = poolContract.try_getRoot3Alpha();
+  pool.root3Alpha = scaleDown(root3AlphaCall.value, 18);
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);
@@ -269,12 +299,12 @@ function createGyroLikePool(event: PoolCreated, id: string): string {
 }
 
 export function handleNewGyro2Pool(event: PoolCreated): void {
-  createGyroLikePool(event, 'Gyro2');
+  createGyro2LikePool(event);
   Gyro2PoolTemplate.create(event.params.pool);
 }
 
 export function handleNewGyro3Pool(event: PoolCreated): void {
-  createGyroLikePool(event, 'Gyro3');
+  createGyro3LikePool(event);
   Gyro3PoolTemplate.create(event.params.pool);
 }
 
