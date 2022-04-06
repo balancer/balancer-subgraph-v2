@@ -33,6 +33,9 @@ mainnet:
   AaveLinearPoolFactory:
     address: "0xD7FAD3bd59D6477cbe1BE7f646F7f1BA25b230f8"
     startBlock: 13766443
+  ERC4626LinearPoolFactory:
+    address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
+    startBlock: 14521506
 kovan:
   network: kovan
   Vault:
@@ -68,6 +71,9 @@ kovan:
   AaveLinearPoolFactory:
     address: "0x94522C4586cb15E08AFF943545Fb2c8Ca7f508cE"
     startBlock: 28677003
+  ERC4626LinearPoolFactory:
+    address: "0x44284efFA14964feF15CB13e4a6579D3b3AD7e14"
+    startBlock: 30831572
 rinkeby:
   network: rinkeby
   Vault:
@@ -178,9 +184,12 @@ polygon:
   AaveLinearPoolFactory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 22287712
-  ERC4626LinearPoolFactory:
+  ERC4626LinearPoolFactoryBeta:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
+  ERC4626LinearPoolFactory:
+    address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
+    startBlock: 26746067
 arbitrum:
   network: arbitrum-one
   Vault:
@@ -207,6 +216,9 @@ arbitrum:
   InvestmentPoolFactory:
     address: "0xaCd615B3705B9c880E4E7293f1030B34e57B4c1c"
     startBlock: 1488052
+  ERC4626LinearPoolFactory:
+    address: "0x2794953110874981a0d301286c986992022A62a1"
+    startBlock: 9311471
 polygonGrafted:
   network: matic
   graft:
