@@ -1,8 +1,8 @@
 specVersion: 0.0.2
 description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
 graft:
-  base: QmQGKEA3EohUWHxjkwv3JFQCn2WRjWqakqxCNHRkvz1bGT
-  block: 25772862
+  base: QmZa9fCaQfRgYiAcdBF43nu9rEwsnZW12xJDCtyrQVJ11s
+  block: 26746066
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
