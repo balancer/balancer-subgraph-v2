@@ -279,7 +279,10 @@ function createGyro3LikePool(event: PoolCreated): string {
 
   pool.poolType = PoolType.Gyro3;
   let root3AlphaCall = poolContract.try_getRoot3Alpha();
-  pool.root3Alpha = scaleDown(root3AlphaCall.value, 18);
+
+  (!root3AlphaCall.reverted) {
+    pool.root3Alpha = scaleDown(root3AlphaCall.value, 18);
+  }
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let tokensCall = vaultContract.try_getPoolTokens(poolId);

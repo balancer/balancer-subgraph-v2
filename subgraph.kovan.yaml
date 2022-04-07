@@ -329,7 +329,7 @@ dataSources:
     name: Gyro3PoolFactory
     network: kovan
     source:
-      address: '0xD705917272a6de9c3b18333BafE81d59941A4439'
+      address: '0xDB42004e392aCdeAD8A1138E8AdE52E4c801a8F8'
       abi: Gyro3PoolFactory
       startBlock: 30827386
     mapping:
