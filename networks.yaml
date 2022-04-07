@@ -254,6 +254,9 @@ polygonGrafted:
   AaveLinearPoolFactory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 22287712
-  ERC4626LinearPoolFactory:
+  ERC4626LinearPoolFactoryBeta:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
+  ERC4626LinearPoolFactory:
+    address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
+    startBlock: 26746067
