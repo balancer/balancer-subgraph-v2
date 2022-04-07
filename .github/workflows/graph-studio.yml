@@ -1,0 +1,33 @@
+name: Deploy Graph
+
+on:
+  push:
+    branches: master
+
+jobs:
+  deploy-studio:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.12
+        with:
+          graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
+          graph_version_label: ${GITHUB_SHA::8}
+          graph_subgraph_name: "balancer-v2"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.yaml"
+          graph_deploy_studio: true
+
+env:
+  CI: true
