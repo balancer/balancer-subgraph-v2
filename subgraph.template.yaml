@@ -350,7 +350,7 @@ dataSources:
   {{/if}}
   {{#if ERC4626LinearPoolFactoryBeta}}
   - kind: ethereum/contract
-    name: ERC4626LinearPoolFactory
+    name: ERC4626LinearPoolFactoryBeta
     network: {{network}}
     source:
       address: '{{ERC4626LinearPoolFactoryBeta.address}}'
