@@ -340,11 +340,44 @@ dataSources:
           file: ./abis/ERC20.json
         - name: AaveLinearPoolFactory
           file: ./abis/AaveLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
         - name: AaveLinearPool
           file: ./abis/AaveLinearPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewLinearPool
+          handler: handleNewAaveLinearPool
+  {{/if}}
+  {{#if ERC4626LinearPoolFactory}}
+  - kind: ethereum/contract
+    name: ERC4626LinearPoolFactory
+    network: {{network}}
+    source:
+      address: '{{ERC4626LinearPoolFactory.address}}'
+      abi: ERC4626LinearPoolFactory
+      startBlock: {{ERC4626LinearPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC4626LinearPoolFactory
+          file: ./abis/ERC4626LinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: ERC4626LinearPool
+          file: ./abis/ERC4626LinearPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewERC4626LinearPool
   {{/if}}
   {{#if Gyro2PoolFactory}}
   - kind: ethereum/contract
@@ -627,10 +660,10 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
-    name: AaveLinearPool
+    name: LinearPool
     network: {{network}}
     source:
-      abi: AaveLinearPool
+      abi: LinearPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -647,8 +680,8 @@ templates:
           file: ./abis/WeightedPool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
