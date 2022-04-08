@@ -8,6 +8,8 @@ export const SWAP_OUT = 1;
 
 export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
+export let MIN_POOL_LIQUIDITY = BigDecimal.fromString('10');
+
 export class AddressByNetwork {
   public mainnet: string;
   public kovan: string;
