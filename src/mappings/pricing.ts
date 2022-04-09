@@ -1,6 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD } from './helpers/constants';
+import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, WETH } from './helpers/constants';
 import { hasVirtualSupply, PoolType } from './helpers/pools';
 import { createPoolSnapshot, getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
 
@@ -126,6 +126,18 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   return true;
 }
 
+export function valueInETH(value: BigDecimal, pricingAsset: Address): BigDecimal {
+  let ethValue = ZERO_BD;
+
+  let pricingAssetInETH = LatestPrice.load(getLatestPriceId(pricingAsset, WETH));
+
+  if (pricingAssetInETH != null) {
+    ethValue = value.times(pricingAssetInETH.price);
+  }
+
+  return ethValue;
+}
+
 export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal {
   let usdValue = ZERO_BD;
 
@@ -139,6 +151,17 @@ export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal
         usdValue = value.times(pricingAssetInUSD.price);
         break;
       }
+    }
+  }
+
+  // if there's no price in USD
+  if (usdValue.equals(ZERO_BD)) {
+    // try to convert it first to ETH
+    const ethValue = valueInETH(value, pricingAsset);
+
+    if (ethValue.gt(ZERO_BD)) {
+      // then convert value in ETH to USD
+      usdValue = valueInUSD(ethValue, WETH);
     }
   }
 
