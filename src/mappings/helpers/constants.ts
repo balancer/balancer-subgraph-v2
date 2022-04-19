@@ -227,6 +227,7 @@ let LINEAR_DAI = forNetwork(linearDaiAddressByNetwork, network);
 let LINEAR_USDC = forNetwork(linearUsdcAddressByNetwork, network);
 let LINEAR_USDT = forNetwork(linearUsdtAddressByNetwork, network);
 
+// PRICING_ASSETS must be sorted by order of preference
 export let PRICING_ASSETS: Address[] = [
   WETH,
   WMATIC,

@@ -11,6 +11,14 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
+export function getPreferentialPricingAsset(assets: Address[]): Address | null {
+  // Assumes PRICING_ASSETS are sorted by order of preference
+  for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
+    if (assets.includes(PRICING_ASSETS[i])) return PRICING_ASSETS[i];
+  }
+  return null;
+}
+
 export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
