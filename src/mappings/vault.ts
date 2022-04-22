@@ -29,7 +29,7 @@ import {
   swapValueInUSD,
   getPreferentialPricingAsset,
 } from './pricing';
-import { SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './helpers/constants';
+import { SWAP_IN, SWAP_OUT, ZERO, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 
@@ -465,7 +465,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   }
 
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
-  if (preferentialToken != null) {
+  if (preferentialToken != ZERO_ADDRESS) {
     updatePoolLiquidity(poolId.toHex(), block, preferentialToken, blockTimestamp);
   }
 }

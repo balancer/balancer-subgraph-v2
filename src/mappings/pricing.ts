@@ -1,6 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, WETH } from './helpers/constants';
+import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, WETH, ZERO_ADDRESS } from './helpers/constants';
 import { hasVirtualSupply, PoolType } from './helpers/pools';
 import { createPoolSnapshot, getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
 
@@ -11,12 +11,12 @@ export function isPricingAsset(asset: Address): boolean {
   return false;
 }
 
-export function getPreferentialPricingAsset(assets: Address[]): Address | null {
+export function getPreferentialPricingAsset(assets: Address[]): Address {
   // Assumes PRICING_ASSETS are sorted by order of preference
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
     if (assets.includes(PRICING_ASSETS[i])) return PRICING_ASSETS[i];
   }
-  return null;
+  return ZERO_ADDRESS;
 }
 
 export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32): boolean {

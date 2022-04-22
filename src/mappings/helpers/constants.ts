@@ -6,7 +6,7 @@ export let ONE_BD = BigDecimal.fromString('1');
 export const SWAP_IN = 0;
 export const SWAP_OUT = 1;
 
-export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
 
 export class AddressByNetwork {
   public mainnet: string;
