@@ -222,8 +222,8 @@ arbitrum:
 polygonGrafted:
   network: matic
   graft:
-    block: 26746066
-    base: QmZa9fCaQfRgYiAcdBF43nu9rEwsnZW12xJDCtyrQVJ11s
+    block: 26135969
+    base: QmewRhm32cXUY4NbGL3p4rY7N25RH4eJ7Era3aNd7SP3tK
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
