@@ -22,8 +22,14 @@ import {
   getBalancerSnapshot,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
-import { isPricingAsset, updatePoolLiquidity, valueInUSD, swapValueInUSD } from './pricing';
-import { MIN_POOL_LIQUIDITY, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './helpers/constants';
+import {
+  isPricingAsset,
+  updatePoolLiquidity,
+  valueInUSD,
+  swapValueInUSD,
+  getPreferentialPricingAsset,
+} from './pricing';
+import { MIN_POOL_LIQUIDITY, SWAP_IN, SWAP_OUT, ZERO, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 
@@ -434,7 +440,6 @@ export function handleSwapEvent(event: SwapEvent): void {
     }
 
     tokenPrice.save();
-    updatePoolLiquidity(poolId.toHex(), block, tokenInAddress, blockTimestamp);
   }
   if (isPricingAsset(tokenOutAddress) && pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY)) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
@@ -457,6 +462,10 @@ export function handleSwapEvent(event: SwapEvent): void {
     }
 
     tokenPrice.save();
-    updatePoolLiquidity(poolId.toHex(), block, tokenOutAddress, blockTimestamp);
+  }
+
+  const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
+  if (preferentialToken != ZERO_ADDRESS) {
+    updatePoolLiquidity(poolId.toHex(), block, preferentialToken, blockTimestamp);
   }
 }

@@ -246,8 +246,8 @@ export function handleTransfer(event: Transfer): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let isMint = event.params.from.toHex() == ZERO_ADDRESS;
-  let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
+  let isMint = event.params.from == ZERO_ADDRESS;
+  let isBurn = event.params.to == ZERO_ADDRESS;
 
   let poolShareFrom = getPoolShare(poolId.toHexString(), event.params.from);
   let poolShareFromBalance = poolShareFrom == null ? ZERO_BD : poolShareFrom.balance;
