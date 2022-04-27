@@ -69,6 +69,9 @@ type Pool @entity {
   # Gyro2Pool Only
   sqrtAlpha: BigDecimal
   sqrtBeta: BigDecimal
+
+  # Gyro3Pool Only
+  root3Alpha: BigDecimal
 }
 
 type PoolToken @entity {
