@@ -73,7 +73,7 @@ kovan:
     startBlock: 30120881
   Gyro3PoolFactory:
     address: "0xBBfD645Be37037bE6c60D498E798037bd8d805d3"
-    startBlock: 30827386
+    startBlock: 31238127
 rinkeby:
   network: rinkeby
   Vault:

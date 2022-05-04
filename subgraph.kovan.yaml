@@ -333,7 +333,7 @@ dataSources:
     source:
       address: '0xBBfD645Be37037bE6c60D498E798037bd8d805d3'
       abi: Gyro3PoolFactory
-      startBlock: 30827386
+      startBlock: 31238127
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
