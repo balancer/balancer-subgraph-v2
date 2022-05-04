@@ -288,7 +288,7 @@ function createGyro3LikePool(event: PoolCreated): string {
   pool.poolType = PoolType.Gyro3;
   let root3AlphaCall = poolContract.try_getRoot3Alpha();
 
-  (!root3AlphaCall.reverted) {
+  if (!root3AlphaCall.reverted) {
     pool.root3Alpha = scaleDown(root3AlphaCall.value, 18);
   }
 
