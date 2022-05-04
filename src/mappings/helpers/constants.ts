@@ -6,7 +6,9 @@ export let ONE_BD = BigDecimal.fromString('1');
 export const SWAP_IN = 0;
 export const SWAP_OUT = 1;
 
-export let ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
+
+export let MIN_POOL_LIQUIDITY = BigDecimal.fromString('10');
 
 export class AddressByNetwork {
   public mainnet: string;
@@ -170,6 +172,26 @@ let linearUsdtAddressByNetwork: AddressByNetwork = {
   dev: '0x0000000000000000000000000000000000000000',
 };
 
+let mkrAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2',
+  kovan: '0x0000000000000000000000000000000000000000',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x6f7C932e7684666C9fd1d44527765433e01fF61d',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
+let gnoAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x6810e776880C02933D47DB1b9fc05908e5386b96',
+  kovan: '0x0000000000000000000000000000000000000000',
+  goerli: '0x0000000000000000000000000000000000000000',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x5FFD62D3C3eE2E81C00A7b9079FB248e7dF024A8',
+  arbitrum: '0xa0b862F60edEf4452F25B4160F177db44DeB6Cf1',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
   if (network == 'mainnet') {
     return Address.fromString(addressByNetwork.mainnet);
@@ -197,6 +219,8 @@ export let USDC: Address = forNetwork(usdcAddressByNetwork, network);
 export let USDT: Address = forNetwork(usdtAddressByNetwork, network);
 export let BAL: Address = forNetwork(balAddressByNetwork, network);
 export let DAI: Address = forNetwork(daiAddressByNetwork, network);
+export let MKR: Address = forNetwork(mkrAddressByNetwork, network);
+export let GNO: Address = forNetwork(gnoAddressByNetwork, network);
 
 let ALT_DAI = forNetwork(altDaiAddressByNetwork, network);
 let ALT_USDC = forNetwork(altUsdcAddressByNetwork, network);
@@ -205,6 +229,7 @@ let LINEAR_DAI = forNetwork(linearDaiAddressByNetwork, network);
 let LINEAR_USDC = forNetwork(linearUsdcAddressByNetwork, network);
 let LINEAR_USDT = forNetwork(linearUsdtAddressByNetwork, network);
 
+// PRICING_ASSETS must be sorted by order of preference
 export let PRICING_ASSETS: Address[] = [
   WETH,
   WMATIC,
@@ -213,6 +238,8 @@ export let PRICING_ASSETS: Address[] = [
   DAI,
   USDT,
   BAL,
+  MKR,
+  GNO,
   ALT_DAI,
   ALT_USDC,
   ALT_USDT,
