@@ -17,12 +17,16 @@ import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
+import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
+import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
+import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
@@ -227,6 +231,92 @@ function handleNewLinearPool(event: PoolCreated, poolType: string): void {
   pool.save();
 
   LinearPoolTemplate.create(poolAddress);
+}
+
+function createGyro2LikePool(event: PoolCreated): string {
+  let poolAddress: Address = event.params.pool;
+
+  let poolContract = Gyro2Pool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+
+  pool.factory = event.address;
+
+  pool.poolType = PoolType.Gyro2;
+  let sqrtParamsCall = poolContract.try_getSqrtParameters();
+  pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
+  pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    pool.tokensList = changetype<Bytes[]>(tokens);
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
+    }
+  }
+
+  pool.save();
+
+  return poolId.toHexString();
+}
+
+function createGyro3LikePool(event: PoolCreated): string {
+  let poolAddress: Address = event.params.pool;
+
+  let poolContract = Gyro3Pool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+
+  pool.factory = event.address;
+
+  pool.poolType = PoolType.Gyro3;
+  let root3AlphaCall = poolContract.try_getRoot3Alpha();
+
+  if (!root3AlphaCall.reverted) {
+    pool.root3Alpha = scaleDown(root3AlphaCall.value, 18);
+  }
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    pool.tokensList = changetype<Bytes[]>(tokens);
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
+    }
+  }
+
+  pool.save();
+
+  return poolId.toHexString();
+}
+
+export function handleNewGyro2Pool(event: PoolCreated): void {
+  createGyro2LikePool(event);
+  Gyro2PoolTemplate.create(event.params.pool);
+}
+
+export function handleNewGyro3Pool(event: PoolCreated): void {
+  createGyro3LikePool(event);
+  Gyro3PoolTemplate.create(event.params.pool);
 }
 
 function findOrInitializeVault(): Balancer {

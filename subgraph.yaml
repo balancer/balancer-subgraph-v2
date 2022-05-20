@@ -608,3 +608,56 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
+  - kind: ethereum/contract
+    name: Gyro2Pool
+    network: mainnet
+    source:
+      abi: Gyro2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: Gyro2Pool
+          file: ./abis/Gyro2Pool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: Gyro3Pool
+    network: mainnet
+    source:
+      abi: Gyro3Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: Gyro3Pool
+          file: ./abis/Gyro3Pool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+    

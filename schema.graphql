@@ -65,6 +65,13 @@ type Pool @entity {
   wrappedIndex: Int
   lowerTarget: BigDecimal
   upperTarget: BigDecimal
+
+  # Gyro2Pool Only
+  sqrtAlpha: BigDecimal
+  sqrtBeta: BigDecimal
+
+  # Gyro3Pool Only
+  root3Alpha: BigDecimal
 }
 
 type PoolToken @entity {
