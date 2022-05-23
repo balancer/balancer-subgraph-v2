@@ -81,6 +81,7 @@ export function handleBalanceChange(event: PoolBalanceChanged): void {
 function handlePoolJoined(event: PoolBalanceChanged): void {
   let poolId: string = event.params.poolId.toHexString();
   let amounts: BigInt[] = event.params.deltas;
+  let protocolFeeAmounts: BigInt[] = event.params.protocolFeeAmounts;
   let blockTimestamp = event.block.timestamp.toI32();
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -121,7 +122,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     if (poolToken == null) {
       throw new Error('poolToken not found');
     }
-    let tokenAmountIn = tokenToDecimal(amounts[i], poolToken.decimals);
+    let amountIn = amounts[i].minus(protocolFeeAmounts[i]);
+    let tokenAmountIn = tokenToDecimal(amountIn, poolToken.decimals);
     let newAmount = poolToken.balance.plus(tokenAmountIn);
     let tokenAmountInUSD = valueInUSD(tokenAmountIn, tokenAddress);
 
@@ -170,6 +172,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 function handlePoolExited(event: PoolBalanceChanged): void {
   let poolId = event.params.poolId.toHex();
   let amounts = event.params.deltas;
+  let protocolFeeAmounts: BigInt[] = event.params.protocolFeeAmounts;
   let blockTimestamp = event.block.timestamp.toI32();
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -212,7 +215,8 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     if (poolToken == null) {
       throw new Error('poolToken not found');
     }
-    let tokenAmountOut = tokenToDecimal(amounts[i].neg(), poolToken.decimals);
+    let amountOut = amounts[i].minus(protocolFeeAmounts[i]).neg();
+    let tokenAmountOut = tokenToDecimal(amountOut, poolToken.decimals);
     let newAmount = poolToken.balance.minus(tokenAmountOut);
     let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
 
