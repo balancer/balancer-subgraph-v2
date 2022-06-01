@@ -14,6 +14,7 @@ import {
   Balancer,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
+import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
@@ -123,6 +124,13 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
     decimals = decimalCall.value;
   }
 
+  let isPool = false;
+  let pool = WeightedPool.bind(tokenAddress);
+  let isPoolCall = pool.try_getPoolId();
+  if (!isPoolCall.reverted) {
+    isPool = true;
+  }
+
   let poolToken = new PoolToken(poolTokenId);
   // ensures token entity is created
   let _token = getToken(tokenAddress);
@@ -131,6 +139,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   poolToken.name = name;
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
+  poolToken.isPool = isPool;
   poolToken.balance = ZERO_BD;
   poolToken.invested = ZERO_BD;
   poolToken.priceRate = ONE_BD;
