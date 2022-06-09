@@ -5,7 +5,7 @@ on:
     branches: fabio/multi-subgraphs
 
 jobs:
-  deploy-core:
+  deploy-mainnet-core:
     runs-on: ubuntu-latest
     environment: graph
     steps:
@@ -26,7 +26,7 @@ jobs:
           graph_subgraph_name: "balancer-v2-mainnet-core"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.core.yaml"
-  deploy-full:
+  deploy-mainnet-analytical:
     runs-on: ubuntu-latest
     environment: graph
     steps:
@@ -47,6 +47,129 @@ jobs:
           graph_subgraph_name: "balancer-v2-mainnet-analytical"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.full.yaml"
-
-env:
-  CI: true
+  deploy-polygon-core:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.5
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-v2-polygon-core"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.polygon.core.yaml"
+  deploy-polygon-analytical:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.5
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-v2-polygon-analytical"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.polygon.full.yaml"
+  deploy-arbitrum-core:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.5
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-v2-arbitrum-core"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.arbitrum.core.yaml"
+  deploy-arbitrum-analytical:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.5
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-v2-arbitrum-analytical"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.arbitrum.full.yaml"
+  deploy-goerli-core:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.5
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-v2-goerli-core"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.goerli.core.yaml"
+  deploy-goerli-analytical:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.5
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-v2-goerli-analytical"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.goerli.full.yaml"
