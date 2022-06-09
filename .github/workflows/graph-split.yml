@@ -173,3 +173,6 @@ jobs:
           graph_subgraph_name: "balancer-v2-goerli-analytical"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.goerli.full.yaml"
+
+env:
+  CI: true
