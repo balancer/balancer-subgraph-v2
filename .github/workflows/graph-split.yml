@@ -20,7 +20,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-mainnet-core"
@@ -41,7 +41,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-mainnet-analytical"
@@ -62,7 +62,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-polygon-core"
@@ -83,7 +83,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-polygon-analytical"
@@ -104,7 +104,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-arbitrum-core"
@@ -125,7 +125,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-arbitrum-analytical"
@@ -146,7 +146,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-goerli-core"
@@ -167,7 +167,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2-goerli-analytical"
