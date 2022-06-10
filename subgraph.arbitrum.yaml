@@ -127,6 +127,33 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePool
   - kind: ethereum/contract
+    name: StablePoolV2Factory
+    network: arbitrum-one
+    source:
+      address: '0xEF44D6786b2b4d544b7850Fe67CE6381626Bf2D6'
+      abi: StablePoolFactory
+      startBlock: 79343
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: StablePoolFactory
+          file: ./abis/StablePoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewStablePool
+  - kind: ethereum/contract
     name: MetaStablePoolFactory
     network: arbitrum-one
     source:
