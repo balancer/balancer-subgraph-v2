@@ -14,6 +14,7 @@ import {
   Balancer,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
+import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
@@ -214,6 +215,13 @@ export function createToken(tokenAddress: Address): Token {
   if (!maybeName.reverted) name = maybeName.value;
   if (!maybeSymbol.reverted) symbol = maybeSymbol.value;
   if (!maybeDecimals.reverted) decimals = maybeDecimals.value;
+
+  let pool = WeightedPool.bind(tokenAddress);
+  let isPoolCall = pool.try_getPoolId();
+  if (!isPoolCall.reverted) {
+    let poolId = isPoolCall.value;
+    token.pool = poolId.toHexString();
+  }
 
   token.name = name;
   token.symbol = symbol;

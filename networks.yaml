@@ -139,25 +139,34 @@ goerli:
   network: goerli
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-    startBlock: 4648000
+    startBlock: 4648099
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
-    startBlock: 4648000
+    startBlock: 4648101
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 4716924
-  # StablePoolFactory:
-  #   address: ""
-  #   startBlock: 0
-  # MetaStablePoolFactory:
-  #   address: ""
-  #   startBlock: 0
-  # LiquidityBootstrappingPoolFactory:
-  #   address: ""
-  #   startBlock: 0
-  ConvergentPoolFactory:
-    address: "0x0766B218517d9dC198155f0dC3485270cF788aF7"
-    startBlock: 4752660
+  StablePoolFactory:
+    address: "0x44afeb87c871D8fEA9398a026DeA2BD3A13F5769"
+    startBlock: 6992992
+  MetaStablePoolFactory:
+    address: "0xA55F73E2281c60206ba43A3590dB07B8955832Be"
+    startBlock: 6993057
+  LiquidityBootstrappingPoolFactory:
+    address: "0xb48Cc42C45d262534e46d5965a9Ac496F1B7a830"
+    startBlock: 6993037
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0xB0C726778C3AE4B3454D85557A48e8fa502bDD6A"
+    startBlock: 6993471
+  InvestmentPoolFactory:
+    address: "0x3C9F788131A26329A689Bd951b5aCb4454669487"
+    startBlock: 6993461
+  StablePhantomPoolFactory:
+    address: "0x41E9036AE350baEDCC7107760A020Dca3c0731ec"
+    startBlock: 6993896
+  AaveLinearPoolFactory:
+    address: "0x94470C12fc192e071F12Fec1152861608CE01562"
+    startBlock: 6993887
 polygon:
   network: matic
   Vault:
