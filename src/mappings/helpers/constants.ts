@@ -192,6 +192,16 @@ let gnoAddressByNetwork: AddressByNetwork = {
   dev: '0x0000000000000000000000000000000000000000',
 };
 
+let balBptAddressByNetwork: AddressByNetwork = {
+  mainnet: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
+  kovan: '0x61d5dc44849c9c87b0856a2a311536205c96c7fd',
+  goerli: '0xf8a0623ab66f985effc1c69d05f1af4badb01b00',
+  rinkeby: '0x0000000000000000000000000000000000000000',
+  polygon: '0x0000000000000000000000000000000000000000',
+  arbitrum: '0x0000000000000000000000000000000000000000',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
   if (network == 'mainnet') {
     return Address.fromString(addressByNetwork.mainnet);
@@ -211,6 +221,7 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
 }
 
 export let VAULT_ADDRESS = forNetwork(vaultAddressByNetwork, network);
+export let BAL_BPT: Address = forNetwork(balBptAddressByNetwork, network);
 export let WETH: Address = forNetwork(wethAddressByNetwork, network);
 export let WMATIC: Address = forNetwork(wMaticAddressByNetwork, network);
 export let WBTC: Address = forNetwork(wbtcAddressByNetwork, network);
@@ -240,6 +251,7 @@ export let PRICING_ASSETS: Address[] = [
   BAL,
   MKR,
   GNO,
+  BAL_BPT,
   ALT_DAI,
   ALT_USDC,
   ALT_USDT,
