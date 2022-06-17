@@ -1,8 +1,8 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, WETH, ZERO_ADDRESS } from './helpers/constants';
+import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, WETH, ZERO_ADDRESS, USDC } from './helpers/constants';
 import { hasVirtualSupply, PoolType } from './helpers/pools';
-import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken } from './helpers/misc';
+import { createPoolSnapshot, getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -98,6 +98,10 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
 
+  // capture BPT price
+  const bptPrice = getBptPrice(pool, block, timestamp);
+  if (bptPrice) updateLatestPrice(bptPrice);
+
   // Create or update pool daily snapshot
   createPoolSnapshot(pool, timestamp);
 
@@ -153,6 +157,23 @@ export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal
   }
 
   return usdValue;
+}
+
+export function getBptPrice(pool: Pool, block: BigInt, timestamp: i32): TokenPrice | null {
+  if (pool.totalShares.equals(ZERO_BD)) return null;
+
+  let bptPriceId = getTokenPriceId(pool.id, Address.fromBytes(pool.address), USDC, block);
+  let bptPrice = new TokenPrice(bptPriceId);
+  bptPrice.poolId = pool.id;
+  bptPrice.block = block;
+  bptPrice.timestamp = timestamp;
+  bptPrice.asset = pool.address;
+  bptPrice.amount = pool.totalShares;
+  bptPrice.pricingAsset = USDC;
+  bptPrice.price = pool.totalLiquidity.div(pool.totalShares);
+  bptPrice.save();
+
+  return bptPrice;
 }
 
 export function swapValueInUSD(
