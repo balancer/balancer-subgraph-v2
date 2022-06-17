@@ -84,8 +84,8 @@ type PoolToken @entity {
   address: String!
   priceRate: BigDecimal!
   balance: BigDecimal!
-  invested: BigDecimal!
-  managed: [ManagementOperation!] @derivedFrom(field: "poolTokenId")
+  managed: BigDecimal!
+  managements: [ManagementOperation!] @derivedFrom(field: "poolTokenId")
 
   # WeightedPool Only
   weight: BigDecimal

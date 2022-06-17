@@ -132,7 +132,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
   poolToken.balance = ZERO_BD;
-  poolToken.invested = ZERO_BD;
+  poolToken.managed = ZERO_BD;
   poolToken.priceRate = ONE_BD;
   poolToken.token = _token.id;
   poolToken.save();
