@@ -162,7 +162,8 @@ export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal
 export function getBptPrice(pool: Pool, block: BigInt, timestamp: i32): TokenPrice | null {
   if (pool.totalShares.equals(ZERO_BD)) return null;
 
-  let bptPriceId = getTokenPriceId(pool.id, Address.fromBytes(pool.address), USDC, block);
+  const bptAddress = Address.fromString(pool.address.toHexString());
+  let bptPriceId = getTokenPriceId(pool.id, bptAddress, USDC, block);
   let bptPrice = new TokenPrice(bptPriceId);
   bptPrice.poolId = pool.id;
   bptPrice.block = block;
