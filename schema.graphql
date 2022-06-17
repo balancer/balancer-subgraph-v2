@@ -85,7 +85,7 @@ type PoolToken @entity {
   priceRate: BigDecimal!
   balance: BigDecimal!
   invested: BigDecimal!
-  investments: [Investment!] @derivedFrom(field: "poolTokenId")
+  managed: [ManagementOperation!] @derivedFrom(field: "poolTokenId")
 
   # WeightedPool Only
   weight: BigDecimal
@@ -206,10 +206,18 @@ type TokenPrice @entity {
   timestamp: Int!
 }
 
-type Investment @entity {
+enum OperationType {
+  Deposit
+  Withdraw
+  Report
+}
+
+type ManagementOperation @entity {
   id: ID!
+  type: OperationType!
   assetManagerAddress: Bytes!
-  amount: BigDecimal!
+  cashAmount: BigDecimal!
+  managedAmount: BigDecimal!
   poolTokenId: PoolToken!
   timestamp: Int!
 }
