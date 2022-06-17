@@ -177,7 +177,7 @@ export function updateLatestPrice(tokenPrice: TokenPrice): void {
   latestPrice.save();
 
   let token = getToken(tokenAddress);
-  const pricingAssetAddress = Address.fromBytes(tokenPrice.pricingAsset);
+  const pricingAssetAddress = Address.fromString(tokenPrice.pricingAsset.toHexString());
   const tokenInUSD = valueInUSD(tokenPrice.price, pricingAssetAddress);
   token.latestUSDPrice = tokenInUSD;
   token.latestPrice = latestPrice.id;
