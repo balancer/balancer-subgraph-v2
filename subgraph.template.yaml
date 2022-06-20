@@ -125,6 +125,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: StablePoolFactory
           file: ./abis/StablePoolFactory.json
         - name: StablePool
@@ -154,6 +156,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: MetaStablePoolFactory
           file: ./abis/MetaStablePoolFactory.json
         - name: StablePool
@@ -278,6 +282,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: ConvergentPoolFactory
           file: ./abis/ConvergentPoolFactory.json
         - name: ConvergentCurvePool
@@ -307,6 +313,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: StablePhantomPoolFactory
           file: ./abis/StablePhantomPoolFactory.json
         - name: StablePool
@@ -338,6 +346,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: AaveLinearPoolFactory
           file: ./abis/AaveLinearPoolFactory.json
         - name: LinearPool
@@ -369,6 +379,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: ERC4626LinearPoolFactory
           file: ./abis/ERC4626LinearPoolFactory.json
         - name: LinearPool
@@ -400,6 +412,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: ERC4626LinearPoolFactory
           file: ./abis/ERC4626LinearPoolFactory.json
         - name: LinearPool
@@ -431,6 +445,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: Gyro2Pool
           file: ./abis/Gyro2Pool.json
         - name: Gyro2PoolFactory
@@ -460,6 +476,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: Gyro3Pool
           file: ./abis/Gyro3Pool.json
         - name: Gyro3PoolFactory
