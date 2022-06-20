@@ -274,7 +274,8 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   let deltaAmount = cashDeltaAmount.plus(managedDeltaAmount);
 
   poolToken.balance = poolToken.balance.plus(deltaAmount);
-  poolToken.managed = poolToken.managed.plus(managedDeltaAmount);
+  poolToken.cashBalance = poolToken.cashBalance.plus(cashDeltaAmount);
+  poolToken.managedBalance = poolToken.managedBalance.plus(managedDeltaAmount);
   poolToken.save();
 
   let logIndex = event.logIndex;
@@ -288,11 +289,11 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   } else if (cashDeltaAmount.lt(ZERO_BD)) {
     management.type = 'Withdraw';
   } else {
-    management.type = 'Report';
+    management.type = 'Update';
   }
   management.poolTokenId = poolToken.id;
-  management.cashAmount = cashDeltaAmount;
-  management.managedAmount = managedDeltaAmount;
+  management.cashDelta = cashDeltaAmount;
+  management.managedDelta = managedDeltaAmount;
   management.timestamp = event.block.timestamp.toI32();
   management.save();
 }

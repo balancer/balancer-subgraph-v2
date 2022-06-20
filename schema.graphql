@@ -84,7 +84,8 @@ type PoolToken @entity {
   address: String!
   priceRate: BigDecimal!
   balance: BigDecimal!
-  managed: BigDecimal!
+  cashBalance: BigDecimal!
+  managedBalance: BigDecimal!
   managements: [ManagementOperation!] @derivedFrom(field: "poolTokenId")
 
   # WeightedPool Only
@@ -209,15 +210,15 @@ type TokenPrice @entity {
 enum OperationType {
   Deposit
   Withdraw
-  Report
+  Update
 }
 
 type ManagementOperation @entity {
   id: ID!
   type: OperationType!
   assetManagerAddress: Bytes!
-  cashAmount: BigDecimal!
-  managedAmount: BigDecimal!
+  cashDelta: BigDecimal!
+  managedDelta: BigDecimal!
   poolTokenId: PoolToken!
   timestamp: Int!
 }
