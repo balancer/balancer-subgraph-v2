@@ -237,6 +237,7 @@ type Token @entity {
   totalVolumeNotional: BigDecimal!
   totalSwapCount: BigInt!
   latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
+  latestUSDPrice: BigDecimal # latest price of token in USD, updated when pool liquidity changes
   pool: Pool # pool entity associated with the token, if it is a Balancer pool
 }
 
