@@ -76,8 +76,9 @@ type Pool @entity {
 
 type PoolToken @entity {
   id: ID!
-  poolId: Pool!
+  poolId: Pool
   token: Token!
+  assetManager: Bytes!
   symbol: String!
   name: String!
   decimals: Int!
@@ -216,7 +217,6 @@ enum OperationType {
 type ManagementOperation @entity {
   id: ID!
   type: OperationType!
-  assetManagerAddress: Bytes!
   cashDelta: BigDecimal!
   managedDelta: BigDecimal!
   poolTokenId: PoolToken!

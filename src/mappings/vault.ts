@@ -259,7 +259,6 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   }
 
   let token: Address = event.params.token;
-  let assetManagerAddress: Address = event.params.assetManager;
 
   let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
@@ -283,7 +282,6 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   let managementId = transactionHash.toHexString().concat(logIndex.toHexString());
 
   let management = new ManagementOperation(managementId);
-  management.assetManagerAddress = assetManagerAddress;
   if (cashDeltaAmount.gt(ZERO_BD)) {
     management.type = 'Deposit';
   } else if (cashDeltaAmount.lt(ZERO_BD)) {

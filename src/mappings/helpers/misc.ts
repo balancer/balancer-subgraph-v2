@@ -89,7 +89,7 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
   return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
 }
 
-export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
+export function createPoolTokenEntity(poolId: string, tokenAddress: Address, assetManagerAddress: Address): void {
   let poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
   let token = ERC20.bind(tokenAddress);
@@ -128,6 +128,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   let _token = getToken(tokenAddress);
   poolToken.poolId = poolId;
   poolToken.address = tokenAddress.toHexString();
+  poolToken.assetManager = assetManagerAddress;
   poolToken.name = name;
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
