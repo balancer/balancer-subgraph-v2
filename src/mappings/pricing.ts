@@ -2,7 +2,7 @@ import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
 import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS } from './helpers/constants';
 import { hasVirtualSupply, PoolType } from './helpers/pools';
-import { createPoolSnapshot, getBalancerSnapshot, getToken, getTokenPriceId, loadPoolToken } from './helpers/misc';
+import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken } from './helpers/misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
