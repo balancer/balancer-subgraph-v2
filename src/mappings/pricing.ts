@@ -98,9 +98,8 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
 
-  // capture BPT price
-  const bptPrice = getBptPrice(pool, block, timestamp);
-  if (bptPrice) updateLatestPrice(bptPrice);
+  // update BPT price
+  updateBptPrice(pool);
 
   // Create or update pool daily snapshot
   createPoolSnapshot(pool, timestamp);
@@ -135,22 +134,13 @@ export function valueInUSD(value: BigDecimal, asset: Address): BigDecimal {
   return usdValue;
 }
 
-export function getBptPrice(pool: Pool, block: BigInt, timestamp: i32): TokenPrice | null {
-  if (pool.totalShares.equals(ZERO_BD)) return null;
+export function updateBptPrice(pool: Pool): void {
+  if (pool.totalShares.equals(ZERO_BD)) return;
 
   const bptAddress = Address.fromString(pool.address.toHexString());
-  let bptPriceId = getTokenPriceId(pool.id, bptAddress, USDC, block);
-  let bptPrice = new TokenPrice(bptPriceId);
-  bptPrice.poolId = pool.id;
-  bptPrice.block = block;
-  bptPrice.timestamp = timestamp;
-  bptPrice.asset = pool.address;
-  bptPrice.amount = pool.totalShares;
-  bptPrice.pricingAsset = USDC;
-  bptPrice.price = pool.totalLiquidity.div(pool.totalShares);
-  bptPrice.save();
-
-  return bptPrice;
+  let bptToken = getToken(bptAddress);
+  bptToken.latestUSDPrice = pool.totalLiquidity.div(pool.totalShares);
+  bptToken.save();
 }
 
 export function swapValueInUSD(
