@@ -98,6 +98,9 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
 
+  // update BPT price
+  updateBptPrice(pool);
+
   // Create or update pool daily snapshot
   createPoolSnapshot(pool, timestamp);
 
@@ -129,6 +132,15 @@ export function valueInUSD(value: BigDecimal, asset: Address): BigDecimal {
   }
 
   return usdValue;
+}
+
+export function updateBptPrice(pool: Pool): void {
+  if (pool.totalShares.equals(ZERO_BD)) return;
+
+  const bptAddress = Address.fromString(pool.address.toHexString());
+  let bptToken = getToken(bptAddress);
+  bptToken.latestUSDPrice = pool.totalLiquidity.div(pool.totalShares);
+  bptToken.save();
 }
 
 export function swapValueInUSD(
