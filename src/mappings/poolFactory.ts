@@ -45,7 +45,6 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string {
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
-  pool.factory = event.address;
   pool.owner = owner;
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
@@ -102,7 +101,6 @@ function createStableLikePool(event: PoolCreated, poolType: string): string {
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
-  pool.factory = event.address;
   pool.owner = owner;
 
   let vaultContract = Vault.bind(VAULT_ADDRESS);
@@ -164,9 +162,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
   // let owner = ownerCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = PoolType.Element;
-  pool.factory = event.address;
-  // pool.owner = owner;
+  pool.poolType = PoolType.Element; // pool.owner = owner;
   pool.principalToken = principalToken;
   pool.baseToken = baseToken;
   pool.expiryTime = expiryTime;
@@ -210,8 +206,6 @@ function handleNewLinearPool(event: PoolCreated, poolType: string): void {
   let pool = handleNewPool(event, poolId, swapFee);
 
   pool.poolType = poolType;
-  pool.factory = event.address;
-
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
   let wrappedIndexCall = poolContract.try_getWrappedIndex();
@@ -252,8 +246,6 @@ function createGyro2LikePool(event: PoolCreated): string {
 
   let pool = handleNewPool(event, poolId, swapFee);
 
-  pool.factory = event.address;
-
   pool.poolType = PoolType.Gyro2;
   let sqrtParamsCall = poolContract.try_getSqrtParameters();
   pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
@@ -288,8 +280,6 @@ function createGyro3LikePool(event: PoolCreated): string {
   let swapFee = swapFeeCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
-
-  pool.factory = event.address;
 
   pool.poolType = PoolType.Gyro3;
   let root3AlphaCall = poolContract.try_getRoot3Alpha();
