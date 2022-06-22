@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "types": ["@graphprotocol/graph-ts"],
+    "lib": ["DOM","ES2017"],
+    "types": ["@graphprotocol/graph-ts", "node"],
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
-    "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
+    "forceConsistentCasingInFileNames": true,  /* Disallow inconsistently-cased references to the same file. */
+    "strictNullChecks": true
   },
   "exclude": [
     "src/types"

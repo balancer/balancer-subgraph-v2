@@ -23,8 +23,13 @@
       },
       {
         "internalType": "uint256",
-        "name": "amplificationParameter",
+        "name": "root3Alpha",
         "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "assetManagers",
+        "type": "address[]"
       },
       {
         "internalType": "uint256",
@@ -45,54 +50,15 @@
         "internalType": "address",
         "name": "owner",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "configAddress",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startValue",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endValue",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "AmpUpdateStarted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "currentValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "AmpUpdateStopped",
-    "type": "event"
   },
   {
     "anonymous": false,
@@ -308,21 +274,24 @@
   },
   {
     "inputs": [],
-    "name": "getAmplificationParameter",
+    "name": "getAuthorizer",
+    "outputs": [
+      {
+        "internalType": "contract IAuthorizer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getInvariant",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "isUpdating",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "precision",
+        "name": "invariant",
         "type": "uint256"
       }
     ],
@@ -331,12 +300,25 @@
   },
   {
     "inputs": [],
-    "name": "getAuthorizer",
+    "name": "getLastInvariant",
     "outputs": [
       {
-        "internalType": "contract IAuthorizer",
+        "internalType": "uint256",
         "name": "",
-        "type": "address"
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNormalizedWeights",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -406,6 +388,32 @@
   },
   {
     "inputs": [],
+    "name": "getRoot3Alpha",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getScalingFactors",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getSwapFeePercentage",
     "outputs": [
       {
@@ -423,6 +431,19 @@
     "outputs": [
       {
         "internalType": "contract IVault",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gyroConfig",
+    "outputs": [
+      {
+        "internalType": "contract IGyroConfig",
         "name": "",
         "type": "address"
       }
@@ -645,87 +666,6 @@
           }
         ],
         "internalType": "struct IPoolSwapStructs.SwapRequest",
-        "name": "swapRequest",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "balances",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "indexIn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "indexOut",
-        "type": "uint256"
-      }
-    ],
-    "name": "onSwap",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "enum IVault.SwapKind",
-            "name": "kind",
-            "type": "uint8"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "tokenIn",
-            "type": "address"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "tokenOut",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "poolId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "lastChangeBlock",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes",
-            "name": "userData",
-            "type": "bytes"
-          }
-        ],
-        "internalType": "struct IPoolSwapStructs.SwapRequest",
         "name": "request",
         "type": "tuple"
       },
@@ -748,7 +688,7 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -942,31 +882,6 @@
       }
     ],
     "name": "setSwapFeePercentage",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "rawEndValue",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "startAmplificationParameterUpdate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "stopAmplificationParameterUpdate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

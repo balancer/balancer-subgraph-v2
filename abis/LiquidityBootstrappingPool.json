@@ -22,9 +22,9 @@
         "type": "address[]"
       },
       {
-        "internalType": "uint256",
-        "name": "amplificationParameter",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "normalizedWeights",
+        "type": "uint256[]"
       },
       {
         "internalType": "uint256",
@@ -45,54 +45,15 @@
         "internalType": "address",
         "name": "owner",
         "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "swapEnabledOnStart",
+        "type": "bool"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startValue",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endValue",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "AmpUpdateStarted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "currentValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "AmpUpdateStopped",
-    "type": "event"
   },
   {
     "anonymous": false,
@@ -124,12 +85,56 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "startWeights",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "endWeights",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "GradualWeightUpdateScheduled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "bool",
         "name": "paused",
         "type": "bool"
       }
     ],
     "name": "PausedStateChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "swapEnabled",
+        "type": "bool"
+      }
+    ],
+    "name": "SwapEnabledSet",
     "type": "event"
   },
   {
@@ -308,21 +313,47 @@
   },
   {
     "inputs": [],
-    "name": "getAmplificationParameter",
+    "name": "getAuthorizer",
+    "outputs": [
+      {
+        "internalType": "contract IAuthorizer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGradualWeightUpdateParams",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "value",
+        "name": "startTime",
         "type": "uint256"
       },
       {
-        "internalType": "bool",
-        "name": "isUpdating",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
       },
       {
+        "internalType": "uint256[]",
+        "name": "endWeights",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getInvariant",
+    "outputs": [
+      {
         "internalType": "uint256",
-        "name": "precision",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -331,12 +362,25 @@
   },
   {
     "inputs": [],
-    "name": "getAuthorizer",
+    "name": "getLastInvariant",
     "outputs": [
       {
-        "internalType": "contract IAuthorizer",
+        "internalType": "uint256",
         "name": "",
-        "type": "address"
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNormalizedWeights",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -399,6 +443,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSwapEnabled",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -592,87 +649,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "enum IVault.SwapKind",
-            "name": "kind",
-            "type": "uint8"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "tokenIn",
-            "type": "address"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "tokenOut",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "poolId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "lastChangeBlock",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes",
-            "name": "userData",
-            "type": "bytes"
-          }
-        ],
-        "internalType": "struct IPoolSwapStructs.SwapRequest",
-        "name": "swapRequest",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "balances",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "indexIn",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "indexOut",
-        "type": "uint256"
-      }
-    ],
-    "name": "onSwap",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -936,12 +912,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "swapFeePercentage",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "swapEnabled",
+        "type": "bool"
       }
     ],
-    "name": "setSwapFeePercentage",
+    "name": "setSwapEnabled",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -950,23 +926,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "rawEndValue",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endTime",
+        "name": "swapFeePercentage",
         "type": "uint256"
       }
     ],
-    "name": "startAmplificationParameterUpdate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "stopAmplificationParameterUpdate",
+    "name": "setSwapFeePercentage",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1047,6 +1011,29 @@
         "type": "bool"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "endWeights",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "updateWeightsGradually",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   }
