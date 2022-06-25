@@ -100,6 +100,33 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
   - kind: ethereum/contract
+    name: PrimaryIssuePoolFactory
+    network: goerli
+    source:
+      address: '0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1'
+      abi: PrimaryIssuePoolFactory
+      startBlock: 7104148
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrimaryIssuePoolFactory
+          file: ./abis/PrimaryIssuePoolFactory.json
+        - name: PrimaryIssuePool
+          file: ./abis/PrimaryIssuePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewPrimaryPool
+  - kind: ethereum/contract
     name: ConvergentPoolFactory
     network: goerli
     source:
@@ -378,3 +405,26 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
+  - kind: ethereum/contract
+    name: PrimaryIssuePool
+    network: goerli
+    source:
+      abi: PrimaryIssuePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: PrimaryIssuePool
+          file: ./abis/PrimaryIssuePool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange

@@ -39,6 +39,9 @@ mainnet:
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
+  PrimaryIssuePoolFactory:
+    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
+    startBlock: 7104148
 kovan:
   network: kovan
   Vault:
@@ -158,6 +161,9 @@ goerli:
   ConvergentPoolFactory:
     address: "0x0766B218517d9dC198155f0dC3485270cF788aF7"
     startBlock: 4752660
+  PrimaryIssuePoolFactory:
+    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
+    startBlock: 7104148
 polygon:
   network: matic
   Vault:

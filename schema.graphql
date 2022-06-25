@@ -65,6 +65,17 @@ type Pool @entity {
   wrappedIndex: Int
   lowerTarget: BigDecimal
   upperTarget: BigDecimal
+
+  # PrimaryPool Only
+  security: Bytes
+  currency: Bytes
+  minimumPrice: BigDecimal
+  basePrice: BigDecimal
+  maxSecurityOffered: BigDecimal
+  cutoffTime: BigInt
+  startTime: BigInt
+  balancerManager: Bytes
+  
 }
 
 type PoolToken @entity {
