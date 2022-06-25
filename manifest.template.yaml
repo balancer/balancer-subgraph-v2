@@ -643,6 +643,8 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
+        - event: OracleEnabledChanged(bool)
+          handler: handleOracleEnabledChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: {{network}}
