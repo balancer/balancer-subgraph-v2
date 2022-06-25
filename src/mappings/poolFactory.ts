@@ -10,6 +10,7 @@ import { Balancer, Pool } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
+import { WeightedPool2Tokens as WeightedPool2TokensTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
 import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
 import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templates';
@@ -43,7 +44,6 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string | 
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
-  pool.factory = event.address;
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -64,6 +64,11 @@ export function handleNewWeightedPool(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Weighted);
   if (pool == null) return;
   WeightedPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewWeighted2TokenPool(event: PoolCreated): void {
+  createWeightedLikePool(event, PoolType.Weighted);
+  WeightedPool2TokensTemplate.create(event.params.pool);
 }
 
 export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
@@ -93,7 +98,6 @@ function createStableLikePool(event: PoolCreated, poolType: string): string | nu
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
-  pool.factory = event.address;
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -152,9 +156,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
   // let owner = ownerCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = PoolType.Element;
-  pool.factory = event.address;
-  // pool.owner = owner;
+  pool.poolType = PoolType.Element; // pool.owner = owner;
   pool.principalToken = principalToken;
   pool.baseToken = baseToken;
   pool.expiryTime = expiryTime;
@@ -193,8 +195,6 @@ function handleNewLinearPool(event: PoolCreated, poolType: string): void {
   let pool = handleNewPool(event, poolId, swapFee);
 
   pool.poolType = poolType;
-  pool.factory = event.address;
-
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
   let wrappedIndexCall = poolContract.try_getWrappedIndex();
@@ -230,8 +230,6 @@ export function handleNewGyro2Pool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee);
 
-  pool.factory = event.address;
-
   pool.poolType = PoolType.Gyro2;
   let sqrtParamsCall = poolContract.try_getSqrtParameters();
   pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
@@ -260,8 +258,6 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
   let swapFee = swapFeeCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
-
-  pool.factory = event.address;
 
   pool.poolType = PoolType.Gyro3;
   let root3AlphaCall = poolContract.try_getRoot3Alpha();
@@ -305,6 +301,8 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.swapFee = scaleDown(swapFee, 18);
     pool.createTime = event.block.timestamp.toI32();
     pool.address = poolAddress;
+    pool.factory = event.address;
+    pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
     pool.swapEnabled = true;
 
