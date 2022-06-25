@@ -16,6 +16,7 @@ type Pool @entity {
   poolType: String
   factory: Bytes
   strategyType: Int!
+  oracleEnabled: Boolean!
   symbol: String
   name: String
   swapEnabled: Boolean!
@@ -76,16 +77,18 @@ type Pool @entity {
 
 type PoolToken @entity {
   id: ID!
-  poolId: Pool!
+  poolId: Pool
   token: Token!
+  assetManager: Bytes!
   symbol: String!
   name: String!
   decimals: Int!
   address: String!
   priceRate: BigDecimal!
   balance: BigDecimal!
-  invested: BigDecimal!
-  investments: [Investment!] @derivedFrom(field: "poolTokenId")
+  cashBalance: BigDecimal!
+  managedBalance: BigDecimal!
+  managements: [ManagementOperation!] @derivedFrom(field: "poolTokenId")
 
   # WeightedPool Only
   weight: BigDecimal
@@ -206,10 +209,17 @@ type TokenPrice @entity {
   timestamp: Int!
 }
 
-type Investment @entity {
+enum OperationType {
+  Deposit
+  Withdraw
+  Update
+}
+
+type ManagementOperation @entity {
   id: ID!
-  assetManagerAddress: Bytes!
-  amount: BigDecimal!
+  type: OperationType!
+  cashDelta: BigDecimal!
+  managedDelta: BigDecimal!
   poolTokenId: PoolToken!
   timestamp: Int!
 }
@@ -237,6 +247,8 @@ type Token @entity {
   totalVolumeNotional: BigDecimal!
   totalSwapCount: BigInt!
   latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
+  latestUSDPrice: BigDecimal # latest price of token in USD, updated when pool liquidity changes
+  pool: Pool # pool entity associated with the token, if it is a Balancer pool
 }
 
 type TokenSnapshot @entity {
