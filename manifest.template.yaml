@@ -549,7 +549,7 @@ templates:
           handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: WeightedPool2Tokens
-    network: mainnet
+    network: {{network}}
     source:
       abi: WeightedPool2Tokens
     mapping:
