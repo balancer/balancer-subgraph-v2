@@ -72,13 +72,38 @@ type Pool @entity {
   balancerManager: Bytes
 
   # PrimaryPool only
-  minimumPrice: BigDecimal
-  basePrice: BigDecimal
-  maxSecurityOffered: BigDecimal
-  cutoffTime: BigInt
-  startTime: BigInt
+  openingPrice: BigDecimal
+  securityOffered: BigDecimal
+  primarySubscriptions: [PrimaryIssues!] @derivedFrom(field: "poolId")
   
-  
+  # SecondaryPool only
+  secondaryOffer: BigDecimal
+  secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "poolId")
+}
+
+type PrimaryIssues @entity {
+  id: ID!
+  poolId: Pool!
+  security: Bytes
+  assetIn: Bytes
+  assetName: String
+  amount: BigDecimal
+  investor: Bytes
+  price: BigDecimal
+}
+
+type SecondaryTrades @entity {
+  id: ID!
+  poolId: Pool!
+  security: Bytes
+  party: Bytes 
+  counterparty: Bytes 
+  price: BigDecimal
+  askprice: BigDecimal 
+  currency: Bytes 
+  amount: BigDecimal 
+  status: Bytes
+  executionDate: BigInt
 }
 
 type PoolToken @entity {

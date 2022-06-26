@@ -26,6 +26,8 @@ import {
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
+import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
+import { SecondaryIssuePool, Offer, tradeReport } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -163,9 +165,72 @@ export function handleTargetsSet(event: TargetsSet): void {
   let poolId = poolIdCall.value;
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
-
+  
   pool.lowerTarget = tokenToDecimal(event.params.lowerTarget, 18);
   pool.upperTarget = tokenToDecimal(event.params.upperTarget, 18);
+  pool.save();
+}
+
+/************************************
+ *************NEW ISSUE**************
+ ************************************/
+
+ export function handleOpenIssue(event: OpenIssue): void {
+  let poolAddress = event.address;
+
+  let poolContract = PrimaryIssuePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  //pool.openingPrice = tokenToDecimal(event.params.openingPrice, 18);
+  //pool.securityOffered = tokenToDecimal(event.params.securityOffered, 18);
+  pool.save();
+}
+
+export function handleSubscription(event: Subscription): void {
+  let poolAddress = event.address;
+
+  let poolContract = PrimaryIssuePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  //pool.closingPrice = tokenToDecimal(event.params.closingPrice, 18);
+  //pool.securitySold = tokenToDecimal(event.params.securitySold, 18);
+  pool.save();
+}
+
+/************************************
+ *************SECONDARY**************
+ ************************************/
+
+ export function handleSecondaryOffer(event: Offer): void {
+  let poolAddress = event.address;
+
+  let poolContract = SecondaryIssuePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  
+  //pool.secondaryOffer = tokenToDecimal(event.params.secondaryOffer, 18);
+  pool.save();
+}
+
+export function handleTrade(event: tradeReport): void {
+  let poolAddress = event.address;
+
+  let poolContract = SecondaryIssuePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  //pool.closingPrice = tokenToDecimal(event.params.closingPrice, 18);
+  //pool.securitySold = tokenToDecimal(event.params.securitySold, 18);
   pool.save();
 }
 

@@ -12,6 +12,8 @@ export namespace PoolType {
   export const StablePhantom = 'StablePhantom';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
+  export const PrimaryIssuePool = 'PrimaryIssuePool';
+  export const SecondaryIssuePool = 'SecondaryIssuePool';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {

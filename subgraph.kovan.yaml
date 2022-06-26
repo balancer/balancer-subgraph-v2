@@ -685,6 +685,10 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: OpenIssue(indexed address,uint256,uint256)
+          handler: handleOpenIssue
+        - event: Subscription(indexed address,address,string,uint256,address,uint256)
+          handler: handleSubscription
   - kind: ethereum/contract
     name: SecondaryIssuePool
     network: kovan
@@ -708,3 +712,7 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: Offer(indexed address,uint256)
+          handler: handleSecondaryOffer
+        - event: tradeReport(indexed address,address,address,uint256,uint256,address,uint256,bytes32,uint256)
+          handler: handleTrade
