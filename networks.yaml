@@ -42,6 +42,9 @@ mainnet:
   PrimaryIssuePoolFactory:
     address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
     startBlock: 7104148
+  SecondaryIssuePoolFactory:
+    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
+    startBlock: 7104148
 kovan:
   network: kovan
   Vault:
@@ -162,6 +165,9 @@ goerli:
     address: "0x0766B218517d9dC198155f0dC3485270cF788aF7"
     startBlock: 4752660
   PrimaryIssuePoolFactory:
+    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
+    startBlock: 7104148
+  SecondaryIssuePoolFactory:
     address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
     startBlock: 7104148
 polygon:

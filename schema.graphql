@@ -66,15 +66,18 @@ type Pool @entity {
   lowerTarget: BigDecimal
   upperTarget: BigDecimal
 
-  # PrimaryPool Only
+  # PrimaryPool and SecondaryPool Only
   security: Bytes
   currency: Bytes
+  balancerManager: Bytes
+
+  # PrimaryPool only
   minimumPrice: BigDecimal
   basePrice: BigDecimal
   maxSecurityOffered: BigDecimal
   cutoffTime: BigInt
   startTime: BigInt
-  balancerManager: Bytes
+  
   
 }
 

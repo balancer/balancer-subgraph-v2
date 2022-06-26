@@ -126,6 +126,33 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewPrimaryPool
+  - kind: ethereum/contract
+    name: SecondaryIssuePoolFactory
+    network: ropsten
+    source:
+      address: ''
+      abi: SecondaryIssuePoolFactory
+      startBlock: 
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: SecondaryIssuePoolFactory
+          file: ./abis/SecondaryIssuePoolFactory.json
+        - name: SecondaryIssuePool
+          file: ./abis/SecondaryIssuePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewSecondaryPool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -396,6 +423,29 @@ templates:
       abis:
         - name: PrimaryIssuePool
           file: ./abis/PrimaryIssuePool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: SecondaryIssuePool
+    network: ropsten
+    source:
+      abi: SecondaryIssuePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: SecondaryIssuePool
+          file: ./abis/SecondaryIssuePool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

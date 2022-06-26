@@ -18,6 +18,7 @@ import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { PrimaryIssuePool as PrimaryPoolTemplate } from '../types/templates';
+import { SecondaryIssuePool as SecondaryPoolTemplate } from '../types/templates';
 
 import { Vault } from '../types/Vault/Vault';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
@@ -25,6 +26,7 @@ import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { PrimaryIssuePool } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
+import { SecondaryIssuePool } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string {
@@ -221,6 +223,49 @@ export function handleNewPrimaryPool(event: PoolCreated): void {
   pool.save();
 
   PrimaryPoolTemplate.create(poolAddress);
+}
+
+export function handleNewSecondaryPool(event: PoolCreated): void {
+  let poolAddress: Address = event.params.pool;
+
+  let poolContract = SecondaryIssuePool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let securityCall = poolContract.try_getSecurity();
+  let security = securityCall.value;
+
+  let currencyCall = poolContract.try_getCurrency();
+  let currency = currencyCall.value;
+
+  let ownerCall = poolContract.try_getOwner();
+  let balancerManager = ownerCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+  pool.poolType = PoolType.Element;
+  pool.factory = event.address;
+  pool.owner = balancerManager;
+  pool.principalToken = security;
+  pool.baseToken = currency;
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (!tokensCall.reverted) {
+    let tokens = tokensCall.value.value0;
+    pool.tokensList = changetype<Bytes[]>(tokens);
+
+    for (let i: i32 = 0; i < tokens.length; i++) {
+      createPoolTokenEntity(poolId.toHexString(), tokens[i]);
+    }
+  }
+  pool.save();
+
+  SecondaryPoolTemplate.create(poolAddress);
 }
 
 export function handleNewAaveLinearPool(event: PoolCreated): void {
