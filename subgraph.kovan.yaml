@@ -304,7 +304,7 @@ dataSources:
     name: Gyro2PoolFactory
     network: kovan
     source:
-      address: '0xba9519ce545aEe8d4Df51a3914CC22AB85E90CeA'
+      address: '0xffaba637b66bdb0ddf6a0ef89bcf88d4c86ff743'
       abi: Gyro2PoolFactory
       startBlock: 30120881
     mapping:
