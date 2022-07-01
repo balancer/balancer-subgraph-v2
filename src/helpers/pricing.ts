@@ -2,7 +2,7 @@ import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, LatestPrice } from '../types/schema';
 import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS } from './constants';
 import { hasVirtualSupply, PoolType } from './pools';
-import { createPoolSnapshot, getToken, loadPoolToken } from './misc';
+import { getToken, loadPoolToken } from './misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -89,9 +89,6 @@ export function updatePoolLiquidity(poolId: string, pricingAsset: Address): bool
 
   // update BPT price
   updateBptPrice(pool);
-
-  // Create or update pool daily snapshot
-  createPoolSnapshot(pool, timestamp);
 
   // Update global stats
   let vault = Balancer.load('2') as Balancer;
