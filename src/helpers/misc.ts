@@ -12,17 +12,10 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
-<<<<<<< HEAD:src/helpers/misc.ts
 } from '../types/schema';
-import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { ERC20 } from '../types/Vault/ERC20';
+import { WeightedPool } from '../types/Vault/WeightedPool';
 import { Swap as SwapEvent } from '../types/Vault/Vault';
-=======
-} from '../../types/schema';
-import { ERC20 } from '../../types/Vault/ERC20';
-import { WeightedPool } from '../../types/Vault/WeightedPool';
-import { Swap as SwapEvent } from '../../types/Vault/Vault';
->>>>>>> dev:src/mappings/helpers/misc.ts
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
 

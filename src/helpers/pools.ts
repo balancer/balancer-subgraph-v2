@@ -1,12 +1,7 @@
-<<<<<<< HEAD:src/helpers/pools.ts
-import { Address } from '@graphprotocol/graph-ts';
-import { Pool } from '../types/schema';
-=======
 import { Address, Bytes, log } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
-import { Vault } from '../../types/Vault/Vault';
+import { Pool } from '../types/schema';
+import { Vault } from '../types/Vault/Vault';
 import { VAULT_ADDRESS } from './constants';
->>>>>>> dev:src/mappings/helpers/pools.ts
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PoolType {
