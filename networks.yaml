@@ -78,7 +78,7 @@ kovan:
     address: "0x94522C4586cb15E08AFF943545Fb2c8Ca7f508cE"
     startBlock: 28677003
   Gyro2PoolFactory:
-    address: "0xba9519ce545aEe8d4Df51a3914CC22AB85E90CeA"
+    address: "0xffaba637b66bdb0ddf6a0ef89bcf88d4c86ff743"
     startBlock: 30120881
   Gyro3PoolFactory:
     address: "0xBBfD645Be37037bE6c60D498E798037bd8d805d3"
