@@ -172,8 +172,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}      entities:
         - Balancer
         - Pool
       abis:
@@ -452,8 +455,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}      entities:
         - Balancer
         - Pool
       abis:
@@ -522,8 +528,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}      entities:
         - Balancer
         - Pool
       abis:
@@ -553,8 +562,11 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
+      {{#if full}}
+      file: ./src/mappings/full/poolFactory.ts
+      {{else}}
+      file: ./src/mappings/core/poolFactory.ts
+      {{/if}}      entities:
         - Balancer
         - Pool
       abis:
@@ -610,7 +622,11 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
@@ -886,7 +902,11 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
@@ -912,7 +932,11 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
+      {{#if full}}
+      file: ./src/mappings/full/poolController.ts
+      {{else}}
+      file: ./src/mappings/core/poolController.ts
+      {{/if}}
       entities:
         - Pool
         - PoolShare
