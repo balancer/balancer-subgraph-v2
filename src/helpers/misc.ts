@@ -12,10 +12,17 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
+<<<<<<< HEAD:src/helpers/misc.ts
 } from '../types/schema';
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { ERC20 } from '../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../types/Vault/Vault';
+=======
+} from '../../types/schema';
+import { ERC20 } from '../../types/Vault/ERC20';
+import { WeightedPool } from '../../types/Vault/WeightedPool';
+import { Swap as SwapEvent } from '../../types/Vault/Vault';
+>>>>>>> dev:src/mappings/helpers/misc.ts
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
 
@@ -102,7 +109,7 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
   return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
 }
 
-export function createPoolTokenEntity(poolId: string, tokenAddress: Address): void {
+export function createPoolTokenEntity(poolId: string, tokenAddress: Address, assetManagerAddress: Address): void {
   let poolTokenId = getPoolTokenId(poolId, tokenAddress);
 
   let token = ERC20.bind(tokenAddress);
@@ -141,11 +148,13 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
   let _token = getToken(tokenAddress);
   poolToken.poolId = poolId;
   poolToken.address = tokenAddress.toHexString();
+  poolToken.assetManager = assetManagerAddress;
   poolToken.name = name;
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
   poolToken.balance = ZERO_BD;
-  poolToken.invested = ZERO_BD;
+  poolToken.cashBalance = ZERO_BD;
+  poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
   poolToken.token = _token.id;
   poolToken.save();
@@ -227,6 +236,13 @@ export function createToken(tokenAddress: Address): Token {
   if (!maybeName.reverted) name = maybeName.value;
   if (!maybeSymbol.reverted) symbol = maybeSymbol.value;
   if (!maybeDecimals.reverted) decimals = maybeDecimals.value;
+
+  let pool = WeightedPool.bind(tokenAddress);
+  let isPoolCall = pool.try_getPoolId();
+  if (!isPoolCall.reverted) {
+    let poolId = isPoolCall.value;
+    token.pool = poolId.toHexString();
+  }
 
   token.name = name;
   token.symbol = symbol;

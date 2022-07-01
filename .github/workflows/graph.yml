@@ -20,7 +20,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-kovan-v2"
@@ -41,7 +41,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-rinkeby-v2"
@@ -62,7 +62,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-goerli-v2"
@@ -83,7 +83,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-v2"
@@ -104,12 +104,12 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-polygon-v2"
           graph_account: "balancer-labs"
-          graph_config_file: "subgraph.polygonGrafted.yaml"
+          graph_config_file: "subgraph.polygon.yaml"
   deploy-arbitrum:
     runs-on: ubuntu-latest
     environment: graph
@@ -125,7 +125,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.5
+      - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-arbitrum-v2"

@@ -1,5 +1,6 @@
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../../types/templates/WeightedPool/BalancerPoolToken';
+import { OracleEnabledChanged } from '../../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
@@ -31,6 +32,18 @@ import { updateAmpFactor } from '../../helpers/stable';
 /************************************
  *********** SWAP ENABLED ***********
  ************************************/
+
+export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.oracleEnabled = event.params.enabled;
+  pool.save();
+}
 
 export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
@@ -202,8 +215,8 @@ export function handleTransfer(event: Transfer): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let isMint = event.params.from.toHex() == ZERO_ADDRESS;
-  let isBurn = event.params.to.toHex() == ZERO_ADDRESS;
+  let isMint = event.params.from == ZERO_ADDRESS;
+  let isBurn = event.params.to == ZERO_ADDRESS;
 
   let poolShareFrom = getPoolShare(poolId.toHexString(), event.params.from);
   let poolShareFromBalance = poolShareFrom == null ? ZERO_BD : poolShareFrom.balance;

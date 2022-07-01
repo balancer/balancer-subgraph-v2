@@ -115,13 +115,15 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: WeightedPoolFactory
-          file: ./abis/WeightedPoolFactory.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: WeightedPoolFactory
+          file: ./abis/WeightedPoolFactory.json
+        - name: WeightedPool2Tokens
+          file: ./abis/WeightedPool2Tokens.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewWeightedPool
+          handler: handleNewWeighted2TokenPool
   {{/if}}
   {{#if StablePoolFactory}}
   - kind: ethereum/contract
@@ -140,6 +142,37 @@ dataSources:
       {{else}}
       file: ./src/mappings/core/poolFactory.ts
       {{/if}}
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: StablePoolFactory
+          file: ./abis/StablePoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewStablePool
+  {{/if}}
+  {{#if StablePoolV2Factory}}
+  - kind: ethereum/contract
+    name: StablePoolV2Factory
+    network: {{network}}
+    source:
+      address: '{{StablePoolV2Factory.address}}'
+      abi: StablePoolFactory
+      startBlock: {{StablePoolV2Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
       entities:
         - Balancer
         - Pool
@@ -181,6 +214,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: MetaStablePoolFactory
           file: ./abis/MetaStablePoolFactory.json
         - name: StablePool
@@ -321,6 +356,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: ConvergentPoolFactory
           file: ./abis/ConvergentPoolFactory.json
         - name: ConvergentCurvePool
@@ -354,6 +391,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: StablePhantomPoolFactory
           file: ./abis/StablePhantomPoolFactory.json
         - name: StablePool
@@ -389,6 +428,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: AaveLinearPoolFactory
           file: ./abis/AaveLinearPoolFactory.json
         - name: LinearPool
@@ -398,6 +439,39 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewAaveLinearPool
+  {{/if}}
+  {{#if ERC4626LinearPoolFactoryBeta}}
+  - kind: ethereum/contract
+    name: ERC4626LinearPoolFactoryBeta
+    network: {{network}}
+    source:
+      address: '{{ERC4626LinearPoolFactoryBeta.address}}'
+      abi: ERC4626LinearPoolFactory
+      startBlock: {{ERC4626LinearPoolFactoryBeta.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: ERC4626LinearPoolFactory
+          file: ./abis/ERC4626LinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: ERC4626LinearPool
+          file: ./abis/ERC4626LinearPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewERC4626LinearPool
   {{/if}}
   {{#if ERC4626LinearPoolFactory}}
   - kind: ethereum/contract
@@ -424,6 +498,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: ERC4626LinearPoolFactory
           file: ./abis/ERC4626LinearPoolFactory.json
         - name: LinearPool
@@ -433,6 +509,68 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewERC4626LinearPool
+  {{/if}}
+  {{#if Gyro2PoolFactory}}
+  - kind: ethereum/contract
+    name: Gyro2PoolFactory
+    network: {{network}}
+    source:
+      address: '{{Gyro2PoolFactory.address}}'
+      abi: Gyro2PoolFactory
+      startBlock: {{Gyro2PoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: Gyro2Pool
+          file: ./abis/Gyro2Pool.json
+        - name: Gyro2PoolFactory
+          file: ./abis/Gyro2PoolFactory.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewGyro2Pool
+  {{/if}}
+  {{#if Gyro3PoolFactory}}
+  - kind: ethereum/contract
+    name: Gyro3PoolFactory
+    network: {{network}}
+    source:
+      address: '{{Gyro3PoolFactory.address}}'
+      abi: Gyro3PoolFactory
+      startBlock: {{Gyro3PoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: Gyro3Pool
+          file: ./abis/Gyro3Pool.json
+        - name: Gyro3PoolFactory
+          file: ./abis/Gyro3PoolFactory.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewGyro3Pool
   {{/if}}
 templates:
   - kind: ethereum/contract
@@ -463,6 +601,33 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: WeightedPool2Tokens
+    network: {{network}}
+    source:
+      abi: WeightedPool2Tokens
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: WeightedPool2Tokens
+          file: ./abis/WeightedPool2Tokens.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: OracleEnabledChanged(bool)
+          handler: handleOracleEnabledChanged
   - kind: ethereum/contract
     name: StablePool
     network: {{network}}
@@ -538,6 +703,8 @@ templates:
           handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
+        - event: OracleEnabledChanged(bool)
+          handler: handleOracleEnabledChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: {{network}}
@@ -710,3 +877,56 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
+  - kind: ethereum/contract
+    name: Gyro2Pool
+    network: {{network}}
+    source:
+      abi: Gyro2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: Gyro2Pool
+          file: ./abis/Gyro2Pool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: Gyro3Pool
+    network: {{network}}
+    source:
+      abi: Gyro3Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: Gyro3Pool
+          file: ./abis/Gyro3Pool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+    
