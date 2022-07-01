@@ -5,7 +5,7 @@ import {
   PoolBalanceManaged,
   InternalBalanceChanged,
 } from '../../types/Vault/Vault';
-import { Balancer, Pool, Swap, JoinExit, Investment } from '../../types/schema';
+import { Balancer, Pool, Swap, JoinExit, ManagementOperation } from '../../types/schema';
 import {
   tokenToDecimal,
   scaleDown,
@@ -226,9 +226,8 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   }
 
   let token: Address = event.params.token;
-  let assetManagerAddress: Address = event.params.assetManager;
 
-  //let cashDelta = event.params.cashDelta;
+  let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
 
   let poolToken = loadPoolToken(poolId.toHexString(), token);
@@ -236,18 +235,32 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
     throw new Error('poolToken not found');
   }
 
+  let cashDeltaAmount = tokenToDecimal(cashDelta, poolToken.decimals);
   let managedDeltaAmount = tokenToDecimal(managedDelta, poolToken.decimals);
+  let deltaAmount = cashDeltaAmount.plus(managedDeltaAmount);
 
-  poolToken.invested = poolToken.invested.plus(managedDeltaAmount);
+  poolToken.balance = poolToken.balance.plus(deltaAmount);
+  poolToken.cashBalance = poolToken.cashBalance.plus(cashDeltaAmount);
+  poolToken.managedBalance = poolToken.managedBalance.plus(managedDeltaAmount);
   poolToken.save();
 
-  let assetManagerId = poolToken.id.concat(assetManagerAddress.toHexString());
-  let investment = new Investment(assetManagerId);
-  investment.assetManagerAddress = assetManagerAddress;
-  investment.poolTokenId = poolToken.id;
-  investment.amount = managedDeltaAmount;
-  investment.timestamp = event.block.timestamp.toI32();
-  investment.save();
+  let logIndex = event.logIndex;
+  let transactionHash = event.transaction.hash;
+  let managementId = transactionHash.toHexString().concat(logIndex.toHexString());
+
+  let management = new ManagementOperation(managementId);
+  if (cashDeltaAmount.gt(ZERO_BD)) {
+    management.type = 'Deposit';
+  } else if (cashDeltaAmount.lt(ZERO_BD)) {
+    management.type = 'Withdraw';
+  } else {
+    management.type = 'Update';
+  }
+  management.poolTokenId = poolToken.id;
+  management.cashDelta = cashDeltaAmount;
+  management.managedDelta = managedDeltaAmount;
+  management.timestamp = event.block.timestamp.toI32();
+  management.save();
 }
 
 /************************************
