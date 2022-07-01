@@ -23,7 +23,7 @@ jobs:
       - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-beta-v2"
+          graph_subgraph_name: "balancer-v2-beta"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.yaml"
   deploy-kovan-beta:
