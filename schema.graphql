@@ -84,26 +84,26 @@ type Pool @entity {
 type PrimaryIssues @entity {
   id: ID!
   poolId: Pool!
-  security: Bytes
-  assetIn: Bytes
-  assetName: String
-  amount: BigDecimal
-  investor: Bytes
-  price: BigDecimal
+  security: Bytes!
+  assetIn: Bytes!
+  assetName: String!
+  amount: BigDecimal!
+  investor: Bytes!
+  price: BigDecimal!
 }
 
 type SecondaryTrades @entity {
   id: ID!
   poolId: Pool!
-  security: Bytes
-  party: Bytes 
-  counterparty: Bytes 
-  price: BigDecimal
-  askprice: BigDecimal 
-  currency: Bytes 
-  amount: BigDecimal 
-  status: Bytes
-  executionDate: BigInt
+  security: Bytes!
+  party: Bytes! 
+  counterparty: Bytes! 
+  price: BigDecimal!
+  askprice: BigDecimal! 
+  currency: Bytes! 
+  amount: BigDecimal! 
+  status: Bytes!
+  executionDate: Int!
 }
 
 type PoolToken @entity {

@@ -12,7 +12,10 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
+  PrimaryIssues,
+  SecondaryTrades,
 } from '../../types/schema';
+import { PrimaryIssuePool } from '../../types/templates';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
@@ -140,6 +143,14 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address): vo
 
 export function loadPriceRateProvider(poolId: string, tokenAddress: Address): PriceRateProvider | null {
   return PriceRateProvider.load(getPoolTokenId(poolId, tokenAddress));
+}
+
+export function loadPrimarySubscriptions(poolId: string, tokenAddress: Address): PrimaryIssues | null {
+  return PrimaryIssues.load(getPoolTokenId(poolId, tokenAddress));
+}
+
+export function loadSecondaryTrades(poolId: string, tokenAddress: Address): SecondaryTrades | null {
+  return SecondaryTrades.load(getPoolTokenId(poolId, tokenAddress));
 }
 
 export function getTokenPriceId(

@@ -14,7 +14,9 @@ import {
   PriceRateCacheUpdated,
   PriceRateProviderSet,
 } from '../types/templates/MetaStablePool/MetaStablePool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate } from '../types/schema';
+import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
+import { SecondaryIssuePool, Offer, tradeReport } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, PrimaryIssues, SecondaryTrades } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -23,11 +25,11 @@ import {
   getPoolTokenId,
   loadPriceRateProvider,
   getPoolShare,
+  loadPrimarySubscriptions,
+  loadSecondaryTrades,
 } from './helpers/misc';
 import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
-import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
-import { SecondaryIssuePool, Offer, tradeReport } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -184,8 +186,8 @@ export function handleTargetsSet(event: TargetsSet): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  //pool.openingPrice = tokenToDecimal(event.params.openingPrice, 18);
-  //pool.securityOffered = tokenToDecimal(event.params.securityOffered, 18);
+  pool.openingPrice = tokenToDecimal(event.params.openingPrice, 18);
+  pool.securityOffered = tokenToDecimal(event.params.securityOffered, 18);
   pool.save();
 }
 
@@ -198,8 +200,14 @@ export function handleSubscription(event: Subscription): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  //pool.closingPrice = tokenToDecimal(event.params.closingPrice, 18);
-  //pool.securitySold = tokenToDecimal(event.params.securitySold, 18);
+  let provider = loadPrimarySubscriptions(poolId.toHexString(), event.params.security);
+  if (provider == null) {
+    // Primary subscriptions and pooltokens share an ID
+    let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
+    provider = new PrimaryIssues(providerId);
+    provider.poolId = poolId.toHexString();
+  }
+  
   pool.save();
 }
 
@@ -216,7 +224,7 @@ export function handleSubscription(event: Subscription): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
   
-  //pool.secondaryOffer = tokenToDecimal(event.params.secondaryOffer, 18);
+  pool.secondaryOffer = tokenToDecimal(event.params.secondaryOffer, 18);
   pool.save();
 }
 
@@ -229,8 +237,14 @@ export function handleTrade(event: tradeReport): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  //pool.closingPrice = tokenToDecimal(event.params.closingPrice, 18);
-  //pool.securitySold = tokenToDecimal(event.params.securitySold, 18);
+  let provider = loadSecondaryTrades(poolId.toHexString(), event.params.security);
+  if (provider == null) {
+    // Secondary trades and pooltokens share an ID
+    let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
+    provider = new SecondaryTrades(providerId);
+    provider.poolId = poolId.toHexString();
+  }
+  
   pool.save();
 }
 
