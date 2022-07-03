@@ -40,11 +40,11 @@ mainnet:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
   PrimaryIssuePoolFactory:
-    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
-    startBlock: 7104148
+    address: "0xC76E5F9a08Cb9fE35ED1ba54aC9E7E9722815F08"
+    startBlock: 10960323
   SecondaryIssuePoolFactory:
-    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
-    startBlock: 7104148
+    address: "0xDA0B2D1BD2aFa0dF261f30434BF08629739C4772"
+    startBlock: 10960335
 kovan:
   network: kovan
   Vault:
@@ -112,9 +112,12 @@ rinkeby:
   InvestmentPoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 9252383
-  # ConvergentPoolFactory:
-  #   address: ""
-  #   startBlock: 0
+  PrimaryIssuePoolFactory:
+    address: "0xC76E5F9a08Cb9fE35ED1ba54aC9E7E9722815F08"
+    startBlock: 10960323
+  SecondaryIssuePoolFactory:
+    address: "0xDA0B2D1BD2aFa0dF261f30434BF08629739C4772"
+    startBlock: 10960335
 ropsten:
   network: ropsten
   Vault:
