@@ -176,7 +176,8 @@ dataSources:
       file: ./src/mappings/full/poolFactory.ts
       {{else}}
       file: ./src/mappings/core/poolFactory.ts
-      {{/if}}      entities:
+      {{/if}}
+      entities:
         - Balancer
         - Pool
       abis:
@@ -459,7 +460,8 @@ dataSources:
       file: ./src/mappings/full/poolFactory.ts
       {{else}}
       file: ./src/mappings/core/poolFactory.ts
-      {{/if}}      entities:
+      {{/if}}
+      entities:
         - Balancer
         - Pool
       abis:
@@ -532,7 +534,8 @@ dataSources:
       file: ./src/mappings/full/poolFactory.ts
       {{else}}
       file: ./src/mappings/core/poolFactory.ts
-      {{/if}}      entities:
+      {{/if}}
+      entities:
         - Balancer
         - Pool
       abis:
@@ -566,7 +569,8 @@ dataSources:
       file: ./src/mappings/full/poolFactory.ts
       {{else}}
       file: ./src/mappings/core/poolFactory.ts
-      {{/if}}      entities:
+      {{/if}}
+      entities:
         - Balancer
         - Pool
       abis:
