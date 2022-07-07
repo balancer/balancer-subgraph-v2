@@ -41,6 +41,7 @@ type Pool @entity {
   tokens: [PoolToken!] @derivedFrom(field: "poolId")
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
+  snapshots: [PoolSnapshot!] @derivedFrom(field: "pool")
   historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
 
   # LiquidityBootstrappingPool Only
