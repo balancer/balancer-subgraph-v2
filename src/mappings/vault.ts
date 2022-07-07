@@ -367,8 +367,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tokenOutSym = poolTokenOut.symbol;
   swap.tokenAmountOut = tokenAmountOut;
 
-  // TODO - add valueUSD to swap entity
-  // swap.valueUSD = swapValueUSD;
+  swap.valueUSD = swapValueUSD;
 
   swap.caller = event.transaction.from;
   swap.userAddress = event.transaction.from.toHex();
