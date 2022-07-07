@@ -151,18 +151,20 @@ export function swapValueInUSD(
 ): BigDecimal {
   let swapValueUSD = ZERO_BD;
 
-  // if one of the tokens is a stable, it takes precedence
   if (isUSDStable(tokenOutAddress)) {
+    // if one of the tokens is a stable, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
   } else if (isUSDStable(tokenInAddress)) {
-  // if only one of the tokens is a pricing asset, it takes precedence
-  swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+    // if one of the tokens is a stable, it takes precedence
+    swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
   } else if (isPricingAsset(tokenInAddress) && !isPricingAsset(tokenOutAddress)) {
+    // if only one of the tokens is a pricing asset, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
   } else if (isPricingAsset(tokenOutAddress) && !isPricingAsset(tokenInAddress)) {
+    // if only one of the tokens is a pricing asset, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-  // if none or both tokens are pricing assets, take the average of the known prices
   } else {
+    // if none or both tokens are pricing assets, take the average of the known prices
     let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
     let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
     let divisor =
