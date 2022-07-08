@@ -576,6 +576,8 @@ templates:
           handler: handleTransfer
         - event: OracleEnabledChanged(bool)
           handler: handleOracleEnabledChanged
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: StablePool
     network: {{network}}
