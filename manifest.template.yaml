@@ -362,6 +362,39 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePhantomPool
   {{/if}}
+  {{#if StablePhantomPoolV2Factory}}
+  - kind: ethereum/contract
+    name: StablePhantomPoolV2Factory
+    network: {{network}}
+    source:
+      address: '{{StablePhantomPoolV2Factory.address}}'
+      abi: StablePhantomPoolFactory
+      startBlock: {{StablePhantomPoolV2Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: StablePhantomPoolFactory
+          file: ./abis/StablePhantomPoolFactory.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+        - name: StablePhantomPool
+          file: ./abis/StablePhantomPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewStablePhantomPool
+  {{/if}}
   {{#if AaveLinearPoolFactory}}
   - kind: ethereum/contract
     name: AaveLinearPoolFactory
