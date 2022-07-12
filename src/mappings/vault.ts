@@ -31,7 +31,7 @@ import {
   updateLatestPrice,
 } from './pricing';
 import { MIN_POOL_LIQUIDITY, SWAP_IN, SWAP_OUT, ZERO, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
-import { hasVirtualSupply, isVariableWeightPool, isStableLikePool } from './helpers/pools';
+import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, isStablePhantomPool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 
 /************************************
@@ -157,7 +157,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   // with a non-zero value for the BPT amount when the pool is initialized, 
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
   // and therefore must be subtracted from totalShares
-  if (pool.poolType == 'StablePhantom') {
+  if (isStablePhantomPool(pool)) {
     let preMintedBpt = ZERO_BD;
     for (let i: i32 = 0; i < tokenAddresses.length; i++) {
       if (tokenAddresses[i] == pool.address) {
