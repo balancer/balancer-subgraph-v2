@@ -1,6 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, WETH, ZERO_ADDRESS } from './helpers/constants';
+import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS } from './helpers/constants';
 import { hasVirtualSupply, PoolType } from './helpers/pools';
 import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken } from './helpers/misc';
 
@@ -98,6 +98,9 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
 
+  // update BPT price
+  updateBptPrice(pool);
+
   // Create or update pool daily snapshot
   createPoolSnapshot(pool, timestamp);
 
@@ -113,46 +116,31 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   return true;
 }
 
-export function valueInETH(value: BigDecimal, pricingAsset: Address): BigDecimal {
-  let ethValue = ZERO_BD;
-
-  let pricingAssetInETH = LatestPrice.load(getLatestPriceId(pricingAsset, WETH));
-
-  if (pricingAssetInETH != null) {
-    ethValue = value.times(pricingAssetInETH.price);
-  }
-
-  return ethValue;
-}
-
-export function valueInUSD(value: BigDecimal, pricingAsset: Address): BigDecimal {
+export function valueInUSD(value: BigDecimal, asset: Address): BigDecimal {
   let usdValue = ZERO_BD;
 
-  if (isUSDStable(pricingAsset)) {
+  if (isUSDStable(asset)) {
     usdValue = value;
   } else {
     // convert to USD
-    for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
-      let pricingAssetInUSD = LatestPrice.load(getLatestPriceId(pricingAsset, USD_STABLE_ASSETS[i]));
-      if (pricingAssetInUSD != null) {
-        usdValue = value.times(pricingAssetInUSD.price);
-        break;
-      }
-    }
-  }
+    let token = getToken(asset);
 
-  // if there's no price in USD
-  if (usdValue.equals(ZERO_BD)) {
-    // try to convert it first to ETH
-    const ethValue = valueInETH(value, pricingAsset);
-
-    if (ethValue.gt(ZERO_BD)) {
-      // then convert value in ETH to USD
-      usdValue = valueInUSD(ethValue, WETH);
+    if (token.latestUSDPrice) {
+      const latestUSDPrice = token.latestUSDPrice as BigDecimal;
+      usdValue = value.times(latestUSDPrice);
     }
   }
 
   return usdValue;
+}
+
+export function updateBptPrice(pool: Pool): void {
+  if (pool.totalShares.equals(ZERO_BD)) return;
+
+  const bptAddress = Address.fromString(pool.address.toHexString());
+  let bptToken = getToken(bptAddress);
+  bptToken.latestUSDPrice = pool.totalLiquidity.div(pool.totalShares);
+  bptToken.save();
 }
 
 export function swapValueInUSD(
@@ -164,10 +152,19 @@ export function swapValueInUSD(
   let swapValueUSD = ZERO_BD;
 
   if (isUSDStable(tokenOutAddress)) {
+    // if one of the tokens is a stable, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
   } else if (isUSDStable(tokenInAddress)) {
+    // if one of the tokens is a stable, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+  } else if (isPricingAsset(tokenInAddress) && !isPricingAsset(tokenOutAddress)) {
+    // if only one of the tokens is a pricing asset, it takes precedence
+    swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+  } else if (isPricingAsset(tokenOutAddress) && !isPricingAsset(tokenInAddress)) {
+    // if only one of the tokens is a pricing asset, it takes precedence
+    swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
   } else {
+    // if none or both tokens are pricing assets, take the average of the known prices
     let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
     let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
     let divisor =
@@ -201,6 +198,9 @@ export function updateLatestPrice(tokenPrice: TokenPrice): void {
   latestPrice.save();
 
   let token = getToken(tokenAddress);
+  const pricingAssetAddress = Address.fromString(tokenPrice.pricingAsset.toHexString());
+  const tokenInUSD = valueInUSD(tokenPrice.price, pricingAssetAddress);
+  token.latestUSDPrice = tokenInUSD;
   token.latestPrice = latestPrice.id;
   token.save();
 }
