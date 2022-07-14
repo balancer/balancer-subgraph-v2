@@ -80,9 +80,9 @@ kovan:
   Gyro2PoolFactory:
     address: "0xffaba637b66bdb0ddf6a0ef89bcf88d4c86ff743"
     startBlock: 32474232
-  # Gyro3PoolFactory:
-  #   address: "0xBBfD645Be37037bE6c60D498E798037bd8d805d3"
-  #   startBlock: 31238127
+  Gyro3PoolFactory:
+    address: "0xBBfD645Be37037bE6c60D498E798037bd8d805d3"
+    startBlock: 31238127
   ERC4626LinearPoolFactory:
     address: "0x44284efFA14964feF15CB13e4a6579D3b3AD7e14"
     startBlock: 30831572
