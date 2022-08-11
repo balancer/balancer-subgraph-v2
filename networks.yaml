@@ -176,6 +176,9 @@ goerli:
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
     startBlock: 6993887
+  AaveLinearPoolV2Factory:
+    address: "0x8F42aDBbA1B16EaAE3BB5754915E0D06059aDd75"
+    startBlock: 7382577
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygon:
   network: matic
