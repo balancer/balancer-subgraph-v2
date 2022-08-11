@@ -362,14 +362,14 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePhantomPool
   {{/if}}
-  {{#if StablePhantomPoolV2Factory}}
+  {{#if ComposableStablePoolFactory}}
   - kind: ethereum/contract
-    name: StablePhantomPoolV2Factory
+    name: ComposableStablePoolFactory
     network: {{network}}
     source:
-      address: '{{StablePhantomPoolV2Factory.address}}'
+      address: '{{ComposableStablePoolFactory.address}}'
       abi: StablePhantomPoolFactory
-      startBlock: {{StablePhantomPoolV2Factory.startBlock}}
+      startBlock: {{ComposableStablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

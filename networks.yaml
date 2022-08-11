@@ -170,9 +170,9 @@ goerli:
   StablePhantomPoolFactory:
     address: "0x41E9036AE350baEDCC7107760A020Dca3c0731ec"
     startBlock: 6993896
-  StablePhantomPoolV2Factory:
-    address: "0x72D07D7DcA67b8A406aD1Ec34ce969c90bFEE768"
-    startBlock: 7175600
+  ComposableStablePoolFactory:
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 7383114
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
     startBlock: 6993887
