@@ -155,6 +155,9 @@ goerli:
   StablePoolFactory:
     address: "0x44afeb87c871D8fEA9398a026DeA2BD3A13F5769"
     startBlock: 6992992
+  StablePoolV2Factory:
+    address: "0xD360B8afb3d7463bE823bE1Ec3c33aA173EbE86e"
+    startBlock: 7169381
   MetaStablePoolFactory:
     address: "0xA55F73E2281c60206ba43A3590dB07B8955832Be"
     startBlock: 6993057
