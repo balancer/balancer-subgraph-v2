@@ -430,7 +430,7 @@ dataSources:
   {{/if}}
   {{#if AaveLinearPoolV2Factory}}
   - kind: ethereum/contract
-    name: AaveLinearPoolFactory
+    name: AaveLinearV2PoolFactory
     network: {{network}}
     source:
       address: '{{AaveLinearPoolV2Factory.address}}'
