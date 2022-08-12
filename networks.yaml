@@ -40,10 +40,10 @@ mainnet:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
   PrimaryIssuePoolFactory:
-    address: "0xC76E5F9a08Cb9fE35ED1ba54aC9E7E9722815F08"
+    address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
     startBlock: 10960323
   SecondaryIssuePoolFactory:
-    address: "0xDA0B2D1BD2aFa0dF261f30434BF08629739C4772"
+    address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
     startBlock: 10960335
 kovan:
   network: kovan
@@ -113,10 +113,10 @@ rinkeby:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 9252383
   PrimaryIssuePoolFactory:
-    address: "0xC76E5F9a08Cb9fE35ED1ba54aC9E7E9722815F08"
+    address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
     startBlock: 10960323
   SecondaryIssuePoolFactory:
-    address: "0xDA0B2D1BD2aFa0dF261f30434BF08629739C4772"
+    address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
     startBlock: 10960335
 ropsten:
   network: ropsten
@@ -168,10 +168,10 @@ goerli:
     address: "0x0766B218517d9dC198155f0dC3485270cF788aF7"
     startBlock: 4752660
   PrimaryIssuePoolFactory:
-    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
+    address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
     startBlock: 7104148
   SecondaryIssuePoolFactory:
-    address: "0xA84965eDDF405B76ea8fA9d902396562B9fd9AA1"
+    address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
     startBlock: 7104148
 polygon:
   network: matic

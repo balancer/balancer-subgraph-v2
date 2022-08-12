@@ -103,9 +103,9 @@ dataSources:
     name: PrimaryIssuePoolFactory
     network: rinkeby
     source:
-      address: ''
+      address: '0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF'
       abi: PrimaryIssuePoolFactory
-      startBlock: 
+      startBlock: 10960323
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -130,9 +130,9 @@ dataSources:
     name: SecondaryIssuePoolFactory
     network: rinkeby
     source:
-      address: ''
+      address: '0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA'
       abi: SecondaryIssuePoolFactory
-      startBlock: 
+      startBlock: 10960335
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -571,7 +571,7 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: OpenIssue(indexed address,uint256,uint256)
+        - event: OpenIssue(indexed address,uint256,uint256,uint256)
           handler: handleOpenIssue
         - event: Subscription(indexed address,address,string,uint256,address,uint256)
           handler: handleSubscription

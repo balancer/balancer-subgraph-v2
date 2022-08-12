@@ -74,6 +74,7 @@ type Pool @entity {
   # PrimaryPool only
   openingPrice: BigDecimal
   securityOffered: BigDecimal
+  cutoffTime: Int
   primarySubscriptions: [PrimaryIssues!] @derivedFrom(field: "poolId")
   
   # SecondaryPool only
