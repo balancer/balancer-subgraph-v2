@@ -14,8 +14,8 @@ export namespace PoolType {
   export const StablePhantom = 'StablePhantom';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
-  export const PrimaryIssuePool = 'PrimaryIssuePool';
-  export const SecondaryIssuePool = 'SecondaryIssuePool';
+  export const PrimaryIssue = 'PrimaryIssue';
+  export const SecondaryIssue = 'SecondaryIssue';
   export const Linear = 'AaveLinear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';

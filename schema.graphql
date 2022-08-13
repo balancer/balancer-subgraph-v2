@@ -84,33 +84,33 @@ type Pool @entity {
   openingPrice: BigDecimal
   securityOffered: BigDecimal
   cutoffTime: Int
-  primarySubscriptions: [PrimaryIssues!] @derivedFrom(field: "poolId")
+  primarySubscriptions: [PrimaryIssues!] @derivedFrom(field: "pool")
   
   # SecondaryPool only
   secondaryOffer: BigDecimal
-  secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "poolId")
+  secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "pool")
 }
 
 type PrimaryIssues @entity {
   id: ID!
-  poolId: Pool!
-  security: Bytes!
-  assetIn: Bytes!
+  pool: Pool!
+  security: Token!
+  assetIn: Token!
   assetName: String!
   amount: BigDecimal!
-  investor: Bytes!
+  investor: User!
   price: BigDecimal!
 }
 
 type SecondaryTrades @entity {
   id: ID!
-  poolId: Pool!
-  security: Bytes!
-  party: Bytes! 
-  counterparty: Bytes! 
+  pool: Pool!
+  security: Token!
+  party: User! 
+  counterparty: User! 
   price: BigDecimal!
-  askprice: BigDecimal! 
-  currency: Bytes! 
+  askPrice: BigDecimal! 
+  currency: Token! 
   amount: BigDecimal! 
   status: Bytes!
   executionDate: Int!

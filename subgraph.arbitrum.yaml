@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
-      startBlock: 222832
+      startBlock: 222831
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -644,7 +644,7 @@ templates:
         - event: Offer(indexed address,uint256)
           handler: handleSecondaryOffer
         - event: tradeReport(indexed address,address,address,uint256,uint256,address,uint256,bytes32,uint256)
-          handler: handleTrade
+          handler: handleTradeReport
   - kind: ethereum/contract
     name: Gyro2Pool
     network: arbitrum-one

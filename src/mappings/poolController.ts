@@ -218,7 +218,7 @@ export function handleSubscription(event: Subscription): void {
     // Primary subscriptions and pooltokens share an ID
     let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
     provider = new PrimaryIssues(providerId);
-    provider.poolId = poolId.toHexString();
+    provider.pool = poolId.toHexString();
   }
   
   pool.save();
@@ -241,7 +241,7 @@ export function handleSubscription(event: Subscription): void {
   pool.save();
 }
 
-export function handleTrade(event: tradeReport): void {
+export function handleTradeReport(event: tradeReport): void {
   let poolAddress = event.address;
 
   let poolContract = SecondaryIssuePool.bind(poolAddress);
@@ -255,7 +255,7 @@ export function handleTrade(event: tradeReport): void {
     // Secondary trades and pooltokens share an ID
     let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
     provider = new SecondaryTrades(providerId);
-    provider.poolId = poolId.toHexString();
+    provider.pool = poolId.toHexString();
   }
   
   pool.save();

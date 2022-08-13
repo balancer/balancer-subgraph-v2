@@ -740,7 +740,7 @@ templates:
         - event: Offer(indexed address,uint256)
           handler: handleSecondaryOffer
         - event: tradeReport(indexed address,address,address,uint256,uint256,address,uint256,bytes32,uint256)
-          handler: handleTrade
+          handler: handleTradeReport
   - kind: ethereum/contract
     name: Gyro2Pool
     network: matic

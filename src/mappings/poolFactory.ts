@@ -198,7 +198,7 @@ export function handleNewPrimaryPool(event: PoolCreated): void {
   let balancerManager = ownerCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = PoolType.Element;
+  pool.poolType = PoolType.PrimaryIssue;
   pool.factory = event.address;
   pool.owner = balancerManager;
   pool.principalToken = security;
@@ -236,7 +236,7 @@ export function handleNewSecondaryPool(event: PoolCreated): void {
   let balancerManager = ownerCall.value;
 
   let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = PoolType.Element;
+  pool.poolType = PoolType.SecondaryIssue;
   pool.factory = event.address;
   pool.owner = balancerManager;
   pool.principalToken = security;
