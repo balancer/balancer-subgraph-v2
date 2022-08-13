@@ -1,5 +1,6 @@
 import { BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
+import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
@@ -34,6 +35,18 @@ import { updateAmpFactor } from './helpers/stable';
 /************************************
  *********** SWAP ENABLED ***********
  ************************************/
+
+export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.oracleEnabled = event.params.enabled;
+  pool.save();
+}
 
 export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;

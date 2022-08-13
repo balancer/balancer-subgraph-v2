@@ -1,5 +1,7 @@
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, Bytes, log } from '@graphprotocol/graph-ts';
 import { Pool } from '../../types/schema';
+import { Vault } from '../../types/Vault/Vault';
+import { VAULT_ADDRESS } from './constants';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PoolType {
@@ -14,6 +16,9 @@ export namespace PoolType {
   export const ERC4626Linear = 'ERC4626Linear';
   export const PrimaryIssuePool = 'PrimaryIssuePool';
   export const SecondaryIssuePool = 'SecondaryIssuePool';
+  export const Linear = 'AaveLinear';
+  export const Gyro2 = 'Gyro2';
+  export const Gyro3 = 'Gyro3';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {
@@ -36,4 +41,35 @@ export function isStableLikePool(pool: Pool): boolean {
 
 export function getPoolAddress(poolId: string): Address {
   return changetype<Address>(Address.fromHexString(poolId.slice(0, 42)));
+}
+
+export function getPoolTokens(poolId: Bytes): Bytes[] | null {
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let tokensCall = vaultContract.try_getPoolTokens(poolId);
+
+  if (tokensCall.reverted) {
+    log.warning('Failed to get pool tokens: {}', [poolId.toHexString()]);
+    return null;
+  }
+
+  let tokensValue = tokensCall.value.value0;
+  let tokens = changetype<Bytes[]>(tokensValue);
+
+  return tokens;
+}
+
+export function getPoolTokenManager(poolId: Bytes, tokenAddress: Bytes): Address | null {
+  let token = changetype<Address>(tokenAddress);
+
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let managersCall = vaultContract.try_getPoolTokenInfo(poolId, token);
+
+  if (managersCall.reverted) {
+    log.warning('Failed to get pool token info: {} {}', [poolId.toHexString(), token.toHexString()]);
+    return null;
+  }
+
+  let assetManager = managersCall.value.value3;
+
+  return assetManager;
 }
