@@ -368,7 +368,7 @@ dataSources:
     network: {{network}}
     source:
       address: '{{ComposableStablePoolFactory.address}}'
-      abi: StablePhantomPoolFactory
+      abi: ComposableStablePoolFactory
       startBlock: {{ComposableStablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
@@ -385,12 +385,12 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: StablePhantomPoolFactory
-          file: ./abis/StablePhantomPoolFactory.json
+        - name: ComposableStablePoolFactory
+          file: ./abis/ComposableStablePoolFactory.json
+        - name: ComposableStablePool
+          file: ./abis/ComposableStablePool.json
         - name: StablePool
           file: ./abis/StablePool.json
-        - name: StablePhantomPool
-          file: ./abis/StablePhantomPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePhantomPoolV2
@@ -430,7 +430,7 @@ dataSources:
   {{/if}}
   {{#if AaveLinearPoolV2Factory}}
   - kind: ethereum/contract
-    name: AaveLinearV2PoolFactory
+    name: AaveLinearPoolV2Factory
     network: {{network}}
     source:
       address: '{{AaveLinearPoolV2Factory.address}}'
