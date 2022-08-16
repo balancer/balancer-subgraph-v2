@@ -215,12 +215,18 @@ polygon:
   ERC4626LinearPoolFactory:
     address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
     startBlock: 26746067
+  Gyro2PoolFactory:
+    address: "0x5d8545a7330245150bE0Ce88F8afB0EDc41dFc34"
+    startBlock: 31556084
+  Gyro3PoolFactory:
+    address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
+    startBlock: 31556094
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygonGrafted:
   network: matic
   graft:
-    block: 29371950
-    base: QmRwWT9GQQ4GQsJBB8XwunVcSvdpjzaKk7Qb9FPrW68KAb
+    block: 31556084
+    base: QmcnNgS7NUvZbMYkpQvHNsM2AFkX6wY1XfjZZgYA1ZxPwn
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -260,11 +266,17 @@ polygonGrafted:
   ERC4626LinearPoolFactory:
     address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
     startBlock: 26746067
+  Gyro2PoolFactory:
+    address: "0x5d8545a7330245150bE0Ce88F8afB0EDc41dFc34"
+    startBlock: 31556084
+  Gyro3PoolFactory:
+    address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
+    startBlock: 31556094
 arbitrum:
   network: arbitrum-one
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-    startBlock: 222831
+    startBlock: 222832
   WeightedPoolFactory:
     address: "0x7dFdEF5f355096603419239CE743BfaF1120312B"
     startBlock: 222863
