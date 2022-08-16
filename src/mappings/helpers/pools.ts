@@ -35,8 +35,8 @@ export function hasVirtualSupply(pool: Pool): boolean {
 
 export function isStableLikePool(pool: Pool): boolean {
   return (
-    pool.poolType == PoolType.Stable || 
-    pool.poolType == PoolType.MetaStable || 
+    pool.poolType == PoolType.Stable ||
+    pool.poolType == PoolType.MetaStable ||
     pool.poolType == PoolType.StablePhantom ||
     pool.poolType == PoolType.ComposableStable
   );

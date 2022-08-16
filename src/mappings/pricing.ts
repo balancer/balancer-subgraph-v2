@@ -50,10 +50,7 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
     if (latestPrice) {
       // value in terms of priceableAsset
       price = latestPrice.price;
-    } else if (
-      pool.poolType == PoolType.StablePhantom ||
-      pool.poolType == PoolType.ComposableStable
-    ) {
+    } else if (pool.poolType == PoolType.StablePhantom || pool.poolType == PoolType.ComposableStable) {
       // try to estimate token price in terms of pricing asset
       let pricingAssetInUSD = valueInUSD(ONE_BD, pricingAsset);
       let currentTokenInUSD = valueInUSD(ONE_BD, tokenAddress);
