@@ -276,7 +276,7 @@ arbitrum:
   network: arbitrum-one
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-    startBlock: 222832
+    startBlock: 222831
   WeightedPoolFactory:
     address: "0x7dFdEF5f355096603419239CE743BfaF1120312B"
     startBlock: 222863
