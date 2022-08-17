@@ -318,7 +318,7 @@ arbitrum:
     startBlock: 14244664
   ComposableStablePoolFactory:
     address: "0x44A41fE82c9539C1aadaBEE5B9C3f327eba5C8a3"
-    startBlock: 121073
+    startBlock: 20524890
   MetaStablePoolFactory:
     address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
     startBlock: 222868
