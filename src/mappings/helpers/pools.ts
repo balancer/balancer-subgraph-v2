@@ -12,6 +12,7 @@ export namespace PoolType {
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
   export const Investment = 'Investment';
   export const StablePhantom = 'StablePhantom';
+  export const ComposableStable = 'ComposableStable';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
   export const Linear = 'AaveLinear';
@@ -27,13 +28,17 @@ export function hasVirtualSupply(pool: Pool): boolean {
   return (
     pool.poolType == PoolType.AaveLinear ||
     pool.poolType == PoolType.ERC4626Linear ||
-    pool.poolType == PoolType.StablePhantom
+    pool.poolType == PoolType.StablePhantom ||
+    pool.poolType == PoolType.ComposableStable
   );
 }
 
 export function isStableLikePool(pool: Pool): boolean {
   return (
-    pool.poolType == PoolType.Stable || pool.poolType == PoolType.MetaStable || pool.poolType == PoolType.StablePhantom
+    pool.poolType == PoolType.Stable ||
+    pool.poolType == PoolType.MetaStable ||
+    pool.poolType == PoolType.StablePhantom ||
+    pool.poolType == PoolType.ComposableStable
   );
 }
 
