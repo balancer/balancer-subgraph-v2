@@ -1,0 +1,21 @@
+import { Address } from '@graphprotocol/graph-ts';
+
+class Assets {
+  public stableAssets: Address[];
+  public pricingAssets: Address[];
+}
+
+const assets: Assets = {
+  stableAssets: [
+    {{#each stableAssets}}
+    Address.fromString('{{address}}'),
+    {{/each}}
+  ],
+  pricingAssets: [
+    {{#each pricingAssets}}
+    Address.fromString('{{address}}'),
+    {{/each}}
+  ],
+};
+
+export default assets;
