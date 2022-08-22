@@ -13,9 +13,7 @@ export let MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
 
 export class AddressByNetwork {
   public mainnet: string;
-  public kovan: string;
   public goerli: string;
-  public rinkeby: string;
   public polygon: string;
   public arbitrum: string;
   public dev: string;
@@ -25,9 +23,7 @@ let network: string = dataSource.network();
 
 let vaultAddressByNetwork: AddressByNetwork = {
   mainnet: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  kovan: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   goerli: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  rinkeby: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   polygon: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   arbitrum: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
@@ -36,12 +32,8 @@ let vaultAddressByNetwork: AddressByNetwork = {
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
   if (network == 'mainnet') {
     return Address.fromString(addressByNetwork.mainnet);
-  } else if (network == 'kovan') {
-    return Address.fromString(addressByNetwork.kovan);
   } else if (network == 'goerli') {
     return Address.fromString(addressByNetwork.goerli);
-  } else if (network == 'rinkeby') {
-    return Address.fromString(addressByNetwork.rinkeby);
   } else if (network == 'matic') {
     return Address.fromString(addressByNetwork.polygon);
   } else if (network == 'arbitrum-one') {
