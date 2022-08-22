@@ -9,18 +9,13 @@
     "lint": "eslint --max-warnings 0 . --ext .ts",
     "test": "jest ./test/*.test.ts",
     "deploy": "graph deploy balancer-labs/balancer-v2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy:kovan": "graph deploy balancer-labs/balancer-kovan-v2 subgraph.kovan.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/balancer-v2 subgraph.dockerParity.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "import-abis": "ts-node ./scripts/update-abis.ts",
     "generate-manifests": "ts-node ./scripts/generate-manifests",
     "update-addresses": "ts-node ./scripts/update-addresses-subgraph.ts",
-    "update-addresses:kovan": "yarn update-addresses kovan",
-    "update-addresses:ropsten": "yarn update-addresses ropsten",
-    "update-addresses:rinkeby": "yarn update-addresses rinkeby",
     "update-addresses:goerli": "yarn update-addresses goerli",
     "update-addresses:local": "yarn update-addresses dockerParity",
     "sync": "yarn import-abis && yarn update-addresses && yarn codegen && yarn build",
-    "sync:kovan": "yarn import-abis && yarn update-addresses kovan && yarn codegen && yarn build",
     "sync:local": "yarn import-abis && yarn update-addresses dockerParity && yarn codegen && yarn build"
   },
   "devDependencies": {
