@@ -1,0 +1,42 @@
+{
+  "stableAssets": [
+    {
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "symbol": "USDC"
+    },
+    {
+      "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "symbol": "DAI"
+    },
+    {
+      "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "symbol": "USDT"
+    }
+  ],
+  "pricingAssets": [
+    {
+      "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619", 
+      "symbol": "WETH"
+    },
+    {
+      "address": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", 
+      "symbol": "WMATIC"
+    },
+    {
+      "address": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6", 
+      "symbol": "WBTC"
+    },
+    {
+      "address": "0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3", 
+      "symbol": "BAL"
+    },
+    {
+      "address": "0x6f7C932e7684666C9fd1d44527765433e01fF61d", 
+      "symbol": "MKR"
+    },
+    {
+      "address": "0x5FFD62D3C3eE2E81C00A7b9079FB248e7dF024A8", 
+      "symbol": "GNO"
+    }
+  ]
+}
