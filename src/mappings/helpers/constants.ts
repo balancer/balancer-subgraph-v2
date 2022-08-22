@@ -15,7 +15,8 @@ export let MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
 
 export let USD_STABLE_ASSETS = assets.stableAssets;
 export let PRICING_ASSETS = assets.stableAssets.concat(assets.pricingAssets);
-export class AddressByNetwork {
+
+class AddressByNetwork {
   public mainnet: string;
   public goerli: string;
   public polygon: string;
