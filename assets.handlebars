@@ -12,12 +12,12 @@ class Assets {
 const assets: Assets = {
   stableAssets: [
     {{#each stableAssets}}
-    Address.fromString('{{address}}'),
+    Address.fromString('{{address}}'), // {{symbol}}
     {{/each}}
   ],
   pricingAssets: [
     {{#each pricingAssets}}
-    Address.fromString('{{address}}'),
+    Address.fromString('{{address}}'), // {{symbol}}
     {{/each}}
   ],
 };
