@@ -51,8 +51,20 @@
       "symbol": "bb-a-USDC-V1"
     },
     {
-      "address": "0x2BBf681cC4eb09218BEe85EA2a5d3D13Fa40fC0C", 
+      "address": "0x2BBf681cC4eb09218BEe85EA2a5d3D13Fa40fC0C",
       "symbol": "bb-a-USDT-V1"
+    },
+    {
+      "address": "0xae37D54Ae477268B9997d4161B96b8200755935c",
+      "symbol": "bb-a-DAI-V2"
+    },
+    {
+      "address": "0x82698aeCc9E28e9Bb27608Bd52cF57f704BD1B83",
+      "symbol": "bb-a-USDC-V2"
+    },
+    {
+      "address": "0x2F4eb100552ef93840d5aDC30560E5513DFfFACb",
+      "symbol": "bb-a-USDT-V2"
     }
   ]
 }
