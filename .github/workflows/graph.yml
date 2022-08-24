@@ -16,6 +16,8 @@ jobs:
           node-version: 14
       - name: Install
         run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets goerli
       - name: Codegen
         run: yarn codegen
       - name: Build
@@ -37,6 +39,8 @@ jobs:
           node-version: 14
       - name: Install
         run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets
       - name: Codegen
         run: yarn codegen
       - name: Build
@@ -58,6 +62,8 @@ jobs:
           node-version: 14
       - name: Install
         run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets polygon
       - name: Codegen
         run: yarn codegen
       - name: Build
@@ -79,6 +85,8 @@ jobs:
           node-version: 14
       - name: Install
         run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets arbitrum
       - name: Codegen
         run: yarn codegen
       - name: Build
