@@ -74,6 +74,22 @@ type Pool @entity {
 
   # Gyro3Pool Only
   root3Alpha: BigDecimal
+
+  # GyroEPool Only
+  alpha: BigDecimal
+  beta: BigDecimal
+  c: BigDecimal
+  s: BigDecimal
+  lambda: BigDecimal
+  tauAlphaX: BigDecimal
+  tauAlphaY: BigDecimal
+  tauBetaX: BigDecimal
+  tauBetaY: BigDecimal
+  u: BigDecimal
+  v: BigDecimal
+  w: BigDecimal
+  z: BigDecimal
+  dSq: BigDecimal
 }
 
 type PoolToken @entity {
