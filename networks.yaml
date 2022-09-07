@@ -162,7 +162,7 @@ polygonGrafted:
     address: "0xcA96C4f198d343E251b1a01F3EBA061ef3DA73C1"
     startBlock: 29371951
   ComposableStablePoolFactory:
-    address: "0x967F7AdD4Fd5AF0553B7A45F225ec26EDD699E61"
+    address: "0x136FD06Fa01eCF624C7F2B3CB15742c1339dC2c4"
     startBlock: 32774224
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
@@ -215,7 +215,7 @@ arbitrum:
     address: "0xEF44D6786b2b4d544b7850Fe67CE6381626Bf2D6"
     startBlock: 14244664
   ComposableStablePoolFactory:
-    address: "0x136FD06Fa01eCF624C7F2B3CB15742c1339dC2c4"
+    address: "0xaEb406b0E430BF5Ea2Dc0B9Fe62E4E53f74B3a33"
     startBlock: 23227044
   MetaStablePoolFactory:
     address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
