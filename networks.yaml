@@ -16,8 +16,8 @@ mainnet:
     address: "0x8df6EfEc5547e31B0eb7d1291B511FF8a2bf987c"
     startBlock: 14934936
   ComposableStablePoolFactory:
-    address: "0xDc6d62ae091ea77331542042A72e5E38B188837C"
-    startBlock: 15359933
+    address: "0xf9ac7B9dF2b3454E841110CcE5550bD5AC6f875F"
+    startBlock: 15485885
   MetaStablePoolFactory:
     address: "0x67d27634E44793fE63c467035E31ea8635117cd4"
     startBlock: 13011941
@@ -78,8 +78,8 @@ goerli:
     address: "0x41E9036AE350baEDCC7107760A020Dca3c0731ec"
     startBlock: 6993896
   ComposableStablePoolFactory:
-    address: "0x239e55F427D44C3cc793f49bFB507ebe76638a2b"
-    startBlock: 7422111
+    address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
+    startBlock: 7542764
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
     startBlock: 6993887
@@ -105,8 +105,8 @@ polygon:
     address: "0xcA96C4f198d343E251b1a01F3EBA061ef3DA73C1"
     startBlock: 29371951
   ComposableStablePoolFactory:
-    address: "0x967F7AdD4Fd5AF0553B7A45F225ec26EDD699E61"
-    startBlock: 32001447
+    address: "0x136FD06Fa01eCF624C7F2B3CB15742c1339dC2c4"
+    startBlock: 32774224
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 17913016
@@ -144,8 +144,8 @@ polygon:
 polygonGrafted:
   network: matic
   graft:
-    block: 31996915
-    base: QmdgiNgLd11HFKuzScsLdWSxpfpngnefvNa31UFG2T7KcH
+    block: 32001447
+    base: QmeYB9NoVzq6orxCZhQrFPBrFnuujrXAdVzCDiD2U2JzrY
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -162,8 +162,8 @@ polygonGrafted:
     address: "0xcA96C4f198d343E251b1a01F3EBA061ef3DA73C1"
     startBlock: 29371951
   ComposableStablePoolFactory:
-    address: "0x967F7AdD4Fd5AF0553B7A45F225ec26EDD699E61"
-    startBlock: 32001447
+    address: "0x136FD06Fa01eCF624C7F2B3CB15742c1339dC2c4"
+    startBlock: 32774224
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 17913016
@@ -215,8 +215,8 @@ arbitrum:
     address: "0xEF44D6786b2b4d544b7850Fe67CE6381626Bf2D6"
     startBlock: 14244664
   ComposableStablePoolFactory:
-    address: "0x44A41fE82c9539C1aadaBEE5B9C3f327eba5C8a3"
-    startBlock: 20524890
+    address: "0xaEb406b0E430BF5Ea2Dc0B9Fe62E4E53f74B3a33"
+    startBlock: 23227044
   MetaStablePoolFactory:
     address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
     startBlock: 222868
