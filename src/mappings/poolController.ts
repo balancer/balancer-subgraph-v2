@@ -16,7 +16,7 @@ import {
   PriceRateProviderSet,
 } from '../types/templates/MetaStablePool/MetaStablePool';
 import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
-import { SecondaryIssuePool, Offer, tradeReport } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
+import { SecondaryIssuePool, Offer, tradeReport, bestAvailableTrades} from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
 import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, PrimaryIssues, SecondaryTrades } from '../types/schema';
 
 import {
@@ -198,7 +198,7 @@ export function handleTargetsSet(event: TargetsSet): void {
   let poolId = poolIdCall.value;
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
-
+  
   pool.openingPrice = tokenToDecimal(event.params.openingPrice, 18);
   pool.securityOffered = tokenToDecimal(event.params.securityOffered, 18);
   pool.save();
@@ -238,6 +238,21 @@ export function handleSubscription(event: Subscription): void {
   let pool = Pool.load(poolId.toHexString()) as Pool;
   
   pool.secondaryOffer = tokenToDecimal(event.params.secondaryOffer, 18);
+  
+  pool.save();
+}
+
+export function handleBestAvailableTrades(event: bestAvailableTrades): void {
+  let poolAddress = event.address;
+
+  let poolContract = SecondaryIssuePool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  
+  pool.bestUnfilledBid = tokenToDecimal(event.params.bestUnfilledBid, 18);
+  pool.bestUnfilledOffer = tokenToDecimal(event.params.bestUnfilledOffer, 18);
   pool.save();
 }
 
