@@ -362,6 +362,39 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewStablePhantomPool
   {{/if}}
+  {{#if ComposableStablePoolFactory}}
+  - kind: ethereum/contract
+    name: ComposableStablePoolFactory
+    network: {{network}}
+    source:
+      address: '{{ComposableStablePoolFactory.address}}'
+      abi: ComposableStablePoolFactory
+      startBlock: {{ComposableStablePoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: ComposableStablePoolFactory
+          file: ./abis/ComposableStablePoolFactory.json
+        - name: ComposableStablePool
+          file: ./abis/ComposableStablePool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewStablePhantomPoolV2
+  {{/if}}
   {{#if AaveLinearPoolFactory}}
   - kind: ethereum/contract
     name: AaveLinearPoolFactory
@@ -370,6 +403,39 @@ dataSources:
       address: '{{AaveLinearPoolFactory.address}}'
       abi: AaveLinearPoolFactory
       startBlock: {{AaveLinearPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: AaveLinearPoolFactory
+          file: ./abis/AaveLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewAaveLinearPool
+  {{/if}}
+  {{#if AaveLinearPoolV2Factory}}
+  - kind: ethereum/contract
+    name: AaveLinearPoolV2Factory
+    network: {{network}}
+    source:
+      address: '{{AaveLinearPoolV2Factory.address}}'
+      abi: AaveLinearPoolFactory
+      startBlock: {{AaveLinearPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -771,6 +837,44 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPool
+    network: {{network}}
+    source:
+      abi: StablePhantomPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
+        - name: StablePhantomPool
+          file: ./abis/StablePhantomPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: AmpUpdateStarted(uint256,uint256,uint256,uint256)
+          handler: handleAmpUpdateStarted
+        - event: AmpUpdateStopped(uint256)
+          handler: handleAmpUpdateStopped
+        - event: TokenRateProviderSet(indexed address,indexed address,uint256)
+          handler: handlePriceRateProviderSet
+        - event: TokenRateCacheUpdated(indexed address,uint256)
+          handler: handlePriceRateCacheUpdated
+  - kind: ethereum/contract
+    name: StablePhantomPoolV2
     network: {{network}}
     source:
       abi: StablePhantomPool

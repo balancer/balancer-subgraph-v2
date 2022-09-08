@@ -14,6 +14,7 @@ import { WeightedPool2Tokens as WeightedPool2TokensTemplate } from '../types/tem
 import { StablePool as StablePoolTemplate } from '../types/templates';
 import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
 import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templates';
+import { StablePhantomPoolV2 as StablePhantomPoolV2Template } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
@@ -129,6 +130,12 @@ export function handleNewStablePhantomPool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.StablePhantom);
   if (pool == null) return;
   StablePhantomPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewStablePhantomPoolV2(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.ComposableStable);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
 }
 
 export function handleNewCCPPool(event: PoolCreated): void {
