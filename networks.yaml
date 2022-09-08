@@ -83,9 +83,6 @@ kovan:
   Gyro3PoolFactory:
     address: "0xBBfD645Be37037bE6c60D498E798037bd8d805d3"
     startBlock: 31238127
-  GyroCEMMPoolFactory:
-    address: "0xd0E45cf9e4E7008B78e679F46778bb28C2e8a5Eb"
-    startBlock: 33659382
   ERC4626LinearPoolFactory:
     address: "0x44284efFA14964feF15CB13e4a6579D3b3AD7e14"
     startBlock: 30831572
@@ -176,6 +173,9 @@ goerli:
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
     startBlock: 6993887
+  GyroCEMMPoolFactory:
+    address: "0x9E182eC776aAa2E0169f5FEc08fC22a7f059AaDC"
+    startBlock: 7546831
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygon:
   network: matic

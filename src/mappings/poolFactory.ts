@@ -281,7 +281,6 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
 
 export function handleNewGyroCEMMPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
-
   let poolContract = GyroCEMMPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
@@ -296,25 +295,24 @@ export function handleNewGyroCEMMPool(event: PoolCreated): void {
   let cemmParamsCall = poolContract.try_getCEMMParams();
 
   if (!cemmParamsCall.reverted) {
-    const params = cemmParamsCall.value[0];
+    const params = cemmParamsCall.value.value0;
     // terms in the 'derived' object are stored in extra precision (38 decimals) with final decimal rounded down
-    const derived = cemmParamsCall.value[1];
+    const derived = cemmParamsCall.value.value1;
+    pool.alpha = scaleDown(params.alpha, 18);
+    pool.beta = scaleDown(params.beta, 18);
+    pool.c = scaleDown(params.c, 18);
+    pool.s = scaleDown(params.s, 18);
+    pool.lambda = scaleDown(params.lambda, 18);
 
-    pool.alpha = scaleDown(params[0], 18);
-    pool.beta = scaleDown(params[1], 18);
-    pool.c = scaleDown(params[2], 18);
-    pool.s = scaleDown(params[3], 18);
-    pool.lambda = scaleDown(params[4], 18);
-
-    pool.tauAlphaX = scaleDown(derived[0][0], 38);
-    pool.tauAlphaY = scaleDown(derived[0][1], 38);
-    pool.tauBetaX = scaleDown(derived[1][0], 38);
-    pool.tauBetaY = scaleDown(derived[1][1], 38);
-    pool.u = scaleDown(derived[2], 38);
-    pool.v = scaleDown(derived[3], 38);
-    pool.w = scaleDown(derived[4], 38);
-    pool.z = scaleDown(derived[5], 38);
-    pool.dSq = scaleDown(derived[6], 38);
+    pool.tauAlphaX = scaleDown(derived.tauAlpha.x, 38);
+    pool.tauAlphaY = scaleDown(derived.tauAlpha.y, 38);
+    pool.tauBetaX = scaleDown(derived.tauBeta.x, 38);
+    pool.tauBetaY = scaleDown(derived.tauBeta.y, 38);
+    pool.u = scaleDown(derived.u, 38);
+    pool.v = scaleDown(derived.v, 38);
+    pool.w = scaleDown(derived.w, 38);
+    pool.z = scaleDown(derived.z, 38);
+    pool.dSq = scaleDown(derived.dSq, 38);
   }
 
   let tokens = getPoolTokens(poolId);
