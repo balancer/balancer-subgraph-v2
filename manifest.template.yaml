@@ -79,6 +79,35 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
   {{/if}}
+  {{#if WeightedPoolV2Factory}}
+  - kind: ethereum/contract
+    name: WeightedPoolV2Factory
+    network: {{network}}
+    source:
+      address: '{{WeightedPoolV2Factory.address}}'
+      abi: WeightedPoolFactory
+      startBlock: {{WeightedPoolV2Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPoolFactory
+          file: ./abis/WeightedPoolFactory.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewWeightedPool
+  {{/if}}
   {{#if WeightedPool2TokenFactory}}
   - kind: ethereum/contract
     name: WeightedPool2TokenFactory
