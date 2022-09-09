@@ -140,6 +140,9 @@ polygon:
   Gyro3PoolFactory:
     address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
     startBlock: 31556094
+  FXPoolFactory:
+    address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
+    startBlock: 32054794
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygonGrafted:
   network: matic
@@ -197,6 +200,9 @@ polygonGrafted:
   Gyro3PoolFactory:
     address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
     startBlock: 31556094
+  FXPoolFactory:
+    address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
+    startBlock: 32054794
 arbitrum:
   network: arbitrum-one
   Vault:
