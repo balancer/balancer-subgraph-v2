@@ -6,6 +6,9 @@ mainnet:
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 12272146
+  WeightedPoolV2Factory:
+    address: "0xcC508a455F5b0073973107Db6a878DdBDab957bC"
+    startBlock: 15497271
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 12272146
@@ -53,6 +56,9 @@ goerli:
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 4648101
+  WeightedPoolV2Factory:
+    address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
+    startBlock: 7553858
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 4716924
@@ -95,6 +101,9 @@ polygon:
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 15832998
+  WeightedPoolV2Factory:
+    address: "0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3"
+    startBlock: 32850162
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 15869090
@@ -144,14 +153,17 @@ polygon:
 polygonGrafted:
   network: matic
   graft:
-    block: 32001447
-    base: QmeYB9NoVzq6orxCZhQrFPBrFnuujrXAdVzCDiD2U2JzrY
+    block: 32850161
+    base: QmbxbnHYSSpW5FCo6rQwUUSG719nEmwHWqZZTJxAd5k6wb
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 15832998
+  WeightedPoolV2Factory:
+    address: "0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3"
+    startBlock: 32850162
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 15869090
@@ -205,6 +217,9 @@ arbitrum:
   WeightedPoolFactory:
     address: "0x7dFdEF5f355096603419239CE743BfaF1120312B"
     startBlock: 222863
+  WeightedPoolV2Factory:
+    address: "0x8df6EfEc5547e31B0eb7d1291B511FF8a2bf987c"
+    startBlock: 23605789
   WeightedPool2TokenFactory:
     address: "0xCF0a32Bbef8F064969F21f7e02328FB577382018"
     startBlock: 222864
