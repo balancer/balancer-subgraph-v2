@@ -39,7 +39,7 @@ import {
   ZERO_ADDRESS,
   ZERO_BD,
 } from './helpers/constants';
-import { hasVirtualSupply, isVariableWeightPool, isStableLikePool } from './helpers/pools';
+import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 
 /************************************
@@ -161,19 +161,19 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
   }
 
-  // Update virtual supply
-  if (pool.poolType == 'StablePhantom') {
-    let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
-    if (pool.totalShares.equals(maxTokenBalance)) {
-      let initialBpt = ZERO_BD;
-      for (let i: i32 = 0; i < tokenAddresses.length; i++) {
-        if (tokenAddresses[i] == pool.address) {
-          initialBpt = scaleDown(amounts[i], 18);
-        }
+  // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
+  // with a non-zero value for the BPT amount when the pool is initialized,
+  // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
+  // and therefore must be subtracted from totalShares
+  if (pool.poolType == PoolType.StablePhantom || pool.poolType == PoolType.ComposableStable) {
+    let preMintedBpt = ZERO_BD;
+    for (let i: i32 = 0; i < tokenAddresses.length; i++) {
+      if (tokenAddresses[i] == pool.address) {
+        preMintedBpt = scaleDown(amounts[i], 18);
       }
-      pool.totalShares = maxTokenBalance.minus(initialBpt);
-      pool.save();
     }
+    pool.totalShares = pool.totalShares.minus(preMintedBpt);
+    pool.save();
   }
 }
 
