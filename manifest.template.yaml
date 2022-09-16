@@ -868,9 +868,9 @@ templates:
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
         - event: TokenRateProviderSet(indexed address,indexed address,uint256)
-          handler: handleTokenRateProviderSet
+          handler: handlePriceRateProviderSet
         - event: TokenRateCacheUpdated(indexed address,uint256)
-          handler: handleTokenRateCacheUpdated
+          handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
     name: StablePhantomPoolV2
     network: {{network}}
