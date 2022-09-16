@@ -739,9 +739,9 @@ templates:
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
         - event: PriceRateProviderSet(indexed address,indexed address,uint256)
-          handler: handlePriceRateProviderSetV1
+          handler: handlePriceRateProviderSet
         - event: PriceRateCacheUpdated(indexed address,uint256)
-          handler: handlePriceRateCacheUpdatedV1
+          handler: handlePriceRateCacheUpdated
         - event: OracleEnabledChanged(bool)
           handler: handleOracleEnabledChanged
   - kind: ethereum/contract
@@ -868,9 +868,9 @@ templates:
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
         - event: TokenRateProviderSet(indexed address,indexed address,uint256)
-          handler: handlePriceRateProviderSetV1
+          handler: handleTokenRateProviderSet
         - event: TokenRateCacheUpdated(indexed address,uint256)
-          handler: handlePriceRateCacheUpdatedV1
+          handler: handleTokenRateCacheUpdated
   - kind: ethereum/contract
     name: StablePhantomPoolV2
     network: {{network}}
@@ -906,9 +906,9 @@ templates:
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
         - event: TokenRateProviderSet(indexed uint256,indexed address,uint256)
-          handler: handlePriceRateProviderSetV2
+          handler: handleTokenRateProviderSet
         - event: TokenRateCacheUpdated(indexed uint256,uint256)
-          handler: handlePriceRateCacheUpdatedV2
+          handler: handleTokenRateCacheUpdated
   - kind: ethereum/contract
     name: LinearPool
     network: {{network}}
