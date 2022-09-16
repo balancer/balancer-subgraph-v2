@@ -24,7 +24,6 @@ import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 import { GyroCEMMPool as GyroCEMMPoolTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
-import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
@@ -32,7 +31,6 @@ import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroCEMMPool } from '../types/templates/GyroCEMMPool/GyroCEMMPool';
 import { ERC20 } from '../types/Vault/ERC20';
-import { PoolRegistered } from '../types/Vault/Vault';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string | null {
   let poolAddress: Address = event.params.pool;
