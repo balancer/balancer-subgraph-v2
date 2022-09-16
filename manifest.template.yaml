@@ -39,6 +39,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
         - name: StablePool
           file: ./abis/StablePool.json
       eventHandlers:
@@ -50,6 +52,8 @@ dataSources:
           handler: handleBalanceManage
         - event: InternalBalanceChanged(indexed address,indexed address,int256)
           handler: handleInternalBalanceChange
+        - event: PoolRegistered(indexed bytes32,indexed address,uint8)
+          handler: handlePoolRegistered
   {{#if WeightedPoolFactory}}
   - kind: ethereum/contract
     name: WeightedPoolFactory
@@ -644,6 +648,31 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: WeightedPoolV2
+    network: {{network}}
+    source:
+      abi: WeightedPoolV2
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      # eventHandlers:
+      #   - event: Transfer(indexed address,indexed address,uint256)
+      #     handler: handleTransfer
+      #   - event: SwapFeePercentageChanged(uint256)
+      #     handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: WeightedPool2Tokens
     network: {{network}}

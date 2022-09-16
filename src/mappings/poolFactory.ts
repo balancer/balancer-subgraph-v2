@@ -23,12 +23,14 @@ import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
+import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { ERC20 } from '../types/Vault/ERC20';
+import { PoolRegistered } from '../types/Vault/Vault';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string): string | null {
   let poolAddress: Address = event.params.pool;
@@ -59,6 +61,26 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string | 
   updatePoolWeights(poolId.toHexString());
 
   return poolId.toHexString();
+}
+
+export function handlePoolRegistered(event: PoolRegistered): void {
+  let poolAddress: Address = event.params.poolAddress;
+  let poolContract = WeightedPoolV2.bind(poolAddress);
+
+  let isWeightedPoolV2 = poolContract.try_getATHRateProduct().reverted;
+  if (isWeightedPoolV2) {
+    // Create a PoolCreated event from PoolRegistered Event
+    const poolCreatedEvent = new PoolCreated(
+      event.address,
+      event.logIndex,
+      event.transactionLogIndex,
+      event.logType,
+      event.block,
+      event.transaction,
+      [event.parameters[1]] // PoolCreated expects parameters[0] to be the pool address
+    );
+    handleNewWeightedPool(poolCreatedEvent);
+  }
 }
 
 export function handleNewWeightedPool(event: PoolCreated): void {
