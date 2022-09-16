@@ -43,7 +43,7 @@ import {
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
-import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
+import { PoolCreated, WeightedPoolFactory } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { handleNewWeightedPool } from './poolFactory';
 
 /************************************
@@ -522,14 +522,15 @@ export function handleSwapEvent(event: SwapEvent): void {
 
 // Temporary solution to handle WeightedPoolV2 creations on Polygon
 export function handlePoolRegistered(event: PoolRegistered): void {
-  let poolAddress: Address = event.params.poolAddress;
-  let poolContract = WeightedPoolV2.bind(poolAddress);
+  let weightedV2Factory = Address.fromString('0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3');
+  let factoryContract = WeightedPoolFactory.bind(weightedV2Factory);
 
-  let isWeightedPoolV2 = poolContract.try_getATHRateProduct().reverted;
+  let poolAddress = event.params.poolAddress;
+  let isWeightedPoolV2 = factoryContract.try_isPoolFromFactory(poolAddress).value;
   if (isWeightedPoolV2) {
     // Create a PoolCreated event from PoolRegistered Event
     const poolCreatedEvent = new PoolCreated(
-      event.address,
+      weightedV2Factory,
       event.logIndex,
       event.transactionLogIndex,
       event.logType,
