@@ -63,26 +63,6 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string | 
   return poolId.toHexString();
 }
 
-export function handlePoolRegistered(event: PoolRegistered): void {
-  let poolAddress: Address = event.params.poolAddress;
-  let poolContract = WeightedPoolV2.bind(poolAddress);
-
-  let isWeightedPoolV2 = poolContract.try_getATHRateProduct().reverted;
-  if (isWeightedPoolV2) {
-    // Create a PoolCreated event from PoolRegistered Event
-    const poolCreatedEvent = new PoolCreated(
-      event.address,
-      event.logIndex,
-      event.transactionLogIndex,
-      event.logType,
-      event.block,
-      event.transaction,
-      [event.parameters[1]] // PoolCreated expects parameters[0] to be the pool address
-    );
-    handleNewWeightedPool(poolCreatedEvent);
-  }
-}
-
 export function handleNewWeightedPool(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Weighted);
   if (pool == null) return;
