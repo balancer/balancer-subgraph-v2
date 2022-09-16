@@ -4,6 +4,7 @@ import {
   PoolBalanceChanged,
   PoolBalanceManaged,
   InternalBalanceChanged,
+  PoolRegistered,
 } from '../types/Vault/Vault';
 import { Balancer, Pool, Swap, JoinExit, TokenPrice, UserInternalBalance, ManagementOperation } from '../types/schema';
 import {
@@ -41,6 +42,9 @@ import {
 } from './helpers/constants';
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
+import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
+import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
+import { handleNewWeightedPool } from './poolFactory';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -513,5 +517,26 @@ export function handleSwapEvent(event: SwapEvent): void {
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
   if (preferentialToken != ZERO_ADDRESS) {
     updatePoolLiquidity(poolId.toHex(), block, preferentialToken, blockTimestamp);
+  }
+}
+
+// Temporary solution to handle WeightedPoolV2 creations on Polygon
+export function handlePoolRegistered(event: PoolRegistered): void {
+  let poolAddress: Address = event.params.poolAddress;
+  let poolContract = WeightedPoolV2.bind(poolAddress);
+
+  let isWeightedPoolV2 = poolContract.try_getATHRateProduct().reverted;
+  if (isWeightedPoolV2) {
+    // Create a PoolCreated event from PoolRegistered Event
+    const poolCreatedEvent = new PoolCreated(
+      event.address,
+      event.logIndex,
+      event.transactionLogIndex,
+      event.logType,
+      event.block,
+      event.transaction,
+      [event.parameters[1]] // PoolCreated expects parameters[0] to be the pool address
+    );
+    handleNewWeightedPool(poolCreatedEvent);
   }
 }
