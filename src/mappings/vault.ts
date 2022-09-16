@@ -42,7 +42,6 @@ import {
 } from './helpers/constants';
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
-import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { PoolCreated, WeightedPoolFactory } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { handleNewWeightedPool } from './poolFactory';
 
