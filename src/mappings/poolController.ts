@@ -206,11 +206,11 @@ export function handleTokenRateProviderSet(event: TokenRateProviderSet): void {
   let poolId = poolIdCall.value.toHexString();
   let pool = Pool.load(poolId) as Pool;
   let token = pool.tokensList[event.params.tokenIndex.toI32()];
-  let tokensAddress = Address.fromString(token.toHexString());
+  let tokenAddress = Address.fromString(token.toHexString());
 
   setPriceRateProvider(
     event.address,
-    tokensAddress,
+    tokenAddress,
     event.params.provider,
     event.params.cacheDuration.toI32(),
     event.block.timestamp.toI32()
@@ -259,9 +259,9 @@ export function handleTokenRateCacheUpdated(event: TokenRateCacheUpdated): void 
   let poolId = poolIdCall.value.toHexString();
   let pool = Pool.load(poolId) as Pool;
   let token = pool.tokensList[event.params.tokenIndex.toI32()];
-  let tokensAddress = Address.fromString(token.toHexString());
+  let tokenAddress = Address.fromString(token.toHexString());
 
-  setPriceRateCache(event.address, tokensAddress, event.params.rate, event.block.timestamp.toI32());
+  setPriceRateCache(event.address, tokenAddress, event.params.rate, event.block.timestamp.toI32());
 }
 
 export function setPriceRateCache(
