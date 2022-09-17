@@ -1,4 +1,4 @@
-name: Deploy Graph Studio
+name: Deploy Graph
 
 on:
   push:

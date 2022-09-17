@@ -1,4 +1,4 @@
-name: Deploy Graph Beta
+name: Deploy Graph
 
 on:
   push:

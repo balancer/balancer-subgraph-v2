@@ -1,4 +1,4 @@
-name: Deploy Graph Production
+name: Deploy Graph
 
 on:
   push:
