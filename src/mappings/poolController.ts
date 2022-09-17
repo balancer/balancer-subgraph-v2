@@ -217,21 +217,6 @@ export function handleTokenRateProviderSet(event: TokenRateProviderSet): void {
   );
 }
 
-export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {
-  setPriceRateCache(event.address, event.params.token, event.params.rate, event.block.timestamp.toI32());
-}
-
-export function handleTokenRateCacheUpdated(event: TokenRateCacheUpdated): void {
-  let poolContract = MetaStablePool.bind(event.address);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value.toHexString();
-  let pool = Pool.load(poolId) as Pool;
-  let token = pool.tokensList[event.params.tokenIndex.toI32()];
-  let tokensAddress = Address.fromString(token.toHexString());
-
-  setPriceRateCache(event.address, tokensAddress, event.params.rate, event.block.timestamp.toI32());
-}
-
 export function setPriceRateProvider(
   poolAddress: Address,
   tokenAddress: Address,
@@ -262,6 +247,21 @@ export function setPriceRateProvider(
   provider.cacheDuration = cacheDuration;
 
   provider.save();
+}
+
+export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {
+  setPriceRateCache(event.address, event.params.token, event.params.rate, event.block.timestamp.toI32());
+}
+
+export function handleTokenRateCacheUpdated(event: TokenRateCacheUpdated): void {
+  let poolContract = MetaStablePool.bind(event.address);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value.toHexString();
+  let pool = Pool.load(poolId) as Pool;
+  let token = pool.tokensList[event.params.tokenIndex.toI32()];
+  let tokensAddress = Address.fromString(token.toHexString());
+
+  setPriceRateCache(event.address, tokensAddress, event.params.rate, event.block.timestamp.toI32());
 }
 
 export function setPriceRateCache(
