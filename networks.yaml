@@ -92,6 +92,10 @@ goerli:
   AaveLinearPoolV2Factory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 7421371
+  GyroCEMMPoolFactory:
+    address: "0x9E182eC776aAa2E0169f5FEc08fC22a7f059AaDC"
+    startBlock: 7546831
+
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygon:
   network: matic
