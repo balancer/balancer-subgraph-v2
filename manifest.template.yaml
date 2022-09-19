@@ -41,6 +41,8 @@ dataSources:
           file: ./abis/WeightedPool.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPoolFactory
+          file: ./abis/WeightedPoolFactory.json
       eventHandlers:
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent
@@ -50,6 +52,10 @@ dataSources:
           handler: handleBalanceManage
         - event: InternalBalanceChanged(indexed address,indexed address,int256)
           handler: handleInternalBalanceChange
+        {{#if isPolygon}}
+        - event: PoolRegistered(indexed bytes32,indexed address,uint8)
+          handler: handlePoolRegistered
+        {{/if}}
   {{#if WeightedPoolFactory}}
   - kind: ethereum/contract
     name: WeightedPoolFactory
