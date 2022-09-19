@@ -135,7 +135,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let newAmount = poolToken.balance.plus(tokenAmountIn);
     let tokenAmountInUSD = valueInUSD(tokenAmountIn, tokenAddress);
 
-    join.valueUSD = join.valueUSD.plus(tokenAmountInUSD);
+    join.valueUSD = join.valueUSD.plus(tokenAmountInUSD || 0);
 
     let token = getToken(tokenAddress);
     token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
@@ -232,7 +232,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let newAmount = poolToken.balance.minus(tokenAmountOut);
     let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
 
-    exit.valueUSD = exit.valueUSD.plus(tokenAmountOutUSD);
+    exit.valueUSD = exit.valueUSD.plus(tokenAmountOutUSD || 0);
 
     poolToken.balance = newAmount;
     poolToken.save();
