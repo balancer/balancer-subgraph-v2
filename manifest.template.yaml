@@ -875,7 +875,7 @@ templates:
     name: StablePhantomPoolV2
     network: {{network}}
     source:
-      abi: StablePhantomPool
+      abi: ComposableStablePool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -894,8 +894,8 @@ templates:
           file: ./abis/StablePool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: StablePhantomPool
-          file: ./abis/StablePhantomPool.json
+        - name: ComposableStablePool
+          file: ./abis/ComposableStablePool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -905,10 +905,10 @@ templates:
           handler: handleAmpUpdateStarted
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
-        - event: TokenRateProviderSet(indexed address,indexed address,uint256)
-          handler: handlePriceRateProviderSet
-        - event: TokenRateCacheUpdated(indexed address,uint256)
-          handler: handlePriceRateCacheUpdated
+        - event: TokenRateProviderSet(indexed uint256,indexed address,uint256)
+          handler: handleTokenRateProviderSet
+        - event: TokenRateCacheUpdated(indexed uint256,uint256)
+          handler: handleTokenRateCacheUpdated
   - kind: ethereum/contract
     name: LinearPool
     network: {{network}}
