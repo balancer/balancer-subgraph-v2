@@ -39,8 +39,6 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: WeightedPoolV2
-          file: ./abis/WeightedPoolV2.json
         - name: StablePool
           file: ./abis/StablePool.json
         - name: WeightedPoolFactory
