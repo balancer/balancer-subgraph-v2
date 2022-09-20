@@ -610,6 +610,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: FXPool
           file: ./abis/FXPool.json
         - name: FXPoolFactory
@@ -1010,6 +1012,8 @@ templates:
       abis:
         - name: FXPool
           file: ./abis/FXPool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
