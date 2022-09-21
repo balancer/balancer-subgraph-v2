@@ -32,7 +32,7 @@ import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroCEMMPool } from '../types/templates/GyroCEMMPool/GyroCEMMPool';
 import { ERC20 } from '../types/Vault/ERC20';
 
-function createWeightedLikePool(event: PoolCreated, poolType: string): string | null {
+function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
@@ -47,6 +47,7 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string | 
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
+  pool.poolTypeVersion = poolTypeVersion;
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -69,6 +70,12 @@ export function handleNewWeightedPool(event: PoolCreated): void {
   WeightedPoolTemplate.create(event.params.pool);
 }
 
+export function handleNewWeightedPoolV2(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Weighted, 2);
+  if (pool == null) return;
+  WeightedPoolTemplate.create(event.params.pool);
+}
+
 export function handleNewWeighted2TokenPool(event: PoolCreated): void {
   createWeightedLikePool(event, PoolType.Weighted);
   WeightedPool2TokensTemplate.create(event.params.pool);
@@ -86,7 +93,7 @@ export function handleNewInvestmentPool(event: PoolCreated): void {
   InvestmentPoolTemplate.create(event.params.pool);
 }
 
-function createStableLikePool(event: PoolCreated, poolType: string): string | null {
+function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
   let poolContract = StablePool.bind(poolAddress);
 
@@ -101,6 +108,7 @@ function createStableLikePool(event: PoolCreated, poolType: string): string | nu
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
+  pool.poolTypeVersion = poolTypeVersion;
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -186,11 +194,15 @@ export function handleNewAaveLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear);
 }
 
+export function handleNewAaveLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear, 2);
+}
+
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
-function handleNewLinearPool(event: PoolCreated, poolType: string): void {
+function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
 
   let poolContract = LinearPool.bind(poolAddress);
@@ -204,6 +216,8 @@ function handleNewLinearPool(event: PoolCreated, poolType: string): void {
   let pool = handleNewPool(event, poolId, swapFee);
 
   pool.poolType = poolType;
+  pool.poolTypeVersion = poolTypeVersion;
+
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
   let wrappedIndexCall = poolContract.try_getWrappedIndex();
