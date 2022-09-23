@@ -1,22 +1,12 @@
-import { ZERO_BD, ZERO, ZERO_ADDRESS, ONE_BD } from './helpers/constants';
-import { getPoolTokenManager, getPoolTokens, PoolType } from './helpers/pools';
+import { ZERO_BD, ZERO } from './helpers/constants';
+import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRates } from './helpers/pools';
 
-import {
-  newPoolEntity,
-  createPoolTokenEntity,
-  scaleDown,
-  getBalancerSnapshot,
-  tokenToDecimal,
-  getPoolTokenId,
-  bytesToAddress,
-} from './helpers/misc';
+import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { RateProvider } from '../types/WeightedPoolV2Factory/RateProvider';
-import { WeightedPoolV2 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
-import { Balancer, Pool, PoolToken, PriceRateProvider } from '../types/schema';
+import { Balancer, Pool } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -75,35 +65,6 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   if (poolTypeVersion == 2) setPriceRates(poolId.toHex(), poolAddress, tokens);
 
   return poolId.toHexString();
-}
-
-export function getRateFromProvider(providerAddress: Address): BigDecimal {
-  let providerContract = RateProvider.bind(providerAddress);
-
-  let rateCall = providerContract.try_getRate();
-  if (rateCall.reverted) return ONE_BD;
-
-  let rate = scaleDown(rateCall.value, 18);
-
-  return rate;
-}
-
-export function setPriceRates(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
-  let poolContract = WeightedPoolV2.bind(poolAddress);
-
-  let rateProvidersCall = poolContract.try_getRateProviders();
-  if (rateProvidersCall.reverted) return;
-
-  let rateProviders = rateProvidersCall.value;
-  if (rateProviders.length != tokensList.length) return;
-
-  for (let i: i32 = 0; i < rateProviders.length; i++) {
-    let tokenAddress = bytesToAddress(tokensList[i]);
-    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
-    let poolToken = PoolToken.load(poolTokenId) as PoolToken;
-    poolToken.priceRate = getRateFromProvider(rateProviders[i]);
-    poolToken.save();
-  }
 }
 
 export function handleNewWeightedPool(event: PoolCreated): void {

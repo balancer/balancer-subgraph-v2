@@ -1,7 +1,10 @@
-import { Address, Bytes, log } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
+import { Address, BigDecimal, Bytes, log } from '@graphprotocol/graph-ts';
+import { Pool, PoolToken } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
-import { VAULT_ADDRESS } from './constants';
+import { RateProvider } from '../../types/WeightedPoolV2Factory/RateProvider';
+import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
+import { ONE_BD, VAULT_ADDRESS } from './constants';
+import { bytesToAddress, getPoolTokenId, scaleDown } from './misc';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PoolType {
@@ -76,4 +79,33 @@ export function getPoolTokenManager(poolId: Bytes, tokenAddress: Bytes): Address
   let assetManager = managersCall.value.value3;
 
   return assetManager;
+}
+
+export function getRateFromProvider(providerAddress: Address): BigDecimal {
+  let providerContract = RateProvider.bind(providerAddress);
+
+  let rateCall = providerContract.try_getRate();
+  if (rateCall.reverted) return ONE_BD;
+
+  let rate = scaleDown(rateCall.value, 18);
+
+  return rate;
+}
+
+export function setPriceRates(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
+  let poolContract = WeightedPoolV2.bind(poolAddress);
+
+  let rateProvidersCall = poolContract.try_getRateProviders();
+  if (rateProvidersCall.reverted) return;
+
+  let rateProviders = rateProvidersCall.value;
+  if (rateProviders.length != tokensList.length) return;
+
+  for (let i: i32 = 0; i < rateProviders.length; i++) {
+    let tokenAddress = bytesToAddress(tokensList[i]);
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+    let poolToken = PoolToken.load(poolTokenId) as PoolToken;
+    poolToken.priceRate = getRateFromProvider(rateProviders[i]);
+    poolToken.save();
+  }
 }
