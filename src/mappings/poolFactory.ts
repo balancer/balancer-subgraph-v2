@@ -8,6 +8,7 @@ import {
   getBalancerSnapshot,
   tokenToDecimal,
   getPoolTokenId,
+  bytesToAddress,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
@@ -71,7 +72,7 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   updatePoolWeights(poolId.toHexString());
 
   // Create PriceRateProvider entities for Weighted V2 Pools
-  if (poolTypeVersion == 2) setPriceRates(poolId, poolAddress, tokens);
+  if (poolTypeVersion == 2) setPriceRates(poolId.toHex(), poolAddress, tokens);
 
   return poolId.toHexString();
 }
@@ -87,7 +88,7 @@ export function getRateFromProvider(providerAddress: Address): BigDecimal {
   return rate;
 }
 
-export function setPriceRates(poolId: Address, poolAddress: Address, tokensList: Bytes[]): void {
+export function setPriceRates(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
   let poolContract = WeightedPoolV2.bind(poolAddress);
 
   let rateProvidersCall = poolContract.try_getRateProviders();
@@ -97,7 +98,8 @@ export function setPriceRates(poolId: Address, poolAddress: Address, tokensList:
   if (rateProviders.length != tokensList.length) return;
 
   for (let i: i32 = 0; i < rateProviders.length; i++) {
-    let poolTokenId = getPoolTokenId(poolId.toHexString(), tokensList[i]);
+    let tokenAddress = bytesToAddress(tokensList[i]);
+    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
     let poolToken = PoolToken.load(poolTokenId) as PoolToken;
     poolToken.priceRate = getRateFromProvider(rateProviders[i]);
     poolToken.save();

@@ -1,4 +1,4 @@
-import { BigDecimal, Address, BigInt, ethereum } from '@graphprotocol/graph-ts';
+import { BigDecimal, Address, BigInt, ethereum, Bytes } from '@graphprotocol/graph-ts';
 import {
   Pool,
   User,
@@ -20,6 +20,10 @@ import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
 
 const DAY = 24 * 60 * 60;
+
+export function bytesToAddress(address: Bytes): Address {
+  return Address.fromString(address.toHexString());
+}
 
 export function getTokenDecimals(tokenAddress: Address): i32 {
   let token = ERC20.bind(tokenAddress);
