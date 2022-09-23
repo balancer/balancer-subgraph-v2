@@ -512,7 +512,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 // Temporary solution to handle WeightedPoolV2 creations on Polygon
 export function handlePoolRegistered(event: PoolRegistered): void {
   let poolAddress = event.params.poolAddress;
-  let weightedV2Factory = Address.fromString('0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227');
+  let weightedV2Factory = Address.fromString('0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3');
 
   let factoryContract = WeightedPoolFactory.bind(weightedV2Factory);
   let isWeightedPoolV2Call = factoryContract.try_isPoolFromFactory(poolAddress);
