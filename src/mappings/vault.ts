@@ -108,6 +108,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let join = new JoinExit(joinId);
   join.sender = event.params.liquidityProvider;
   let joinAmounts = new Array<BigDecimal>(amounts.length);
+  let valueUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -116,6 +117,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
     let joinAmount = scaleDown(amounts[i], poolToken.decimals);
     joinAmounts[i] = joinAmount;
+    let tokenJoinAmountInUSD = valueInUSD(joinAmount, tokenAddress);
+    valueUSD = valueUSD.plus(tokenJoinAmountInUSD);
   }
   join.type = 'Join';
   join.amounts = joinAmounts;
@@ -123,8 +126,9 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.user = event.params.liquidityProvider.toHexString();
   join.timestamp = blockTimestamp;
   join.tx = transactionHash;
+  join.valueUSD = valueUSD;
+  join.save();
 
-  let valueUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -135,27 +139,22 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
     let amountIn = amounts[i].minus(protocolFeeAmounts[i]);
     let tokenAmountIn = tokenToDecimal(amountIn, poolToken.decimals);
-    let newAmount = poolToken.balance.plus(tokenAmountIn);
-    let tokenAmountInUSD = valueInUSD(tokenAmountIn, tokenAddress);
-
-    valueUSD = valueUSD.plus(tokenAmountInUSD);
+    let newBalance = poolToken.balance.plus(tokenAmountIn);
+    poolToken.balance = newBalance;
+    poolToken.save();
 
     let token = getToken(tokenAddress);
-    token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
+    const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountIn);
+    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+    token.totalBalanceNotional = tokenTotalBalanceNotional;
+    token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
-
-    poolToken.balance = newAmount;
-    poolToken.save();
   }
-
-  join.valueUSD = valueUSD;
-  join.save();
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
@@ -206,6 +205,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   let exit = new JoinExit(exitId);
   exit.sender = event.params.liquidityProvider;
   let exitAmounts = new Array<BigDecimal>(amounts.length);
+  let valueUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -214,6 +214,8 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
     let exitAmount = scaleDown(amounts[i].neg(), poolToken.decimals);
     exitAmounts[i] = exitAmount;
+    let tokenExitAmountInUSD = valueInUSD(exitAmount, tokenAddress);
+    valueUSD = valueUSD.plus(tokenExitAmountInUSD);
   }
   exit.type = 'Exit';
   exit.amounts = exitAmounts;
@@ -221,8 +223,9 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.user = event.params.liquidityProvider.toHexString();
   exit.timestamp = blockTimestamp;
   exit.tx = transactionHash;
+  exit.valueUSD = valueUSD;
+  exit.save();
 
-  let valueUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -233,27 +236,22 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
     let amountOut = amounts[i].minus(protocolFeeAmounts[i]).neg();
     let tokenAmountOut = tokenToDecimal(amountOut, poolToken.decimals);
-    let newAmount = poolToken.balance.minus(tokenAmountOut);
-    let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
-
-    valueUSD = valueUSD.plus(tokenAmountOutUSD);
-
-    poolToken.balance = newAmount;
+    let newBalance = poolToken.balance.minus(tokenAmountOut);
+    poolToken.balance = newBalance;
     poolToken.save();
 
     let token = getToken(tokenAddress);
-    token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
+    const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
+    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+    token.totalBalanceNotional = tokenTotalBalanceNotional;
+    token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
   }
-
-  exit.valueUSD = valueUSD;
-  exit.save();
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
