@@ -238,12 +238,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let amountOut = amounts[i].minus(protocolFeeAmounts[i]).neg();
     let tokenAmountOut = tokenToDecimal(amountOut, poolToken.decimals);
     let newBalance = poolToken.balance.minus(tokenAmountOut);
-
-    let tokenExitAmount = amounts[i];
-    let scaledTokenExitAmount = tokenToDecimal(tokenExitAmount, poolToken.decimals);
-    let tokenExitAmountInUSD = valueInUSD(scaledTokenExitAmount, tokenAddress);
-    valueUSD = valueUSD.plus(tokenExitAmountInUSD);
-
     poolToken.balance = newBalance;
     poolToken.save();
 
