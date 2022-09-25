@@ -142,13 +142,15 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let newBalance = poolToken.balance.plus(tokenAmountIn);
 
     let token = getToken(tokenAddress);
-    token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
-    token.totalBalanceUSD = valueInUSD(token.totalBalanceNotional, tokenAddress);
+    const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountIn);
+    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+    token.totalBalanceNotional = tokenTotalBalanceNotional;
+    token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
 
     poolToken.balance = newBalance;
@@ -246,13 +248,15 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     poolToken.save();
 
     let token = getToken(tokenAddress);
-    token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
-    token.totalBalanceUSD = valueInUSD(token.totalBalanceNotional, tokenAddress);
+    const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
+    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+    token.totalBalanceNotional = tokenTotalBalanceNotional;
+    token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
   }
 
