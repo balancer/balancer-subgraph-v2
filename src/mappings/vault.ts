@@ -144,7 +144,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
     let token = getToken(tokenAddress);
     token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
+    token.totalBalanceUSD = valueInUSD(token.totalBalanceNotional, tokenAddress);
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
@@ -249,7 +249,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 
     let token = getToken(tokenAddress);
     token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
+    token.totalBalanceUSD = valueInUSD(token.totalBalanceNotional, tokenAddress);
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
