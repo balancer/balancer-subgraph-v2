@@ -4,122 +4,173 @@
       {
         "components": [
           {
-            "internalType": "contract IVault",
-            "name": "vault",
-            "type": "address"
+            "components": [
+              {
+                "internalType": "contract IVault",
+                "name": "vault",
+                "type": "address"
+              },
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "symbol",
+                "type": "string"
+              },
+              {
+                "internalType": "contract IERC20",
+                "name": "token0",
+                "type": "address"
+              },
+              {
+                "internalType": "contract IERC20",
+                "name": "token1",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "swapFeePercentage",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "pauseWindowDuration",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "bufferPeriodDuration",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "oracleEnabled",
+                "type": "bool"
+              },
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct ExtensibleWeightedPool2Tokens.NewPoolParams",
+            "name": "baseParams",
+            "type": "tuple"
           },
           {
-            "internalType": "contract IProtocolFeePercentagesProvider",
-            "name": "protocolFeeProvider",
-            "type": "address"
+            "components": [
+              {
+                "internalType": "int256",
+                "name": "alpha",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "beta",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "c",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "s",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "lambda",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct GyroCEMMMath.Params",
+            "name": "cemmParams",
+            "type": "tuple"
           },
           {
-            "internalType": "string",
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "symbol",
-            "type": "string"
-          },
-          {
-            "internalType": "contract IERC20[]",
-            "name": "tokens",
-            "type": "address[]"
-          },
-          {
-            "internalType": "contract IRateProvider[]",
-            "name": "rateProviders",
-            "type": "address[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "tokenRateCacheDurations",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "bool[]",
-            "name": "exemptFromYieldProtocolFeeFlags",
-            "type": "bool[]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amplificationParameter",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "swapFeePercentage",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "pauseWindowDuration",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "bufferPeriodDuration",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "owner",
-            "type": "address"
+            "components": [
+              {
+                "components": [
+                  {
+                    "internalType": "int256",
+                    "name": "x",
+                    "type": "int256"
+                  },
+                  {
+                    "internalType": "int256",
+                    "name": "y",
+                    "type": "int256"
+                  }
+                ],
+                "internalType": "struct GyroCEMMMath.Vector2",
+                "name": "tauAlpha",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "int256",
+                    "name": "x",
+                    "type": "int256"
+                  },
+                  {
+                    "internalType": "int256",
+                    "name": "y",
+                    "type": "int256"
+                  }
+                ],
+                "internalType": "struct GyroCEMMMath.Vector2",
+                "name": "tauBeta",
+                "type": "tuple"
+              },
+              {
+                "internalType": "int256",
+                "name": "u",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "v",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "w",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "z",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "dSq",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct GyroCEMMMath.DerivedParams",
+            "name": "derivedCemmParams",
+            "type": "tuple"
           }
         ],
-        "internalType": "struct ComposableStablePool.NewPoolParams",
+        "internalType": "struct GyroCEMMPool.GyroParams",
         "name": "params",
         "type": "tuple"
+      },
+      {
+        "internalType": "address",
+        "name": "configAddress",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startValue",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endValue",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "AmpUpdateStarted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "currentValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "AmpUpdateStopped",
-    "type": "event"
   },
   {
     "anonymous": false,
@@ -152,30 +203,56 @@
       {
         "indexed": false,
         "internalType": "bool",
-        "name": "paused",
+        "name": "derivedParamsValidated",
         "type": "bool"
       }
     ],
-    "name": "PausedStateChanged",
+    "name": "CEMMDerivedParamsValidated",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
+        "internalType": "bool",
+        "name": "paramsValidated",
+        "type": "bool"
+      }
+    ],
+    "name": "CEMMParamsValidated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "feeType",
+        "name": "invariantAfterJoin",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvariantAterInitializeJoin",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldInvariant",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "protocolFeePercentage",
+        "name": "newInvariant",
         "type": "uint256"
       }
     ],
-    "name": "ProtocolFeePercentageCacheUpdated",
+    "name": "InvariantOldAndNew",
     "type": "event"
   },
   {
@@ -188,7 +265,33 @@
         "type": "bool"
       }
     ],
-    "name": "RecoveryModeStateChanged",
+    "name": "OracleEnabledChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oracleUpdatedIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "OracleIndexUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "paused",
+        "type": "bool"
+      }
+    ],
+    "name": "PausedStateChanged",
     "type": "event"
   },
   {
@@ -208,44 +311,37 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenIndex",
-        "type": "uint256"
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "balances",
+        "type": "uint256[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "int256",
+            "name": "x",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "y",
+            "type": "int256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct GyroCEMMMath.Vector2",
+        "name": "invariant",
+        "type": "tuple"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "rate",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "TokenRateCacheUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "contract IRateProvider",
-        "name": "provider",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "cacheDuration",
-        "type": "uint256"
-      }
-    ],
-    "name": "TokenRateProviderSet",
+    "name": "SwapParams",
     "type": "event"
   },
   {
@@ -275,12 +371,12 @@
   },
   {
     "inputs": [],
-    "name": "DELEGATE_PROTOCOL_SWAP_FEES_SENTINEL",
+    "name": "DOMAIN_SEPARATOR",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -288,12 +384,181 @@
   },
   {
     "inputs": [],
-    "name": "DOMAIN_SEPARATOR",
+    "name": "_dSq",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "int256",
         "name": "",
-        "type": "bytes32"
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_paramsAlpha",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_paramsBeta",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_paramsC",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_paramsLambda",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_paramsS",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_tauAlphaX",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_tauAlphaY",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_tauBetaX",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_tauBetaY",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_u",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_v",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_w",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_z",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
       }
     ],
     "stateMutability": "view",
@@ -404,15 +669,26 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "disableRecoveryMode",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "startIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "dirtyUninitializedOracleSamples",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "enableRecoveryMode",
+    "name": "enableOracle",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -438,42 +714,6 @@
   },
   {
     "inputs": [],
-    "name": "getActualSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getAmplificationParameter",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "isUpdating",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "precision",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "getAuthorizer",
     "outputs": [
       {
@@ -487,42 +727,117 @@
   },
   {
     "inputs": [],
-    "name": "getBptIndex",
+    "name": "getCEMMParams",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getDomainSeparator",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getLastJoinExitData",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "lastJoinExitAmplification",
-        "type": "uint256"
+        "components": [
+          {
+            "internalType": "int256",
+            "name": "alpha",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "beta",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "c",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "s",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "lambda",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct GyroCEMMMath.Params",
+        "name": "params",
+        "type": "tuple"
       },
       {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "int256",
+                "name": "x",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "y",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct GyroCEMMMath.Vector2",
+            "name": "tauAlpha",
+            "type": "tuple"
+          },
+          {
+            "components": [
+              {
+                "internalType": "int256",
+                "name": "x",
+                "type": "int256"
+              },
+              {
+                "internalType": "int256",
+                "name": "y",
+                "type": "int256"
+              }
+            ],
+            "internalType": "struct GyroCEMMMath.Vector2",
+            "name": "tauBeta",
+            "type": "tuple"
+          },
+          {
+            "internalType": "int256",
+            "name": "u",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "v",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "w",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "z",
+            "type": "int256"
+          },
+          {
+            "internalType": "int256",
+            "name": "dSq",
+            "type": "int256"
+          }
+        ],
+        "internalType": "struct GyroCEMMMath.DerivedParams",
+        "name": "d",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getInvariant",
+    "outputs": [
+      {
         "internalType": "uint256",
-        "name": "lastPostJoinExitInvariant",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -531,7 +846,7 @@
   },
   {
     "inputs": [],
-    "name": "getMinimumBpt",
+    "name": "getLargestSafeQueryWindow",
     "outputs": [
       {
         "internalType": "uint256",
@@ -543,19 +858,83 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "getNextNonce",
+    "inputs": [],
+    "name": "getLastInvariant",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum IPriceOracle.Variable",
+        "name": "variable",
+        "type": "uint8"
+      }
+    ],
+    "name": "getLatest",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMiscData",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "logInvariant",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "logTotalSupply",
+        "type": "int256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "oracleSampleCreationTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "oracleIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "oracleEnabled",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "swapFeePercentage",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNormalizedWeights",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",
@@ -569,6 +948,37 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "enum IPriceOracle.Variable",
+            "name": "variable",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ago",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IPriceOracle.OracleAccumulatorQuery[]",
+        "name": "queries",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "getPastAccumulators",
+    "outputs": [
+      {
+        "internalType": "int256[]",
+        "name": "results",
+        "type": "int256[]"
       }
     ],
     "stateMutability": "view",
@@ -611,51 +1021,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "feeType",
-        "type": "uint256"
-      }
-    ],
-    "name": "getProtocolFeePercentageCache",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getProtocolFeesCollector",
-    "outputs": [
-      {
-        "internalType": "contract IProtocolFeesCollector",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getProtocolSwapFeeDelegation",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "getRate",
     "outputs": [
@@ -669,26 +1034,49 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getRateProviders",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "contract IRateProvider[]",
-        "name": "",
-        "type": "address[]"
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getScalingFactors",
+    "name": "getSample",
     "outputs": [
       {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
+        "internalType": "int256",
+        "name": "logPairPrice",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "accLogPairPrice",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "logBptPrice",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "accLogBptPrice",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "logInvariant",
+        "type": "int256"
+      },
+      {
+        "internalType": "int256",
+        "name": "accLogInvariant",
+        "type": "int256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -710,12 +1098,42 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC20",
-        "name": "token",
-        "type": "address"
+        "components": [
+          {
+            "internalType": "enum IPriceOracle.Variable",
+            "name": "variable",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "secs",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ago",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IPriceOracle.OracleAverageQuery[]",
+        "name": "queries",
+        "type": "tuple[]"
       }
     ],
-    "name": "getTokenRate",
+    "name": "getTimeWeightedAverage",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "results",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTotalSamples",
     "outputs": [
       {
         "internalType": "uint256",
@@ -723,41 +1141,7 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "getTokenRateCache",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "rate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "oldRate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "expires",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -775,12 +1159,12 @@
   },
   {
     "inputs": [],
-    "name": "inRecoveryMode",
+    "name": "gyroConfig",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "contract IGyroConfig",
         "name": "",
-        "type": "bool"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -808,25 +1192,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "isTokenExemptFromYieldProtocolFee",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -957,12 +1322,12 @@
     "outputs": [
       {
         "internalType": "uint256[]",
-        "name": "",
+        "name": "amountsIn",
         "type": "uint256[]"
       },
       {
         "internalType": "uint256[]",
-        "name": "",
+        "name": "dueProtocolFeeAmounts",
         "type": "uint256[]"
       }
     ],
@@ -1020,22 +1385,17 @@
           }
         ],
         "internalType": "struct IPoolSwapStructs.SwapRequest",
-        "name": "swapRequest",
+        "name": "request",
         "type": "tuple"
       },
       {
-        "internalType": "uint256[]",
-        "name": "balances",
-        "type": "uint256[]"
-      },
-      {
         "internalType": "uint256",
-        "name": "indexIn",
+        "name": "balanceTokenIn",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "indexOut",
+        "name": "balanceTokenOut",
         "type": "uint256"
       }
     ],
@@ -1047,13 +1407,6 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pause",
-    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -1211,17 +1564,12 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC20",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "poolConfig",
-        "type": "bytes"
+        "internalType": "bool",
+        "name": "paused",
+        "type": "bool"
       }
     ],
-    "name": "setAssetManagerPoolConfig",
+    "name": "setPaused",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1235,49 +1583,6 @@
       }
     ],
     "name": "setSwapFeePercentage",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "duration",
-        "type": "uint256"
-      }
-    ],
-    "name": "setTokenRateCacheDuration",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "rawEndValue",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "startAmplificationParameterUpdate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "stopAmplificationParameterUpdate",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1358,33 +1663,6 @@
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpause",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "updateProtocolFeePercentageCache",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "updateTokenRateCache",
-    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   }
