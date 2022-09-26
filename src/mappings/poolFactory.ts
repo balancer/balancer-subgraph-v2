@@ -61,7 +61,7 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
 
-  // Create PriceRateProvider entities for Weighted V2 Pools
+  // Get priceRate for each PoolToken from WeightedPoolV2Factory
   if (poolTypeVersion == 2) setPriceRates(poolId.toHex(), poolAddress, tokens);
 
   return poolId.toHexString();
