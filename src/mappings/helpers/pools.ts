@@ -1,5 +1,5 @@
 import { Address, BigDecimal, Bytes, log } from '@graphprotocol/graph-ts';
-import { Pool, PoolToken, PriceRateProvider } from '../../types/schema';
+import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
 import { RateProvider } from '../../types/WeightedPoolV2Factory/RateProvider';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
