@@ -1,5 +1,5 @@
 import { Address, BigDecimal, Bytes, log } from '@graphprotocol/graph-ts';
-import { Pool, PoolToken } from '../../types/schema';
+import { Pool, PoolToken, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
 import { RateProvider } from '../../types/WeightedPoolV2Factory/RateProvider';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
@@ -92,7 +92,7 @@ export function getRateFromProvider(providerAddress: Address): BigDecimal {
   return rate;
 }
 
-export function setPriceRates(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
+export function setPriceRateProviders(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
   let poolContract = WeightedPoolV2.bind(poolAddress);
 
   let rateProvidersCall = poolContract.try_getRateProviders();
@@ -103,9 +103,11 @@ export function setPriceRates(poolId: string, poolAddress: Address, tokensList: 
 
   for (let i: i32 = 0; i < rateProviders.length; i++) {
     let tokenAddress = bytesToAddress(tokensList[i]);
-    let poolTokenId = getPoolTokenId(poolId, tokenAddress);
-    let poolToken = PoolToken.load(poolTokenId) as PoolToken;
-    poolToken.priceRate = getRateFromProvider(rateProviders[i]);
-    poolToken.save();
+    let providerId = getPoolTokenId(poolId, tokenAddress);
+    let provider = new PriceRateProvider(providerId);
+    provider.poolId = poolId;
+    provider.address = rateProviders[i];
+    provider.token = tokenAddress.toHex();
+    provider.save();
   }
 }
