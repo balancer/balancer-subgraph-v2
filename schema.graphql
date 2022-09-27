@@ -117,10 +117,10 @@ type PriceRateProvider @entity {
   poolId: Pool!
   token: PoolToken!
   address: Bytes!
-  rate: BigDecimal!
-  lastCached: Int!
-  cacheDuration: Int!
-  cacheExpiry: Int!
+  rate: BigDecimal
+  lastCached: Int
+  cacheDuration: Int
+  cacheExpiry: Int
 }
 
 type PoolShare @entity {
