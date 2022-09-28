@@ -106,8 +106,8 @@ export function setPriceRateProviders(poolId: string, poolAddress: Address, toke
     let providerId = getPoolTokenId(poolId, tokenAddress);
     let provider = new PriceRateProvider(providerId);
     provider.poolId = poolId;
+    provider.token = providerId;
     provider.address = rateProviders[i];
-    provider.token = tokenAddress.toHex();
     provider.save();
   }
 }
