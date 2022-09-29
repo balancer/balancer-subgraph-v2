@@ -1,10 +1,9 @@
-import { Address, BigDecimal, Bytes, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, log } from '@graphprotocol/graph-ts';
 import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
-import { RateProvider } from '../../types/WeightedPoolV2Factory/RateProvider';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
-import { ONE_BD, VAULT_ADDRESS } from './constants';
-import { bytesToAddress, getPoolTokenId, scaleDown } from './misc';
+import { VAULT_ADDRESS } from './constants';
+import { bytesToAddress, getPoolTokenId } from './misc';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PoolType {
@@ -79,17 +78,6 @@ export function getPoolTokenManager(poolId: Bytes, tokenAddress: Bytes): Address
   let assetManager = managersCall.value.value3;
 
   return assetManager;
-}
-
-export function getRateFromProvider(providerAddress: Address): BigDecimal {
-  let providerContract = RateProvider.bind(providerAddress);
-
-  let rateCall = providerContract.try_getRate();
-  if (rateCall.reverted) return ONE_BD;
-
-  let rate = scaleDown(rateCall.value, 18);
-
-  return rate;
 }
 
 export function setPriceRateProviders(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
