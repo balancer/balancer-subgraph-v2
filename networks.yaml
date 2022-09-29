@@ -211,6 +211,9 @@ polygonGrafted:
     startBlock: 31556094
 arbitrum:
   network: arbitrum-one
+  graft:
+    block: 23605789
+    base: QmbzqYtV71DtKPBVfdutN3Dz5CQiNchWwegtWyjbkkgW2v
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832
