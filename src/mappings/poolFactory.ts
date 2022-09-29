@@ -21,7 +21,7 @@ import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
-import { GyroCEMMPool as GyroCEMMPoolTemplate } from '../types/templates';
+import { GyroEPool as GyroEPoolTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
@@ -29,7 +29,7 @@ import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/Conv
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
-import { GyroCEMMPool } from '../types/templates/GyroCEMMPool/GyroCEMMPool';
+import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
@@ -300,9 +300,9 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
   Gyro3PoolTemplate.create(event.params.pool);
 }
 
-export function handleNewGyroCEMMPool(event: PoolCreated): void {
+export function handleNewGyroEPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
-  let poolContract = GyroCEMMPool.bind(poolAddress);
+  let poolContract = GyroEPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -312,13 +312,13 @@ export function handleNewGyroCEMMPool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee);
 
-  pool.poolType = PoolType.GyroCEMM;
-  let cemmParamsCall = poolContract.try_getCEMMParams();
+  pool.poolType = PoolType.GyroE;
+  let eParamsCall = poolContract.try_getCEMMParams();
 
-  if (!cemmParamsCall.reverted) {
-    const params = cemmParamsCall.value.value0;
+  if (!eParamsCall.reverted) {
+    const params = eParamsCall.value.value0;
     // terms in the 'derived' object are stored in extra precision (38 decimals) with final decimal rounded down
-    const derived = cemmParamsCall.value.value1;
+    const derived = eParamsCall.value.value1;
     pool.alpha = scaleDown(params.alpha, 18);
     pool.beta = scaleDown(params.beta, 18);
     pool.c = scaleDown(params.c, 18);
@@ -344,7 +344,7 @@ export function handleNewGyroCEMMPool(event: PoolCreated): void {
 
   handleNewPoolTokens(poolId, tokens);
 
-  GyroCEMMPoolTemplate.create(event.params.pool);
+  GyroEPoolTemplate.create(event.params.pool);
 }
 
 function findOrInitializeVault(): Balancer {
