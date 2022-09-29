@@ -14,6 +14,7 @@ type Pool @entity {
   id: ID!
   address: Bytes!
   poolType: String
+  poolTypeVersion: Int
   factory: Bytes
   strategyType: Int!
   oracleEnabled: Boolean!
@@ -74,6 +75,22 @@ type Pool @entity {
 
   # Gyro3Pool Only
   root3Alpha: BigDecimal
+
+  # GyroCEMMPool Only
+  alpha: BigDecimal
+  beta: BigDecimal
+  c: BigDecimal
+  s: BigDecimal
+  lambda: BigDecimal
+  tauAlphaX: BigDecimal
+  tauAlphaY: BigDecimal
+  tauBetaX: BigDecimal
+  tauBetaY: BigDecimal
+  u: BigDecimal
+  v: BigDecimal
+  w: BigDecimal
+  z: BigDecimal
+  dSq: BigDecimal
 }
 
 type PoolToken @entity {
@@ -174,6 +191,7 @@ type JoinExit @entity {
   type: InvestType!
   sender: Bytes!
   amounts: [BigDecimal!]!
+  valueUSD: BigDecimal
   pool: Pool!
   user: User!
   timestamp: Int!

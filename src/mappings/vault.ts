@@ -4,6 +4,7 @@ import {
   PoolBalanceChanged,
   PoolBalanceManaged,
   InternalBalanceChanged,
+  PoolRegistered,
 } from '../types/Vault/Vault';
 import { Balancer, Pool, Swap, JoinExit, TokenPrice, UserInternalBalance, ManagementOperation } from '../types/schema';
 import {
@@ -41,6 +42,8 @@ import {
 } from './helpers/constants';
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
+import { PoolCreated, WeightedPoolFactory } from '../types/WeightedPoolFactory/WeightedPoolFactory';
+import { handleNewWeightedPool } from './poolFactory';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -105,6 +108,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let join = new JoinExit(joinId);
   join.sender = event.params.liquidityProvider;
   let joinAmounts = new Array<BigDecimal>(amounts.length);
+  let valueUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -113,6 +117,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
     let joinAmount = scaleDown(amounts[i], poolToken.decimals);
     joinAmounts[i] = joinAmount;
+    let tokenJoinAmountInUSD = valueInUSD(joinAmount, tokenAddress);
+    valueUSD = valueUSD.plus(tokenJoinAmountInUSD);
   }
   join.type = 'Join';
   join.amounts = joinAmounts;
@@ -120,6 +126,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.user = event.params.liquidityProvider.toHexString();
   join.timestamp = blockTimestamp;
   join.tx = transactionHash;
+  join.valueUSD = valueUSD;
   join.save();
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -132,21 +139,21 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
     let amountIn = amounts[i].minus(protocolFeeAmounts[i]);
     let tokenAmountIn = tokenToDecimal(amountIn, poolToken.decimals);
-    let newAmount = poolToken.balance.plus(tokenAmountIn);
-    let tokenAmountInUSD = valueInUSD(tokenAmountIn, tokenAddress);
+    let newBalance = poolToken.balance.plus(tokenAmountIn);
+    poolToken.balance = newBalance;
+    poolToken.save();
 
     let token = getToken(tokenAddress);
-    token.totalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(tokenAmountInUSD);
+    const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountIn);
+    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+    token.totalBalanceNotional = tokenTotalBalanceNotional;
+    token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
-
-    poolToken.balance = newAmount;
-    poolToken.save();
   }
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -198,6 +205,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   let exit = new JoinExit(exitId);
   exit.sender = event.params.liquidityProvider;
   let exitAmounts = new Array<BigDecimal>(amounts.length);
+  let valueUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -206,6 +214,8 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
     let exitAmount = scaleDown(amounts[i].neg(), poolToken.decimals);
     exitAmounts[i] = exitAmount;
+    let tokenExitAmountInUSD = valueInUSD(exitAmount, tokenAddress);
+    valueUSD = valueUSD.plus(tokenExitAmountInUSD);
   }
   exit.type = 'Exit';
   exit.amounts = exitAmounts;
@@ -213,6 +223,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.user = event.params.liquidityProvider.toHexString();
   exit.timestamp = blockTimestamp;
   exit.tx = transactionHash;
+  exit.valueUSD = valueUSD;
   exit.save();
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -225,20 +236,20 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
     let amountOut = amounts[i].minus(protocolFeeAmounts[i]).neg();
     let tokenAmountOut = tokenToDecimal(amountOut, poolToken.decimals);
-    let newAmount = poolToken.balance.minus(tokenAmountOut);
-    let tokenAmountOutUSD = valueInUSD(tokenAmountOut, tokenAddress);
-
-    poolToken.balance = newAmount;
+    let newBalance = poolToken.balance.minus(tokenAmountOut);
+    poolToken.balance = newBalance;
     poolToken.save();
 
     let token = getToken(tokenAddress);
-    token.totalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(tokenAmountOutUSD);
+    const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
+    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+    token.totalBalanceNotional = tokenTotalBalanceNotional;
+    token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
 
     let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
-    tokenSnapshot.totalBalanceNotional = token.totalBalanceNotional;
-    tokenSnapshot.totalBalanceUSD = token.totalBalanceUSD;
+    tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+    tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
   }
 
@@ -503,5 +514,33 @@ export function handleSwapEvent(event: SwapEvent): void {
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
   if (preferentialToken != ZERO_ADDRESS) {
     updatePoolLiquidity(poolId.toHex(), block, preferentialToken, blockTimestamp);
+  }
+}
+
+// Temporary solution to handle WeightedPoolV2 creations on Polygon
+export function handlePoolRegistered(event: PoolRegistered): void {
+  let poolAddress = event.params.poolAddress;
+  let weightedV2Factory = Address.fromString('0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3');
+
+  let factoryContract = WeightedPoolFactory.bind(weightedV2Factory);
+  let isWeightedPoolV2Call = factoryContract.try_isPoolFromFactory(poolAddress);
+
+  if (isWeightedPoolV2Call.reverted) {
+    log.warning('isPoolFromFactory call reverted: {} {}', [
+      poolAddress.toHexString(),
+      event.transaction.hash.toHexString(),
+    ]);
+  } else if (isWeightedPoolV2Call.value) {
+    // Create a PoolCreated event from PoolRegistered Event
+    const poolCreatedEvent = new PoolCreated(
+      weightedV2Factory,
+      event.logIndex,
+      event.transactionLogIndex,
+      event.logType,
+      event.block,
+      event.transaction,
+      [event.parameters[1]] // PoolCreated expects parameters[0] to be the pool address
+    );
+    handleNewWeightedPool(poolCreatedEvent);
   }
 }
