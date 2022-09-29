@@ -40,7 +40,7 @@ import {
   ZERO_ADDRESS,
   ZERO_BD,
 } from './helpers/constants';
-import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType } from './helpers/pools';
+import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType, isLinearPool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { PoolCreated, WeightedPoolFactory } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { handleNewWeightedPool } from './poolFactory';
@@ -371,9 +371,11 @@ export function handleSwapEvent(event: SwapEvent): void {
   let swapFeesUSD = ZERO_BD;
 
   if (poolAddress != tokenInAddress && poolAddress != tokenOutAddress) {
-    let swapFee = pool.swapFee;
     swapValueUSD = swapValueInUSD(tokenInAddress, tokenAmountIn, tokenOutAddress, tokenAmountOut);
-    swapFeesUSD = swapValueUSD.times(swapFee);
+    if (!isLinearPool(pool)) {
+      let swapFee = pool.swapFee;
+      swapFeesUSD = swapValueUSD.times(swapFee);
+    }
   }
 
   let swapId = transactionHash.toHexString().concat(logIndex.toString());
