@@ -94,7 +94,7 @@ goerli:
     startBlock: 7421371
   GyroEPoolFactory:
     address: "0xeEe2e20C97633f473A063e3de4807f3F974DBC6c"
-    startBlock: 7546831
+    startBlock: 7668885
 
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygon:
