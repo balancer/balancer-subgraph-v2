@@ -116,6 +116,64 @@ export function updatePoolLiquidity(poolId: string, block: BigInt, pricingAsset:
   return true;
 }
 
+export function updatePoolLiquidity2(poolId: string, block: BigInt, timestamp: i32): boolean {
+  let pool = Pool.load(poolId);
+  if (pool == null) return false;
+  let tokensList: Bytes[] = pool.tokensList;
+  let newPoolLiquidity: BigDecimal = ZERO_BD;
+
+  for (let j: i32 = 0; j < tokensList.length; j++) {
+    let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
+    // Exclude virtual supply from pool value
+    if (hasVirtualSupply(pool) && pool.address == tokenAddress) {
+      continue;
+    }
+
+    let poolToken = loadPoolToken(poolId, tokenAddress);
+    if (poolToken == null) continue;
+
+    let poolTokenQuantity: BigDecimal = poolToken.balance;
+    let poolTokenValue = valueInUSD(poolTokenQuantity, tokenAddress);
+    newPoolLiquidity = newPoolLiquidity.plus(poolTokenValue);
+  }
+
+  let oldPoolLiquidity: BigDecimal = pool.totalLiquidity2;
+  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
+
+  // TODO: should we deptrecate this entity?
+  // Take snapshot of pool state
+  // let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
+  // let phl = new PoolHistoricalLiquidity(phlId);
+  // phl.poolId = poolId;
+  // phl.pricingAsset = pricingAsset;
+  // phl.block = block;
+  // phl.poolTotalShares = pool.totalShares;
+  // phl.poolLiquidity = poolValue;
+  // phl.poolShareValue = pool.totalShares.gt(ZERO_BD) ? poolValue.div(pool.totalShares) : ZERO_BD;
+  // phl.save();
+
+  // Update pool stats
+  pool.totalLiquidity2 = newPoolLiquidity;
+  pool.save();
+
+  // update BPT price
+  updateBptPrice(pool);
+
+  // Create or update pool daily snapshot
+  createPoolSnapshot(pool, timestamp);
+
+  // Update global stats
+  let vault = Balancer.load('2') as Balancer;
+  vault.totalLiquidity2 = vault.totalLiquidity2.plus(liquidityChange);
+  vault.save();
+
+  let vaultSnapshot = getBalancerSnapshot(vault.id, timestamp);
+  vaultSnapshot.totalLiquidity2 = vault.totalLiquidity2;
+  vaultSnapshot.save();
+
+  return true;
+}
+
 export function valueInUSD(value: BigDecimal, asset: Address): BigDecimal {
   let usdValue = ZERO_BD;
 

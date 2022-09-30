@@ -30,6 +30,7 @@ import {
   swapValueInUSD,
   getPreferentialPricingAsset,
   updateLatestPrice,
+  updatePoolLiquidity2,
 } from './pricing';
 import {
   MIN_POOL_LIQUIDITY,
@@ -166,6 +167,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
         break;
       }
     }
+    updatePoolLiquidity2(poolId, event.block.number, blockTimestamp);
   }
 
   // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
@@ -264,6 +266,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
       }
     }
   }
+  updatePoolLiquidity2(poolId, event.block.number, blockTimestamp);
 }
 
 /************************************
@@ -517,6 +520,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (preferentialToken != ZERO_ADDRESS) {
     updatePoolLiquidity(poolId.toHex(), block, preferentialToken, blockTimestamp);
   }
+  updatePoolLiquidity2(poolId.toHex(), block, blockTimestamp);
 }
 
 // Temporary solution to handle WeightedPoolV2 creations on Polygon
