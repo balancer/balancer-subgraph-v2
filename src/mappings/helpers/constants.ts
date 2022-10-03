@@ -2,6 +2,14 @@ import { BigDecimal, BigInt, Address, dataSource } from '@graphprotocol/graph-ts
 
 import assets from './assets';
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace ProtocolFeeType {
+  export const Swap = 0;
+  export const FlashLoan = 1;
+  export const Yield = 2;
+  export const Aum = 3;
+}
+
 export let ZERO = BigInt.fromI32(0);
 export let ZERO_BD = BigDecimal.fromString('0');
 export let ONE_BD = BigDecimal.fromString('1');
