@@ -10,6 +10,7 @@ import { Balancer, Pool } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
+import { WeightedPoolV2 as WeightedPoolV2Template } from '../types/templates';
 import { WeightedPool2Tokens as WeightedPool2TokensTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
 import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
@@ -76,7 +77,7 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 export function handleNewWeightedPoolV2(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Weighted, 2);
   if (pool == null) return;
-  WeightedPoolTemplate.create(event.params.pool);
+  WeightedPoolV2Template.create(event.params.pool);
 }
 
 export function handleNewWeighted2TokenPool(event: PoolCreated): void {
