@@ -29,8 +29,32 @@ import {
   loadPriceRateProvider,
   getPoolShare,
 } from './helpers/misc';
-import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
+import { ProtocolFeePercentageCacheUpdated } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
+
+export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  const feeType = event.params.feeType.toI32();
+  const feePercentage = scaleDown(event.params.protocolFeePercentage, 18);
+
+  if (feeType == ProtocolFeeType.Swap) {
+    pool.protocolSwapFeeCache = feePercentage;
+  } else if (feeType == ProtocolFeeType.Yield) {
+    pool.protocolYieldFeeCache = feePercentage;
+  } else if (feeType == ProtocolFeeType.Aum) {
+    pool.protocolAumFeeCache = feePercentage;
+  }
+
+  pool.save();
+}
 
 /************************************
  *********** SWAP ENABLED ***********
