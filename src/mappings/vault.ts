@@ -144,7 +144,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     poolToken.save();
 
     let token = getToken(tokenAddress);
-    const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountIn);
+    const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
     const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
     token.totalBalanceNotional = tokenTotalBalanceNotional;
     token.totalBalanceUSD = tokenTotalBalanceUSD;
