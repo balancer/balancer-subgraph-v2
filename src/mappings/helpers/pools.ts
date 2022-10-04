@@ -1,7 +1,9 @@
 import { Address, Bytes, log } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
+import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
+import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { VAULT_ADDRESS } from './constants';
+import { bytesToAddress, getPoolTokenId } from './misc';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PoolType {
@@ -15,9 +17,9 @@ export namespace PoolType {
   export const ComposableStable = 'ComposableStable';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
-  export const Linear = 'AaveLinear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
+  export const GyroCEMM = 'GyroCEMM';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {
@@ -31,6 +33,10 @@ export function hasVirtualSupply(pool: Pool): boolean {
     pool.poolType == PoolType.StablePhantom ||
     pool.poolType == PoolType.ComposableStable
   );
+}
+
+export function isLinearPool(pool: Pool): boolean {
+  return pool.poolType == PoolType.AaveLinear || pool.poolType == PoolType.ERC4626Linear;
 }
 
 export function isStableLikePool(pool: Pool): boolean {
@@ -75,4 +81,24 @@ export function getPoolTokenManager(poolId: Bytes, tokenAddress: Bytes): Address
   let assetManager = managersCall.value.value3;
 
   return assetManager;
+}
+
+export function setPriceRateProviders(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
+  let poolContract = WeightedPoolV2.bind(poolAddress);
+
+  let rateProvidersCall = poolContract.try_getRateProviders();
+  if (rateProvidersCall.reverted) return;
+
+  let rateProviders = rateProvidersCall.value;
+  if (rateProviders.length != tokensList.length) return;
+
+  for (let i: i32 = 0; i < rateProviders.length; i++) {
+    let tokenAddress = bytesToAddress(tokensList[i]);
+    let providerId = getPoolTokenId(poolId, tokenAddress);
+    let provider = new PriceRateProvider(providerId);
+    provider.poolId = poolId;
+    provider.token = providerId;
+    provider.address = rateProviders[i];
+    provider.save();
+  }
 }

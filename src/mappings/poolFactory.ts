@@ -1,5 +1,5 @@
 import { ZERO_BD, ZERO } from './helpers/constants';
-import { getPoolTokenManager, getPoolTokens, PoolType } from './helpers/pools';
+import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRateProviders } from './helpers/pools';
 
 import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
@@ -21,6 +21,7 @@ import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
+import { GyroCEMMPool as GyroCEMMPoolTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
@@ -28,9 +29,10 @@ import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/Conv
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
+import { GyroCEMMPool } from '../types/templates/GyroCEMMPool/GyroCEMMPool';
 import { ERC20 } from '../types/Vault/ERC20';
 
-function createWeightedLikePool(event: PoolCreated, poolType: string): string | null {
+function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
   let poolContract = WeightedPool.bind(poolAddress);
 
@@ -45,6 +47,7 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string | 
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
+  pool.poolTypeVersion = poolTypeVersion;
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -58,11 +61,20 @@ function createWeightedLikePool(event: PoolCreated, poolType: string): string | 
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
 
+  // Create PriceRateProvider entities for WeightedPoolV2
+  if (poolTypeVersion == 2) setPriceRateProviders(poolId.toHex(), poolAddress, tokens);
+
   return poolId.toHexString();
 }
 
 export function handleNewWeightedPool(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Weighted);
+  if (pool == null) return;
+  WeightedPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewWeightedPoolV2(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Weighted, 2);
   if (pool == null) return;
   WeightedPoolTemplate.create(event.params.pool);
 }
@@ -84,7 +96,7 @@ export function handleNewInvestmentPool(event: PoolCreated): void {
   InvestmentPoolTemplate.create(event.params.pool);
 }
 
-function createStableLikePool(event: PoolCreated, poolType: string): string | null {
+function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
   let poolContract = StablePool.bind(poolAddress);
 
@@ -99,6 +111,7 @@ function createStableLikePool(event: PoolCreated, poolType: string): string | nu
 
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = poolType;
+  pool.poolTypeVersion = poolTypeVersion;
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -184,11 +197,15 @@ export function handleNewAaveLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear);
 }
 
+export function handleNewAaveLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear, 2);
+}
+
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
-function handleNewLinearPool(event: PoolCreated, poolType: string): void {
+function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
 
   let poolContract = LinearPool.bind(poolAddress);
@@ -202,6 +219,8 @@ function handleNewLinearPool(event: PoolCreated, poolType: string): void {
   let pool = handleNewPool(event, poolId, swapFee);
 
   pool.poolType = poolType;
+  pool.poolTypeVersion = poolTypeVersion;
+
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
   let wrappedIndexCall = poolContract.try_getWrappedIndex();
@@ -282,6 +301,53 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
   handleNewPoolTokens(poolId, tokens);
 
   Gyro3PoolTemplate.create(event.params.pool);
+}
+
+export function handleNewGyroCEMMPool(event: PoolCreated): void {
+  let poolAddress: Address = event.params.pool;
+  let poolContract = GyroCEMMPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+
+  pool.poolType = PoolType.GyroCEMM;
+  let cemmParamsCall = poolContract.try_getCEMMParams();
+
+  if (!cemmParamsCall.reverted) {
+    const params = cemmParamsCall.value.value0;
+    // terms in the 'derived' object are stored in extra precision (38 decimals) with final decimal rounded down
+    const derived = cemmParamsCall.value.value1;
+    pool.alpha = scaleDown(params.alpha, 18);
+    pool.beta = scaleDown(params.beta, 18);
+    pool.c = scaleDown(params.c, 18);
+    pool.s = scaleDown(params.s, 18);
+    pool.lambda = scaleDown(params.lambda, 18);
+
+    pool.tauAlphaX = scaleDown(derived.tauAlpha.x, 38);
+    pool.tauAlphaY = scaleDown(derived.tauAlpha.y, 38);
+    pool.tauBetaX = scaleDown(derived.tauBeta.x, 38);
+    pool.tauBetaY = scaleDown(derived.tauBeta.y, 38);
+    pool.u = scaleDown(derived.u, 38);
+    pool.v = scaleDown(derived.v, 38);
+    pool.w = scaleDown(derived.w, 38);
+    pool.z = scaleDown(derived.z, 38);
+    pool.dSq = scaleDown(derived.dSq, 38);
+  }
+
+  let tokens = getPoolTokens(poolId);
+  if (tokens == null) return;
+  pool.tokensList = tokens;
+
+  pool.save();
+
+  handleNewPoolTokens(poolId, tokens);
+
+  GyroCEMMPoolTemplate.create(event.params.pool);
 }
 
 function findOrInitializeVault(): Balancer {
