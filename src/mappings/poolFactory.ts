@@ -1,5 +1,5 @@
 import { ZERO_BD, ZERO } from './helpers/constants';
-import { getPoolTokenManager, getPoolTokens, PoolType } from './helpers/pools';
+import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRateProviders } from './helpers/pools';
 
 import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
@@ -61,6 +61,9 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
 
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
+
+  // Create PriceRateProvider entities for WeightedPoolV2
+  if (poolTypeVersion == 2) setPriceRateProviders(poolId.toHex(), poolAddress, tokens);
 
   return poolId.toHexString();
 }
