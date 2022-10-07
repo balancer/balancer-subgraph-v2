@@ -97,16 +97,18 @@ goerli:
     startBlock: 7546831
 polygon:
   network: matic
-  isPolygon: true
   graft:
-    block: 32850162
-    base: QmZxw8YkdvoUtt7DsEP6DnL7cYKWzMT94cZyFyZJgf4oEY
+    block: 32054794
+    base: QmYX1jk9d745tSn5fDHE1racdXFmQCdfjZ1QHU2sUnwyLT
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 15832998
+  WeightedPoolV2Factory:
+    address: "0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3"
+    startBlock: 32850162
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 15869090
@@ -152,11 +154,14 @@ polygon:
   Gyro3PoolFactory:
     address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
     startBlock: 31556094
+  FXPoolFactory:
+    address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
+    startBlock: 32054794
 arbitrum:
   network: arbitrum-one
   graft:
     block: 23605789
-    base: QmYWua86EUbrnoE8j4FsTmzdeExhLzwDqE3kdsXpxqD92Y
+    base: QmPpDvuEs8qAhFvZR7Be6Snk3knkju2zd3PXZnVeUHsPwe
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832

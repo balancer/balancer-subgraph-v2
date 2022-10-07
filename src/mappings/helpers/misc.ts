@@ -17,12 +17,18 @@ import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
-import { getPoolAddress } from './pools';
+import { getPoolAddress, isComposablePool } from './pools';
+import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
+import { valueInUSD } from '../pricing';
 
 const DAY = 24 * 60 * 60;
 
 export function bytesToAddress(address: Bytes): Address {
   return Address.fromString(address.toHexString());
+}
+
+export function stringToBytes(str: string): Bytes {
+  return Bytes.fromByteArray(Bytes.fromHexString(str));
 }
 
 export function getTokenDecimals(tokenAddress: Address): i32 {
@@ -94,8 +100,8 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
   return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
 }
 
-export function createPoolTokenEntity(poolId: string, tokenAddress: Address, assetManagerAddress: Address): void {
-  let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, assetManagerAddress: Address): void {
+  let poolTokenId = getPoolTokenId(pool.id, tokenAddress);
 
   let token = ERC20.bind(tokenAddress);
   let symbol = '';
@@ -131,7 +137,7 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address, ass
   let poolToken = new PoolToken(poolTokenId);
   // ensures token entity is created
   let _token = getToken(tokenAddress);
-  poolToken.poolId = poolId;
+  poolToken.poolId = pool.id;
   poolToken.address = tokenAddress.toHexString();
   poolToken.assetManager = assetManagerAddress;
   poolToken.name = name;
@@ -142,6 +148,17 @@ export function createPoolTokenEntity(poolId: string, tokenAddress: Address, ass
   poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
   poolToken.token = _token.id;
+
+  if (isComposablePool(pool)) {
+    let poolAddress = bytesToAddress(pool.address);
+    let poolContract = ComposableStablePool.bind(poolAddress);
+    let isTokenExemptCall = poolContract.try_isTokenExemptFromYieldProtocolFee(tokenAddress);
+
+    if (!isTokenExemptCall.reverted) {
+      poolToken.isExemptFromYieldProtocolFee = isTokenExemptCall.value;
+    }
+  }
+
   poolToken.save();
 }
 
@@ -299,11 +316,13 @@ export function updateTokenBalances(
   let token = getToken(tokenAddress);
 
   if (swapDirection == SWAP_IN) {
-    token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
+    const totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
+    token.totalBalanceNotional = totalBalanceNotional;
+    token.totalBalanceUSD = valueInUSD(totalBalanceNotional, tokenAddress);
   } else if (swapDirection == SWAP_OUT) {
-    token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
+    const totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
+    token.totalBalanceNotional = totalBalanceNotional;
+    token.totalBalanceUSD = valueInUSD(totalBalanceNotional, tokenAddress);
   }
 
   token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
