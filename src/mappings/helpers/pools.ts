@@ -20,6 +20,7 @@ export namespace PoolType {
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
   export const GyroCEMM = 'GyroCEMM';
+  export const FX = 'FX';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {

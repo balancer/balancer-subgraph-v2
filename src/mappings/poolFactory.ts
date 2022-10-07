@@ -4,7 +4,7 @@ import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRateProviders } f
 import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool } from '../types/schema';
 
@@ -22,6 +22,7 @@ import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 import { GyroCEMMPool as GyroCEMMPoolTemplate } from '../types/templates';
+import { FXPool as FXPoolTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
@@ -348,6 +349,43 @@ export function handleNewGyroCEMMPool(event: PoolCreated): void {
   handleNewPoolTokens(poolId, tokens);
 
   GyroCEMMPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewFXPool(event: ethereum.Event): void {
+  /**
+   * FXPoolFactory emits a custom NewFXPool event with the following params:
+   *   event.parameters[0] = caller
+   *   event.parameters[1] = id (vault poolId)
+   *   event.parameters[2] = fxpool (pool address)
+   * */
+  let poolId = event.parameters[1].value.toBytes();
+  let poolAddress = event.parameters[2].value.toAddress();
+  let swapFee = ZERO; // @todo: figure out how to get swap fee from FXPool
+
+  // Create a PoolCreated event from generic ethereum.Event
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[2]] // PoolCreated expects parameters[0] to be the pool address
+  );
+
+  let pool = handleNewPool(poolCreatedEvent, poolId, swapFee);
+
+  pool.poolType = PoolType.FX;
+
+  let tokens = getPoolTokens(poolId);
+  if (tokens == null) return;
+  pool.tokensList = tokens;
+
+  pool.save();
+
+  handleNewPoolTokens(poolId, tokens);
+
+  FXPoolTemplate.create(poolAddress);
 }
 
 function findOrInitializeVault(): Balancer {
