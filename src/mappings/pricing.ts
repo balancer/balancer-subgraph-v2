@@ -19,7 +19,7 @@ export function getPreferentialPricingAsset(assets: Address[]): Address {
   return ZERO_ADDRESS;
 }
 
-export function addHistoricalPoolLiquidityRecord(poolId: string, block: BigInt, pricingAsset: Address, timestamp: i32): boolean {
+export function addHistoricalPoolLiquidityRecord(poolId: string, block: BigInt, pricingAsset: Address): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
 
@@ -95,7 +95,7 @@ export function addHistoricalPoolLiquidityRecord(poolId: string, block: BigInt, 
   return true;
 }
 
-export function updatePoolLiquidity(poolId: string, block: BigInt, timestamp: i32): boolean {
+export function updatePoolLiquidity(poolId: string, timestamp: i32): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
   let tokensList: Bytes[] = pool.tokensList;

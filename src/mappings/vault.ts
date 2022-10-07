@@ -160,14 +160,14 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress, blockTimestamp);
+      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress);
       // Some pricing assets may not have a route back to USD yet
       // so we keep trying until we find one
       if (success) {
         break;
       }
     }
-    updatePoolLiquidity(poolId, event.block.number, blockTimestamp);
+    updatePoolLiquidity(poolId, blockTimestamp);
   }
 
   // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
@@ -258,7 +258,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress, blockTimestamp);
+      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress);
       // Some pricing assets may not have a route back to USD yet
       // so we keep trying until we find one
       if (success) {
@@ -266,7 +266,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
       }
     }
   }
-  updatePoolLiquidity(poolId, event.block.number, blockTimestamp);
+  updatePoolLiquidity(poolId, blockTimestamp);
 }
 
 /************************************
@@ -518,9 +518,9 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
   if (preferentialToken != ZERO_ADDRESS) {
-    addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken, blockTimestamp);
+    addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
-  updatePoolLiquidity(poolId.toHex(), block, blockTimestamp);
+  updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }
 
 // Temporary solution to handle WeightedPoolV2 creations on Polygon
