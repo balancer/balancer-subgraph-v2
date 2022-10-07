@@ -100,7 +100,7 @@ polygon:
   isPolygon: true
   graft:
     block: 32850162
-    base: QmZxw8YkdvoUtt7DsEP6DnL7cYKWzMT94cZyFyZJgf4oEY
+    base: QmYX1jk9d745tSn5fDHE1racdXFmQCdfjZ1QHU2sUnwyLT
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -159,7 +159,7 @@ arbitrum:
   network: arbitrum-one
   graft:
     block: 23605789
-    base: QmYWua86EUbrnoE8j4FsTmzdeExhLzwDqE3kdsXpxqD92Y
+    base: QmPpDvuEs8qAhFvZR7Be6Snk3knkju2zd3PXZnVeUHsPwe
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832
