@@ -115,6 +115,9 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
+
+  # ComposableStablePool Only
+  isExemptFromYieldProtocolFee: Boolean
 }
 
 type PriceRateProvider @entity {

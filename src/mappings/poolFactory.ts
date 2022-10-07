@@ -1,7 +1,14 @@
 import { ZERO_BD, ZERO } from './helpers/constants';
 import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRateProviders } from './helpers/pools';
 
-import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
+import {
+  newPoolEntity,
+  createPoolTokenEntity,
+  scaleDown,
+  getBalancerSnapshot,
+  tokenToDecimal,
+  stringToBytes,
+} from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
@@ -58,7 +65,7 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
@@ -122,7 +129,7 @@ function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVers
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   return poolId.toHexString();
 }
@@ -190,7 +197,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   CCPoolTemplate.create(poolAddress);
 }
@@ -240,7 +247,7 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   pool.totalShares = pool.totalShares.minus(maxTokenBalance);
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   LinearPoolTemplate.create(poolAddress);
 }
@@ -269,7 +276,7 @@ export function handleNewGyro2Pool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   Gyro2PoolTemplate.create(event.params.pool);
 }
@@ -300,7 +307,7 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   Gyro3PoolTemplate.create(event.params.pool);
 }
@@ -347,7 +354,7 @@ export function handleNewGyroCEMMPool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   GyroCEMMPoolTemplate.create(event.params.pool);
 }
@@ -384,7 +391,7 @@ export function handleNewFXPool(event: ethereum.Event): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   FXPoolTemplate.create(poolAddress);
 }
@@ -443,14 +450,15 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
   return pool;
 }
 
-function handleNewPoolTokens(poolId: Bytes, tokens: Bytes[]): void {
+function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   let tokensAddresses = changetype<Address[]>(tokens);
 
   for (let i: i32 = 0; i < tokens.length; i++) {
+    let poolId = stringToBytes(pool.id);
     let assetManager = getPoolTokenManager(poolId, tokens[i]);
 
     if (!assetManager) continue;
 
-    createPoolTokenEntity(poolId.toHexString(), tokensAddresses[i], assetManager);
+    createPoolTokenEntity(pool, tokensAddresses[i], assetManager);
   }
 }

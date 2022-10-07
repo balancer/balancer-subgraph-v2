@@ -36,6 +36,10 @@ export function hasVirtualSupply(pool: Pool): boolean {
   );
 }
 
+export function isComposablePool(pool: Pool): boolean {
+  return pool.poolType == PoolType.ComposableStable;
+}
+
 export function isLinearPool(pool: Pool): boolean {
   return pool.poolType == PoolType.AaveLinear || pool.poolType == PoolType.ERC4626Linear;
 }
