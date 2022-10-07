@@ -98,7 +98,7 @@ goerli:
 polygon:
   network: matic
   graft:
-    block: 32850162
+    block: 32892066
     base: QmYX1jk9d745tSn5fDHE1racdXFmQCdfjZ1QHU2sUnwyLT
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
