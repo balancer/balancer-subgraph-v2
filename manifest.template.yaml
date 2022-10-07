@@ -52,10 +52,6 @@ dataSources:
           handler: handleBalanceManage
         - event: InternalBalanceChanged(indexed address,indexed address,int256)
           handler: handleInternalBalanceChange
-        {{#if isPolygon}}
-        - event: PoolRegistered(indexed bytes32,indexed address,uint8)
-          handler: handlePoolRegistered
-        {{/if}}
   {{#if WeightedPoolFactory}}
   - kind: ethereum/contract
     name: WeightedPoolFactory

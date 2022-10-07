@@ -97,7 +97,6 @@ goerli:
     startBlock: 7546831
 polygon:
   network: matic
-  isPolygon: true
   # graft:
   #   block: 32850162
   #   base: QmZz33UxD51bbvXvwyJzJGhs94DB4gYWenDtAvmXx45ew5
@@ -107,6 +106,9 @@ polygon:
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 15832998
+  WeightedPoolV2Factory:
+    address: "0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3"
+    startBlock: 32850162
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 15869090
