@@ -18,6 +18,7 @@ import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress } from './pools';
+import { valueInUSD } from '../pricing';
 
 const DAY = 24 * 60 * 60;
 
@@ -299,11 +300,13 @@ export function updateTokenBalances(
   let token = getToken(tokenAddress);
 
   if (swapDirection == SWAP_IN) {
-    token.totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.plus(usdBalance);
+    const totalBalanceNotional = token.totalBalanceNotional.plus(notionalBalance);
+    token.totalBalanceNotional = totalBalanceNotional;
+    token.totalBalanceUSD = valueInUSD(totalBalanceNotional, tokenAddress);
   } else if (swapDirection == SWAP_OUT) {
-    token.totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
-    token.totalBalanceUSD = token.totalBalanceUSD.minus(usdBalance);
+    const totalBalanceNotional = token.totalBalanceNotional.minus(notionalBalance);
+    token.totalBalanceNotional = totalBalanceNotional;
+    token.totalBalanceUSD = valueInUSD(totalBalanceNotional, tokenAddress);
   }
 
   token.totalVolumeUSD = token.totalVolumeUSD.plus(usdBalance);
