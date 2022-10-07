@@ -4,7 +4,6 @@ import {
   PoolBalanceChanged,
   PoolBalanceManaged,
   InternalBalanceChanged,
-  PoolRegistered,
 } from '../types/Vault/Vault';
 import { Balancer, Pool, Swap, JoinExit, TokenPrice, UserInternalBalance, ManagementOperation } from '../types/schema';
 import {
@@ -43,8 +42,6 @@ import {
 } from './helpers/constants';
 import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType, isLinearPool } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
-import { PoolCreated, WeightedPoolFactory } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { handleNewWeightedPool } from './poolFactory';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -521,32 +518,4 @@ export function handleSwapEvent(event: SwapEvent): void {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
   updatePoolLiquidity(poolId.toHex(), blockTimestamp);
-}
-
-// Temporary solution to handle WeightedPoolV2 creations on Polygon
-export function handlePoolRegistered(event: PoolRegistered): void {
-  let poolAddress = event.params.poolAddress;
-  let weightedV2Factory = Address.fromString('0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3');
-
-  let factoryContract = WeightedPoolFactory.bind(weightedV2Factory);
-  let isWeightedPoolV2Call = factoryContract.try_isPoolFromFactory(poolAddress);
-
-  if (isWeightedPoolV2Call.reverted) {
-    log.warning('isPoolFromFactory call reverted: {} {}', [
-      poolAddress.toHexString(),
-      event.transaction.hash.toHexString(),
-    ]);
-  } else if (isWeightedPoolV2Call.value) {
-    // Create a PoolCreated event from PoolRegistered Event
-    const poolCreatedEvent = new PoolCreated(
-      weightedV2Factory,
-      event.logIndex,
-      event.transactionLogIndex,
-      event.logType,
-      event.block,
-      event.transaction,
-      [event.parameters[1]] // PoolCreated expects parameters[0] to be the pool address
-    );
-    handleNewWeightedPool(poolCreatedEvent);
-  }
 }
