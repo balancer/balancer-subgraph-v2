@@ -24,11 +24,12 @@ import {
 import { updatePoolWeights } from './helpers/weighted';
 import {
   isPricingAsset,
-  updatePoolLiquidity,
+  addHistoricalPoolLiquidityRecord,
   valueInUSD,
   swapValueInUSD,
   getPreferentialPricingAsset,
   updateLatestPrice,
+  updatePoolLiquidity,
 } from './pricing';
 import {
   MIN_POOL_LIQUIDITY,
@@ -156,13 +157,14 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      let success = updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
+      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress);
       // Some pricing assets may not have a route back to USD yet
       // so we keep trying until we find one
       if (success) {
         break;
       }
     }
+    updatePoolLiquidity(poolId, blockTimestamp);
   }
 
   // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
@@ -253,7 +255,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      let success = updatePoolLiquidity(poolId, event.block.number, tokenAddress, blockTimestamp);
+      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress);
       // Some pricing assets may not have a route back to USD yet
       // so we keep trying until we find one
       if (success) {
@@ -261,6 +263,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
       }
     }
   }
+  updatePoolLiquidity(poolId, blockTimestamp);
 }
 
 /************************************
@@ -512,6 +515,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
   if (preferentialToken != ZERO_ADDRESS) {
-    updatePoolLiquidity(poolId.toHex(), block, preferentialToken, blockTimestamp);
+    addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
+  updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }
