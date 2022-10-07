@@ -391,7 +391,7 @@ export function handleNewFXPool(event: ethereum.Event): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   FXPoolTemplate.create(poolAddress);
 }
