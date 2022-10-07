@@ -91,6 +91,11 @@ type Pool @entity {
   w: BigDecimal
   z: BigDecimal
   dSq: BigDecimal
+
+  # Composable and WeightedV2 Only
+  protocolSwapFeeCache: BigDecimal
+  protocolYieldFeeCache: BigDecimal
+  protocolAumFeeCache: BigDecimal
 }
 
 type PoolToken @entity {
