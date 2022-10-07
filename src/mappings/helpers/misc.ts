@@ -150,7 +150,7 @@ export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, assetMa
   poolToken.token = _token.id;
 
   if (isComposablePool(pool)) {
-    let poolAddress = Address.fromString(pool.id);
+    let poolAddress = bytesToAddress(pool.address);
     let poolContract = ComposableStablePool.bind(poolAddress);
     let isTokenExemptCall = poolContract.try_isTokenExemptFromYieldProtocolFee(tokenAddress);
 
