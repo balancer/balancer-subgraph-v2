@@ -5,7 +5,6 @@ type Balancer @entity {
   pools: [Pool!] @derivedFrom(field: "vaultID")
 
   totalLiquidity: BigDecimal!
-  totalLiquidity2: BigDecimal!
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
@@ -29,7 +28,6 @@ type Pool @entity {
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
-  totalLiquidity2: BigDecimal!
   totalShares: BigDecimal!
 
   createTime: Int!
@@ -253,7 +251,6 @@ type PoolSnapshot @entity {
   swapVolume: BigDecimal!
   swapFees: BigDecimal!
   liquidity: BigDecimal!
-  liquidity2: BigDecimal!
   swapsCount: BigInt!
   holdersCount: BigInt!
   timestamp: Int!
@@ -309,7 +306,6 @@ type BalancerSnapshot @entity {
   timestamp: Int!
   poolCount: Int!
   totalLiquidity: BigDecimal!
-  totalLiquidity2: BigDecimal!
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
