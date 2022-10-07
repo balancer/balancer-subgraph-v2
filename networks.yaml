@@ -97,9 +97,9 @@ goerli:
     startBlock: 7546831
 polygon:
   network: matic
-  # graft:
-  #   block: 32850162
-  #   base: QmZz33UxD51bbvXvwyJzJGhs94DB4gYWenDtAvmXx45ew5
+  graft:
+    block: 32850162
+    base: QmYX1jk9d745tSn5fDHE1racdXFmQCdfjZ1QHU2sUnwyLT
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -154,11 +154,14 @@ polygon:
   Gyro3PoolFactory:
     address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
     startBlock: 31556094
+  FXPoolFactory:
+    address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
+    startBlock: 32054794
 arbitrum:
   network: arbitrum-one
-  # graft:
-  #   block: 23605789
-  #   base: QmbzqYtV71DtKPBVfdutN3Dz5CQiNchWwegtWyjbkkgW2v
+  graft:
+    block: 23605789
+    base: QmPpDvuEs8qAhFvZR7Be6Snk3knkju2zd3PXZnVeUHsPwe
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832

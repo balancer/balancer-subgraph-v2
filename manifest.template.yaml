@@ -653,6 +653,37 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewGyroCEMMPool
   {{/if}}
+  {{#if FXPoolFactory}}
+  - kind: ethereum/contract
+    name: FXPoolFactory
+    network: {{network}}
+    source:
+      address: '{{FXPoolFactory.address}}'
+      abi: FXPoolFactory
+      startBlock: {{FXPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: FXPool
+          file: ./abis/FXPool.json
+        - name: FXPoolFactory
+          file: ./abis/FXPoolFactory.json
+      eventHandlers:
+        - event: NewFXPool(indexed address,indexed bytes32,indexed address)
+          handler: handleNewFXPool
+  {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -1052,4 +1083,28 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: FXPool
+    network: {{network}}
+    source:
+      abi: FXPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: FXPool
+          file: ./abis/FXPool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
     
