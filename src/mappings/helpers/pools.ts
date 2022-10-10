@@ -20,6 +20,7 @@ export namespace PoolType {
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
   export const GyroCEMM = 'GyroCEMM';
+  export const FX = 'FX';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {
@@ -33,6 +34,10 @@ export function hasVirtualSupply(pool: Pool): boolean {
     pool.poolType == PoolType.StablePhantom ||
     pool.poolType == PoolType.ComposableStable
   );
+}
+
+export function isComposablePool(pool: Pool): boolean {
+  return pool.poolType == PoolType.ComposableStable;
 }
 
 export function isLinearPool(pool: Pool): boolean {
