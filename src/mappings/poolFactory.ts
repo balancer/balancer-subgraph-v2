@@ -140,6 +140,12 @@ export function handleNewStablePool(event: PoolCreated): void {
   StablePoolTemplate.create(event.params.pool);
 }
 
+export function handleNewStablePoolV2(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.Stable, 2);
+  if (pool == null) return;
+  StablePoolTemplate.create(event.params.pool);
+}
+
 export function handleNewMetaStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.MetaStable);
   if (pool == null) return;

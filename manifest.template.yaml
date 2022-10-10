@@ -203,7 +203,7 @@ dataSources:
           file: ./abis/StablePool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewStablePool
+          handler: handleNewStablePoolV2
   {{/if}}
   {{#if MetaStablePoolFactory}}
   - kind: ethereum/contract
