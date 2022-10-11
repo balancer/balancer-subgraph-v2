@@ -173,6 +173,16 @@ type AmpUpdate @entity {
   endAmp: BigInt!
 }
 
+type SwapFeeUpdate @entity {
+  id: ID!
+  pool: Pool!
+  scheduledTimestamp: Int!
+  startTimestamp: BigInt!
+  endTimestamp: BigInt!
+  startSwapFeePercentage: BigDecimal!
+  endSwapFeePercentage: BigDecimal!
+}
+
 type Swap @entity {
   id: ID!
   caller: Bytes!

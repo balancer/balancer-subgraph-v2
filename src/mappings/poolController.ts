@@ -1,4 +1,4 @@
-import { Address, BigInt, log } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
@@ -19,7 +19,7 @@ import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate } from '../types/schema';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -169,8 +169,39 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  pool.swapFee = scaleDown(event.params.swapFeePercentage, 18);
+  const newSwapFee = scaleDown(event.params.swapFeePercentage, 18);
+  pool.swapFee = newSwapFee;
   pool.save();
+
+  const swapFeeUpdateID = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
+  createSwapFeeUpdate(
+    swapFeeUpdateID,
+    pool,
+    event.block.timestamp.toI32(),
+    event.block.timestamp,
+    event.block.timestamp,
+    newSwapFee,
+    newSwapFee
+  )
+}
+
+export function createSwapFeeUpdate(
+  _id: string, 
+  _pool: Pool, 
+  _blockTimestamp: i32, 
+  _startTimestamp: BigInt,
+  _endTimestamp: BigInt,
+  _startSwapFeePercentage: BigDecimal,
+  _endSwapFeePercentage: BigDecimal
+): void {
+  let swapFeeUpdate = new SwapFeeUpdate(_id);
+  swapFeeUpdate.pool = _pool.id;
+  swapFeeUpdate.scheduledTimestamp = _blockTimestamp;
+  swapFeeUpdate.startTimestamp = _startTimestamp;
+  swapFeeUpdate.endTimestamp = _endTimestamp;
+  swapFeeUpdate.startSwapFeePercentage = _startSwapFeePercentage;
+  swapFeeUpdate.endSwapFeePercentage = _endSwapFeePercentage;
+  swapFeeUpdate.save();
 }
 
 /************************************
