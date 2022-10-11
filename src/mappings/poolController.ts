@@ -182,13 +182,13 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
     event.block.timestamp,
     newSwapFee,
     newSwapFee
-  )
+  );
 }
 
 export function createSwapFeeUpdate(
-  _id: string, 
-  _pool: Pool, 
-  _blockTimestamp: i32, 
+  _id: string,
+  _pool: Pool,
+  _blockTimestamp: i32,
   _startTimestamp: BigInt,
   _endTimestamp: BigInt,
   _startSwapFeePercentage: BigDecimal,
