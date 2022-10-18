@@ -164,8 +164,9 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
         break;
       }
     }
-    updatePoolLiquidity(poolId, blockTimestamp);
   }
+
+  updatePoolLiquidity(poolId, blockTimestamp);
 
   // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
   // with a non-zero value for the BPT amount when the pool is initialized,
