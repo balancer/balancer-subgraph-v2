@@ -166,8 +166,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
   }
 
-  updatePoolLiquidity(poolId, blockTimestamp);
-
   // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
   // with a non-zero value for the BPT amount when the pool is initialized,
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
@@ -182,6 +180,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.totalShares = pool.totalShares.minus(preMintedBpt);
     pool.save();
   }
+
+  updatePoolLiquidity(poolId, blockTimestamp);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -264,6 +264,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
       }
     }
   }
+
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -518,5 +519,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (preferentialToken != ZERO_ADDRESS) {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
+
   updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }
