@@ -36,12 +36,22 @@ import {
   MIN_SWAP_VALUE_USD,
   SWAP_IN,
   SWAP_OUT,
+  USDC_ADDRESS,
   ZERO,
   ZERO_ADDRESS,
   ZERO_BD,
 } from './helpers/constants';
-import { hasVirtualSupply, isVariableWeightPool, isStableLikePool, PoolType, isLinearPool } from './helpers/pools';
+import {
+  hasVirtualSupply,
+  isVariableWeightPool,
+  isStableLikePool,
+  PoolType,
+  isLinearPool,
+  isFXPool,
+} from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
+import { FXPool } from '../types/Vault/FXPool';
+import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -374,9 +384,25 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   if (poolAddress != tokenInAddress && poolAddress != tokenOutAddress) {
     swapValueUSD = swapValueInUSD(tokenInAddress, tokenAmountIn, tokenOutAddress, tokenAmountOut);
-    if (!isLinearPool(pool)) {
+    if (!isLinearPool(pool) && !isFXPool(pool)) {
       let swapFee = pool.swapFee;
       swapFeesUSD = swapValueUSD.times(swapFee);
+    } else if (isFXPool(pool)) {
+      // Custom logic for calculating trading fee for FXPools
+      let pool = FXPool.bind(Address.fromString(poolAddress.toHexString()));
+      let isTokenInBase = tokenOutAddress == USDC_ADDRESS;
+      let assimilatorRes = pool.try_assimilator(isTokenInBase ? tokenInAddress : tokenOutAddress);
+      let assimilator = BaseToUsdAssimilator.bind(assimilatorRes.value);
+      let rateRes = assimilator.try_getRate();
+      let baseRate = scaleDown(rateRes.value, 8);
+
+      if (isTokenInBase) {
+        // tokenIn = baseToken, fee = (amountIn * rate) - amountOut
+        swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut);
+      } else {
+        // tokenIn = USDC, fee = amountIn - (amountOut * rate)
+        swapFeesUSD = tokenAmountIn.minus(tokenAmountOut.times(baseRate));
+      }
     }
   }
 

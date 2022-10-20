@@ -43,6 +43,10 @@ dataSources:
           file: ./abis/StablePool.json
         - name: WeightedPoolFactory
           file: ./abis/WeightedPoolFactory.json
+        - name: FXPool
+          file: ./abis/FXPool.json
+        - name: BaseToUsdAssimilator
+          file: ./abis/BaseToUsdAssimilator.json
       eventHandlers:
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent

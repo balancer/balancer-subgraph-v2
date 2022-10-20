@@ -57,3 +57,13 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
 }
 
 export let VAULT_ADDRESS = forNetwork(vaultAddressByNetwork, network);
+
+let usdcAddressByNetwork: AddressByNetwork = {
+  mainnet: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  goerli: '0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb',
+  polygon: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+  arbitrum: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+  dev: '0x0000000000000000000000000000000000000000',
+};
+
+export let USDC_ADDRESS = forNetwork(usdcAddressByNetwork, network);
