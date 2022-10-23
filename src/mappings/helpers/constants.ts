@@ -9,6 +9,7 @@ export const SWAP_OUT = 1;
 export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
 
 export let MIN_POOL_LIQUIDITY = BigDecimal.fromString('2000');
+export let MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
 
 export class AddressByNetwork {
   public mainnet: string;
@@ -145,7 +146,7 @@ let altUsdtAddressByNetwork: AddressByNetwork = {
 let linearDaiAddressByNetwork: AddressByNetwork = {
   mainnet: '0x804CdB9116a10bB78768D3252355a1b18067bF8f',
   kovan: '0xfcccb77a946b6a3bd59d149f083b5bfbb8004d6d',
-  goerli: '0x0000000000000000000000000000000000000000',
+  goerli: '0x5cEA6A84eD13590ED14903925Fa1A73c36297d99',
   rinkeby: '0x0000000000000000000000000000000000000000',
   polygon: '0x0000000000000000000000000000000000000000',
   arbitrum: '0x0000000000000000000000000000000000000000',
@@ -155,7 +156,7 @@ let linearDaiAddressByNetwork: AddressByNetwork = {
 let linearUsdcAddressByNetwork: AddressByNetwork = {
   mainnet: '0x9210F1204b5a24742Eba12f710636D76240dF3d0',
   kovan: '0x0bbd32b14a6503ee20f87df38cf2d5d3b59ea2f5',
-  goerli: '0x0000000000000000000000000000000000000000',
+  goerli: '0x0595D1Df64279ddB51F1bdC405Fe2D0b4Cc86681',
   rinkeby: '0x0000000000000000000000000000000000000000',
   polygon: '0x0000000000000000000000000000000000000000',
   arbitrum: '0x0000000000000000000000000000000000000000',
@@ -165,7 +166,7 @@ let linearUsdcAddressByNetwork: AddressByNetwork = {
 let linearUsdtAddressByNetwork: AddressByNetwork = {
   mainnet: '0x2BBf681cC4eb09218BEe85EA2a5d3D13Fa40fC0C',
   kovan: '0xe667d48618e71c2a02e4a1b66ed9def1426938b6',
-  goerli: '0x0000000000000000000000000000000000000000',
+  goerli: '0xeFD681A82970AC5d980b9B2D40499735e7BF3F1F',
   rinkeby: '0x0000000000000000000000000000000000000000',
   polygon: '0x0000000000000000000000000000000000000000',
   arbitrum: '0x0000000000000000000000000000000000000000',
