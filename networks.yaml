@@ -39,12 +39,12 @@ mainnet:
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
-  PrimaryIssuePoolFactory:
-    address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
-    startBlock: 10960323
-  SecondaryIssuePoolFactory:
-    address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
-    startBlock: 10960335
+  #PrimaryIssuePoolFactory:
+  #  address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
+  #  startBlock: 10960323
+  #SecondaryIssuePoolFactory:
+  #  address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
+  #  startBlock: 10960335
 kovan:
   network: kovan
   Vault:
@@ -118,12 +118,12 @@ rinkeby:
   InvestmentPoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 9252383
-  PrimaryIssuePoolFactory:
-    address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
-    startBlock: 10960323
-  SecondaryIssuePoolFactory:
-    address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
-    startBlock: 10960335
+  #PrimaryIssuePoolFactory:
+  #  address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
+  #  startBlock: 10960323
+  #SecondaryIssuePoolFactory:
+  #  address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
+  #  startBlock: 10960335
 ropsten:
   network: ropsten
   Vault:
@@ -165,11 +165,11 @@ goerli:
     address: "0x0766B218517d9dC198155f0dC3485270cF788aF7"
     startBlock: 4752660
   PrimaryIssuePoolFactory:
-    address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
-    startBlock: 7104148
+    address: "0x6345af64B84Df6D459B6f50E3c5282736dbE61FC"
+    startBlock: 7818449
   SecondaryIssuePoolFactory:
-    address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
-    startBlock: 7104148
+    address: "0x860034169483050be19C0c9dcadA92975485c7eD"
+    startBlock: 7818440
   StablePoolFactory:
     address: "0x44afeb87c871D8fEA9398a026DeA2BD3A13F5769"
     startBlock: 6992992

@@ -15,6 +15,7 @@ const abiJSONfilenames = [
   'BalancerPoolToken',
   'BasePoolFactory',
   'PrimaryIssuePoolFactory',
+  'SecondaryIssuePoolFactory',
   'ERC20',
   'BalancerHelpers',
 ].map((a) => a + '.json');
