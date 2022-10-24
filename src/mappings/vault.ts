@@ -50,7 +50,6 @@ import {
   isFXPool,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
-import { FXPool } from '../types/Vault/FXPool';
 import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
 
 /************************************
