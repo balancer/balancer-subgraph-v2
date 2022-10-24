@@ -417,11 +417,6 @@ export function handleAssimilatorIncluded(event: ethereum.Event): void {
    *   event.parameters[2] = reserve
    *   event.parameters[3] = assimilator
    * */
-  let tokenAddress = event.parameters[2].value.toAddress();
-  if (tokenAddress == USDC_ADDRESS) {
-    return; // skip USDC, we are only interested on base token assimilator
-  }
-
   let poolAddress = event.address;
 
   // TODO - refactor so pool -> poolId doesn't require call
@@ -430,8 +425,10 @@ export function handleAssimilatorIncluded(event: ethereum.Event): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-  pool.baseAssimilator = event.parameters[3].value.toAddress();
+  let tokenAddress = event.parameters[2].value.toAddress();
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  if (poolToken == null) return;
 
-  pool.save();
+  poolToken.assimilator = event.parameters[3].value.toAddress();
+  poolToken.save();
 }

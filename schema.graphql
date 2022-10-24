@@ -96,9 +96,6 @@ type Pool @entity {
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
-
-  # FXPool Only
-  baseAssimilator: Bytes
 }
 
 type PoolToken @entity {
@@ -121,6 +118,9 @@ type PoolToken @entity {
 
   # ComposableStablePool Only
   isExemptFromYieldProtocolFee: Boolean
+
+  # FXPool Only
+  assimilator: Bytes
 }
 
 type PriceRateProvider @entity {

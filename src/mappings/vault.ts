@@ -388,7 +388,8 @@ export function handleSwapEvent(event: SwapEvent): void {
       swapFeesUSD = swapValueUSD.times(swapFee);
     } else if (isFXPool(pool)) {
       // Custom logic for calculating trading fee for FXPools
-      let baseAssimilator = pool.baseAssimilator;
+      let isTokenInBase = tokenOutAddress == USDC_ADDRESS;
+      let baseAssimilator = isTokenInBase ? poolTokenIn.assimilator : poolTokenOut.assimilator;
       if (baseAssimilator) {
         let assimilatorAddress = Address.fromString(baseAssimilator.toHexString());
         let assimilator = BaseToUsdAssimilator.bind(assimilatorAddress);
@@ -396,7 +397,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
         if (!rateRes.reverted) {
           let baseRate = scaleDown(rateRes.value, 8);
-          if (tokenOutAddress == USDC_ADDRESS) {
+          if (isTokenInBase) {
             // tokenIn = baseToken, fee = (amountIn * rate) - amountOut
             swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut);
           } else {
