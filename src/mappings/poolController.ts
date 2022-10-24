@@ -29,7 +29,7 @@ import {
   loadPriceRateProvider,
   getPoolShare,
 } from './helpers/misc';
-import { ONE_BD, ProtocolFeeType, USDC_ADDRESS, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
 import { ProtocolFeePercentageCacheUpdated } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 
