@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, ethereum, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
@@ -29,7 +29,7 @@ import {
   loadPriceRateProvider,
   getPoolShare,
 } from './helpers/misc';
-import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { ONE_BD, ProtocolFeeType, USDC_ADDRESS, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
 import { ProtocolFeePercentageCacheUpdated } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 
@@ -401,6 +401,37 @@ export function handleTransfer(event: Transfer): void {
   if (poolShareFrom !== null && poolShareFrom.balance.equals(ZERO_BD) && poolShareFromBalance.notEqual(ZERO_BD)) {
     pool.holdersCount = pool.holdersCount.minus(BigInt.fromI32(1));
   }
+
+  pool.save();
+}
+
+/************************************
+ ************* FXPOOL ***************
+ ************************************/
+
+export function handleAssimilatorIncluded(event: ethereum.Event): void {
+  /**
+   * FXPool emits a AssimilatorIncluded event with the following args:
+   *   event.parameters[0] = derivative
+   *   event.parameters[1] = numeraire
+   *   event.parameters[2] = reserve
+   *   event.parameters[3] = assimilator
+   * */
+  let tokenAddress = event.parameters[2].value.toAddress();
+  if (tokenAddress == USDC_ADDRESS) {
+    return; // skip USDC, we are only interested on base token assimilator
+  }
+
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.baseAssimilator = event.parameters[3].value.toAddress();
 
   pool.save();
 }

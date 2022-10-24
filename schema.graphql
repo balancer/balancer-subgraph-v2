@@ -96,6 +96,9 @@ type Pool @entity {
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
+
+  # FXPool Only
+  baseAssimilator: Bytes
 }
 
 type PoolToken @entity {

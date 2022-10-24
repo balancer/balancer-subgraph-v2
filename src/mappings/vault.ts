@@ -389,19 +389,22 @@ export function handleSwapEvent(event: SwapEvent): void {
       swapFeesUSD = swapValueUSD.times(swapFee);
     } else if (isFXPool(pool)) {
       // Custom logic for calculating trading fee for FXPools
-      let pool = FXPool.bind(Address.fromString(poolAddress.toHexString()));
-      let isTokenInBase = tokenOutAddress == USDC_ADDRESS;
-      let assimilatorRes = pool.try_assimilator(isTokenInBase ? tokenInAddress : tokenOutAddress);
-      let assimilator = BaseToUsdAssimilator.bind(assimilatorRes.value);
-      let rateRes = assimilator.try_getRate();
-      let baseRate = scaleDown(rateRes.value, 8);
+      let baseAssimilator = pool.baseAssimilator;
+      if (baseAssimilator) {
+        let assimilatorAddress = Address.fromString(baseAssimilator.toHexString());
+        let assimilator = BaseToUsdAssimilator.bind(assimilatorAddress);
+        let rateRes = assimilator.try_getRate();
 
-      if (isTokenInBase) {
-        // tokenIn = baseToken, fee = (amountIn * rate) - amountOut
-        swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut);
-      } else {
-        // tokenIn = USDC, fee = amountIn - (amountOut * rate)
-        swapFeesUSD = tokenAmountIn.minus(tokenAmountOut.times(baseRate));
+        if (!rateRes.reverted) {
+          let baseRate = scaleDown(rateRes.value, 8);
+          if (tokenOutAddress == USDC_ADDRESS) {
+            // tokenIn = baseToken, fee = (amountIn * rate) - amountOut
+            swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut);
+          } else {
+            // tokenIn = USDC, fee = amountIn - (amountOut * rate)
+            swapFeesUSD = tokenAmountIn.minus(tokenAmountOut.times(baseRate));
+          }
+        }
       }
     }
   }
