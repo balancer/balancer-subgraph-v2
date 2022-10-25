@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, ethereum, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
@@ -403,4 +403,32 @@ export function handleTransfer(event: Transfer): void {
   }
 
   pool.save();
+}
+
+/************************************
+ ************* FXPOOL ***************
+ ************************************/
+
+export function handleAssimilatorIncluded(event: ethereum.Event): void {
+  /**
+   * FXPool emits a AssimilatorIncluded event with the following args:
+   *   event.parameters[0] = derivative
+   *   event.parameters[1] = numeraire
+   *   event.parameters[2] = reserve
+   *   event.parameters[3] = assimilator
+   * */
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let tokenAddress = event.parameters[2].value.toAddress();
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  if (poolToken == null) return;
+
+  poolToken.assimilator = event.parameters[3].value.toAddress();
+  poolToken.save();
 }
