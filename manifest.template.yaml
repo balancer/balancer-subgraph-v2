@@ -1144,4 +1144,6 @@ templates:
           handler: handleTransfer
         - event: AssimilatorIncluded(indexed address,indexed address,indexed address,address)
           handler: handleAssimilatorIncluded
+        - event: ParametersSet(uint256,uint256,uint256,uint256,uint256)
+          handler: handleParametersSet
     

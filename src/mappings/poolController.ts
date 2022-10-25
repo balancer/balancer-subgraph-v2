@@ -432,3 +432,31 @@ export function handleAssimilatorIncluded(event: ethereum.Event): void {
   poolToken.assimilator = event.parameters[3].value.toAddress();
   poolToken.save();
 }
+
+export function handleParametersSet(event: ethereum.Event): void {
+  /**
+   * FXPool emits a ParametersSet event with the following params:
+   *   event.parameters[0] = alpha
+   *   event.parameters[1] = beta
+   *   event.parameters[2] = delta
+   *   event.parameters[3] = epsilon
+   *   event.parameters[4] = lambda
+   * */
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.alpha = scaleDown(event.parameters[0].value.toBigInt(), 18);
+  pool.beta = scaleDown(event.parameters[1].value.toBigInt(), 18);
+  pool.delta = scaleDown(event.parameters[2].value.toBigInt(), 18);
+  pool.epsilon = scaleDown(event.parameters[3].value.toBigInt(), 18);
+  pool.lambda = scaleDown(event.parameters[4].value.toBigInt(), 18);
+
+  pool.save();
+}
