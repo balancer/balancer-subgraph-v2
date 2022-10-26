@@ -19,6 +19,7 @@ import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
+import { ParametersSet } from '../types/templates/FXPool/FXPool';
 import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
 
 import {
@@ -409,15 +410,7 @@ export function handleTransfer(event: Transfer): void {
  ************* FXPOOL ***************
  ************************************/
 
-export function handleParametersSet(event: ethereum.Event): void {
-  /**
-   * FXPool emits a ParametersSet event with the following params:
-   *   event.parameters[0] = alpha
-   *   event.parameters[1] = beta
-   *   event.parameters[2] = delta
-   *   event.parameters[3] = epsilon
-   *   event.parameters[4] = lambda
-   * */
+export function handleParametersSet(event: ParametersSet): void {
   let poolAddress = event.address;
 
   // TODO - refactor so pool -> poolId doesn't require call
@@ -428,11 +421,11 @@ export function handleParametersSet(event: ethereum.Event): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  pool.alpha = scaleDown(event.parameters[0].value.toBigInt(), 18);
-  pool.beta = scaleDown(event.parameters[1].value.toBigInt(), 18);
-  pool.delta = scaleDown(event.parameters[2].value.toBigInt(), 18);
-  pool.epsilon = scaleDown(event.parameters[3].value.toBigInt(), 18);
-  pool.lambda = scaleDown(event.parameters[4].value.toBigInt(), 18);
+  pool.alpha = scaleDown(event.params.alpha, 18);
+  pool.beta = scaleDown(event.params.beta, 18);
+  pool.delta = scaleDown(event.params.delta, 18);
+  pool.epsilon = scaleDown(event.params.epsilon, 18);
+  pool.lambda = scaleDown(event.params.lambda, 18);
 
   pool.save();
 }
