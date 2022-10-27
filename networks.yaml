@@ -87,7 +87,7 @@ goerli:
     address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
     startBlock: 7542764
   ComposableStablePoolAMPModifiedFactory:
-    address: "0x5dcfec1ceab209cd1c2669cfbde83103b0b0198b"
+    address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
     startBlock: 7842251  
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
