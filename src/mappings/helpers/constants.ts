@@ -1,6 +1,6 @@
 import { BigDecimal, BigInt, Address, dataSource } from '@graphprotocol/graph-ts';
 
-import assets from './assets';
+import { assets } from './assets';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace ProtocolFeeType {
