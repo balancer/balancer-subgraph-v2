@@ -86,7 +86,7 @@ goerli:
   ComposableStablePoolFactory:
     address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
     startBlock: 7542764
-  ComposableStablePoolAMPModifiedFactory:
+  HighAmpComposableStablePoolFactory:
     address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
     startBlock: 7842251  
   AaveLinearPoolFactory:
