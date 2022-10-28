@@ -43,6 +43,10 @@ dataSources:
           file: ./abis/StablePool.json
         - name: WeightedPoolFactory
           file: ./abis/WeightedPoolFactory.json
+        - name: FXPool
+          file: ./abis/FXPool.json
+        - name: BaseToUsdAssimilator
+          file: ./abis/BaseToUsdAssimilator.json
       eventHandlers:
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent
@@ -403,6 +407,39 @@ dataSources:
       address: '{{ComposableStablePoolFactory.address}}'
       abi: ComposableStablePoolFactory
       startBlock: {{ComposableStablePoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: ComposableStablePoolFactory
+          file: ./abis/ComposableStablePoolFactory.json
+        - name: ComposableStablePool
+          file: ./abis/ComposableStablePool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewComposableStablePool
+  {{/if}}
+  {{#if HighAmpComposableStablePoolFactory}}
+  - kind: ethereum/contract
+    name: HighAmpComposableStablePoolFactory
+    network: {{network}}
+    source:
+      address: '{{HighAmpComposableStablePoolFactory.address}}'
+      abi: ComposableStablePoolFactory
+      startBlock: {{HighAmpComposableStablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -1138,4 +1175,8 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+        - event: AssimilatorIncluded(indexed address,indexed address,indexed address,address)
+          handler: handleAssimilatorIncluded
+        - event: ParametersSet(uint256,uint256,uint256,uint256,uint256)
+          handler: handleParametersSet
     

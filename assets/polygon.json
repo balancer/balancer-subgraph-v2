@@ -31,6 +31,10 @@
       "symbol": "BAL"
     },
     {
+      "address": "0x3d468ab2329f296e1b9d8476bb54dd77d8c2320f",
+      "symbol": "B-80BAL-20WETH"
+    },
+    {
       "address": "0x6f7C932e7684666C9fd1d44527765433e01fF61d", 
       "symbol": "MKR"
     },
