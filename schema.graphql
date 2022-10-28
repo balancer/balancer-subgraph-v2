@@ -124,6 +124,9 @@ type PoolToken @entity {
 
   # ComposableStablePool Only
   isExemptFromYieldProtocolFee: Boolean
+
+  # FXPool Only
+  assimilator: Bytes
 }
 
 type PriceRateProvider @entity {
