@@ -36,7 +36,6 @@ import {
   MIN_SWAP_VALUE_USD,
   SWAP_IN,
   SWAP_OUT,
-  USDC_ADDRESS,
   ZERO,
   ZERO_ADDRESS,
   ZERO_BD,
@@ -51,6 +50,7 @@ import {
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
+import { USDC_ADDRESS } from './helpers/assets';
 
 /************************************
  ******** INTERNAL BALANCES *********
