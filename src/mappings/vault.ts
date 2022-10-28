@@ -164,7 +164,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
         break;
       }
     }
-    updatePoolLiquidity(poolId, blockTimestamp);
   }
 
   // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
@@ -181,6 +180,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.totalShares = pool.totalShares.minus(preMintedBpt);
     pool.save();
   }
+
+  updatePoolLiquidity(poolId, blockTimestamp);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -263,6 +264,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
       }
     }
   }
+
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -517,5 +519,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (preferentialToken != ZERO_ADDRESS) {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
+
   updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }

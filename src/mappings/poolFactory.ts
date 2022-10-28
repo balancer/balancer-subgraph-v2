@@ -140,6 +140,12 @@ export function handleNewStablePool(event: PoolCreated): void {
   StablePoolTemplate.create(event.params.pool);
 }
 
+export function handleNewStablePoolV2(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.Stable, 2);
+  if (pool == null) return;
+  StablePoolTemplate.create(event.params.pool);
+}
+
 export function handleNewMetaStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.MetaStable);
   if (pool == null) return;
@@ -152,7 +158,7 @@ export function handleNewStablePhantomPool(event: PoolCreated): void {
   StablePhantomPoolTemplate.create(event.params.pool);
 }
 
-export function handleNewStablePhantomPoolV2(event: PoolCreated): void {
+export function handleNewComposableStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.ComposableStable);
   if (pool == null) return;
   StablePhantomPoolV2Template.create(event.params.pool);
