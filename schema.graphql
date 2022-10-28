@@ -77,11 +77,8 @@ type Pool @entity {
   root3Alpha: BigDecimal
 
   # GyroCEMMPool Only
-  alpha: BigDecimal
-  beta: BigDecimal
   c: BigDecimal
   s: BigDecimal
-  lambda: BigDecimal
   tauAlphaX: BigDecimal
   tauAlphaY: BigDecimal
   tauBetaX: BigDecimal
@@ -91,6 +88,15 @@ type Pool @entity {
   w: BigDecimal
   z: BigDecimal
   dSq: BigDecimal
+
+  # GyroCEMMPool+FXPool Only
+  alpha: BigDecimal
+  beta: BigDecimal
+  lambda: BigDecimal
+
+  # FXPool Only
+  delta: BigDecimal
+  epsilon: BigDecimal
 
   # Composable and WeightedV2 Only
   protocolSwapFeeCache: BigDecimal
@@ -118,9 +124,6 @@ type PoolToken @entity {
 
   # ComposableStablePool Only
   isExemptFromYieldProtocolFee: Boolean
-
-  # FXPool Only
-  assimilator: Bytes
 }
 
 type PriceRateProvider @entity {
