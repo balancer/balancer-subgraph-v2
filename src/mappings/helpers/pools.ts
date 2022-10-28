@@ -53,6 +53,10 @@ export function isStableLikePool(pool: Pool): boolean {
   );
 }
 
+export function isFXPool(pool: Pool): boolean {
+  return pool.poolType == PoolType.FX;
+}
+
 export function getPoolAddress(poolId: string): Address {
   return changetype<Address>(Address.fromHexString(poolId.slice(0, 42)));
 }
