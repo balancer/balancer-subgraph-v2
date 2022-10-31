@@ -86,6 +86,9 @@ goerli:
   ComposableStablePoolFactory:
     address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
     startBlock: 7542764
+  HighAmpComposableStablePoolFactory:
+    address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
+    startBlock: 7842251
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
     startBlock: 6993887
@@ -97,9 +100,9 @@ goerli:
     startBlock: 7546831
 polygon:
   network: matic
-  # graft:
-  #   block: 32054794
-  #   base: QmYX1jk9d745tSn5fDHE1racdXFmQCdfjZ1QHU2sUnwyLT
+  graft:
+    block: 32054797
+    base: QmSWtXDQ43QeHz1vZjBTQYwXLTLxCbA3AFkPFPigvFuhLb
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990

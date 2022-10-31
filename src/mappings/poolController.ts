@@ -19,6 +19,7 @@ import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
+import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
 import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
 
 import {
@@ -403,4 +404,45 @@ export function handleTransfer(event: Transfer): void {
   }
 
   pool.save();
+}
+
+/************************************
+ ************* FXPOOL ***************
+ ************************************/
+
+export function handleParametersSet(event: ParametersSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.alpha = scaleDown(event.params.alpha, 18);
+  pool.beta = scaleDown(event.params.beta, 18);
+  pool.delta = scaleDown(event.params.delta, 18);
+  pool.epsilon = scaleDown(event.params.epsilon, 18);
+  pool.lambda = scaleDown(event.params.lambda, 18);
+
+  pool.save();
+}
+
+export function handleAssimilatorIncluded(event: AssimilatorIncluded): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let tokenAddress = event.params.reserve;
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  if (poolToken == null) return;
+
+  poolToken.assimilator = event.params.assimilator;
+  poolToken.save();
 }

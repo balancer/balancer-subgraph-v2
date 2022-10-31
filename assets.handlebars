@@ -9,7 +9,11 @@ class Assets {
   public pricingAssets: Address[];
 }
 
-const assets: Assets = {
+{{#each stableAssets}}
+export const {{symbol}}_ADDRESS = Address.fromString('{{address}}');
+{{/each}}
+
+export const assets: Assets = {
   stableAssets: [
     {{#each stableAssets}}
     Address.fromString('{{address}}'), // {{symbol}}
@@ -21,5 +25,3 @@ const assets: Assets = {
     {{/each}}
   ],
 };
-
-export default assets;
