@@ -47,6 +47,7 @@ import {
   PoolType,
   isLinearPool,
   isFXPool,
+  isComposableStablePool,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
@@ -179,7 +180,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   // with a non-zero value for the BPT amount when the pool is initialized,
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
   // and therefore must be subtracted from totalShares
-  if (pool.poolType == PoolType.StablePhantom || pool.poolType == PoolType.ComposableStable) {
+  if (pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool)) {
     let preMintedBpt = ZERO_BD;
     for (let i: i32 = 0; i < tokenAddresses.length; i++) {
       if (tokenAddresses[i] == pool.address) {
