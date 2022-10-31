@@ -15,6 +15,7 @@ export namespace PoolType {
   export const Investment = 'Investment';
   export const StablePhantom = 'StablePhantom';
   export const ComposableStable = 'ComposableStable';
+  export const HighAmpComposableStable = 'HighAmpComposableStable';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
   export const Gyro2 = 'Gyro2';
