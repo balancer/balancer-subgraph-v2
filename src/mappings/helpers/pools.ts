@@ -38,10 +38,7 @@ export function hasVirtualSupply(pool: Pool): boolean {
 }
 
 export function isComposableStablePool(pool: Pool): boolean {
-  return (
-    pool.poolType == PoolType.ComposableStable ||
-    pool.poolType == PoolType.HighAmpComposableStable
-  );
+  return pool.poolType == PoolType.ComposableStable || pool.poolType == PoolType.HighAmpComposableStable;
 }
 
 export function isLinearPool(pool: Pool): boolean {
