@@ -329,7 +329,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   management.save();
 
   // The wrapped token in a linear pool is hardly ever traded, meaning we rarely compute its USD price
-  // This creates am exceptional entry for the token price of the wrapped token, 
+  // This creates an exceptional entry for the token price of the wrapped token,
   // with the main token as the pricing asset even if it's not globally defined as one
   // TODO: is this the best handler for this?
   if (pool.poolType == PoolType.AaveLinear) {
@@ -343,12 +343,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
         const asset = bytesToAddress(pool.tokensList[pool.wrappedIndex]);
         const pricingAsset = bytesToAddress(pool.tokensList[pool.mainIndex]);
         const price = scaleDown(rate, 18);
-        let tokenPriceId = getTokenPriceId(
-          poolId.toHex(),
-          asset,
-          pricingAsset,
-          event.block.number
-        );
+        let tokenPriceId = getTokenPriceId(poolId.toHex(), asset, pricingAsset, event.block.number);
         let tokenPrice = new TokenPrice(tokenPriceId);
         tokenPrice.poolId = poolId.toHexString();
         tokenPrice.block = event.block.number;
