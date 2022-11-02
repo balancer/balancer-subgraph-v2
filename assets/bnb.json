@@ -19,6 +19,10 @@
       "symbol": "WETH"
     },
     {
+      "address": "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "symbol": "WBNB"
+    },
+    {
       "address": "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
       "symbol": "BTCB"
     }
