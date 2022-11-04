@@ -42,33 +42,41 @@ export class PoolCreated__Params {
   }
 }
 
-export class PrimaryIssuePoolFactory__createInputParamsStruct extends ethereum.Tuple {
+export class PrimaryIssuePoolFactory__createInput_factoryPoolParamsStruct extends ethereum.Tuple {
+  get name(): string {
+    return this[0].toString();
+  }
+
+  get symbol(): string {
+    return this[1].toString();
+  }
+
   get security(): Address {
-    return this[0].toAddress();
+    return this[2].toAddress();
   }
 
   get currency(): Address {
-    return this[1].toAddress();
+    return this[3].toAddress();
   }
 
   get minimumPrice(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get basePrice(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get maxAmountsIn(): BigInt {
     return this[4].toBigInt();
   }
 
-  get issueFeePercentage(): BigInt {
+  get basePrice(): BigInt {
     return this[5].toBigInt();
   }
 
-  get cutOffTime(): BigInt {
+  get maxAmountsIn(): BigInt {
     return this[6].toBigInt();
+  }
+
+  get swapFeePercentage(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get cutOffTime(): BigInt {
+    return this[8].toBigInt();
   }
 }
 
@@ -111,23 +119,25 @@ export class PrimaryIssuePoolFactory extends ethereum.SmartContract {
     return new PrimaryIssuePoolFactory("PrimaryIssuePoolFactory", address);
   }
 
-  create(params: PrimaryIssuePoolFactory__createInputParamsStruct): Address {
+  create(
+    _factoryPoolParams: PrimaryIssuePoolFactory__createInput_factoryPoolParamsStruct
+  ): Address {
     let result = super.call(
       "create",
-      "create((address,address,uint256,uint256,uint256,uint256,uint256)):(address)",
-      [ethereum.Value.fromTuple(params)]
+      "create((string,string,address,address,uint256,uint256,uint256,uint256,uint256)):(address)",
+      [ethereum.Value.fromTuple(_factoryPoolParams)]
     );
 
     return result[0].toAddress();
   }
 
   try_create(
-    params: PrimaryIssuePoolFactory__createInputParamsStruct
+    _factoryPoolParams: PrimaryIssuePoolFactory__createInput_factoryPoolParamsStruct
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "create",
-      "create((address,address,uint256,uint256,uint256,uint256,uint256)):(address)",
-      [ethereum.Value.fromTuple(params)]
+      "create((string,string,address,address,uint256,uint256,uint256,uint256,uint256)):(address)",
+      [ethereum.Value.fromTuple(_factoryPoolParams)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -259,6 +269,29 @@ export class PrimaryIssuePoolFactory extends ethereum.SmartContract {
     );
   }
 
+  getProtocolFeePercentagesProvider(): Address {
+    let result = super.call(
+      "getProtocolFeePercentagesProvider",
+      "getProtocolFeePercentagesProvider():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getProtocolFeePercentagesProvider(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getProtocolFeePercentagesProvider",
+      "getProtocolFeePercentagesProvider():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getVault(): Address {
     let result = super.call("getVault", "getVault():(address)", []);
 
@@ -333,6 +366,10 @@ export class ConstructorCall__Inputs {
   get vault(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
+
+  get protocolFeeProvider(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
@@ -360,8 +397,8 @@ export class CreateCall__Inputs {
     this._call = call;
   }
 
-  get params(): CreateCallParamsStruct {
-    return changetype<CreateCallParamsStruct>(
+  get _factoryPoolParams(): CreateCall_factoryPoolParamsStruct {
+    return changetype<CreateCall_factoryPoolParamsStruct>(
       this._call.inputValues[0].value.toTuple()
     );
   }
@@ -379,33 +416,41 @@ export class CreateCall__Outputs {
   }
 }
 
-export class CreateCallParamsStruct extends ethereum.Tuple {
+export class CreateCall_factoryPoolParamsStruct extends ethereum.Tuple {
+  get name(): string {
+    return this[0].toString();
+  }
+
+  get symbol(): string {
+    return this[1].toString();
+  }
+
   get security(): Address {
-    return this[0].toAddress();
+    return this[2].toAddress();
   }
 
   get currency(): Address {
-    return this[1].toAddress();
+    return this[3].toAddress();
   }
 
   get minimumPrice(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get basePrice(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get maxAmountsIn(): BigInt {
     return this[4].toBigInt();
   }
 
-  get issueFeePercentage(): BigInt {
+  get basePrice(): BigInt {
     return this[5].toBigInt();
   }
 
-  get cutOffTime(): BigInt {
+  get maxAmountsIn(): BigInt {
     return this[6].toBigInt();
+  }
+
+  get swapFeePercentage(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get cutOffTime(): BigInt {
+    return this[8].toBigInt();
   }
 }
 

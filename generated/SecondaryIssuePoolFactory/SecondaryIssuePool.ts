@@ -544,6 +544,50 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getDomainSeparator(): Bytes {
+    let result = super.call(
+      "getDomainSeparator",
+      "getDomainSeparator():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_getDomainSeparator(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "getDomainSeparator",
+      "getDomainSeparator():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  getNextNonce(account: Address): BigInt {
+    let result = super.call("getNextNonce", "getNextNonce(address):(uint256)", [
+      ethereum.Value.fromAddress(account)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getNextNonce(account: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getNextNonce",
+      "getNextNonce(address):(uint256)",
+      [ethereum.Value.fromAddress(account)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getOrderRef(): Array<Bytes> {
     let result = super.call("getOrderRef", "getOrderRef():(bytes32[])", []);
 

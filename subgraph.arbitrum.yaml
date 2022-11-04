@@ -10,7 +10,7 @@ dataSources:
     source:
       address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
-      startBlock: 222831
+      startBlock: 222832
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -36,6 +36,12 @@ dataSources:
           file: ./abis/WeightedPool.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPoolFactory
+          file: ./abis/WeightedPoolFactory.json
+        - name: FXPool
+          file: ./abis/FXPool.json
+        - name: BaseToUsdAssimilator
+          file: ./abis/BaseToUsdAssimilator.json
       eventHandlers:
         - event: Swap(indexed bytes32,indexed address,indexed address,uint256,uint256)
           handler: handleSwapEvent
@@ -72,6 +78,35 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewWeightedPool
+  - kind: ethereum/contract
+    name: WeightedPoolV2Factory
+    network: arbitrum-one
+    source:
+      address: '0x8df6EfEc5547e31B0eb7d1291B511FF8a2bf987c'
+      abi: WeightedPoolFactory
+      startBlock: 23605789
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPoolFactory
+          file: ./abis/WeightedPoolFactory.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewWeightedPoolV2
   - kind: ethereum/contract
     name: WeightedPool2TokenFactory
     network: arbitrum-one
@@ -158,7 +193,7 @@ dataSources:
           file: ./abis/StablePool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewStablePool
+          handler: handleNewStablePoolV2
   - kind: ethereum/contract
     name: MetaStablePoolFactory
     network: arbitrum-one
@@ -278,6 +313,68 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewInvestmentPool
   - kind: ethereum/contract
+    name: ComposableStablePoolFactory
+    network: arbitrum-one
+    source:
+      address: '0xaEb406b0E430BF5Ea2Dc0B9Fe62E4E53f74B3a33'
+      abi: ComposableStablePoolFactory
+      startBlock: 23227044
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: ComposableStablePoolFactory
+          file: ./abis/ComposableStablePoolFactory.json
+        - name: ComposableStablePool
+          file: ./abis/ComposableStablePool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewComposableStablePool
+  - kind: ethereum/contract
+    name: AaveLinearPoolV2Factory
+    network: arbitrum-one
+    source:
+      address: '0xe2E901AB09f37884BA31622dF3Ca7FC19AA443Be'
+      abi: AaveLinearPoolFactory
+      startBlock: 20509414
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: AaveLinearPoolFactory
+          file: ./abis/AaveLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewAaveLinearPoolV2
+  - kind: ethereum/contract
     name: ERC4626LinearPoolFactory
     network: arbitrum-one
     source:
@@ -334,6 +431,35 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: WeightedPoolV2
+    network: arbitrum-one
+    source:
+      abi: WeightedPoolV2
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
+        - name: BalancerPoolToken
+          file: ./abis/BalancerPoolToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: ProtocolFeePercentageCacheUpdated(indexed uint256,uint256)
+          handler: handleProtocolFeePercentageCacheUpdated
   - kind: ethereum/contract
     name: WeightedPool2Tokens
     network: arbitrum-one
@@ -562,6 +688,46 @@ templates:
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
   - kind: ethereum/contract
+    name: StablePhantomPoolV2
+    network: arbitrum-one
+    source:
+      abi: ComposableStablePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+        - name: MetaStablePool
+          file: ./abis/MetaStablePool.json
+        - name: ComposableStablePool
+          file: ./abis/ComposableStablePool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: AmpUpdateStarted(uint256,uint256,uint256,uint256)
+          handler: handleAmpUpdateStarted
+        - event: AmpUpdateStopped(uint256)
+          handler: handleAmpUpdateStopped
+        - event: TokenRateProviderSet(indexed uint256,indexed address,uint256)
+          handler: handleTokenRateProviderSet
+        - event: TokenRateCacheUpdated(indexed uint256,uint256)
+          handler: handleTokenRateCacheUpdated
+        - event: ProtocolFeePercentageCacheUpdated(indexed uint256,uint256)
+          handler: handleProtocolFeePercentageCacheUpdated
+  - kind: ethereum/contract
     name: LinearPool
     network: arbitrum-one
     source:
@@ -645,6 +811,8 @@ templates:
           handler: handleSecondaryOffer
         - event: tradeReport(indexed address,address,address,uint256,uint256,address,uint256,bytes32,uint256)
           handler: handleTradeReport
+        - event: bestAvailableTrades(uint256,uint256)
+          handler: handleBestAvailableTrades
   - kind: ethereum/contract
     name: Gyro2Pool
     network: arbitrum-one
@@ -697,3 +865,58 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange    
+  - kind: ethereum/contract
+    name: GyroCEMMPool
+    network: arbitrum-one
+    source:
+      abi: GyroCEMMPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: GyroCEMMPool
+          file: ./abis/GyroCEMMPool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+  - kind: ethereum/contract
+    name: FXPool
+    network: arbitrum-one
+    source:
+      abi: FXPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: FXPool
+          file: ./abis/FXPool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: AssimilatorIncluded(indexed address,indexed address,indexed address,address)
+          handler: handleAssimilatorIncluded
+        - event: ParametersSet(uint256,uint256,uint256,uint256,uint256)
+          handler: handleParametersSet
+    

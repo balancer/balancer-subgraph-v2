@@ -57,12 +57,16 @@ export class OpenIssue__Params {
     return this._event.parameters[1].value.toBigInt();
   }
 
-  get securityOffered(): BigInt {
+  get maxPrice(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
 
-  get cutoffTime(): BigInt {
+  get securityOffered(): BigInt {
     return this._event.parameters[3].value.toBigInt();
+  }
+
+  get cutoffTime(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
   }
 }
 
@@ -486,6 +490,21 @@ export class PrimaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getBptIndex(): BigInt {
+    let result = super.call("getBptIndex", "getBptIndex():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_getBptIndex(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getBptIndex", "getBptIndex():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getCurrency(): Address {
     let result = super.call("getCurrency", "getCurrency():(address)", []);
 
@@ -499,6 +518,142 @@ export class PrimaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getCurrencyIndex(): BigInt {
+    let result = super.call(
+      "getCurrencyIndex",
+      "getCurrencyIndex():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getCurrencyIndex(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getCurrencyIndex",
+      "getCurrencyIndex():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getDomainSeparator(): Bytes {
+    let result = super.call(
+      "getDomainSeparator",
+      "getDomainSeparator():(bytes32)",
+      []
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_getDomainSeparator(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "getDomainSeparator",
+      "getDomainSeparator():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  getIssueCutoffTime(): BigInt {
+    let result = super.call(
+      "getIssueCutoffTime",
+      "getIssueCutoffTime():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getIssueCutoffTime(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getIssueCutoffTime",
+      "getIssueCutoffTime():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getMaximumPrice(): BigInt {
+    let result = super.call(
+      "getMaximumPrice",
+      "getMaximumPrice():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getMaximumPrice(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getMaximumPrice",
+      "getMaximumPrice():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getMinimumPrice(): BigInt {
+    let result = super.call(
+      "getMinimumPrice",
+      "getMinimumPrice():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getMinimumPrice(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getMinimumPrice",
+      "getMinimumPrice():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getNextNonce(account: Address): BigInt {
+    let result = super.call("getNextNonce", "getNextNonce(address):(uint256)", [
+      ethereum.Value.fromAddress(account)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getNextNonce(account: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getNextNonce",
+      "getNextNonce(address):(uint256)",
+      [ethereum.Value.fromAddress(account)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   getOwner(): Address {
@@ -625,6 +780,52 @@ export class PrimaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getSecurityIndex(): BigInt {
+    let result = super.call(
+      "getSecurityIndex",
+      "getSecurityIndex():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getSecurityIndex(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getSecurityIndex",
+      "getSecurityIndex():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getSecurityOffered(): BigInt {
+    let result = super.call(
+      "getSecurityOffered",
+      "getSecurityOffered():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getSecurityOffered(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getSecurityOffered",
+      "getSecurityOffered():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   getSwapFeePercentage(): BigInt {
@@ -1152,44 +1353,22 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get security(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get currency(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get minimumPrice(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get basePrice(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-
-  get maxSecurityOffered(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
-  get issueFeePercentage(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
+  get _factoryPoolParams(): ConstructorCall_factoryPoolParamsStruct {
+    return changetype<ConstructorCall_factoryPoolParamsStruct>(
+      this._call.inputValues[1].value.toTuple()
+    );
   }
 
   get pauseWindowDuration(): BigInt {
-    return this._call.inputValues[7].value.toBigInt();
+    return this._call.inputValues[2].value.toBigInt();
   }
 
   get bufferPeriodDuration(): BigInt {
-    return this._call.inputValues[8].value.toBigInt();
-  }
-
-  get issueCutoffTime(): BigInt {
-    return this._call.inputValues[9].value.toBigInt();
+    return this._call.inputValues[3].value.toBigInt();
   }
 
   get owner(): Address {
-    return this._call.inputValues[10].value.toAddress();
+    return this._call.inputValues[4].value.toAddress();
   }
 }
 
@@ -1198,6 +1377,44 @@ export class ConstructorCall__Outputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
+  }
+}
+
+export class ConstructorCall_factoryPoolParamsStruct extends ethereum.Tuple {
+  get name(): string {
+    return this[0].toString();
+  }
+
+  get symbol(): string {
+    return this[1].toString();
+  }
+
+  get security(): Address {
+    return this[2].toAddress();
+  }
+
+  get currency(): Address {
+    return this[3].toAddress();
+  }
+
+  get minimumPrice(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get basePrice(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get maxAmountsIn(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get swapFeePercentage(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get cutOffTime(): BigInt {
+    return this[8].toBigInt();
   }
 }
 

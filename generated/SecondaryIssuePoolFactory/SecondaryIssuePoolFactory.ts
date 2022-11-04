@@ -255,6 +255,29 @@ export class SecondaryIssuePoolFactory extends ethereum.SmartContract {
     );
   }
 
+  getProtocolFeePercentagesProvider(): Address {
+    let result = super.call(
+      "getProtocolFeePercentagesProvider",
+      "getProtocolFeePercentagesProvider():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getProtocolFeePercentagesProvider(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getProtocolFeePercentagesProvider",
+      "getProtocolFeePercentagesProvider():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getVault(): Address {
     let result = super.call("getVault", "getVault():(address)", []);
 
@@ -328,6 +351,10 @@ export class ConstructorCall__Inputs {
 
   get vault(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get protocolFeeProvider(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 

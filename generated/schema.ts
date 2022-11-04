@@ -118,6 +118,7 @@ export class Pool extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("address", Value.fromBytes(Bytes.empty()));
+    this.set("poolTypeVersion", Value.fromI32(0));
     this.set("strategyType", Value.fromI32(0));
     this.set("oracleEnabled", Value.fromBoolean(false));
     this.set("swapEnabled", Value.fromBoolean(false));
@@ -186,6 +187,15 @@ export class Pool extends Entity {
     } else {
       this.set("poolType", Value.fromString(<string>value));
     }
+  }
+
+  get poolTypeVersion(): i32 {
+    let value = this.get("poolTypeVersion");
+    return value!.toI32();
+  }
+
+  set poolTypeVersion(value: i32) {
+    this.set("poolTypeVersion", Value.fromI32(value));
   }
 
   get factory(): Bytes | null {
@@ -1153,6 +1163,332 @@ export class SecondaryTrades extends Entity {
   set executionDate(value: i32) {
     this.set("executionDate", Value.fromI32(value));
   }
+
+  get c(): BigDecimal | null {
+    let value = this.get("c");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set c(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("c");
+    } else {
+      this.set("c", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get s(): BigDecimal | null {
+    let value = this.get("s");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set s(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("s");
+    } else {
+      this.set("s", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get tauAlphaX(): BigDecimal | null {
+    let value = this.get("tauAlphaX");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set tauAlphaX(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("tauAlphaX");
+    } else {
+      this.set("tauAlphaX", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get tauAlphaY(): BigDecimal | null {
+    let value = this.get("tauAlphaY");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set tauAlphaY(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("tauAlphaY");
+    } else {
+      this.set("tauAlphaY", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get tauBetaX(): BigDecimal | null {
+    let value = this.get("tauBetaX");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set tauBetaX(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("tauBetaX");
+    } else {
+      this.set("tauBetaX", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get tauBetaY(): BigDecimal | null {
+    let value = this.get("tauBetaY");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set tauBetaY(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("tauBetaY");
+    } else {
+      this.set("tauBetaY", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get u(): BigDecimal | null {
+    let value = this.get("u");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set u(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("u");
+    } else {
+      this.set("u", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get v(): BigDecimal | null {
+    let value = this.get("v");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set v(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("v");
+    } else {
+      this.set("v", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get w(): BigDecimal | null {
+    let value = this.get("w");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set w(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("w");
+    } else {
+      this.set("w", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get z(): BigDecimal | null {
+    let value = this.get("z");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set z(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("z");
+    } else {
+      this.set("z", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get dSq(): BigDecimal | null {
+    let value = this.get("dSq");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set dSq(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("dSq");
+    } else {
+      this.set("dSq", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get alpha(): BigDecimal | null {
+    let value = this.get("alpha");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set alpha(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("alpha");
+    } else {
+      this.set("alpha", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get beta(): BigDecimal | null {
+    let value = this.get("beta");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set beta(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("beta");
+    } else {
+      this.set("beta", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get lambda(): BigDecimal | null {
+    let value = this.get("lambda");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set lambda(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("lambda");
+    } else {
+      this.set("lambda", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get delta(): BigDecimal | null {
+    let value = this.get("delta");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set delta(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("delta");
+    } else {
+      this.set("delta", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get epsilon(): BigDecimal | null {
+    let value = this.get("epsilon");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set epsilon(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("epsilon");
+    } else {
+      this.set("epsilon", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get protocolSwapFeeCache(): BigDecimal | null {
+    let value = this.get("protocolSwapFeeCache");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set protocolSwapFeeCache(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("protocolSwapFeeCache");
+    } else {
+      this.set("protocolSwapFeeCache", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
+
+  get protocolYieldFeeCache(): BigDecimal | null {
+    let value = this.get("protocolYieldFeeCache");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set protocolYieldFeeCache(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("protocolYieldFeeCache");
+    } else {
+      this.set(
+        "protocolYieldFeeCache",
+        Value.fromBigDecimal(<BigDecimal>value)
+      );
+    }
+  }
+
+  get protocolAumFeeCache(): BigDecimal | null {
+    let value = this.get("protocolAumFeeCache");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set protocolAumFeeCache(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("protocolAumFeeCache");
+    } else {
+      this.set("protocolAumFeeCache", Value.fromBigDecimal(<BigDecimal>value));
+    }
+  }
 }
 
 export class PoolToken extends Entity {
@@ -1170,6 +1506,7 @@ export class PoolToken extends Entity {
     this.set("balance", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("cashBalance", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("managedBalance", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("isExemptFromYieldProtocolFee", Value.fromBoolean(false));
   }
 
   save(): void {
@@ -1338,6 +1675,32 @@ export class PoolToken extends Entity {
       this.set("weight", Value.fromBigDecimal(<BigDecimal>value));
     }
   }
+
+  get isExemptFromYieldProtocolFee(): boolean {
+    let value = this.get("isExemptFromYieldProtocolFee");
+    return value!.toBoolean();
+  }
+
+  set isExemptFromYieldProtocolFee(value: boolean) {
+    this.set("isExemptFromYieldProtocolFee", Value.fromBoolean(value));
+  }
+
+  get assimilator(): Bytes | null {
+    let value = this.get("assimilator");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set assimilator(value: Bytes | null) {
+    if (!value) {
+      this.unset("assimilator");
+    } else {
+      this.set("assimilator", Value.fromBytes(<Bytes>value));
+    }
+  }
 }
 
 export class PriceRateProvider extends Entity {
@@ -1348,7 +1711,6 @@ export class PriceRateProvider extends Entity {
     this.set("poolId", Value.fromString(""));
     this.set("token", Value.fromString(""));
     this.set("address", Value.fromBytes(Bytes.empty()));
-    this.set("rate", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("lastCached", Value.fromI32(0));
     this.set("cacheDuration", Value.fromI32(0));
     this.set("cacheExpiry", Value.fromI32(0));
@@ -1409,13 +1771,21 @@ export class PriceRateProvider extends Entity {
     this.set("address", Value.fromBytes(value));
   }
 
-  get rate(): BigDecimal {
+  get rate(): BigDecimal | null {
     let value = this.get("rate");
-    return value!.toBigDecimal();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
   }
 
-  set rate(value: BigDecimal) {
-    this.set("rate", Value.fromBigDecimal(value));
+  set rate(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("rate");
+    } else {
+      this.set("rate", Value.fromBigDecimal(<BigDecimal>value));
+    }
   }
 
   get lastCached(): i32 {
@@ -1860,6 +2230,100 @@ export class AmpUpdate extends Entity {
   }
 }
 
+export class SwapFeeUpdate extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("pool", Value.fromString(""));
+    this.set("scheduledTimestamp", Value.fromI32(0));
+    this.set("startTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("endTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("startSwapFeePercentage", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("endSwapFeePercentage", Value.fromBigDecimal(BigDecimal.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save SwapFeeUpdate entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save SwapFeeUpdate entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("SwapFeeUpdate", id.toString(), this);
+    }
+  }
+
+  static load(id: string): SwapFeeUpdate | null {
+    return changetype<SwapFeeUpdate | null>(store.get("SwapFeeUpdate", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get pool(): string {
+    let value = this.get("pool");
+    return value!.toString();
+  }
+
+  set pool(value: string) {
+    this.set("pool", Value.fromString(value));
+  }
+
+  get scheduledTimestamp(): i32 {
+    let value = this.get("scheduledTimestamp");
+    return value!.toI32();
+  }
+
+  set scheduledTimestamp(value: i32) {
+    this.set("scheduledTimestamp", Value.fromI32(value));
+  }
+
+  get startTimestamp(): BigInt {
+    let value = this.get("startTimestamp");
+    return value!.toBigInt();
+  }
+
+  set startTimestamp(value: BigInt) {
+    this.set("startTimestamp", Value.fromBigInt(value));
+  }
+
+  get endTimestamp(): BigInt {
+    let value = this.get("endTimestamp");
+    return value!.toBigInt();
+  }
+
+  set endTimestamp(value: BigInt) {
+    this.set("endTimestamp", Value.fromBigInt(value));
+  }
+
+  get startSwapFeePercentage(): BigDecimal {
+    let value = this.get("startSwapFeePercentage");
+    return value!.toBigDecimal();
+  }
+
+  set startSwapFeePercentage(value: BigDecimal) {
+    this.set("startSwapFeePercentage", Value.fromBigDecimal(value));
+  }
+
+  get endSwapFeePercentage(): BigDecimal {
+    let value = this.get("endSwapFeePercentage");
+    return value!.toBigDecimal();
+  }
+
+  set endSwapFeePercentage(value: BigDecimal) {
+    this.set("endSwapFeePercentage", Value.fromBigDecimal(value));
+  }
+}
+
 export class Swap extends Entity {
   constructor(id: string) {
     super();
@@ -2079,6 +2543,23 @@ export class JoinExit extends Entity {
 
   set amounts(value: Array<BigDecimal>) {
     this.set("amounts", Value.fromBigDecimalArray(value));
+  }
+
+  get valueUSD(): BigDecimal | null {
+    let value = this.get("valueUSD");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigDecimal();
+    }
+  }
+
+  set valueUSD(value: BigDecimal | null) {
+    if (!value) {
+      this.unset("valueUSD");
+    } else {
+      this.set("valueUSD", Value.fromBigDecimal(<BigDecimal>value));
+    }
   }
 
   get pool(): string {
@@ -2502,6 +2983,8 @@ export class PoolSnapshot extends Entity {
     this.set("swapVolume", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("swapFees", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("liquidity", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("swapsCount", Value.fromBigInt(BigInt.zero()));
+    this.set("holdersCount", Value.fromBigInt(BigInt.zero()));
     this.set("timestamp", Value.fromI32(0));
   }
 
@@ -2583,6 +3066,24 @@ export class PoolSnapshot extends Entity {
 
   set liquidity(value: BigDecimal) {
     this.set("liquidity", Value.fromBigDecimal(value));
+  }
+
+  get swapsCount(): BigInt {
+    let value = this.get("swapsCount");
+    return value!.toBigInt();
+  }
+
+  set swapsCount(value: BigInt) {
+    this.set("swapsCount", Value.fromBigInt(value));
+  }
+
+  get holdersCount(): BigInt {
+    let value = this.get("holdersCount");
+    return value!.toBigInt();
+  }
+
+  set holdersCount(value: BigInt) {
+    this.set("holdersCount", Value.fromBigInt(value));
   }
 
   get timestamp(): i32 {
