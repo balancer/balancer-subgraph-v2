@@ -17,7 +17,7 @@ import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
-import { getPoolAddress, isComposablePool } from './pools';
+import { getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
 import { valueInUSD } from '../pricing';
 
@@ -149,7 +149,7 @@ export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, assetMa
   poolToken.priceRate = ONE_BD;
   poolToken.token = _token.id;
 
-  if (isComposablePool(pool)) {
+  if (isComposableStablePool(pool)) {
     let poolAddress = bytesToAddress(pool.address);
     let poolContract = ComposableStablePool.bind(poolAddress);
     let isTokenExemptCall = poolContract.try_isTokenExemptFromYieldProtocolFee(tokenAddress);

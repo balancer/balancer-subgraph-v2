@@ -21,6 +21,9 @@ mainnet:
   ComposableStablePoolFactory:
     address: "0xf9ac7B9dF2b3454E841110CcE5550bD5AC6f875F"
     startBlock: 15485885
+  HighAmpComposableStablePoolFactory:
+    address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
+    startBlock: 15852258
   MetaStablePoolFactory:
     address: "0x67d27634E44793fE63c467035E31ea8635117cd4"
     startBlock: 13011941
@@ -101,8 +104,8 @@ goerli:
 polygon:
   network: matic
   graft:
-    block: 32054797
-    base: QmSWtXDQ43QeHz1vZjBTQYwXLTLxCbA3AFkPFPigvFuhLb
+    block: 35005956
+    base: QmThpu3cHiwDfAerbrf2xoARXLUaWd95rvomZNntkus66t
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
