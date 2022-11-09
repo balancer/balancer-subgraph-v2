@@ -63,6 +63,10 @@ type Pool @entity {
   # InvestmentPool Only
   managementFee: BigDecimal
 
+  # ManagedPool Only
+  managementAumFee: BigDecimal
+  mustAllowlistLPs: Boolean
+
   # LinearPool Only
   mainIndex: Int
   wrappedIndex: Int
