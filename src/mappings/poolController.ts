@@ -7,6 +7,7 @@ import {
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
+import { GradualSwapFeeUpdateScheduled, MustAllowlistLPsSet } from '../types/templates/ManagedPool/ManagedPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
@@ -33,6 +34,22 @@ import {
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
 import { ProtocolFeePercentageCacheUpdated } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
+
+export function handleMustAllowlistLPsSet(event: MustAllowlistLPsSet): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.mustAllowlistLPs = event.params.mustAllowlistLPs;
+  pool.save();
+}
+
+/************************************
+ *********** PROTOCOL FEE ***********
+ ************************************/
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -183,6 +200,31 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
     event.block.timestamp,
     newSwapFee,
     newSwapFee
+  );
+}
+
+export function handleGradualSwapFeeUpdateScheduled(event: GradualSwapFeeUpdateScheduled): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  const startSwapFee = scaleDown(event.params.startSwapFeePercentage, 18);
+  const endSwapFee = scaleDown(event.params.endSwapFeePercentage, 18);
+
+  const swapFeeUpdateID = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
+  createSwapFeeUpdate(
+    swapFeeUpdateID,
+    pool,
+    event.block.timestamp.toI32(),
+    event.params.startTime,
+    event.params.endTime,
+    startSwapFee,
+    endSwapFee
   );
 }
 
