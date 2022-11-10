@@ -16,7 +16,7 @@ import {
   PriceRateProviderSet,
 } from '../types/templates/MetaStablePool/MetaStablePool';
 import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
-import { SecondaryIssuePool, Offer, tradeReport, bestAvailableTrades} from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
+import { SecondaryIssuePool, Offer, TradeReport, BestAvailableTrades} from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
 import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
@@ -302,7 +302,7 @@ export function handleSubscription(event: Subscription): void {
   pool.save();
 }
 
-export function handleBestAvailableTrades(event: bestAvailableTrades): void {
+export function handleBestAvailableTrades(event: BestAvailableTrades): void {
   let poolAddress = event.address;
 
   let poolContract = SecondaryIssuePool.bind(poolAddress);
@@ -316,7 +316,7 @@ export function handleBestAvailableTrades(event: bestAvailableTrades): void {
   pool.save();
 }
 
-export function handleTradeReport(event: tradeReport): void {
+export function handleTradeReport(event: TradeReport): void {
   let poolAddress = event.address;
 
   let poolContract = SecondaryIssuePool.bind(poolAddress);

@@ -52,8 +52,8 @@ mainnet:
   #  address: "0xA5f0D010200Fc69A2709ADcdceF095Da766bb0cF"
   #  startBlock: 10960323
   #SecondaryIssuePoolFactory:
-  #  address: "0x7E5545c479C0df8a7d3098E5A1E55bFC667029DA"
-  #  startBlock: 10960335
+  #  address: "0x5cfD71cdAe67300e31D6a4858641984d3ffEB695"
+  #  startBlock: 7890594
 goerli:
   network: goerli
   Vault:
@@ -72,8 +72,8 @@ goerli:
     address: "0x6345af64B84Df6D459B6f50E3c5282736dbE61FC"
     startBlock: 7818449
   SecondaryIssuePoolFactory:
-    address: "0x860034169483050be19C0c9dcadA92975485c7eD"
-    startBlock: 7818440
+    address: "0x5cfD71cdAe67300e31D6a4858641984d3ffEB695"
+    startBlock: 7890594
   StablePoolFactory:
     address: "0x44afeb87c871D8fEA9398a026DeA2BD3A13F5769"
     startBlock: 6992992
