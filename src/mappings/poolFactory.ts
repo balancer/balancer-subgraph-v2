@@ -313,11 +313,10 @@ export function handleNewGyroEPool(event: PoolCreated): void {
   let pool = handleNewPool(event, poolId, swapFee);
 
   pool.poolType = PoolType.GyroE;
-  let eParamsCall = poolContract.try_getCEMMParams();
+  let eParamsCall = poolContract.try_getECLPParams();
 
   if (!eParamsCall.reverted) {
     const params = eParamsCall.value.value0;
-    // terms in the 'derived' object are stored in extra precision (38 decimals) with final decimal rounded down
     const derived = eParamsCall.value.value1;
     pool.alpha = scaleDown(params.alpha, 18);
     pool.beta = scaleDown(params.beta, 18);
@@ -325,6 +324,7 @@ export function handleNewGyroEPool(event: PoolCreated): void {
     pool.s = scaleDown(params.s, 18);
     pool.lambda = scaleDown(params.lambda, 18);
 
+    // terms in the 'derived' object are stored in extra precision (38 decimals) with final decimal rounded down
     pool.tauAlphaX = scaleDown(derived.tauAlpha.x, 38);
     pool.tauAlphaY = scaleDown(derived.tauAlpha.y, 38);
     pool.tauBetaX = scaleDown(derived.tauBeta.x, 38);

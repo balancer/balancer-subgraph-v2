@@ -93,8 +93,8 @@ goerli:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 7421371
   GyroEPoolFactory:
-    address: "0xeEe2e20C97633f473A063e3de4807f3F974DBC6c"
-    startBlock: 7668885
+    address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
+    startBlock: 7928618
 
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygon:
@@ -151,6 +151,9 @@ polygon:
   Gyro3PoolFactory:
     address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
     startBlock: 31556094
+  GyroEPoolFactory:
+    address: "0xD4204551BC5397455f8897745d50Ac4F6beE0EF6"
+    startBlock: 35414865
 # REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygonGrafted:
   network: matic
