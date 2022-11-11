@@ -29,10 +29,8 @@ import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
-import { 
-Pool as GyroEPoolTemplate } from '../types/templates';
+import { GyroEPool as GyroEPoolTemplate } from '../types/templates';
 import { FXPool as FXPoolTemplate } from '../types/templates';
-
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
