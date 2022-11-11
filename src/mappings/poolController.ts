@@ -57,10 +57,6 @@ export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercen
   pool.save();
 }
 
-/************************************
- *********** SWAP ENABLED ***********
- ************************************/
-
 export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
   let poolAddress = event.address;
   let poolContract = WeightedPool.bind(poolAddress);
@@ -73,7 +69,10 @@ export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
   pool.save();
 }
 
-export function handleSwapEnabledSet(event: SwapEnabledSet): void {
+/************************************
+ *********** SWAP ENABLED ***********
+ ************************************/
+ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
 
   // TODO - refactor so pool -> poolId doesn't require call
