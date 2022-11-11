@@ -211,16 +211,16 @@ bnb:
   network: bsc
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-    startBlock: 22691002
+    startBlock: 22895868
   WeightedPoolV2Factory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
-    startBlock: 22691205
+    startBlock: 22895868
   ComposableStablePoolFactory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
-    startBlock: 22691193
+    startBlock: 22895868
   TempLiquidityBootstrappingPoolFactory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
-    startBlock: 22691243
+    startBlock: 22895868
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
-    startBlock: 22691270
+    startBlock: 22895868
