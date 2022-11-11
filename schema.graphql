@@ -51,6 +51,9 @@ type Pool @entity {
   # StablePool Only
   amp: BigInt
 
+  # ManagedPool Only
+  circuitBreakers: [CircuitBreaker!] @derivedFrom(field: "pool")
+
   # MetaStablePool and LinearPool Only
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
 
@@ -64,8 +67,9 @@ type Pool @entity {
   managementFee: BigDecimal
 
   # ManagedPool Only
-  managementAumFee: BigDecimal
   mustAllowlistLPs: Boolean
+  managementAumFee: BigDecimal
+  totalAumFeeCollectedInBPT: BigDecimal
 
   # LinearPool Only
   mainIndex: Int
@@ -129,6 +133,9 @@ type PoolToken @entity {
   # ComposableStablePool Only
   isExemptFromYieldProtocolFee: Boolean
 
+  # ManagedPool Only
+  circuitBreaker: CircuitBreaker
+
   # FXPool Only
   assimilator: Bytes
 }
@@ -142,6 +149,15 @@ type PriceRateProvider @entity {
   lastCached: Int
   cacheDuration: Int
   cacheExpiry: Int
+}
+
+type CircuitBreaker @entity {
+  id: ID!
+  pool: Pool!
+  token: PoolToken!
+  bptPrice: BigDecimal!
+  lowerBoundPercentage: BigDecimal!
+  upperBoundPercentage: BigDecimal!
 }
 
 type PoolShare @entity {
