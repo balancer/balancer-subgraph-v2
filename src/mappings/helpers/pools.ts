@@ -13,6 +13,7 @@ export namespace PoolType {
   export const Element = 'Element';
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
   export const Investment = 'Investment';
+  export const Managed = 'Managed';
   export const StablePhantom = 'StablePhantom';
   export const ComposableStable = 'ComposableStable';
   export const HighAmpComposableStable = 'HighAmpComposableStable';
