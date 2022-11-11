@@ -212,6 +212,9 @@ polygonGrafted:
   Gyro3PoolFactory:
     address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
     startBlock: 31556094
+  GyroEPoolFactory:
+    address: "0xD4204551BC5397455f8897745d50Ac4F6beE0EF6"
+    startBlock: 35414865
 arbitrum:
   network: arbitrum-one
   Vault:
