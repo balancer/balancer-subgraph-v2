@@ -21,6 +21,9 @@ mainnet:
   ComposableStablePoolFactory:
     address: "0xf9ac7B9dF2b3454E841110CcE5550bD5AC6f875F"
     startBlock: 15485885
+  HighAmpComposableStablePoolFactory:
+    address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
+    startBlock: 15852258
   MetaStablePoolFactory:
     address: "0x67d27634E44793fE63c467035E31ea8635117cd4"
     startBlock: 13011941
@@ -86,6 +89,9 @@ goerli:
   ComposableStablePoolFactory:
     address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
     startBlock: 7542764
+  HighAmpComposableStablePoolFactory:
+    address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
+    startBlock: 7842251
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
     startBlock: 6993887
@@ -95,78 +101,20 @@ goerli:
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
-
-# REMINDER: when adding new factories, update both polygon and polygonGrafted
 polygon:
   network: matic
-  isPolygon: true
-  Vault:
-    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-    startBlock: 15832990
-  WeightedPoolFactory:
-    address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
-    startBlock: 15832998
-  WeightedPool2TokenFactory:
-    address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
-    startBlock: 15869090
-  StablePoolFactory:
-    address: "0xc66Ba2B6595D3613CCab350C886aCE23866EDe24"
-    startBlock: 16138679
-  StablePoolV2Factory:
-    address: "0xcA96C4f198d343E251b1a01F3EBA061ef3DA73C1"
-    startBlock: 29371951
-  ComposableStablePoolFactory:
-    address: "0x136FD06Fa01eCF624C7F2B3CB15742c1339dC2c4"
-    startBlock: 32774224
-  MetaStablePoolFactory:
-    address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
-    startBlock: 17913016
-  LiquidityBootstrappingPoolFactory:
-    address: "0x751A0bC0e3f75b38e01Cf25bFCE7fF36DE1C87DE"
-    startBlock: 17116402
-  TempLiquidityBootstrappingPoolFactory:
-    address: "0x41B953164995c11C81DA73D212ED8Af25741b7Ac"
-    startBlock: 22067480
-  InvestmentPoolFactory:
-    address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
-    startBlock: 19404118
-  StablePhantomPoolFactory:
-    address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
-    startBlock: 22288478
-  AaveLinearPoolFactory:
-    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
-    startBlock: 22287712
-  AaveLinearPoolV2Factory:
-    address: "0x8df6EfEc5547e31B0eb7d1291B511FF8a2bf987c"
-    startBlock: 31996915
-  ERC4626LinearPoolFactoryBeta:
-    address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
-    startBlock: 25772863
-  ERC4626LinearPoolFactory:
-    address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
-    startBlock: 26746067
-  Gyro2PoolFactory:
-    address: "0x5d8545a7330245150bE0Ce88F8afB0EDc41dFc34"
-    startBlock: 31556084
-  Gyro3PoolFactory:
-    address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
-    startBlock: 31556094
-  GyroEPoolFactory:
-    address: "0xD4204551BC5397455f8897745d50Ac4F6beE0EF6"
-    startBlock: 35414865
-# REMINDER: when adding new factories, update both polygon and polygonGrafted
-polygonGrafted:
-  network: matic
-  isPolygon: true
   graft:
-    block: 32850162
-    base: QmZz33UxD51bbvXvwyJzJGhs94DB4gYWenDtAvmXx45ew5
+    block: 35005956
+    base: QmThpu3cHiwDfAerbrf2xoARXLUaWd95rvomZNntkus66t
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 15832998
+  WeightedPoolV2Factory:
+    address: "0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3"
+    startBlock: 32850162
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 15869090
@@ -215,8 +163,14 @@ polygonGrafted:
   GyroEPoolFactory:
     address: "0xD4204551BC5397455f8897745d50Ac4F6beE0EF6"
     startBlock: 35414865
+  FXPoolFactory:
+    address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
+    startBlock: 32054794
 arbitrum:
   network: arbitrum-one
+  # graft:
+  #   block: 23605789
+  #   base: QmPpDvuEs8qAhFvZR7Be6Snk3knkju2zd3PXZnVeUHsPwe
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832
@@ -256,3 +210,20 @@ arbitrum:
   AaveLinearPoolV2Factory:
     address: "0xe2E901AB09f37884BA31622dF3Ca7FC19AA443Be"
     startBlock: 20509414
+bnb:
+  network: bsc
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 22895868
+  WeightedPoolV2Factory:
+    address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
+    startBlock: 22895868
+  ComposableStablePoolFactory:
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 22895868
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
+    startBlock: 22895868
+  AaveLinearPoolV2Factory:
+    address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
+    startBlock: 22895868

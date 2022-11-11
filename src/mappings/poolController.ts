@@ -1,4 +1,4 @@
-import { Address, BigInt, log } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
@@ -19,7 +19,8 @@ import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate } from '../types/schema';
+import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -29,8 +30,32 @@ import {
   loadPriceRateProvider,
   getPoolShare,
 } from './helpers/misc';
-import { ONE_BD, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
+import { ProtocolFeePercentageCacheUpdated } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
+
+export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  const feeType = event.params.feeType.toI32();
+  const feePercentage = scaleDown(event.params.protocolFeePercentage, 18);
+
+  if (feeType == ProtocolFeeType.Swap) {
+    pool.protocolSwapFeeCache = feePercentage;
+  } else if (feeType == ProtocolFeeType.Yield) {
+    pool.protocolYieldFeeCache = feePercentage;
+  } else if (feeType == ProtocolFeeType.Aum) {
+    pool.protocolAumFeeCache = feePercentage;
+  }
+
+  pool.save();
+}
 
 /************************************
  *********** SWAP ENABLED ***********
@@ -145,8 +170,39 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  pool.swapFee = scaleDown(event.params.swapFeePercentage, 18);
+  const newSwapFee = scaleDown(event.params.swapFeePercentage, 18);
+  pool.swapFee = newSwapFee;
   pool.save();
+
+  const swapFeeUpdateID = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
+  createSwapFeeUpdate(
+    swapFeeUpdateID,
+    pool,
+    event.block.timestamp.toI32(),
+    event.block.timestamp,
+    event.block.timestamp,
+    newSwapFee,
+    newSwapFee
+  );
+}
+
+export function createSwapFeeUpdate(
+  _id: string,
+  _pool: Pool,
+  _blockTimestamp: i32,
+  _startTimestamp: BigInt,
+  _endTimestamp: BigInt,
+  _startSwapFeePercentage: BigDecimal,
+  _endSwapFeePercentage: BigDecimal
+): void {
+  let swapFeeUpdate = new SwapFeeUpdate(_id);
+  swapFeeUpdate.pool = _pool.id;
+  swapFeeUpdate.scheduledTimestamp = _blockTimestamp;
+  swapFeeUpdate.startTimestamp = _startTimestamp;
+  swapFeeUpdate.endTimestamp = _endTimestamp;
+  swapFeeUpdate.startSwapFeePercentage = _startSwapFeePercentage;
+  swapFeeUpdate.endSwapFeePercentage = _endSwapFeePercentage;
+  swapFeeUpdate.save();
 }
 
 /************************************
@@ -348,4 +404,45 @@ export function handleTransfer(event: Transfer): void {
   }
 
   pool.save();
+}
+
+/************************************
+ ************* FXPOOL ***************
+ ************************************/
+
+export function handleParametersSet(event: ParametersSet): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.alpha = scaleDown(event.params.alpha, 18);
+  pool.beta = scaleDown(event.params.beta, 18);
+  pool.delta = scaleDown(event.params.delta, 18);
+  pool.epsilon = scaleDown(event.params.epsilon, 18);
+  pool.lambda = scaleDown(event.params.lambda, 18);
+
+  pool.save();
+}
+
+export function handleAssimilatorIncluded(event: AssimilatorIncluded): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let tokenAddress = event.params.reserve;
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  if (poolToken == null) return;
+
+  poolToken.assimilator = event.params.assimilator;
+  poolToken.save();
 }

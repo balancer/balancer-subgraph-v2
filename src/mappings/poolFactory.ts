@@ -1,15 +1,23 @@
 import { ZERO_BD, ZERO } from './helpers/constants';
-import { getPoolTokenManager, getPoolTokens, PoolType } from './helpers/pools';
+import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRateProviders } from './helpers/pools';
 
-import { newPoolEntity, createPoolTokenEntity, scaleDown, getBalancerSnapshot, tokenToDecimal } from './helpers/misc';
+import {
+  newPoolEntity,
+  createPoolTokenEntity,
+  scaleDown,
+  getBalancerSnapshot,
+  tokenToDecimal,
+  stringToBytes,
+} from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
+import { WeightedPoolV2 as WeightedPoolV2Template } from '../types/templates';
 import { WeightedPool2Tokens as WeightedPool2TokensTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
 import { MetaStablePool as MetaStablePoolTemplate } from '../types/templates';
@@ -21,7 +29,10 @@ import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
-import { GyroEPool as GyroEPoolTemplate } from '../types/templates';
+import { 
+Pool as GyroEPoolTemplate } from '../types/templates';
+import { FXPool as FXPoolTemplate } from '../types/templates';
+
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { StablePool } from '../types/templates/StablePool/StablePool';
@@ -56,10 +67,13 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
+
+  // Create PriceRateProvider entities for WeightedPoolV2
+  if (poolTypeVersion == 2) setPriceRateProviders(poolId.toHex(), poolAddress, tokens);
 
   return poolId.toHexString();
 }
@@ -73,7 +87,7 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 export function handleNewWeightedPoolV2(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Weighted, 2);
   if (pool == null) return;
-  WeightedPoolTemplate.create(event.params.pool);
+  WeightedPoolV2Template.create(event.params.pool);
 }
 
 export function handleNewWeighted2TokenPool(event: PoolCreated): void {
@@ -117,13 +131,19 @@ function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVers
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   return poolId.toHexString();
 }
 
 export function handleNewStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.Stable);
+  if (pool == null) return;
+  StablePoolTemplate.create(event.params.pool);
+}
+
+export function handleNewStablePoolV2(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.Stable, 2);
   if (pool == null) return;
   StablePoolTemplate.create(event.params.pool);
 }
@@ -140,8 +160,14 @@ export function handleNewStablePhantomPool(event: PoolCreated): void {
   StablePhantomPoolTemplate.create(event.params.pool);
 }
 
-export function handleNewStablePhantomPoolV2(event: PoolCreated): void {
+export function handleNewComposableStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.ComposableStable);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
+}
+
+export function handleNewHighAmpComposableStablePool(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.HighAmpComposableStable);
   if (pool == null) return;
   StablePhantomPoolV2Template.create(event.params.pool);
 }
@@ -185,7 +211,7 @@ export function handleNewCCPPool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   CCPoolTemplate.create(poolAddress);
 }
@@ -235,7 +261,7 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   pool.totalShares = pool.totalShares.minus(maxTokenBalance);
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   LinearPoolTemplate.create(poolAddress);
 }
@@ -264,7 +290,7 @@ export function handleNewGyro2Pool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   Gyro2PoolTemplate.create(event.params.pool);
 }
@@ -295,7 +321,7 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   Gyro3PoolTemplate.create(event.params.pool);
 }
@@ -342,9 +368,46 @@ export function handleNewGyroEPool(event: PoolCreated): void {
 
   pool.save();
 
-  handleNewPoolTokens(poolId, tokens);
+  handleNewPoolTokens(pool, tokens);
 
   GyroEPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewFXPool(event: ethereum.Event): void {
+  /**
+   * FXPoolFactory emits a custom NewFXPool event with the following params:
+   *   event.parameters[0] = caller
+   *   event.parameters[1] = id (vault poolId)
+   *   event.parameters[2] = fxpool (pool address)
+   * */
+  let poolId = event.parameters[1].value.toBytes();
+  let poolAddress = event.parameters[2].value.toAddress();
+  let swapFee = ZERO; // @todo: figure out how to get swap fee from FXPool
+
+  // Create a PoolCreated event from generic ethereum.Event
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[2]] // PoolCreated expects parameters[0] to be the pool address
+  );
+
+  let pool = handleNewPool(poolCreatedEvent, poolId, swapFee);
+
+  pool.poolType = PoolType.FX;
+
+  let tokens = getPoolTokens(poolId);
+  if (tokens == null) return;
+  pool.tokensList = tokens;
+
+  pool.save();
+
+  handleNewPoolTokens(pool, tokens);
+
+  FXPoolTemplate.create(poolAddress);
 }
 
 function findOrInitializeVault(): Balancer {
@@ -401,14 +464,15 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
   return pool;
 }
 
-function handleNewPoolTokens(poolId: Bytes, tokens: Bytes[]): void {
+function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   let tokensAddresses = changetype<Address[]>(tokens);
 
   for (let i: i32 = 0; i < tokens.length; i++) {
+    let poolId = stringToBytes(pool.id);
     let assetManager = getPoolTokenManager(poolId, tokens[i]);
 
     if (!assetManager) continue;
 
-    createPoolTokenEntity(poolId.toHexString(), tokensAddresses[i], assetManager);
+    createPoolTokenEntity(pool, tokensAddresses[i], assetManager);
   }
 }

@@ -77,11 +77,8 @@ type Pool @entity {
   root3Alpha: BigDecimal
 
   # GyroEPool Only
-  alpha: BigDecimal
-  beta: BigDecimal
   c: BigDecimal
   s: BigDecimal
-  lambda: BigDecimal
   tauAlphaX: BigDecimal
   tauAlphaY: BigDecimal
   tauBetaX: BigDecimal
@@ -91,6 +88,20 @@ type Pool @entity {
   w: BigDecimal
   z: BigDecimal
   dSq: BigDecimal
+
+  # GyroEPool+FXPool Only
+  alpha: BigDecimal
+  beta: BigDecimal
+  lambda: BigDecimal
+
+  # FXPool Only
+  delta: BigDecimal
+  epsilon: BigDecimal
+
+  # Composable and WeightedV2 Only
+  protocolSwapFeeCache: BigDecimal
+  protocolYieldFeeCache: BigDecimal
+  protocolAumFeeCache: BigDecimal
 }
 
 type PoolToken @entity {
@@ -110,6 +121,12 @@ type PoolToken @entity {
 
   # WeightedPool Only
   weight: BigDecimal
+
+  # ComposableStablePool Only
+  isExemptFromYieldProtocolFee: Boolean
+
+  # FXPool Only
+  assimilator: Bytes
 }
 
 type PriceRateProvider @entity {
@@ -117,10 +134,10 @@ type PriceRateProvider @entity {
   poolId: Pool!
   token: PoolToken!
   address: Bytes!
-  rate: BigDecimal!
-  lastCached: Int!
-  cacheDuration: Int!
-  cacheExpiry: Int!
+  rate: BigDecimal
+  lastCached: Int
+  cacheDuration: Int
+  cacheExpiry: Int
 }
 
 type PoolShare @entity {
@@ -163,6 +180,16 @@ type AmpUpdate @entity {
   endTimestamp: BigInt!
   startAmp: BigInt!
   endAmp: BigInt!
+}
+
+type SwapFeeUpdate @entity {
+  id: ID!
+  pool: Pool!
+  scheduledTimestamp: Int!
+  startTimestamp: BigInt!
+  endTimestamp: BigInt!
+  startSwapFeePercentage: BigDecimal!
+  endSwapFeePercentage: BigDecimal!
 }
 
 type Swap @entity {
