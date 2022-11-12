@@ -21,6 +21,9 @@ mainnet:
   ComposableStablePoolFactory:
     address: "0xf9ac7B9dF2b3454E841110CcE5550bD5AC6f875F"
     startBlock: 15485885
+  HighAmpComposableStablePoolFactory:
+    address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
+    startBlock: 15852258
   MetaStablePoolFactory:
     address: "0x67d27634E44793fE63c467035E31ea8635117cd4"
     startBlock: 13011941
@@ -113,8 +116,8 @@ goerli:
 polygon:
   network: matic
   graft:
-    block: 32054797
-    base: QmSWtXDQ43QeHz1vZjBTQYwXLTLxCbA3AFkPFPigvFuhLb
+    block: 35005956
+    base: QmThpu3cHiwDfAerbrf2xoARXLUaWd95rvomZNntkus66t
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -216,3 +219,20 @@ arbitrum:
   AaveLinearPoolV2Factory:
     address: "0xe2E901AB09f37884BA31622dF3Ca7FC19AA443Be"
     startBlock: 20509414
+bnb:
+  network: bsc
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 22895868
+  WeightedPoolV2Factory:
+    address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
+    startBlock: 22895868
+  ComposableStablePoolFactory:
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 22895868
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
+    startBlock: 22895868
+  AaveLinearPoolV2Factory:
+    address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
+    startBlock: 22895868

@@ -29,6 +29,7 @@ class AddressByNetwork {
   public goerli: string;
   public polygon: string;
   public arbitrum: string;
+  public bnb: string;
   public dev: string;
 }
 
@@ -39,6 +40,7 @@ let vaultAddressByNetwork: AddressByNetwork = {
   goerli: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   polygon: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   arbitrum: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  bnb: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
 };
 
@@ -51,6 +53,8 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
     return Address.fromString(addressByNetwork.polygon);
   } else if (network == 'arbitrum-one') {
     return Address.fromString(addressByNetwork.arbitrum);
+  } else if (network == 'bsc') {
+    return Address.fromString(addressByNetwork.bnb);
   } else {
     return Address.fromString(addressByNetwork.dev);
   }

@@ -168,6 +168,12 @@ export function handleNewComposableStablePool(event: PoolCreated): void {
   StablePhantomPoolV2Template.create(event.params.pool);
 }
 
+export function handleNewHighAmpComposableStablePool(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.HighAmpComposableStable);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
+}
+
 export function handleNewCCPPool(event: PoolCreated): void {
   let poolAddress: Address = event.params.pool;
 

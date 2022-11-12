@@ -15,6 +15,7 @@ export namespace PoolType {
   export const Investment = 'Investment';
   export const StablePhantom = 'StablePhantom';
   export const ComposableStable = 'ComposableStable';
+  export const HighAmpComposableStable = 'HighAmpComposableStable';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
   export const PrimaryIssue = 'PrimaryIssue';
@@ -34,12 +35,12 @@ export function hasVirtualSupply(pool: Pool): boolean {
     pool.poolType == PoolType.AaveLinear ||
     pool.poolType == PoolType.ERC4626Linear ||
     pool.poolType == PoolType.StablePhantom ||
-    pool.poolType == PoolType.ComposableStable
+    isComposableStablePool(pool)
   );
 }
 
-export function isComposablePool(pool: Pool): boolean {
-  return pool.poolType == PoolType.ComposableStable;
+export function isComposableStablePool(pool: Pool): boolean {
+  return pool.poolType == PoolType.ComposableStable || pool.poolType == PoolType.HighAmpComposableStable;
 }
 
 export function isLinearPool(pool: Pool): boolean {
@@ -51,7 +52,7 @@ export function isStableLikePool(pool: Pool): boolean {
     pool.poolType == PoolType.Stable ||
     pool.poolType == PoolType.MetaStable ||
     pool.poolType == PoolType.StablePhantom ||
-    pool.poolType == PoolType.ComposableStable
+    isComposableStablePool(pool)
   );
 }
 

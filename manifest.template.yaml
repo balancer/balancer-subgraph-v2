@@ -521,7 +521,7 @@ dataSources:
           file: ./abis/StablePool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewComposableStablePool
+          handler: handleNewHighAmpComposableStablePool
   {{/if}}
   {{#if AaveLinearPoolFactory}}
   - kind: ethereum/contract
