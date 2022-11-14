@@ -51,9 +51,6 @@ type Pool @entity {
   # StablePool Only
   amp: BigInt
 
-  # ManagedPool Only
-  circuitBreakers: [CircuitBreaker!] @derivedFrom(field: "pool")
-
   # MetaStablePool and LinearPool Only
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
 
@@ -70,6 +67,7 @@ type Pool @entity {
   mustAllowlistLPs: Boolean
   managementAumFee: BigDecimal
   totalAumFeeCollectedInBPT: BigDecimal
+  circuitBreakers: [CircuitBreaker!] @derivedFrom(field: "pool")
 
   # LinearPool Only
   mainIndex: Int
