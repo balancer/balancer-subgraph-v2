@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, Bytes, log, store } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, log, store } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
