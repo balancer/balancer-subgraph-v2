@@ -17,7 +17,7 @@ import {
 } from '../types/templates/MetaStablePool/MetaStablePool';
 import {
   TokenRateCacheUpdated,
-  TokenRateProviderSet
+  TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
 import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
@@ -32,7 +32,10 @@ import {
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
-import { ProtocolFeePercentageCacheUpdated, RecoveryModeStateChanged } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
+import {
+  ProtocolFeePercentageCacheUpdated,
+  RecoveryModeStateChanged,
+} from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -72,7 +75,7 @@ export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
 /************************************
  *********** SWAP ENABLED ***********
  ************************************/
- export function handleSwapEnabledSet(event: SwapEnabledSet): void {
+export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
 
   // TODO - refactor so pool -> poolId doesn't require call
