@@ -20,7 +20,7 @@ export namespace PoolType {
   export const ERC4626Linear = 'ERC4626Linear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
-  export const GyroCEMM = 'GyroCEMM';
+  export const GyroE = 'GyroE';
   export const FX = 'FX';
 }
 
