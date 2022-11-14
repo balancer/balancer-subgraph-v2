@@ -52,7 +52,7 @@ import {
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
 import { ProtocolFeePercentageCacheUpdated } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
-import { getPoolTokens } from './helpers/pools';
+import { getPoolTokenManager, getPoolTokens } from './helpers/pools';
 
 /************************************
  ********** MANAGED POOLS ***********
@@ -108,7 +108,10 @@ export function handleTokenAdded(event: TokenAdded): void {
   pool.tokensList = tokens;
   pool.save();
 
-  createPoolTokenEntity(pool, event.params.token, ZERO_ADDRESS);
+  let assetManager = getPoolTokenManager(poolId, event.params.token);
+  if (!assetManager) return;
+
+  createPoolTokenEntity(pool, event.params.token, assetManager);
 }
 
 export function handleTokenRemoved(event: TokenRemoved): void {
