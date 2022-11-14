@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, Bytes, log, store } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
@@ -7,7 +7,15 @@ import {
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
-import { GradualSwapFeeUpdateScheduled, MustAllowlistLPsSet } from '../types/templates/ManagedPool/ManagedPool';
+import {
+  ManagementAumFeePercentageChanged,
+  MustAllowlistLPsSet,
+  GradualSwapFeeUpdateScheduled,
+  CircuitBreakerSet,
+  ProtocolFeePercentageCacheUpdated as EncodedProtocolFeePercentageCacheUpdated,
+  TokenAdded,
+  TokenRemoved,
+} from '../types/templates/ManagedPool/ManagedPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
@@ -21,7 +29,15 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
+import {
+  Pool,
+  PriceRateProvider,
+  GradualWeightUpdate,
+  AmpUpdate,
+  SwapFeeUpdate,
+  CircuitBreaker,
+  PoolToken,
+} from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -30,10 +46,17 @@ import {
   getPoolTokenId,
   loadPriceRateProvider,
   getPoolShare,
+  createPoolTokenEntity,
+  hexToBigDecimal,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
 import { ProtocolFeePercentageCacheUpdated } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
+import { getPoolTokens } from './helpers/pools';
+
+/************************************
+ ********** MANAGED POOLS ***********
+ ************************************/
 
 export function handleMustAllowlistLPsSet(event: MustAllowlistLPsSet): void {
   let poolAddress = event.address;
@@ -45,6 +68,65 @@ export function handleMustAllowlistLPsSet(event: MustAllowlistLPsSet): void {
   let pool = Pool.load(poolId.toHexString()) as Pool;
   pool.mustAllowlistLPs = event.params.mustAllowlistLPs;
   pool.save();
+}
+
+export function handleCircuitBreakerSet(event: CircuitBreakerSet): void {
+  let poolContract = WeightedPool.bind(event.address);
+  let poolIdCall = poolContract.try_getPoolId();
+  if (poolIdCall.reverted) return;
+
+  let poolId = poolIdCall.value.toHexString();
+
+  // ID for PoolToken and CircuitBreaker is built in the same way
+  let id = getPoolTokenId(poolId, event.params.token);
+  let circuitBreaker = new CircuitBreaker(id);
+  circuitBreaker.pool = poolId;
+  circuitBreaker.token = id;
+  circuitBreaker.bptPrice = scaleDown(event.params.bptPrice, 18);
+  circuitBreaker.lowerBoundPercentage = scaleDown(event.params.lowerBoundPercentage, 18);
+  circuitBreaker.upperBoundPercentage = scaleDown(event.params.upperBoundPercentage, 18);
+  circuitBreaker.save();
+
+  let poolToken = PoolToken.load(id);
+  if (!poolToken) return;
+
+  poolToken.circuitBreaker = id;
+  poolToken.save();
+}
+
+export function handleTokenAdded(event: TokenAdded): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  let tokens = getPoolTokens(poolId);
+  if (tokens == null) return;
+  pool.tokensList = tokens;
+  pool.save();
+
+  createPoolTokenEntity(pool, event.params.token, ZERO_ADDRESS);
+}
+
+export function handleTokenRemoved(event: TokenRemoved): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  let tokens = getPoolTokens(poolId);
+  if (tokens == null) return;
+  pool.tokensList = tokens;
+  pool.save();
+
+  let id = getPoolTokenId(poolId.toHexString(), event.params.token);
+  store.remove('PoolToken', id);
 }
 
 /************************************
@@ -70,6 +152,35 @@ export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercen
   } else if (feeType == ProtocolFeeType.Aum) {
     pool.protocolAumFeeCache = feePercentage;
   }
+
+  pool.save();
+}
+
+// For Managed Pools, the feeCache is encoded into bytes as follows:
+// [  8 bytes |    8 bytes    |     8 bytes     |     8 bytes    ]
+// [  unused  | AUM fee cache | Yield fee cache | Swap fee cache ]
+// [MSB                                                       LSB]
+export function handleEncodedProtocolFeePercentageCacheUpdated(event: EncodedProtocolFeePercentageCacheUpdated): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  // Convert to hex and remove the 0x prefix
+  const feeCache = event.params.feeCache.toHex().slice(2);
+
+  // Each byte represents 2 hex digits
+  // Thus each fee is represented by 16 chars
+  let encodedAumFee = feeCache.slice(16, 32);
+  let encodedYieldFee = feeCache.slice(32, 48);
+  let encodedSwapFee = feeCache.slice(48, 64);
+
+  pool.protocolAumFeeCache = hexToBigDecimal(encodedAumFee);
+  pool.protocolYieldFeeCache = hexToBigDecimal(encodedYieldFee);
+  pool.protocolSwapFeeCache = hexToBigDecimal(encodedSwapFee);
 
   pool.save();
 }
@@ -262,6 +373,20 @@ export function handleManagementFeePercentageChanged(event: ManagementFeePercent
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
   pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
+  pool.save();
+}
+
+export function handleManagementAumFeePercentageChanged(event: ManagementAumFeePercentageChanged): void {
+  let poolAddress = event.address;
+
+  // TODO - refactor so pool -> poolId doesn't require call
+  let poolContract = WeightedPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.managementAumFee = scaleDown(event.params.managementAumFeePercentage, 18);
   pool.save();
 }
 

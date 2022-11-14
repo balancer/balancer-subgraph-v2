@@ -31,6 +31,10 @@ export function stringToBytes(str: string): Bytes {
   return Bytes.fromByteArray(Bytes.fromHexString(str));
 }
 
+export function hexToBigDecimal(str: string): BigDecimal {
+  return BigDecimal.fromString(Bytes.fromHexString(str).toI32().toString());
+}
+
 export function getTokenDecimals(tokenAddress: Address): i32 {
   let token = ERC20.bind(tokenAddress);
   let result = token.try_decimals();
