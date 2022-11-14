@@ -1,5 +1,11 @@
 import { ZERO_BD, ZERO } from './helpers/constants';
-import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRateProviders } from './helpers/pools';
+import {
+  getPoolTokenManager,
+  getPoolTokens,
+  isMetaStableDeprecated,
+  PoolType,
+  setPriceRateProviders,
+} from './helpers/pools';
 
 import {
   newPoolEntity,
@@ -147,6 +153,8 @@ export function handleNewStablePoolV2(event: PoolCreated): void {
 }
 
 export function handleNewMetaStablePool(event: PoolCreated): void {
+  if (isMetaStableDeprecated(event.block.number.toI32())) return;
+
   const pool = createStableLikePool(event, PoolType.MetaStable);
   if (pool == null) return;
   MetaStablePoolTemplate.create(event.params.pool);
