@@ -36,6 +36,9 @@ mainnet:
   InvestmentPoolFactory:
     address: "0x48767F9F868a4A7b86A90736632F6E44C2df7fa9"
     startBlock: 13279079
+  ManagedPoolFactory:
+    address: "0x9Ac3E70dB606659Bf32D4BdFbb687AD193FD1F5B"
+    startBlock: 15820459
   ConvergentPoolFactory:
     address: "0xb7561f547F3207eDb42A6AfA42170Cd47ADD17BD"
     startBlock: 12686198
@@ -83,6 +86,9 @@ goerli:
   InvestmentPoolFactory:
     address: "0x3C9F788131A26329A689Bd951b5aCb4454669487"
     startBlock: 6993461
+  ManagedPoolFactory:
+    address: "0x3ead2fdcbee244d9fa5b8d233efedd34bb7d2434"
+    startBlock: 7827768
   StablePhantomPoolFactory:
     address: "0x41E9036AE350baEDCC7107760A020Dca3c0731ec"
     startBlock: 6993896
@@ -139,6 +145,9 @@ polygon:
   InvestmentPoolFactory:
     address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
     startBlock: 19404118
+  ManagedPoolFactory:
+    address: "0x9Ac3E70dB606659Bf32D4BdFbb687AD193FD1F5B"
+    startBlock: 34755232
   StablePhantomPoolFactory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22288478
@@ -201,6 +210,9 @@ arbitrum:
   InvestmentPoolFactory:
     address: "0xaCd615B3705B9c880E4E7293f1030B34e57B4c1c"
     startBlock: 1488052
+  ManagedPoolFactory:
+    address: "0x956ccab09898c0af2aca5e6c229c3ad4e93d9288"
+    startBlock: 32296234
   ERC4626LinearPoolFactory:
     address: "0x2794953110874981a0d301286c986992022A62a1"
     startBlock: 9311471
