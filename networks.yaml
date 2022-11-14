@@ -98,14 +98,14 @@ goerli:
   AaveLinearPoolV2Factory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 7421371
-  GyroCEMMPoolFactory:
-    address: "0x9E182eC776aAa2E0169f5FEc08fC22a7f059AaDC"
-    startBlock: 7546831
+  GyroEPoolFactory:
+    address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
+    startBlock: 7928618
 polygon:
   network: matic
   graft:
-    block: 35005956
-    base: QmThpu3cHiwDfAerbrf2xoARXLUaWd95rvomZNntkus66t
+    block: 35414865
+    base: QmaYNfCzaXRUdSmo2BMqhbuyFVkGzwEFt96MAr5V6DhMiF
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -160,6 +160,9 @@ polygon:
   Gyro3PoolFactory:
     address: "0x90f08B3705208E41DbEEB37A42Fb628dD483AdDa"
     startBlock: 31556094
+  GyroEPoolFactory:
+    address: "0xD4204551BC5397455f8897745d50Ac4F6beE0EF6"
+    startBlock: 35414865
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054794
@@ -189,9 +192,6 @@ arbitrum:
   ComposableStablePoolFactory:
     address: "0xaEb406b0E430BF5Ea2Dc0B9Fe62E4E53f74B3a33"
     startBlock: 23227044
-  MetaStablePoolFactory:
-    address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
-    startBlock: 222868
   LiquidityBootstrappingPoolFactory:
     address: "0x142B9666a0a3A30477b052962ddA81547E7029ab"
     startBlock: 222870

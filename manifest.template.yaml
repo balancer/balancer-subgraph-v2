@@ -659,14 +659,14 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewGyro3Pool
   {{/if}}
-  {{#if GyroCEMMPoolFactory}}
+  {{#if GyroEPoolFactory}}
   - kind: ethereum/contract
-    name: GyroCEMMPoolFactory
+    name: GyroEPoolFactory
     network: {{network}}
     source:
-      address: '{{GyroCEMMPoolFactory.address}}'
-      abi: GyroCEMMPoolFactory
-      startBlock: {{GyroCEMMPoolFactory.startBlock}}
+      address: '{{GyroEPoolFactory.address}}'
+      abi: GyroEPoolFactory
+      startBlock: {{GyroEPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -682,13 +682,13 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: GyroCEMMPool
-          file: ./abis/GyroCEMMPool.json
-        - name: GyroCEMMPoolFactory
-          file: ./abis/GyroCEMMPoolFactory.json
+        - name: GyroEPool
+          file: ./abis/GyroEPool.json
+        - name: GyroEPoolFactory
+          file: ./abis/GyroEPoolFactory.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewGyroCEMMPool
+          handler: handleNewGyroEPool
   {{/if}}
   {{#if FXPoolFactory}}
   - kind: ethereum/contract
@@ -776,6 +776,8 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: ProtocolFeePercentageCacheUpdated(indexed uint256,uint256)
           handler: handleProtocolFeePercentageCacheUpdated
+        - event: RecoveryModeStateChanged(bool)
+          handler: handleRecoveryModeStateChanged
   - kind: ethereum/contract
     name: WeightedPool2Tokens
     network: {{network}}
@@ -1043,6 +1045,8 @@ templates:
           handler: handleTokenRateCacheUpdated
         - event: ProtocolFeePercentageCacheUpdated(indexed uint256,uint256)
           handler: handleProtocolFeePercentageCacheUpdated
+        - event: RecoveryModeStateChanged(bool)
+          handler: handleRecoveryModeStateChanged
   - kind: ethereum/contract
     name: LinearPool
     network: {{network}}
@@ -1126,10 +1130,10 @@ templates:
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
-    name: GyroCEMMPool
+    name: GyroEPool
     network: {{network}}
     source:
-      abi: GyroCEMMPool
+      abi: GyroEPool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -1142,8 +1146,8 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: GyroCEMMPool
-          file: ./abis/GyroCEMMPool.json
+        - name: GyroEPool
+          file: ./abis/GyroEPool.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
       eventHandlers:
