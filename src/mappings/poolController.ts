@@ -36,7 +36,18 @@ import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
-import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import {
+  PausedLocally as PausedLocallyGyro2,
+  UnpausedLocally as UnpausedLocallyGyro2,
+} from '../types/templates/Gyro2Pool/Gyro2Pool';
+import {
+  PausedLocally as PausedLocallyGyro3,
+  UnpausedLocally as UnpausedLocallyGyro3,
+} from '../types/templates/Gyro3Pool/Gyro3Pool';
+import {
+  PausedLocally as PausedLocallyGyroE,
+  UnpausedLocally as UnpausedLocallyGyroE,
+} from '../types/templates/GyroEPool/GyroEPool';
 import { Gyro2Pool, Gyro3Pool, GyroEPool } from '../types/templates';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
@@ -106,7 +117,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   pool.save();
 }
 
-export function handlePauseGyro2Pool(event: PausedLocally) {
+export function handlePauseGyro2Pool(event: PausedLocallyGyro2) {
   let poolAddress = event.address;
 
   let poolContract = Gyro2Pool.bind(poolAddress);
@@ -119,7 +130,7 @@ export function handlePauseGyro2Pool(event: PausedLocally) {
   pool.save();
 }
 
-export function handleUnpauseGyro2Pool(event: UnpausedLocally) {
+export function handleUnpauseGyro2Pool(event: UnpausedLocallyGyro2) {
   let poolAddress = event.address;
 
   let poolContract = Gyro2Pool.bind(poolAddress);
@@ -132,7 +143,7 @@ export function handleUnpauseGyro2Pool(event: UnpausedLocally) {
   pool.save();
 }
 
-export function handlePauseGyro3Pool(event: PausedLocally) {
+export function handlePauseGyro3Pool(event: PausedLocallyGyro3) {
   let poolAddress = event.address;
 
   let poolContract = Gyro3Pool.bind(poolAddress);
@@ -145,7 +156,7 @@ export function handlePauseGyro3Pool(event: PausedLocally) {
   pool.save();
 }
 
-export function handleUnpauseGyro3Pool(event: UnpausedLocally) {
+export function handleUnpauseGyro3Pool(event: UnpausedLocallyGyro3) {
   let poolAddress = event.address;
 
   let poolContract = Gyro3Pool.bind(poolAddress);
@@ -158,7 +169,7 @@ export function handleUnpauseGyro3Pool(event: UnpausedLocally) {
   pool.save();
 }
 
-export function handlePauseGyroEPool(event: PausedLocally) {
+export function handlePauseGyroEPool(event: PausedLocallyGyroE) {
   let poolAddress = event.address;
 
   let poolContract = GyroEPool.bind(poolAddress);
@@ -171,7 +182,7 @@ export function handlePauseGyroEPool(event: PausedLocally) {
   pool.save();
 }
 
-export function handleUnpauseGyroEPool(event: UnpausedLocally) {
+export function handleUnpauseGyroEPool(event: UnpausedLocallyGyroE) {
   let poolAddress = event.address;
 
   let poolContract = GyroEPool.bind(poolAddress);
