@@ -76,7 +76,7 @@ type Pool @entity {
   # Gyro3Pool Only
   root3Alpha: BigDecimal
 
-  # GyroCEMMPool Only
+  # GyroEPool Only
   c: BigDecimal
   s: BigDecimal
   tauAlphaX: BigDecimal
@@ -89,7 +89,7 @@ type Pool @entity {
   z: BigDecimal
   dSq: BigDecimal
 
-  # GyroCEMMPool+FXPool Only
+  # GyroEPool+FXPool Only
   alpha: BigDecimal
   beta: BigDecimal
   lambda: BigDecimal

@@ -1,4 +1,4 @@
-import { Address, Bytes, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, dataSource, log } from '@graphprotocol/graph-ts';
 import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
@@ -20,7 +20,7 @@ export namespace PoolType {
   export const ERC4626Linear = 'ERC4626Linear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
-  export const GyroCEMM = 'GyroCEMM';
+  export const GyroE = 'GyroE';
   export const FX = 'FX';
 }
 
@@ -56,6 +56,18 @@ export function isStableLikePool(pool: Pool): boolean {
 
 export function isFXPool(pool: Pool): boolean {
   return pool.poolType == PoolType.FX;
+}
+
+export function isMetaStableDeprecated(blockNumber: i32): boolean {
+  let network = dataSource.network();
+
+  if (network == 'ethereum' && blockNumber > 15008557) {
+    return true;
+  } else if (network == 'matic' && blockNumber > 35414865) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export function getPoolAddress(poolId: string): Address {
