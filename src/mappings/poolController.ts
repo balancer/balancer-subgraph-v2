@@ -36,6 +36,8 @@ import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
+import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Gyro2Pool, Gyro3Pool, GyroEPool } from '../types/templates';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -101,6 +103,84 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
 
   // when recovery mode is enabled, swaps are disabled; and vice versa
   pool.swapEnabled = !event.params.enabled;
+  pool.save();
+}
+
+export function handlePauseGyro2Pool(event: PausedLocally) {
+  let poolAddress = event.address;
+
+  let poolContract = Gyro2Pool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = false;
+  pool.save();
+}
+
+export function handleUnpauseGyro2Pool(event: UnpausedLocally) {
+  let poolAddress = event.address;
+
+  let poolContract = Gyro2Pool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = true;
+  pool.save();
+}
+
+export function handlePauseGyro3Pool(event: PausedLocally) {
+  let poolAddress = event.address;
+
+  let poolContract = Gyro3Pool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = false;
+  pool.save();
+}
+
+export function handleUnpauseGyro3Pool(event: UnpausedLocally) {
+  let poolAddress = event.address;
+
+  let poolContract = Gyro3Pool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = true;
+  pool.save();
+}
+
+export function handlePauseGyroEPool(event: PausedLocally) {
+  let poolAddress = event.address;
+
+  let poolContract = GyroEPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = false;
+  pool.save();
+}
+
+export function handleUnpauseGyroEPool(event: UnpausedLocally) {
+  let poolAddress = event.address;
+
+  let poolContract = GyroEPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = true;
   pool.save();
 }
 
