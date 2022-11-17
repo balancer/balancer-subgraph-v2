@@ -48,6 +48,7 @@ import {
   isLinearPool,
   isFXPool,
   isComposableStablePool,
+  updatePoolPausedState,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
@@ -110,6 +111,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()]);
     return;
   }
+
   let tokenAddresses = pool.tokensList;
 
   let joinId = transactionHash.toHexString().concat(logIndex.toString());
@@ -191,6 +193,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.save();
   }
 
+  updatePoolPausedState(pool);
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -275,6 +278,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
+  updatePoolPausedState(pool);
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -550,5 +554,6 @@ export function handleSwapEvent(event: SwapEvent): void {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
 
+  updatePoolPausedState(pool);
   updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }
