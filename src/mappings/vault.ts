@@ -48,7 +48,7 @@ import {
   isLinearPool,
   isFXPool,
   isComposableStablePool,
-  updatePoolPausedState,
+  updatePoolSwapEnabled,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
@@ -193,7 +193,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.save();
   }
 
-  updatePoolPausedState(pool);
+  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -278,7 +278,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
-  updatePoolPausedState(pool);
+  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -554,6 +554,6 @@ export function handleSwapEvent(event: SwapEvent): void {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
 
-  updatePoolPausedState(pool);
+  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }
