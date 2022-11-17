@@ -36,21 +36,8 @@ import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
-import {
-  PausedLocally as PausedLocallyGyro2,
-  UnpausedLocally as UnpausedLocallyGyro2,
-} from '../types/templates/Gyro2Pool/Gyro2Pool';
-import {
-  PausedLocally as PausedLocallyGyro3,
-  UnpausedLocally as UnpausedLocallyGyro3,
-} from '../types/templates/Gyro3Pool/Gyro3Pool';
-import {
-  PausedLocally as PausedLocallyGyroE,
-  UnpausedLocally as UnpausedLocallyGyroE,
-} from '../types/templates/GyroEPool/GyroEPool';
+import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
-import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
-import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -119,7 +106,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   pool.save();
 }
 
-export function handlePauseGyroPool(event: PausedLocallyGyro2 | PausedLocallyGyro3 | PausedLocallyGyroE): void {
+export function handlePauseGyroPool(event: PausedLocally): void {
   let poolAddress = event.address;
   let poolContract = Gyro2Pool.bind(poolAddress);
   // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
@@ -132,7 +119,7 @@ export function handlePauseGyroPool(event: PausedLocallyGyro2 | PausedLocallyGyr
   pool.save();
 }
 
-export function handleUnpauseGyroPool(event: UnpausedLocallyGyro2 | UnpausedLocallyGyro3 | UnpausedLocallyGyroE): void {
+export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   let poolAddress = event.address;
   let poolContract = Gyro2Pool.bind(poolAddress);
   // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
