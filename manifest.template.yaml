@@ -913,8 +913,6 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-        - event: PausedStateChanged(bool)
-          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
     network: {{network}}
