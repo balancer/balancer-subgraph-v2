@@ -120,6 +120,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
 
   // when recovery mode is enabled, swaps are disabled; and vice versa
   pool.swapEnabled = !event.params.enabled;
+  pool.recoveryMode = event.params.enabled;
   pool.save();
 }
 
