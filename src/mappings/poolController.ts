@@ -36,6 +36,7 @@ import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
+import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -101,6 +102,32 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
 
   // when recovery mode is enabled, swaps are disabled; and vice versa
   pool.swapEnabled = !event.params.enabled;
+  pool.save();
+}
+
+export function handlePauseGyroPool(event: PausedLocally): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+  // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = false;
+  pool.save();
+}
+
+export function handleUnpauseGyroPool(event: UnpausedLocally): void {
+  let poolAddress = event.address;
+  let poolContract = WeightedPool.bind(poolAddress);
+  // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+
+  pool.swapEnabled = true;
   pool.save();
 }
 
