@@ -117,7 +117,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   pool.save();
 }
 
-export function handlePauseGyro2Pool(event: PausedLocallyGyro2) {
+export function handlePauseGyro2Pool(event: PausedLocallyGyro2): void {
   let poolAddress = event.address;
 
   let poolContract = Gyro2Pool.bind(poolAddress);
@@ -130,7 +130,7 @@ export function handlePauseGyro2Pool(event: PausedLocallyGyro2) {
   pool.save();
 }
 
-export function handleUnpauseGyro2Pool(event: UnpausedLocallyGyro2) {
+export function handleUnpauseGyro2Pool(event: UnpausedLocallyGyro2): void {
   let poolAddress = event.address;
 
   let poolContract = Gyro2Pool.bind(poolAddress);
@@ -143,7 +143,7 @@ export function handleUnpauseGyro2Pool(event: UnpausedLocallyGyro2) {
   pool.save();
 }
 
-export function handlePauseGyro3Pool(event: PausedLocallyGyro3) {
+export function handlePauseGyro3Pool(event: PausedLocallyGyro3): void {
   let poolAddress = event.address;
 
   let poolContract = Gyro3Pool.bind(poolAddress);
@@ -156,7 +156,7 @@ export function handlePauseGyro3Pool(event: PausedLocallyGyro3) {
   pool.save();
 }
 
-export function handleUnpauseGyro3Pool(event: UnpausedLocallyGyro3) {
+export function handleUnpauseGyro3Pool(event: UnpausedLocallyGyro3): void {
   let poolAddress = event.address;
 
   let poolContract = Gyro3Pool.bind(poolAddress);
@@ -169,7 +169,7 @@ export function handleUnpauseGyro3Pool(event: UnpausedLocallyGyro3) {
   pool.save();
 }
 
-export function handlePauseGyroEPool(event: PausedLocallyGyroE) {
+export function handlePauseGyroEPool(event: PausedLocallyGyroE): void {
   let poolAddress = event.address;
 
   let poolContract = GyroEPool.bind(poolAddress);
@@ -182,7 +182,7 @@ export function handlePauseGyroEPool(event: PausedLocallyGyroE) {
   pool.save();
 }
 
-export function handleUnpauseGyroEPool(event: UnpausedLocallyGyroE) {
+export function handleUnpauseGyroEPool(event: UnpausedLocallyGyroE): void {
   let poolAddress = event.address;
 
   let poolContract = GyroEPool.bind(poolAddress);
