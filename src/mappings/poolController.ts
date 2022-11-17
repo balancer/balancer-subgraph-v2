@@ -119,10 +119,10 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   pool.save();
 }
 
-export function handlePauseGyro2Pool(event: PausedLocallyGyro2): void {
+export function handlePauseGyroPool(event: PausedLocallyGyro2 | PausedLocallyGyro3 | PausedLocallyGyroE): void {
   let poolAddress = event.address;
-
   let poolContract = Gyro2Pool.bind(poolAddress);
+  // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
@@ -132,62 +132,10 @@ export function handlePauseGyro2Pool(event: PausedLocallyGyro2): void {
   pool.save();
 }
 
-export function handleUnpauseGyro2Pool(event: UnpausedLocallyGyro2): void {
+export function handleUnpauseGyroPool(event: UnpausedLocallyGyro2 | UnpausedLocallyGyro3 | UnpausedLocallyGyroE): void {
   let poolAddress = event.address;
-
   let poolContract = Gyro2Pool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  pool.swapEnabled = true;
-  pool.save();
-}
-
-export function handlePauseGyro3Pool(event: PausedLocallyGyro3): void {
-  let poolAddress = event.address;
-
-  let poolContract = Gyro3Pool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  pool.swapEnabled = false;
-  pool.save();
-}
-
-export function handleUnpauseGyro3Pool(event: UnpausedLocallyGyro3): void {
-  let poolAddress = event.address;
-
-  let poolContract = Gyro3Pool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  pool.swapEnabled = true;
-  pool.save();
-}
-
-export function handlePauseGyroEPool(event: PausedLocallyGyroE): void {
-  let poolAddress = event.address;
-
-  let poolContract = GyroEPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  pool.swapEnabled = false;
-  pool.save();
-}
-
-export function handleUnpauseGyroEPool(event: UnpausedLocallyGyroE): void {
-  let poolAddress = event.address;
-
-  let poolContract = GyroEPool.bind(poolAddress);
+  // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 

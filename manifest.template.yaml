@@ -1104,9 +1104,9 @@ templates:
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
         - event: PausedLocally()
-          handler: handlePauseGyro2Pool
+          handler: handlePauseGyroPool
         - event: UnpausedLocally()
-          handler: handleUnpauseGyro2Pool
+          handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: Gyro3Pool
     network: {{network}}
@@ -1134,9 +1134,9 @@ templates:
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
         - event: PausedLocally()
-          handler: handlePauseGyro3Pool
+          handler: handlePauseGyroPool
         - event: UnpausedLocally()
-          handler: handleUnpauseGyro3Pool
+          handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: GyroEPool
     network: {{network}}
@@ -1164,9 +1164,9 @@ templates:
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
         - event: PausedLocally()
-          handler: handlePauseGyroEPool
+          handler: handlePauseGyroPool
         - event: UnpausedLocally()
-          handler: handleUnpauseGyroEPool
+          handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: FXPool
     network: {{network}}
