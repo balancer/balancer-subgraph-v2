@@ -37,7 +37,6 @@ import {
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
-import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -108,7 +107,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
 
 export function handlePauseGyroPool(event: PausedLocally): void {
   let poolAddress = event.address;
-  let poolContract = Gyro2Pool.bind(poolAddress);
+  let poolContract = WeightedPool.bind(poolAddress);
   // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -121,7 +120,7 @@ export function handlePauseGyroPool(event: PausedLocally): void {
 
 export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   let poolAddress = event.address;
-  let poolContract = Gyro2Pool.bind(poolAddress);
+  let poolContract = WeightedPool.bind(poolAddress);
   // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
