@@ -48,7 +48,9 @@ import {
   PausedLocally as PausedLocallyGyroE,
   UnpausedLocally as UnpausedLocallyGyroE,
 } from '../types/templates/GyroEPool/GyroEPool';
-import { Gyro2Pool, Gyro3Pool, GyroEPool } from '../types/templates';
+import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
+import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
