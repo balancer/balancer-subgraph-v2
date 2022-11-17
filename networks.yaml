@@ -104,8 +104,8 @@ goerli:
 polygon:
   network: matic
   graft:
-    block: 35414865
-    base: QmaYNfCzaXRUdSmo2BMqhbuyFVkGzwEFt96MAr5V6DhMiF
+    block: 32054794 # Changes to FX pools metrics require that we reindex from the time that factory was deployed
+    base: QmazTuQGghgrLXGxzsJYWnsfLqKTm9iivCtxGXg43fhkqS
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
