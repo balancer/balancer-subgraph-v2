@@ -104,6 +104,11 @@ type Pool @entity {
   protocolAumFeeCache: BigDecimal
 }
 
+type PoolContract @entity {
+  id: ID!
+  pool: Pool!
+}
+
 type PoolToken @entity {
   id: ID!
   poolId: Pool
