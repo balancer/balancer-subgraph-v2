@@ -1,5 +1,4 @@
 import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
-import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
@@ -36,6 +35,7 @@ import {
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Transfer } from '../types/Vault/ERC20';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
