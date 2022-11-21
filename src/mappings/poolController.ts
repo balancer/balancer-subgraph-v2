@@ -39,7 +39,6 @@ import { Transfer } from '../types/Vault/ERC20';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -61,7 +60,6 @@ export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercen
 
 export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -75,24 +73,20 @@ export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
  ************************************/
 export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-
   pool.swapEnabled = event.params.swapEnabled;
   pool.save();
 }
 
 export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-
   // when recovery mode is enabled, swaps are disabled; and vice versa
   pool.swapEnabled = !event.params.enabled;
   pool.save();
@@ -100,7 +94,6 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
 
 export function handlePauseGyroPool(event: PausedLocally): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -111,7 +104,6 @@ export function handlePauseGyroPool(event: PausedLocally): void {
 
 export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -126,7 +118,6 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
 
 export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateScheduled): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -147,7 +138,6 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
 
 export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -164,13 +154,14 @@ export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
 
 export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
+  let poolId = poolContract.pool;
+
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let ampUpdate = new AmpUpdate(id);
-  ampUpdate.poolId = poolContract.pool;
+  ampUpdate.poolId = poolId;
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   ampUpdate.startTimestamp = event.block.timestamp;
   ampUpdate.endTimestamp = event.block.timestamp;
@@ -178,7 +169,7 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
   ampUpdate.endAmp = event.params.currentValue;
   ampUpdate.save();
 
-  let pool = Pool.load(poolContract.pool);
+  let pool = Pool.load(poolId);
   if (pool == null) return;
   updateAmpFactor(pool);
 }
@@ -189,12 +180,10 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
 
 export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-
   const newSwapFee = scaleDown(event.params.swapFeePercentage, 18);
   pool.swapFee = newSwapFee;
   pool.save();
@@ -236,12 +225,10 @@ export function createSwapFeeUpdate(
 
 export function handleManagementFeePercentageChanged(event: ManagementFeePercentageChanged): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-
   pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
   pool.save();
 }
@@ -252,12 +239,10 @@ export function handleManagementFeePercentageChanged(event: ManagementFeePercent
 
 export function handleTargetsSet(event: TargetsSet): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-
   pool.lowerTarget = tokenToDecimal(event.params.lowerTarget, 18);
   pool.upperTarget = tokenToDecimal(event.params.upperTarget, 18);
   pool.save();
@@ -268,8 +253,12 @@ export function handleTargetsSet(event: TargetsSet): void {
  ************************************/
 
 export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
+  let poolAddress = event.address;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
   setPriceRateProvider(
-    event.address,
+    poolContract.pool,
     event.params.token,
     event.params.provider,
     event.params.cacheDuration.toI32(),
@@ -279,7 +268,6 @@ export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
 
 export function handleTokenRateProviderSet(event: TokenRateProviderSet): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -289,7 +277,7 @@ export function handleTokenRateProviderSet(event: TokenRateProviderSet): void {
   let tokenAddress = Address.fromString(token.toHexString());
 
   setPriceRateProvider(
-    event.address,
+    poolContract.pool,
     tokenAddress,
     event.params.provider,
     event.params.cacheDuration.toI32(),
@@ -298,21 +286,18 @@ export function handleTokenRateProviderSet(event: TokenRateProviderSet): void {
 }
 
 export function setPriceRateProvider(
-  poolAddress: Address,
+  poolId: string,
   tokenAddress: Address,
   providerAdress: Address,
   cacheDuration: i32,
   blockTimestamp: i32
 ): void {
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let provider = loadPriceRateProvider(poolContract.pool, tokenAddress);
+  let provider = loadPriceRateProvider(poolId, tokenAddress);
   if (provider == null) {
     // Price rate providers and pooltokens share an ID
-    let providerId = getPoolTokenId(poolContract.pool, tokenAddress);
+    let providerId = getPoolTokenId(poolId, tokenAddress);
     provider = new PriceRateProvider(providerId);
-    provider.poolId = poolContract.pool;
+    provider.poolId = poolId;
     provider.token = providerId;
 
     // Default to a rate of one, this should be updated in `handlePriceRateCacheUpdated` eventually
@@ -328,7 +313,12 @@ export function setPriceRateProvider(
 }
 
 export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {
-  setPriceRateCache(event.address, event.params.token, event.params.rate, event.block.timestamp.toI32());
+  let poolAddress = event.address;
+
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
+  setPriceRateCache(poolContract.pool, event.params.token, event.params.rate, event.block.timestamp.toI32());
 }
 
 export function handleTokenRateCacheUpdated(event: TokenRateCacheUpdated): void {
@@ -342,25 +332,14 @@ export function handleTokenRateCacheUpdated(event: TokenRateCacheUpdated): void 
   let token = pool.tokensList[event.params.tokenIndex.toI32()];
   let tokenAddress = Address.fromString(token.toHexString());
 
-  setPriceRateCache(event.address, tokenAddress, event.params.rate, event.block.timestamp.toI32());
+  setPriceRateCache(poolContract.pool, tokenAddress, event.params.rate, event.block.timestamp.toI32());
 }
 
-export function setPriceRateCache(
-  poolAddress: Address,
-  tokenAddress: Address,
-  rate: BigInt,
-  blockTimestamp: i32
-): void {
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
+export function setPriceRateCache(poolId: string, tokenAddress: Address, rate: BigInt, blockTimestamp: i32): void {
   let rateScaled = scaleDown(rate, 18);
-  let provider = loadPriceRateProvider(poolContract.pool, tokenAddress);
+  let provider = loadPriceRateProvider(poolId, tokenAddress);
   if (provider == null) {
-    log.warning('Provider not found in handlePriceRateCacheUpdated: {} {}', [
-      poolContract.pool,
-      tokenAddress.toHexString(),
-    ]);
+    log.warning('Provider not found in handlePriceRateCacheUpdated: {} {}', [poolId, tokenAddress.toHexString()]);
   } else {
     provider.rate = rateScaled;
     provider.lastCached = blockTimestamp;
@@ -370,7 +349,7 @@ export function setPriceRateCache(
   }
 
   // Attach the rate onto the PoolToken entity
-  let poolToken = loadPoolToken(poolContract.pool, tokenAddress);
+  let poolToken = loadPoolToken(poolId, tokenAddress);
   if (poolToken == null) return;
   poolToken.priceRate = rateScaled;
   poolToken.save();
@@ -382,7 +361,6 @@ export function setPriceRateCache(
 
 export function handleTransfer(event: Transfer): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
@@ -434,24 +412,20 @@ export function handleTransfer(event: Transfer): void {
 
 export function handleParametersSet(event: ParametersSet): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-
   pool.alpha = scaleDown(event.params.alpha, 18);
   pool.beta = scaleDown(event.params.beta, 18);
   pool.delta = scaleDown(event.params.delta, 18);
   pool.epsilon = scaleDown(event.params.epsilon, 18);
   pool.lambda = scaleDown(event.params.lambda, 18);
-
   pool.save();
 }
 
 export function handleAssimilatorIncluded(event: AssimilatorIncluded): void {
   let poolAddress = event.address;
-
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
