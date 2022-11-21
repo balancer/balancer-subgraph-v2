@@ -19,7 +19,7 @@ import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { Balancer, Pool } from '../types/schema';
+import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
 import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -465,6 +465,13 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
     vaultSnapshot.poolCount += 1;
     vaultSnapshot.save();
+  }
+
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) {
+    poolContract = new PoolContract(poolAddress.toHexString());
+    poolContract.pool = poolId.toHexString();
+    poolContract.save();
   }
 
   return pool;
