@@ -1,7 +1,7 @@
 import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
 import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
-import { WeightedPool, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
+import { SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
   SwapEnabledSet,
@@ -11,7 +11,6 @@ import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
   AmpUpdateStopped,
-  MetaStablePool,
   PriceRateCacheUpdated,
   PriceRateProviderSet,
 } from '../types/templates/MetaStablePool/MetaStablePool';
@@ -20,7 +19,7 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PoolContract } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -40,12 +39,11 @@ import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyr
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   const feeType = event.params.feeType.toI32();
   const feePercentage = scaleDown(event.params.protocolFeePercentage, 18);
@@ -63,12 +61,11 @@ export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercen
 
 export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
   pool.oracleEnabled = event.params.enabled;
   pool.save();
 }
@@ -79,12 +76,10 @@ export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
 export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   pool.swapEnabled = event.params.swapEnabled;
   pool.save();
@@ -93,12 +88,10 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
 export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   // when recovery mode is enabled, swaps are disabled; and vice versa
   pool.swapEnabled = !event.params.enabled;
@@ -107,26 +100,22 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
 
 export function handlePauseGyroPool(event: PausedLocally): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
-  // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
+  let pool = Pool.load(poolContract.pool) as Pool;
   pool.swapEnabled = false;
   pool.save();
 }
 
 export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
-  // try_getPoolId is the only contract method being called, which has the same signature across all Gyro pools
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
+  let pool = Pool.load(poolContract.pool) as Pool;
   pool.swapEnabled = true;
   pool.save();
 }
@@ -138,14 +127,12 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
 export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateScheduled): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let weightUpdate = new GradualWeightUpdate(id);
-  weightUpdate.poolId = poolId.toHexString();
+  weightUpdate.poolId = poolContract.pool;
   weightUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   weightUpdate.startTimestamp = event.params.startTime;
   weightUpdate.endTimestamp = event.params.endTime;
@@ -161,14 +148,12 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
 export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let ampUpdate = new AmpUpdate(id);
-  ampUpdate.poolId = poolId.toHexString();
+  ampUpdate.poolId = poolContract.pool;
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   ampUpdate.startTimestamp = event.params.startTime;
   ampUpdate.endTimestamp = event.params.endTime;
@@ -180,14 +165,12 @@ export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
 export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value.toHexString();
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let ampUpdate = new AmpUpdate(id);
-  ampUpdate.poolId = poolId;
+  ampUpdate.poolId = poolContract.pool;
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   ampUpdate.startTimestamp = event.block.timestamp;
   ampUpdate.endTimestamp = event.block.timestamp;
@@ -195,7 +178,7 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
   ampUpdate.endAmp = event.params.currentValue;
   ampUpdate.save();
 
-  let pool = Pool.load(poolId);
+  let pool = Pool.load(poolContract.pool);
   if (pool == null) return;
   updateAmpFactor(pool);
 }
@@ -207,12 +190,10 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
 export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   const newSwapFee = scaleDown(event.params.swapFeePercentage, 18);
   pool.swapFee = newSwapFee;
@@ -256,12 +237,10 @@ export function createSwapFeeUpdate(
 export function handleManagementFeePercentageChanged(event: ManagementFeePercentageChanged): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
   pool.save();
@@ -274,12 +253,10 @@ export function handleManagementFeePercentageChanged(event: ManagementFeePercent
 export function handleTargetsSet(event: TargetsSet): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   pool.lowerTarget = tokenToDecimal(event.params.lowerTarget, 18);
   pool.upperTarget = tokenToDecimal(event.params.upperTarget, 18);
@@ -301,10 +278,13 @@ export function handlePriceRateProviderSet(event: PriceRateProviderSet): void {
 }
 
 export function handleTokenRateProviderSet(event: TokenRateProviderSet): void {
-  let poolContract = MetaStablePool.bind(event.address);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value.toHexString();
-  let pool = Pool.load(poolId) as Pool;
+  let poolAddress = event.address;
+
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
+  let pool = Pool.load(poolContract.pool) as Pool;
+
   let token = pool.tokensList[event.params.tokenIndex.toI32()];
   let tokenAddress = Address.fromString(token.toHexString());
 
@@ -324,17 +304,15 @@ export function setPriceRateProvider(
   cacheDuration: i32,
   blockTimestamp: i32
 ): void {
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = MetaStablePool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let provider = loadPriceRateProvider(poolId.toHexString(), tokenAddress);
+  let provider = loadPriceRateProvider(poolContract.pool, tokenAddress);
   if (provider == null) {
     // Price rate providers and pooltokens share an ID
-    let providerId = getPoolTokenId(poolId.toHexString(), tokenAddress);
+    let providerId = getPoolTokenId(poolContract.pool, tokenAddress);
     provider = new PriceRateProvider(providerId);
-    provider.poolId = poolId.toHexString();
+    provider.poolId = poolContract.pool;
     provider.token = providerId;
 
     // Default to a rate of one, this should be updated in `handlePriceRateCacheUpdated` eventually
@@ -354,10 +332,13 @@ export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void 
 }
 
 export function handleTokenRateCacheUpdated(event: TokenRateCacheUpdated): void {
-  let poolContract = MetaStablePool.bind(event.address);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value.toHexString();
-  let pool = Pool.load(poolId) as Pool;
+  let poolAddress = event.address;
+
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
+  let pool = Pool.load(poolContract.pool) as Pool;
+
   let token = pool.tokensList[event.params.tokenIndex.toI32()];
   let tokenAddress = Address.fromString(token.toHexString());
 
@@ -370,16 +351,14 @@ export function setPriceRateCache(
   rate: BigInt,
   blockTimestamp: i32
 ): void {
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = MetaStablePool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
   let rateScaled = scaleDown(rate, 18);
-  let provider = loadPriceRateProvider(poolId.toHexString(), tokenAddress);
+  let provider = loadPriceRateProvider(poolContract.pool, tokenAddress);
   if (provider == null) {
     log.warning('Provider not found in handlePriceRateCacheUpdated: {} {}', [
-      poolId.toHexString(),
+      poolContract.pool,
       tokenAddress.toHexString(),
     ]);
   } else {
@@ -391,7 +370,7 @@ export function setPriceRateCache(
   }
 
   // Attach the rate onto the PoolToken entity
-  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  let poolToken = loadPoolToken(poolContract.pool, tokenAddress);
   if (poolToken == null) return;
   poolToken.priceRate = rateScaled;
   poolToken.save();
@@ -404,22 +383,21 @@ export function setPriceRateCache(
 export function handleTransfer(event: Transfer): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolId = poolContract.pool;
 
   let isMint = event.params.from == ZERO_ADDRESS;
   let isBurn = event.params.to == ZERO_ADDRESS;
 
-  let poolShareFrom = getPoolShare(poolId.toHexString(), event.params.from);
+  let poolShareFrom = getPoolShare(poolId, event.params.from);
   let poolShareFromBalance = poolShareFrom == null ? ZERO_BD : poolShareFrom.balance;
 
-  let poolShareTo = getPoolShare(poolId.toHexString(), event.params.to);
+  let poolShareTo = getPoolShare(poolId, event.params.to);
   let poolShareToBalance = poolShareTo == null ? ZERO_BD : poolShareTo.balance;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolId) as Pool;
 
   let BPT_DECIMALS = 18;
 
@@ -457,13 +435,10 @@ export function handleTransfer(event: Transfer): void {
 export function handleParametersSet(event: ParametersSet): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   pool.alpha = scaleDown(event.params.alpha, 18);
   pool.beta = scaleDown(event.params.beta, 18);
@@ -477,14 +452,11 @@ export function handleParametersSet(event: ParametersSet): void {
 export function handleAssimilatorIncluded(event: AssimilatorIncluded): void {
   let poolAddress = event.address;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
   let tokenAddress = event.params.reserve;
-  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
+  let poolToken = loadPoolToken(poolContract.pool, tokenAddress);
   if (poolToken == null) return;
 
   poolToken.assimilator = event.params.assimilator;
