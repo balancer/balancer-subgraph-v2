@@ -2,59 +2,100 @@
   {
     "inputs": [
       {
-        "internalType": "contract IVault",
-        "name": "vault",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "symbol",
-        "type": "string"
-      },
-      {
-        "internalType": "contract IERC20[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "root3Alpha",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address[]",
-        "name": "assetManagers",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256",
-        "name": "swapFeePercentage",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "pauseWindowDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "bufferPeriodDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "configAddress",
-        "type": "address"
+        "components": [
+          {
+            "internalType": "contract IVault",
+            "name": "vault",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "configAddress",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "internalType": "string",
+                "name": "symbol",
+                "type": "string"
+              },
+              {
+                "internalType": "contract IERC20[]",
+                "name": "tokens",
+                "type": "address[]"
+              },
+              {
+                "internalType": "uint256",
+                "name": "swapFeePercentage",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "root3Alpha",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "capManager",
+                "type": "address"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "bool",
+                    "name": "capEnabled",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "uint120",
+                    "name": "perAddressCap",
+                    "type": "uint120"
+                  },
+                  {
+                    "internalType": "uint128",
+                    "name": "globalCap",
+                    "type": "uint128"
+                  }
+                ],
+                "internalType": "struct ICappedLiquidity.CapParams",
+                "name": "capParams",
+                "type": "tuple"
+              },
+              {
+                "internalType": "address",
+                "name": "pauseManager",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct Gyro3CLPPool.NewPoolConfigParams",
+            "name": "config",
+            "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pauseWindowDuration",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bufferPeriodDuration",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Gyro3CLPPool.NewPoolParams",
+        "name": "params",
+        "type": "tuple"
       }
     ],
     "stateMutability": "nonpayable",
@@ -83,6 +124,74 @@
       }
     ],
     "name": "Approval",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "capManager",
+        "type": "address"
+      }
+    ],
+    "name": "CapManagerUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "capEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint120",
+            "name": "perAddressCap",
+            "type": "uint120"
+          },
+          {
+            "internalType": "uint128",
+            "name": "globalCap",
+            "type": "uint128"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ICappedLiquidity.CapParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "CapParamsUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldPauseManager",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newPauseManager",
+        "type": "address"
+      }
+    ],
+    "name": "PauseManagerChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PausedLocally",
     "type": "event"
   },
   {
@@ -134,6 +243,12 @@
       }
     ],
     "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "UnpausedLocally",
     "type": "event"
   },
   {
@@ -214,6 +329,62 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "capManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "capParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "capEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint120",
+            "name": "perAddressCap",
+            "type": "uint120"
+          },
+          {
+            "internalType": "uint128",
+            "name": "globalCap",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct ICappedLiquidity.CapParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_pauseManager",
+        "type": "address"
+      }
+    ],
+    "name": "changePauseManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -692,6 +863,26 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pauseManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -863,6 +1054,49 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_capManager",
+        "type": "address"
+      }
+    ],
+    "name": "setCapManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "capEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint120",
+            "name": "perAddressCap",
+            "type": "uint120"
+          },
+          {
+            "internalType": "uint128",
+            "name": "globalCap",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct ICappedLiquidity.CapParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "setCapParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bool",
         "name": "paused",
         "type": "bool"
@@ -962,6 +1196,13 @@
         "type": "bool"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   }
