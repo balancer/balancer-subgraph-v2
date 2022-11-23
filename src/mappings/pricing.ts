@@ -1,8 +1,16 @@
-import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
-import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS } from './helpers/constants';
+import { Address, Bytes, BigInt, BigDecimal, ethereum, log } from '@graphprotocol/graph-ts';
+import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
+import {
+  ZERO_BD,
+  PRICING_ASSETS,
+  USD_STABLE_ASSETS,
+  ONE_BD,
+  ZERO_ADDRESS,
+  FX_AGGREGATOR_ADDRESSES,
+  FX_TOKEN_ADDRESSES,
+} from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, PoolType } from './helpers/pools';
-import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken } from './helpers/misc';
+import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken, scaleDown } from './helpers/misc';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -239,4 +247,35 @@ export function isUSDStable(asset: Address): boolean {
     if (USD_STABLE_ASSETS[i] == asset) return true;
   }
   return false;
+}
+
+export function handleAnswerUpdated(event: ethereum.Event): void {
+  /**
+   * AccessControlledOffchainAggregator emits a AnswerUpdated event with the following params:
+   *   event.parameters[0] = current rate
+   *   event.parameters[1] = roundId
+   *   event.parameters[2] = updatedAt
+   * */
+  let tokenAddress: Address = Address.zero();
+  const aggregatorAddress = event.address;
+
+  for (let i = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
+    if (aggregatorAddress == Address.fromString(FX_AGGREGATOR_ADDRESSES[i])) {
+      tokenAddress = Address.fromString(FX_TOKEN_ADDRESSES[i]);
+      break;
+    }
+  }
+
+  // Return if this answer is for another token we don't track
+  if (tokenAddress == Address.zero()) return;
+
+  const token = Token.load(tokenAddress.toHexString());
+  if (token == null) {
+    log.warning('Token with address {} not found', [tokenAddress.toHexString()]);
+    return;
+  }
+
+  let rate = scaleDown(event.parameters[0].value.toBigInt(), 8);
+  token.latestFXPrice = rate;
+  token.save();
 }
