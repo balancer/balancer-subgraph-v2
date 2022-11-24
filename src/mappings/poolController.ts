@@ -18,7 +18,15 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PoolContract } from '../types/schema';
+import {
+  Pool,
+  PriceRateProvider,
+  GradualWeightUpdate,
+  AmpUpdate,
+  SwapFeeUpdate,
+  PoolContract,
+  RateProviderContract,
+} from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -311,6 +319,24 @@ export function setPriceRateProvider(
         provider.cacheExpiry = blockTimestamp + cacheDuration;
       }
     }
+  } else {
+    // if a rate provider for this poolToken already exists, remove the poolToken from the associated RateProviderContract entity
+    let previousProviderContract = RateProviderContract.load(provider.address.toHexString());
+    if (previousProviderContract) {
+      const index = previousProviderContract.poolTokens.indexOf(poolTokenId, 0);
+      if (index > -1) {
+        previousProviderContract.poolTokens.splice(index, 1);
+      }
+    }
+  }
+
+  let providerContract = RateProviderContract.load(providerAdress.toHexString());
+  if (providerContract == null) {
+    providerContract = new RateProviderContract(providerAdress.toHexString());
+  }
+  const index = providerContract.poolTokens.indexOf(poolTokenId, 0);
+  if (index < 0) {
+    providerContract.poolTokens.push(poolTokenId);
   }
 
   provider.address = providerAdress;

@@ -146,6 +146,11 @@ type PriceRateProvider @entity {
   cacheExpiry: Int
 }
 
+type RateProviderContract @entity {
+  id: ID!
+  poolTokens: [PoolToken!]!
+}
+
 type PoolShare @entity {
   id: ID!
   userAddress: User!
