@@ -293,32 +293,39 @@ export function setPriceRateProvider(
   cacheDuration: i32,
   blockTimestamp: i32
 ): void {
+  // Price rate providers and pooltokens share an ID
+  let poolTokenId = getPoolTokenId(poolId, tokenAddress);
+  let providerId = poolTokenId;
+
   let provider = loadPriceRateProvider(poolId, tokenAddress);
   if (provider == null) {
-    // Price rate providers and pooltokens share an ID
-    let providerId = getPoolTokenId(poolId, tokenAddress);
     provider = new PriceRateProvider(providerId);
     provider.poolId = poolId;
-    provider.token = providerId;
+    provider.token = poolTokenId;
 
     // Default to a rate of one, this should be updated in `handlePriceRateCacheUpdated` eventually
     provider.rate = ONE_BD;
-    provider.lastCached = blockTimestamp;
-    provider.cacheExpiry = blockTimestamp + cacheDuration;
+    if (blockTimestamp >= 0) {
+      provider.lastCached = blockTimestamp;
+      if (cacheDuration >= 0) {
+        provider.cacheExpiry = blockTimestamp + cacheDuration;
+      }
+    }
   }
 
   provider.address = providerAdress;
-  provider.cacheDuration = cacheDuration;
+  if (cacheDuration >= 0) {
+    provider.cacheDuration = cacheDuration;
+  }
 
   let pool = Pool.load(poolId);
   if (pool && isVerifiedRateProviderOfItself(pool) && tokenAddress == pool.address) {
-    provider.isVerified = true
-  }
-  else {
-    provider.isVerified = false
+    provider.isVerified = true;
+  } else {
+    provider.isVerified = false;
   }
 
-provider.save();
+  provider.save();
 }
 
 export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {

@@ -2,6 +2,7 @@ import { Address, Bytes, dataSource, log } from '@graphprotocol/graph-ts';
 import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
+import { setPriceRateProvider } from '../poolController';
 import { VAULT_ADDRESS } from './constants';
 import { bytesToAddress, getPoolTokenId } from './misc';
 
@@ -128,11 +129,6 @@ export function setPriceRateProviders(poolId: string, poolAddress: Address, toke
 
   for (let i: i32 = 0; i < rateProviders.length; i++) {
     let tokenAddress = bytesToAddress(tokensList[i]);
-    let providerId = getPoolTokenId(poolId, tokenAddress);
-    let provider = new PriceRateProvider(providerId);
-    provider.poolId = poolId;
-    provider.token = providerId;
-    provider.address = rateProviders[i];
-    provider.save();
+    setPriceRateProvider(poolId, tokenAddress, rateProviders[i], -1, -1);
   }
 }
