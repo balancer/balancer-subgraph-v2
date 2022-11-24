@@ -26,6 +26,7 @@ import {
   SwapFeeUpdate,
   PoolContract,
   RateProviderContract,
+  PoolToken,
 } from '../types/schema';
 
 import {
@@ -339,6 +340,31 @@ export function setPriceRateProvider(
   }
   provider.save();
   setSafeToSwapOn(poolId);
+}
+
+export function setPriceRateProviderIsVerified(
+  providerAddress: string,
+  tokenAddress: string,
+  isVerified: boolean
+): void {
+  const provider = RateProviderContract.load(providerAddress);
+  if (provider) {
+    const poolTokens = provider.poolTokens;
+    for (let i: i32 = 0; i < poolTokens.length; i++) {
+      const poolToken = PoolToken.load(poolTokens[i]);
+      if (poolToken) {
+        if (poolToken.address == tokenAddress) {
+          let rateProviderId = poolToken.id;
+          let priceRateProvider = PriceRateProvider.load(rateProviderId);
+          if (priceRateProvider) {
+            priceRateProvider.isVerified = isVerified;
+            priceRateProvider.save();
+            setSafeToSwapOn(poolToken.poolId);
+          }
+        }
+      }
+    }
+  }
 }
 
 export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {

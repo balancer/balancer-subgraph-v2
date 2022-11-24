@@ -159,8 +159,10 @@ export function isSafeToSwapOn(pool: Pool): boolean {
   return _isSafeToSwapOn(pool, pool.swapEnabled);
 }
 
-export function setSafeToSwapOn(poolId: string): void {
-  let pool = Pool.load(poolId);
-  if (pool == null) return;
-  pool.isSafeToSwapOn = isSafeToSwapOn(pool);
+export function setSafeToSwapOn(poolId: string | null): void {
+  if (poolId) {
+    let pool = Pool.load(poolId);
+    if (pool == null) return;
+    pool.isSafeToSwapOn = isSafeToSwapOn(pool);
+  }
 }
