@@ -139,6 +139,7 @@ type PriceRateProvider @entity {
   poolId: Pool!
   token: PoolToken!
   address: Bytes!
+  isVerified: Boolean # TODO: make non-nullable on next full sync
   rate: BigDecimal
   lastCached: Int
   cacheDuration: Int
