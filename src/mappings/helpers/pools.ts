@@ -1,10 +1,10 @@
 import { Address, Bytes, dataSource, log } from '@graphprotocol/graph-ts';
-import { Pool, PriceRateProvider } from '../../types/schema';
+import { Pool } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { setPriceRateProvider } from '../poolController';
 import { VAULT_ADDRESS } from './constants';
-import { bytesToAddress, getPoolTokenId } from './misc';
+import { bytesToAddress } from './misc';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace PoolType {

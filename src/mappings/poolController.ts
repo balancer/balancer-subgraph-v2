@@ -44,7 +44,7 @@ import {
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Transfer } from '../types/Vault/ERC20';
-import { getPoolAddress, isVerifiedRateProviderOfItself } from './helpers/pools';
+import { isVerifiedRateProviderOfItself } from './helpers/pools';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
