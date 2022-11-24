@@ -49,10 +49,10 @@ type Pool @entity {
   # LiquidityBootstrappingPool Only
   weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
 
-  # StablePool Only
+  # All kinds of StablePools Only
   amp: BigInt
 
-  # MetaStablePool and LinearPool Only
+  # Linear, MetaStable, StablePhantom, Composable, WeightedV2
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
 
   # ConvergentCurvePool (Element) Only
