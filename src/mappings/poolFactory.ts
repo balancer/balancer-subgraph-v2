@@ -5,6 +5,7 @@ import {
   isMetaStableDeprecated,
   PoolType,
   setPriceRateProviders,
+  _isSafeToSwapOn,
 } from './helpers/pools';
 
 import {
@@ -444,6 +445,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
     pool.swapEnabled = true;
+    pool.isSafeToSwapOn = _isSafeToSwapOn(pool, true);
 
     let bpt = ERC20.bind(poolAddress);
 

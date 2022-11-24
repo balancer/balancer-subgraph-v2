@@ -44,7 +44,7 @@ import {
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Transfer } from '../types/Vault/ERC20';
-import { isVerifiedRateProviderOfItself } from './helpers/pools';
+import { isVerifiedRateProviderOfItself, setSafeToSwapOn, _isSafeToSwapOn } from './helpers/pools';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -84,41 +84,28 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = event.params.swapEnabled;
-  pool.save();
+  setSwapEnabled(poolContract.pool, event.params.swapEnabled);
 }
 
 export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  // when recovery mode is enabled, swaps are disabled; and vice versa
-  pool.swapEnabled = !event.params.enabled;
-  pool.save();
+  setSwapEnabled(poolContract.pool, !event.params.enabled);
 }
 
 export function handlePauseGyroPool(event: PausedLocally): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = false;
-  pool.save();
+  setSwapEnabled(poolContract.pool, false);
 }
 
 export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = true;
-  pool.save();
+  setSwapEnabled(poolContract.pool, true);
 }
 
 /************************************
@@ -350,6 +337,7 @@ export function setPriceRateProvider(
   } else {
     provider.isVerified = false;
   }
+  setSafeToSwapOn(poolId);
 
   provider.save();
 }
@@ -477,4 +465,11 @@ export function handleAssimilatorIncluded(event: AssimilatorIncluded): void {
 
   poolToken.assimilator = event.params.assimilator;
   poolToken.save();
+}
+
+export function setSwapEnabled(poolId: string, swapEnabled: boolean): void {
+  let pool = Pool.load(poolId) as Pool;
+  pool.swapEnabled = swapEnabled;
+  pool.isSafeToSwapOn = _isSafeToSwapOn(pool, swapEnabled);
+  pool.save();
 }

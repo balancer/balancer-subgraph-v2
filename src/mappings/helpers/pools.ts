@@ -1,5 +1,5 @@
 import { Address, Bytes, dataSource, log } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
+import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { setPriceRateProvider } from '../poolController';
@@ -131,4 +131,36 @@ export function setPriceRateProviders(poolId: string, poolAddress: Address, toke
     let tokenAddress = bytesToAddress(tokensList[i]);
     setPriceRateProvider(poolId, tokenAddress, rateProviders[i], -1, -1);
   }
+}
+
+export function _isSafeToSwapOn(pool: Pool, swapEnabled: boolean): boolean {
+  if (!swapEnabled) return false;
+
+  if (
+    pool.poolType == PoolType.ComposableStable ||
+    pool.poolType == PoolType.StablePhantom ||
+    pool.poolType == PoolType.MetaStable
+  ) {
+    const rateProviders = pool.priceRateProviders;
+    if (rateProviders) {
+      for (let i: i32 = 0; i < rateProviders.length; i++) {
+        const rp = PriceRateProvider.load(rateProviders[i]);
+        if (rp == null) return false;
+        if (!rp.isVerified) return false;
+      }
+    }
+  } else if ((pool.poolType = PoolType.Stable)) {
+    if (pool.poolTypeVersion == 1) return false;
+  }
+  return true;
+}
+
+export function isSafeToSwapOn(pool: Pool): boolean {
+  return _isSafeToSwapOn(pool, pool.swapEnabled);
+}
+
+export function setSafeToSwapOn(poolId: string): void {
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
+  pool.isSafeToSwapOn = isSafeToSwapOn(pool);
 }

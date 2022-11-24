@@ -21,6 +21,7 @@ type Pool @entity {
   symbol: String
   name: String
   swapEnabled: Boolean!
+  isSafeToSwapOn: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
 
