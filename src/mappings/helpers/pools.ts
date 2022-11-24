@@ -54,6 +54,18 @@ export function isStableLikePool(pool: Pool): boolean {
   );
 }
 
+export function isVerifiedRateProviderOfItself(pool: Pool): boolean {
+  return (
+    pool.poolType == PoolType.Weighted ||
+    pool.poolType == PoolType.Stable ||
+    pool.poolType == PoolType.MetaStable ||
+    pool.poolType == PoolType.StablePhantom ||
+    pool.poolType == PoolType.ComposableStable ||
+    pool.poolType == PoolType.AaveLinear ||
+    pool.poolType == PoolType.ERC4626Linear
+  );
+}
+
 export function isFXPool(pool: Pool): boolean {
   return pool.poolType == PoolType.FX;
 }

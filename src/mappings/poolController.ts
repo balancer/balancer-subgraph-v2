@@ -36,6 +36,7 @@ import {
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Transfer } from '../types/Vault/ERC20';
+import { getPoolAddress, isVerifiedRateProviderOfItself } from './helpers/pools';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -309,7 +310,15 @@ export function setPriceRateProvider(
   provider.address = providerAdress;
   provider.cacheDuration = cacheDuration;
 
-  provider.save();
+  let pool = Pool.load(poolId);
+  if (pool && isVerifiedRateProviderOfItself(pool) && tokenAddress == pool.address) {
+    provider.isVerified = true
+  }
+  else {
+    provider.isVerified = false
+  }
+
+provider.save();
 }
 
 export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {
