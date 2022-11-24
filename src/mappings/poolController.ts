@@ -337,9 +337,8 @@ export function setPriceRateProvider(
   } else {
     provider.isVerified = false;
   }
-  setSafeToSwapOn(poolId);
-
   provider.save();
+  setSafeToSwapOn(poolId);
 }
 
 export function handlePriceRateCacheUpdated(event: PriceRateCacheUpdated): void {
