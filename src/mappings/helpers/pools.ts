@@ -127,14 +127,8 @@ export function setPriceRateProviders(poolId: string, poolAddress: Address, toke
 }
 
 export function updatePoolSwapEnabled(pool: Pool): void {
-  if (pool.swapEnabled || pool.recoveryMode || isFXPool(pool)) return;
+  if (pool.swapEnabled) return;
 
-  let poolAddress = bytesToAddress(pool.address);
-  let poolContract = WeightedPool.bind(poolAddress);
-
-  let pausedCall = poolContract.try_getPausedState();
-  if (pausedCall.reverted) return;
-
-  pool.swapEnabled = pausedCall.value.value0;
+  pool.swapEnabled = true;
   pool.save();
 }

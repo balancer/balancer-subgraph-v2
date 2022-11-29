@@ -118,8 +118,6 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  // when recovery mode is enabled, swaps are disabled; and vice versa
-  pool.swapEnabled = !event.params.enabled;
   pool.recoveryMode = event.params.enabled;
   pool.save();
 }
