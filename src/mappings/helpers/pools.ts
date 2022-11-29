@@ -1,7 +1,6 @@
 import { Address, Bytes, dataSource, log } from '@graphprotocol/graph-ts';
 import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
-import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { setPriceRateProvider } from '../poolController';
 import { VAULT_ADDRESS } from './constants';
