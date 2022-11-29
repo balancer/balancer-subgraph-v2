@@ -745,6 +745,8 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPoolV2
     network: {{network}}
@@ -772,6 +774,8 @@ templates:
           handler: handleProtocolFeePercentageCacheUpdated
         - event: RecoveryModeStateChanged(bool)
           handler: handleRecoveryModeStateChanged
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPool2Tokens
     network: {{network}}
@@ -797,6 +801,8 @@ templates:
           handler: handleOracleEnabledChanged
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
     network: {{network}}
@@ -824,6 +830,8 @@ templates:
           handler: handleAmpUpdateStarted
         - event: AmpUpdateStopped(uint256)
           handler: handleAmpUpdateStopped
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
     network: {{network}}
@@ -860,6 +868,8 @@ templates:
           handler: handlePriceRateCacheUpdated
         - event: OracleEnabledChanged(bool)
           handler: handleOracleEnabledChanged
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
     network: {{network}}
@@ -909,6 +919,8 @@ templates:
           handler: handleSwapEnabledSet
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
           handler: handleGradualWeightUpdateScheduled
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
     network: {{network}}
@@ -975,6 +987,8 @@ templates:
           handler: handlePriceRateProviderSet
         - event: TokenRateCacheUpdated(indexed address,uint256)
           handler: handlePriceRateCacheUpdated
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPoolV2
     network: {{network}}
@@ -1013,6 +1027,8 @@ templates:
           handler: handleProtocolFeePercentageCacheUpdated
         - event: RecoveryModeStateChanged(bool)
           handler: handleRecoveryModeStateChanged
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: LinearPool
     network: {{network}}
@@ -1039,6 +1055,8 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: Gyro2Pool
     network: {{network}}

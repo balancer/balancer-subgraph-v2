@@ -100,6 +100,7 @@ type Pool @entity {
   epsilon: BigDecimal
 
   # Composable and WeightedV2 Only
+  recoveryMode: Boolean
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
