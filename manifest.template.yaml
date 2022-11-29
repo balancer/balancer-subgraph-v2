@@ -740,8 +740,6 @@ templates:
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: BalancerPoolToken
-          file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -763,12 +761,8 @@ templates:
         - Swap
         - PoolToken
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
         - name: WeightedPoolV2
           file: ./abis/WeightedPoolV2.json
-        - name: BalancerPoolToken
-          file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -794,12 +788,8 @@ templates:
         - Swap
         - PoolToken
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
         - name: WeightedPool2Tokens
           file: ./abis/WeightedPool2Tokens.json
-        - name: BalancerPoolToken
-          file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -823,12 +813,8 @@ templates:
         - Swap
         - PoolToken
       abis:
-        - name: WeightedPool # Necessary for Transfer handler
-          file: ./abis/WeightedPool.json
         - name: StablePool
           file: ./abis/StablePool.json
-        - name: BalancerPoolToken
-          file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -855,14 +841,10 @@ templates:
         - PoolToken
         - PriceRateProvider
       abis:
-        - name: WeightedPool # Necessary for Transfer handler
-          file: ./abis/WeightedPool.json
-        - name: StablePool
-          file: ./abis/StablePool.json
         - name: MetaStablePool
           file: ./abis/MetaStablePool.json
-        - name: BalancerPoolToken
-          file: ./abis/BalancerPoolToken.json
+        - name: StablePool
+          file: ./abis/StablePool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -894,12 +876,8 @@ templates:
         - Swap
         - PoolToken
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
         - name: ConvergentCurvePool
           file: ./abis/ConvergentCurvePool.json
-        - name: BalancerPoolToken
-          file: ./abis/BalancerPoolToken.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -920,8 +898,6 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
         - name: LiquidityBootstrappingPool
           file: ./abis/LiquidityBootstrappingPool.json
       eventHandlers:
@@ -950,8 +926,6 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
         - name: InvestmentPool
           file: ./abis/InvestmentPool.json
       eventHandlers:
@@ -984,14 +958,10 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-        - name: MetaStablePool
-          file: ./abis/MetaStablePool.json
         - name: StablePhantomPool
           file: ./abis/StablePhantomPool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1022,14 +992,10 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-        - name: MetaStablePool
-          file: ./abis/MetaStablePool.json
         - name: ComposableStablePool
           file: ./abis/ComposableStablePool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1064,10 +1030,6 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: MetaStablePool
-          file: ./abis/MetaStablePool.json
         - name: LinearPool
           file: ./abis/LinearPool.json
       eventHandlers:
@@ -1096,8 +1058,6 @@ templates:
       abis:
         - name: Gyro2Pool
           file: ./abis/Gyro2Pool.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1126,8 +1086,6 @@ templates:
       abis:
         - name: Gyro3Pool
           file: ./abis/Gyro3Pool.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1156,8 +1114,6 @@ templates:
       abis:
         - name: GyroEPool
           file: ./abis/GyroEPool.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1186,8 +1142,6 @@ templates:
       abis:
         - name: FXPool
           file: ./abis/FXPool.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
