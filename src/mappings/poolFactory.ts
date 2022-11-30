@@ -450,7 +450,7 @@ function createNewPool(
     const allRateProvidersVerified = areAllRateProvidersVerified(pool);
     pool.allRateProvidersVerified = allRateProvidersVerified;
     const isPoolSubjectToConvergenceBug = isPoolTypeVersionSubjectToConvergenceBug(poolType, poolTypeVersion);
-    pool.isSafeToSwapOn = isSafeToSwapOn(
+    pool.swapEnabled = isSafeToSwapOn(
       false,
       pool.isInRecoveryMode,
       true,

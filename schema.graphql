@@ -23,7 +23,8 @@ type Pool @entity {
   isPaused: Boolean
   " The pool's internal swapEnabled property. Applies to Investment Pools and LBPs. "
   swapEnabled_: Boolean!
-  isSafeToSwapOn: Boolean!
+  " Curated attribute. Combines the pool's internal swapEnabled property with Pause, RecoveryMode (when it might be impossible to swap) and verified rate providers. "
+  swapEnabled: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
 
