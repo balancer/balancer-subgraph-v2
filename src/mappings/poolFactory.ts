@@ -443,7 +443,7 @@ function createNewPool(
     pool.factory = event.address;
     pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
-    pool.swapEnabled = true;
+    pool.swapEnabled_ = true;
     pool.isPaused = false;
     pool.poolType = poolType;
     pool.poolTypeVersion = poolTypeVersion;

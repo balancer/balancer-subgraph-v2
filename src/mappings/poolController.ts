@@ -93,7 +93,7 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool);
   if (pool == null) return;
-  pool.swapEnabled = event.params.swapEnabled;
+  pool.swapEnabled_ = event.params.swapEnabled;
   pool.isSafeToSwapOn = isSafeToSwapOn(
     pool.isPaused,
     pool.isInRecoveryMode,
@@ -114,7 +114,7 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   pool.isSafeToSwapOn = isSafeToSwapOn(
     event.params.paused,
     pool.isInRecoveryMode,
-    pool.swapEnabled,
+    pool.swapEnabled_,
     pool.allRateProvidersVerified,
     isPoolSubjectToConvergenceBug(pool)
   );
@@ -131,7 +131,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   pool.isSafeToSwapOn = isSafeToSwapOn(
     pool.isPaused,
     event.params.enabled,
-    pool.swapEnabled,
+    pool.swapEnabled_,
     pool.allRateProvidersVerified,
     isPoolSubjectToConvergenceBug(pool)
   );
@@ -148,7 +148,7 @@ export function handlePauseGyroPool(event: PausedLocally): void {
   pool.isSafeToSwapOn = isSafeToSwapOn(
     true,
     pool.isInRecoveryMode,
-    pool.swapEnabled,
+    pool.swapEnabled_,
     pool.allRateProvidersVerified,
     isPoolSubjectToConvergenceBug(pool)
   );
@@ -165,7 +165,7 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   pool.isSafeToSwapOn = isSafeToSwapOn(
     false,
     pool.isInRecoveryMode,
-    pool.swapEnabled,
+    pool.swapEnabled_,
     pool.allRateProvidersVerified,
     isPoolSubjectToConvergenceBug(pool)
   );
@@ -408,7 +408,7 @@ export function setPriceRateProvider(
     pool.isSafeToSwapOn = isSafeToSwapOn(
       pool.isPaused,
       pool.isInRecoveryMode,
-      pool.swapEnabled,
+      pool.swapEnabled_,
       allRateProvidersVerified,
       isPoolSubjectToConvergenceBug(pool)
     );
@@ -442,7 +442,7 @@ export function setPriceRateProviderIsVerified(
                 pool.isSafeToSwapOn = isSafeToSwapOn(
                   pool.isPaused,
                   pool.isInRecoveryMode,
-                  pool.swapEnabled,
+                  pool.swapEnabled_,
                   allRateProvidersVerified,
                   isPoolSubjectToConvergenceBug(pool)
                 );

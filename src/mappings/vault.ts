@@ -117,7 +117,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   pool.isSafeToSwapOn = isSafeToSwapOn(
     false,
     pool.isInRecoveryMode,
-    pool.swapEnabled,
+    pool.swapEnabled_,
     pool.allRateProvidersVerified,
     isPoolSubjectToConvergenceBug(pool)
   );
@@ -223,7 +223,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   pool.isSafeToSwapOn = isSafeToSwapOn(
     false,
     pool.isInRecoveryMode,
-    pool.swapEnabled,
+    pool.swapEnabled_,
     pool.allRateProvidersVerified,
     isPoolSubjectToConvergenceBug(pool)
   );
@@ -364,7 +364,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   pool.isSafeToSwapOn = isSafeToSwapOn(
     false,
     pool.isInRecoveryMode,
-    pool.swapEnabled,
+    pool.swapEnabled_,
     pool.allRateProvidersVerified,
     isPoolSubjectToConvergenceBug(pool)
   );

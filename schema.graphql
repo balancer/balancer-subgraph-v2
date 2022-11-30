@@ -21,7 +21,8 @@ type Pool @entity {
   symbol: String
   name: String
   isPaused: Boolean
-  swapEnabled: Boolean!
+  " The pool's internal swapEnabled property. Applies to Investment Pools and LBPs. "
+  swapEnabled_: Boolean!
   isSafeToSwapOn: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
