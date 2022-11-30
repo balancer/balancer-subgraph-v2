@@ -133,9 +133,7 @@ export function setPriceRateProviders(poolId: string, poolAddress: Address, toke
   }
 }
 
-export function _isSafeToSwapOn(pool: Pool, swapEnabled: boolean): boolean {
-  if (!swapEnabled) return false;
-
+export function areAllRateProvidersVerified(pool: Pool): boolean {
   if (
     pool.poolType == PoolType.ComposableStable ||
     pool.poolType == PoolType.StablePhantom ||
@@ -149,27 +147,25 @@ export function _isSafeToSwapOn(pool: Pool, swapEnabled: boolean): boolean {
         if (!rp.isVerified) return false;
       }
     }
-  } else if ((pool.poolType = PoolType.Stable)) {
-    if (pool.poolTypeVersion == 1) return false;
   }
   return true;
 }
 
-export function isSafeToSwapOn(pool: Pool): boolean {
-  return _isSafeToSwapOn(pool, pool.swapEnabled);
+export function isPoolSubjectToConvergenceBug(pool: Pool): boolean {
+  return isPoolTypeVersionSubjectToConvergenceBug(pool.poolType, pool.poolTypeVersion);
 }
 
-export function setSafeToSwapOn(poolId: string | null): void {
-  if (poolId) {
-    let pool = Pool.load(poolId);
-    if (pool == null) return;
-    pool.isSafeToSwapOn = isSafeToSwapOn(pool);
-  }
+export function isPoolTypeVersionSubjectToConvergenceBug(poolType: string | null, poolTypeVersion: i32): boolean {
+  if (poolType == PoolType.Stable && poolTypeVersion == 1) return true;
+  return false;
 }
 
-export function updatePoolSwapEnabled(pool: Pool): void {
-  if (pool.swapEnabled) return;
-
-  pool.swapEnabled = true;
-  pool.save();
+export function isSafeToSwapOn(
+  isPaused: boolean,
+  isInRecoveryMode: boolean,
+  swapEnabled: boolean,
+  allRateProvidersVerified: boolean,
+  isSubjectToConvergenceBug: boolean
+): boolean {
+  return !isPaused && !isInRecoveryMode && swapEnabled && allRateProvidersVerified && !isSubjectToConvergenceBug;
 }

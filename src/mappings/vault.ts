@@ -48,7 +48,8 @@ import {
   isLinearPool,
   isFXPool,
   isComposableStablePool,
-  updatePoolSwapEnabled,
+  isSafeToSwapOn,
+  isPoolSubjectToConvergenceBug,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
@@ -111,6 +112,15 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()]);
     return;
   }
+  // If the pool was paused and a join occurs, it means the pause period has expired.
+  pool.isPaused = false;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    false,
+    pool.isInRecoveryMode,
+    pool.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
 
   let tokenAddresses = pool.tokensList;
 
@@ -190,10 +200,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       }
     }
     pool.totalShares = pool.totalShares.minus(preMintedBpt);
-    pool.save();
   }
-
-  updatePoolSwapEnabled(pool);
+  pool.save();
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -210,9 +218,18 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     log.warning('Pool not found in handlePoolExited: {} {}', [poolId, transactionHash.toHexString()]);
     return;
   }
-  let tokenAddresses = pool.tokensList;
-
+  // If the pool was paused and a join occurs, it means the pause period has expired.
+  pool.isPaused = false;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    false,
+    pool.isInRecoveryMode,
+    pool.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
   pool.save();
+
+  let tokenAddresses = pool.tokensList;
 
   let exitId = transactionHash.toHexString().concat(logIndex.toString());
   let exit = new JoinExit(exitId);
@@ -278,7 +295,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
-  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -343,6 +359,15 @@ export function handleSwapEvent(event: SwapEvent): void {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
   }
+  // If the pool was paused and a swap occurs, it means the pause period has expired.
+  pool.isPaused = false;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    false,
+    pool.isInRecoveryMode,
+    pool.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
 
   if (isVariableWeightPool(pool)) {
     // Some pools' weights update over time so we need to update them after each swap
@@ -559,6 +584,5 @@ export function handleSwapEvent(event: SwapEvent): void {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
 
-  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }

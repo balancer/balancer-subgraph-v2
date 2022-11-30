@@ -20,6 +20,7 @@ type Pool @entity {
   oracleEnabled: Boolean!
   symbol: String
   name: String
+  isPaused: Boolean
   swapEnabled: Boolean!
   isSafeToSwapOn: Boolean!
   swapFee: BigDecimal!
@@ -54,6 +55,7 @@ type Pool @entity {
 
   # Linear, MetaStable, StablePhantom, Composable, WeightedV2
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
+  allRateProvidersVerified: Boolean
 
   # ConvergentCurvePool (Element) Only
   principalToken: Bytes
@@ -100,7 +102,7 @@ type Pool @entity {
   epsilon: BigDecimal
 
   # Composable and WeightedV2 Only
-  recoveryMode: Boolean
+  isInRecoveryMode: Boolean
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal

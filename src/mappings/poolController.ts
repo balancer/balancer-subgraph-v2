@@ -1,10 +1,6 @@
 import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
-import {
-  WeightedPool,
-  PausedStateChanged,
-  SwapFeePercentageChanged,
-} from '../types/templates/WeightedPool/WeightedPool';
+import { PausedStateChanged, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
   SwapEnabledSet,
@@ -49,7 +45,12 @@ import {
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Transfer } from '../types/Vault/ERC20';
-import { isVerifiedRateProviderOfItself, setSafeToSwapOn, _isSafeToSwapOn } from './helpers/pools';
+import {
+  areAllRateProvidersVerified,
+  isSafeToSwapOn,
+  isPoolSubjectToConvergenceBug,
+  isVerifiedRateProviderOfItself,
+} from './helpers/pools';
 
 export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
@@ -90,20 +91,33 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-  setSwapEnabled(poolContract.pool, event.params.swapEnabled);
+  let pool = Pool.load(poolContract.pool);
+  if (pool == null) return;
+  pool.swapEnabled = event.params.swapEnabled;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    pool.isPaused,
+    pool.isInRecoveryMode,
+    event.params.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
+  pool.save();
 }
 
 export function handlePausedStateChanged(event: PausedStateChanged): void {
   let poolAddress = event.address;
-
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  pool.swapEnabled = event.params.paused;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+  let pool = Pool.load(poolContract.pool);
+  if (pool == null) return;
+  pool.isPaused = event.params.paused;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    event.params.paused,
+    pool.isInRecoveryMode,
+    pool.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
   pool.save();
 }
 
@@ -111,21 +125,51 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-  setSwapEnabled(poolContract.pool, !event.params.enabled);
+  let pool = Pool.load(poolContract.pool);
+  if (pool == null) return;
+  pool.isInRecoveryMode = event.params.enabled;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    pool.isPaused,
+    event.params.enabled,
+    pool.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
+  pool.save();
 }
 
 export function handlePauseGyroPool(event: PausedLocally): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-  setSwapEnabled(poolContract.pool, false);
+  let pool = Pool.load(poolContract.pool);
+  if (pool == null) return;
+  pool.isPaused = true;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    true,
+    pool.isInRecoveryMode,
+    pool.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
+  pool.save();
 }
 
 export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-  setSwapEnabled(poolContract.pool, true);
+  let pool = Pool.load(poolContract.pool);
+  if (pool == null) return;
+  pool.isPaused = false;
+  pool.isSafeToSwapOn = isSafeToSwapOn(
+    false,
+    pool.isInRecoveryMode,
+    pool.swapEnabled,
+    pool.allRateProvidersVerified,
+    isPoolSubjectToConvergenceBug(pool)
+  );
+  pool.save();
 }
 
 /************************************
@@ -358,7 +402,18 @@ export function setPriceRateProvider(
     provider.isVerified = false;
   }
   provider.save();
-  setSafeToSwapOn(poolId);
+  if (pool) {
+    const allRateProvidersVerified = areAllRateProvidersVerified(pool);
+    pool.allRateProvidersVerified = allRateProvidersVerified;
+    pool.isSafeToSwapOn = isSafeToSwapOn(
+      pool.isPaused,
+      pool.isInRecoveryMode,
+      pool.swapEnabled,
+      allRateProvidersVerified,
+      isPoolSubjectToConvergenceBug(pool)
+    );
+    pool.save();
+  }
 }
 
 export function setPriceRateProviderIsVerified(
@@ -378,7 +433,22 @@ export function setPriceRateProviderIsVerified(
           if (priceRateProvider) {
             priceRateProvider.isVerified = isVerified;
             priceRateProvider.save();
-            setSafeToSwapOn(poolToken.poolId);
+            let poolId = poolToken.poolId;
+            if (poolId) {
+              let pool = Pool.load(poolId);
+              if (pool) {
+                const allRateProvidersVerified = areAllRateProvidersVerified(pool);
+                pool.allRateProvidersVerified = allRateProvidersVerified;
+                pool.isSafeToSwapOn = isSafeToSwapOn(
+                  pool.isPaused,
+                  pool.isInRecoveryMode,
+                  pool.swapEnabled,
+                  allRateProvidersVerified,
+                  isPoolSubjectToConvergenceBug(pool)
+                );
+                pool.save();
+              }
+            }
           }
         }
       }
@@ -509,11 +579,4 @@ export function handleAssimilatorIncluded(event: AssimilatorIncluded): void {
 
   poolToken.assimilator = event.params.assimilator;
   poolToken.save();
-}
-
-export function setSwapEnabled(poolId: string, swapEnabled: boolean): void {
-  let pool = Pool.load(poolId) as Pool;
-  pool.swapEnabled = swapEnabled;
-  pool.isSafeToSwapOn = _isSafeToSwapOn(pool, swapEnabled);
-  pool.save();
 }

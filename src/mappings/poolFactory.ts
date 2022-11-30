@@ -1,11 +1,14 @@
 import { ZERO_BD, ZERO } from './helpers/constants';
 import {
+  areAllRateProvidersVerified,
   getPoolTokenManager,
   getPoolTokens,
   isMetaStableDeprecated,
+  isSafeToSwapOn,
+  isPoolSubjectToConvergenceBug,
   PoolType,
   setPriceRateProviders,
-  _isSafeToSwapOn,
+  isPoolTypeVersionSubjectToConvergenceBug,
 } from './helpers/pools';
 
 import {
@@ -61,9 +64,8 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   let ownerCall = poolContract.try_getOwner();
   let owner = ownerCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = poolType;
-  pool.poolTypeVersion = poolTypeVersion;
+  let pool = createNewPool(event, poolId, swapFee, poolType, poolTypeVersion);
+
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -125,9 +127,8 @@ function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVers
   let ownerCall = poolContract.try_getOwner();
   let owner = ownerCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = poolType;
-  pool.poolTypeVersion = poolTypeVersion;
+  let pool = createNewPool(event, poolId, swapFee, poolType, poolTypeVersion);
+
   pool.owner = owner;
 
   let tokens = getPoolTokens(poolId);
@@ -205,8 +206,8 @@ export function handleNewCCPPool(event: PoolCreated): void {
   // let ownerCall = poolContract.try_getOwner();
   // let owner = ownerCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
-  pool.poolType = PoolType.Element; // pool.owner = owner;
+  let pool = createNewPool(event, poolId, swapFee, PoolType.Element, 1);
+
   pool.principalToken = principalToken;
   pool.baseToken = baseToken;
   pool.expiryTime = expiryTime;
@@ -246,10 +247,7 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
-
-  pool.poolType = poolType;
-  pool.poolTypeVersion = poolTypeVersion;
+  let pool = createNewPool(event, poolId, swapFee, poolType, poolTypeVersion);
 
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
@@ -284,9 +282,8 @@ export function handleNewGyro2Pool(event: PoolCreated): void {
   let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
+  let pool = createNewPool(event, poolId, swapFee, PoolType.Gyro2, 1);
 
-  pool.poolType = PoolType.Gyro2;
   let sqrtParamsCall = poolContract.try_getSqrtParameters();
   pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
   pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
@@ -313,9 +310,8 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
   let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
+  let pool = createNewPool(event, poolId, swapFee, PoolType.Gyro3, 1);
 
-  pool.poolType = PoolType.Gyro3;
   let root3AlphaCall = poolContract.try_getRoot3Alpha();
 
   if (!root3AlphaCall.reverted) {
@@ -343,9 +339,8 @@ export function handleNewGyroEPool(event: PoolCreated): void {
   let swapFeeCall = poolContract.try_getSwapFeePercentage();
   let swapFee = swapFeeCall.value;
 
-  let pool = handleNewPool(event, poolId, swapFee);
+  let pool = createNewPool(event, poolId, swapFee, PoolType.GyroE, 1);
 
-  pool.poolType = PoolType.GyroE;
   let eParamsCall = poolContract.try_getECLPParams();
 
   if (!eParamsCall.reverted) {
@@ -402,9 +397,7 @@ export function handleNewFXPool(event: ethereum.Event): void {
     [event.parameters[2]] // PoolCreated expects parameters[0] to be the pool address
   );
 
-  let pool = handleNewPool(poolCreatedEvent, poolId, swapFee);
-
-  pool.poolType = PoolType.FX;
+  let pool = createNewPool(poolCreatedEvent, poolId, swapFee, PoolType.FX, 1);
 
   let tokens = getPoolTokens(poolId);
   if (tokens == null) return;
@@ -431,7 +424,13 @@ function findOrInitializeVault(): Balancer {
   return vault;
 }
 
-function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool {
+function createNewPool(
+  event: PoolCreated,
+  poolId: Bytes,
+  swapFee: BigInt,
+  poolType: string,
+  poolTypeVersion: i32
+): Pool {
   let poolAddress: Address = event.params.pool;
 
   let pool = Pool.load(poolId.toHexString());
@@ -445,7 +444,19 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
     pool.swapEnabled = true;
-    pool.isSafeToSwapOn = _isSafeToSwapOn(pool, true);
+    pool.isPaused = false;
+    pool.poolType = poolType;
+    pool.poolTypeVersion = poolTypeVersion;
+    const allRateProvidersVerified = areAllRateProvidersVerified(pool);
+    pool.allRateProvidersVerified = allRateProvidersVerified;
+    const isPoolSubjectToConvergenceBug = isPoolTypeVersionSubjectToConvergenceBug(poolType, poolTypeVersion);
+    pool.isSafeToSwapOn = isSafeToSwapOn(
+      false,
+      pool.isInRecoveryMode,
+      true,
+      allRateProvidersVerified,
+      isPoolSubjectToConvergenceBug      
+    );
 
     let bpt = ERC20.bind(poolAddress);
 
