@@ -160,7 +160,7 @@ export function isPoolTypeVersionSubjectToConvergenceBug(poolType: string | null
   return false;
 }
 
-export function isSafeToSwapOn(
+export function canProcessSwaps(
   isPaused: boolean,
   isInRecoveryMode: boolean,
   swapEnabled: boolean,

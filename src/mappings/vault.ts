@@ -48,7 +48,7 @@ import {
   isLinearPool,
   isFXPool,
   isComposableStablePool,
-  isSafeToSwapOn,
+  canProcessSwaps,
   isPoolSubjectToConvergenceBug,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
@@ -114,7 +114,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   }
   // If the pool was paused and a join occurs, it means the pause period has expired.
   pool.isPaused = false;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     false,
     pool.isInRecoveryMode,
     pool.swapEnabled_,
@@ -220,7 +220,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   }
   // If the pool was paused and a join occurs, it means the pause period has expired.
   pool.isPaused = false;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     false,
     pool.isInRecoveryMode,
     pool.swapEnabled_,
@@ -361,7 +361,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   }
   // If the pool was paused and a swap occurs, it means the pause period has expired.
   pool.isPaused = false;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     false,
     pool.isInRecoveryMode,
     pool.swapEnabled_,

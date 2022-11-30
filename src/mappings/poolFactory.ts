@@ -4,7 +4,7 @@ import {
   getPoolTokenManager,
   getPoolTokens,
   isMetaStableDeprecated,
-  isSafeToSwapOn,
+  canProcessSwaps,
   isPoolSubjectToConvergenceBug,
   PoolType,
   setPriceRateProviders,
@@ -450,7 +450,7 @@ function createNewPool(
     const allRateProvidersVerified = areAllRateProvidersVerified(pool);
     pool.allRateProvidersVerified = allRateProvidersVerified;
     const isPoolSubjectToConvergenceBug = isPoolTypeVersionSubjectToConvergenceBug(poolType, poolTypeVersion);
-    pool.swapEnabled = isSafeToSwapOn(
+    pool.swapEnabled = canProcessSwaps(
       false,
       pool.isInRecoveryMode,
       true,

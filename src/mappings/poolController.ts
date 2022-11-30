@@ -47,7 +47,7 @@ import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyr
 import { Transfer } from '../types/Vault/ERC20';
 import {
   areAllRateProvidersVerified,
-  isSafeToSwapOn,
+  canProcessSwaps,
   isPoolSubjectToConvergenceBug,
   isVerifiedRateProviderOfItself,
 } from './helpers/pools';
@@ -94,7 +94,7 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let pool = Pool.load(poolContract.pool);
   if (pool == null) return;
   pool.swapEnabled_ = event.params.swapEnabled;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     pool.isPaused,
     pool.isInRecoveryMode,
     event.params.swapEnabled,
@@ -111,7 +111,7 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   let pool = Pool.load(poolContract.pool);
   if (pool == null) return;
   pool.isPaused = event.params.paused;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     event.params.paused,
     pool.isInRecoveryMode,
     pool.swapEnabled_,
@@ -128,7 +128,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   let pool = Pool.load(poolContract.pool);
   if (pool == null) return;
   pool.isInRecoveryMode = event.params.enabled;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     pool.isPaused,
     event.params.enabled,
     pool.swapEnabled_,
@@ -145,7 +145,7 @@ export function handlePauseGyroPool(event: PausedLocally): void {
   let pool = Pool.load(poolContract.pool);
   if (pool == null) return;
   pool.isPaused = true;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     true,
     pool.isInRecoveryMode,
     pool.swapEnabled_,
@@ -162,7 +162,7 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   let pool = Pool.load(poolContract.pool);
   if (pool == null) return;
   pool.isPaused = false;
-  pool.swapEnabled = isSafeToSwapOn(
+  pool.swapEnabled = canProcessSwaps(
     false,
     pool.isInRecoveryMode,
     pool.swapEnabled_,
@@ -405,7 +405,7 @@ export function setPriceRateProvider(
   if (pool) {
     const allRateProvidersVerified = areAllRateProvidersVerified(pool);
     pool.allRateProvidersVerified = allRateProvidersVerified;
-    pool.swapEnabled = isSafeToSwapOn(
+    pool.swapEnabled = canProcessSwaps(
       pool.isPaused,
       pool.isInRecoveryMode,
       pool.swapEnabled_,
@@ -439,7 +439,7 @@ export function setPriceRateProviderIsVerified(
               if (pool) {
                 const allRateProvidersVerified = areAllRateProvidersVerified(pool);
                 pool.allRateProvidersVerified = allRateProvidersVerified;
-                pool.swapEnabled = isSafeToSwapOn(
+                pool.swapEnabled = canProcessSwaps(
                   pool.isPaused,
                   pool.isInRecoveryMode,
                   pool.swapEnabled_,
