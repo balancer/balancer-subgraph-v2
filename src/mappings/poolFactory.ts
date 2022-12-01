@@ -1,4 +1,4 @@
-import { ZERO_BD, ZERO } from './helpers/constants';
+import { ZERO_BD, ZERO, FX_AGGREGATOR_ADDRESSES } from './helpers/constants';
 import {
   getPoolTokenManager,
   getPoolTokens,
@@ -22,7 +22,7 @@ import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
-import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
+import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import { WeightedPoolV2 as WeightedPoolV2Template } from '../types/templates';
 import { WeightedPool2Tokens as WeightedPool2TokensTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
@@ -414,6 +414,11 @@ export function handleNewFXPool(event: ethereum.Event): void {
   handleNewPoolTokens(pool, tokens);
 
   FXPoolTemplate.create(poolAddress);
+
+  // Create templates for every Offchain Aggregator
+  for (let i: i32 = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
+    OffchainAggregator.create(FX_AGGREGATOR_ADDRESSES[i]);
+  }
 }
 
 function findOrInitializeVault(): Balancer {
