@@ -1,4 +1,4 @@
-import { Address, Bytes, BigInt, BigDecimal, ethereum, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
 import {
   ZERO_BD,
@@ -11,6 +11,7 @@ import {
 } from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, PoolType } from './helpers/pools';
 import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken, scaleDown } from './helpers/misc';
+import { AnswerUpdated } from '../types/templates/OffchainAggregator/AccessControlledOffchainAggregator';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -249,25 +250,19 @@ export function isUSDStable(asset: Address): boolean {
   return false;
 }
 
-export function handleAnswerUpdated(event: ethereum.Event): void {
-  /**
-   * AccessControlledOffchainAggregator emits a AnswerUpdated event with the following params:
-   *   event.parameters[0] = current rate
-   *   event.parameters[1] = roundId
-   *   event.parameters[2] = updatedAt
-   * */
-  let tokenAddress: Address = Address.zero();
+export function handleAnswerUpdated(event: AnswerUpdated): void {
+  let tokenAddress = ZERO_ADDRESS;
   const aggregatorAddress = event.address;
 
   for (let i = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
-    if (aggregatorAddress == Address.fromString(FX_AGGREGATOR_ADDRESSES[i])) {
-      tokenAddress = Address.fromString(FX_TOKEN_ADDRESSES[i]);
+    if (aggregatorAddress == FX_AGGREGATOR_ADDRESSES[i]) {
+      tokenAddress = FX_TOKEN_ADDRESSES[i];
       break;
     }
   }
 
   // Return if this answer is for another token we don't track
-  if (tokenAddress == Address.zero()) return;
+  if (tokenAddress == ZERO_ADDRESS) return;
 
   const token = Token.load(tokenAddress.toHexString());
   if (token == null) {
@@ -275,7 +270,7 @@ export function handleAnswerUpdated(event: ethereum.Event): void {
     return;
   }
 
-  let rate = scaleDown(event.parameters[0].value.toBigInt(), 8);
+  let rate = scaleDown(event.params.current, 8);
   token.latestFXPrice = rate;
   token.save();
 }

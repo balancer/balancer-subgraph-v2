@@ -719,94 +719,6 @@ dataSources:
         - event: NewFXPool(indexed address,indexed bytes32,indexed address)
           handler: handleNewFXPool
   {{/if}}
-  {{#if USDCOffchainAggregator}}
-  - kind: ethereum/contract
-    name: USDCOffchainAggregator
-    network: {{network}}
-    source:
-      address: '{{USDCOffchainAggregator.address}}'
-      abi: AccessControlledOffchainAggregator
-      startBlock: {{USDCOffchainAggregator.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/pricing.ts
-      entities:
-        - Token
-      abis:
-        - name: AccessControlledOffchainAggregator
-          file: ./abis/AccessControlledOffchainAggregator.json
-      eventHandlers:
-        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-          handler: handleAnswerUpdated
-  {{/if}}
-  {{#if XSGDOffchainAggregator}}
-  - kind: ethereum/contract
-    name: XSGDOffchainAggregator
-    network: {{network}}
-    source:
-      address: '{{XSGDOffchainAggregator.address}}'
-      abi: AccessControlledOffchainAggregator
-      startBlock: {{XSGDOffchainAggregator.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/pricing.ts
-      entities:
-        - Token
-      abis:
-        - name: AccessControlledOffchainAggregator
-          file: ./abis/AccessControlledOffchainAggregator.json
-      eventHandlers:
-        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-          handler: handleAnswerUpdated
-  {{/if}}
-  {{#if DAIOffchainAggregator}}
-  - kind: ethereum/contract
-    name: DAIOffchainAggregator
-    network: {{network}}
-    source:
-      address: '{{DAIOffchainAggregator.address}}'
-      abi: AccessControlledOffchainAggregator
-      startBlock: {{DAIOffchainAggregator.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/pricing.ts
-      entities:
-        - Token
-      abis:
-        - name: AccessControlledOffchainAggregator
-          file: ./abis/AccessControlledOffchainAggregator.json
-      eventHandlers:
-        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-          handler: handleAnswerUpdated
-  {{/if}}
-  {{#if EURSOffchainAggregator}}
-  - kind: ethereum/contract
-    name: EURSOffchainAggregator
-    network: {{network}}
-    source:
-      address: '{{EURSOffchainAggregator.address}}'
-      abi: AccessControlledOffchainAggregator
-      startBlock: {{EURSOffchainAggregator.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/pricing.ts
-      entities:
-        - Token
-      abis:
-        - name: AccessControlledOffchainAggregator
-          file: ./abis/AccessControlledOffchainAggregator.json
-      eventHandlers:
-        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
-          handler: handleAnswerUpdated
-  {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -1233,4 +1145,21 @@ templates:
           handler: handleTransfer
         - event: ParametersSet(uint256,uint256,uint256,uint256,uint256)
           handler: handleParametersSet
-    
+  - kind: ethereum/contract
+    name: OffchainAggregator
+    network: {{network}}
+    source:
+      abi: AccessControlledOffchainAggregator
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/pricing.ts
+      entities:
+        - Token
+      abis:
+        - name: AccessControlledOffchainAggregator
+          file: ./abis/AccessControlledOffchainAggregator.json
+      eventHandlers:
+        - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
+          handler: handleAnswerUpdated
