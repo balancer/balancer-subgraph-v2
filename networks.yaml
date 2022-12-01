@@ -54,18 +54,6 @@ mainnet:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
-  USDCOffchainAggregator:
-    address: "0x789190466E21a8b78b8027866CBBDc151542A26C"
-    startBlock: 15981930
-  XSGDOffchainAggregator:
-    address: "0xc96129C796F03bb21AC947EfC5329CD1F560305B"
-    startBlock: 15981930
-  DAIOffchainAggregator:
-    address: "0xDEc0a100eaD1fAa37407f0Edc76033426CF90b82"
-    startBlock: 15987079
-  EURSOffchainAggregator:
-    address: "0x02F878A94a1AE1B15705aCD65b5519A46fe3517e"
-    startBlock: 15986827
 goerli:
   network: goerli
   Vault:
@@ -181,18 +169,6 @@ polygon:
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054794
-  USDCOffchainAggregator:
-    address: "0xf9c53A834F60cBbE40E27702276fBc0819B3aFAD"
-    startBlock: 32054913
-  XSGDOffchainAggregator:
-    address: "0x45ede0Ea5cBbE380C663C7C3015Cc7c986669FEc"
-    startBlock: 32054913
-  DAIOffchainAggregator:
-    address: "0x62439095489Eb5dE4572de632248682c09a05Ad4"
-    startBlock: 35677540
-  EURSOffchainAggregator:
-    address: "0x310990E8091b5cF083fA55F500F140CFBb959016"
-    startBlock: 35677622
 arbitrum:
   network: arbitrum-one
   # graft:
