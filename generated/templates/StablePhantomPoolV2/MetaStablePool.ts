@@ -10,6 +10,54 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class AmpUpdateStarted extends ethereum.Event {
+  get params(): AmpUpdateStarted__Params {
+    return new AmpUpdateStarted__Params(this);
+  }
+}
+
+export class AmpUpdateStarted__Params {
+  _event: AmpUpdateStarted;
+
+  constructor(event: AmpUpdateStarted) {
+    this._event = event;
+  }
+
+  get startValue(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get endValue(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get startTime(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get endTime(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+}
+
+export class AmpUpdateStopped extends ethereum.Event {
+  get params(): AmpUpdateStopped__Params {
+    return new AmpUpdateStopped__Params(this);
+  }
+}
+
+export class AmpUpdateStopped__Params {
+  _event: AmpUpdateStopped;
+
+  constructor(event: AmpUpdateStopped) {
+    this._event = event;
+  }
+
+  get currentValue(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class Approval extends ethereum.Event {
   get params(): Approval__Params {
     return new Approval__Params(this);
@@ -36,47 +84,21 @@ export class Approval__Params {
   }
 }
 
-export class BestAvailableTrades extends ethereum.Event {
-  get params(): BestAvailableTrades__Params {
-    return new BestAvailableTrades__Params(this);
+export class OracleEnabledChanged extends ethereum.Event {
+  get params(): OracleEnabledChanged__Params {
+    return new OracleEnabledChanged__Params(this);
   }
 }
 
-export class BestAvailableTrades__Params {
-  _event: BestAvailableTrades;
+export class OracleEnabledChanged__Params {
+  _event: OracleEnabledChanged;
 
-  constructor(event: BestAvailableTrades) {
+  constructor(event: OracleEnabledChanged) {
     this._event = event;
   }
 
-  get bestUnfilledBid(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get bestUnfilledOffer(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class Offer extends ethereum.Event {
-  get params(): Offer__Params {
-    return new Offer__Params(this);
-  }
-}
-
-export class Offer__Params {
-  _event: Offer;
-
-  constructor(event: Offer) {
-    this._event = event;
-  }
-
-  get security(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get secondaryOffer(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get enabled(): boolean {
+    return this._event.parameters[0].value.toBoolean();
   }
 }
 
@@ -98,21 +120,51 @@ export class PausedStateChanged__Params {
   }
 }
 
-export class RecoveryModeStateChanged extends ethereum.Event {
-  get params(): RecoveryModeStateChanged__Params {
-    return new RecoveryModeStateChanged__Params(this);
+export class PriceRateCacheUpdated extends ethereum.Event {
+  get params(): PriceRateCacheUpdated__Params {
+    return new PriceRateCacheUpdated__Params(this);
   }
 }
 
-export class RecoveryModeStateChanged__Params {
-  _event: RecoveryModeStateChanged;
+export class PriceRateCacheUpdated__Params {
+  _event: PriceRateCacheUpdated;
 
-  constructor(event: RecoveryModeStateChanged) {
+  constructor(event: PriceRateCacheUpdated) {
     this._event = event;
   }
 
-  get enabled(): boolean {
-    return this._event.parameters[0].value.toBoolean();
+  get token(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get rate(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class PriceRateProviderSet extends ethereum.Event {
+  get params(): PriceRateProviderSet__Params {
+    return new PriceRateProviderSet__Params(this);
+  }
+}
+
+export class PriceRateProviderSet__Params {
+  _event: PriceRateProviderSet;
+
+  constructor(event: PriceRateProviderSet) {
+    this._event = event;
+  }
+
+  get token(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get provider(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get cacheDuration(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -131,56 +183,6 @@ export class SwapFeePercentageChanged__Params {
 
   get swapFeePercentage(): BigInt {
     return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class TradeReport extends ethereum.Event {
-  get params(): TradeReport__Params {
-    return new TradeReport__Params(this);
-  }
-}
-
-export class TradeReport__Params {
-  _event: TradeReport;
-
-  constructor(event: TradeReport) {
-    this._event = event;
-  }
-
-  get security(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get party(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get counterparty(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get price(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get askprice(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get currency(): Address {
-    return this._event.parameters[5].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
-  }
-
-  get status(): Bytes {
-    return this._event.parameters[7].value.toBytes();
-  }
-
-  get executionDate(): BigInt {
-    return this._event.parameters[8].value.toBigInt();
   }
 }
 
@@ -210,7 +212,86 @@ export class Transfer__Params {
   }
 }
 
-export class SecondaryIssuePool__getPausedStateResult {
+export class MetaStablePool__getAmplificationParameterResult {
+  value0: BigInt;
+  value1: boolean;
+  value2: BigInt;
+
+  constructor(value0: BigInt, value1: boolean, value2: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromBoolean(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    return map;
+  }
+}
+
+export class MetaStablePool__getLastInvariantResult {
+  value0: BigInt;
+  value1: BigInt;
+
+  constructor(value0: BigInt, value1: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
+  }
+}
+
+export class MetaStablePool__getOracleMiscDataResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: BigInt;
+  value3: BigInt;
+  value4: boolean;
+
+  constructor(
+    value0: BigInt,
+    value1: BigInt,
+    value2: BigInt,
+    value3: BigInt,
+    value4: boolean
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+    this.value4 = value4;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromSignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromSignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
+    map.set("value4", ethereum.Value.fromBoolean(this.value4));
+    return map;
+  }
+}
+
+export class MetaStablePool__getPastAccumulatorsInputQueriesStruct extends ethereum.Tuple {
+  get variable(): i32 {
+    return this[0].toI32();
+  }
+
+  get ago(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class MetaStablePool__getPausedStateResult {
   value0: boolean;
   value1: BigInt;
   value2: BigInt;
@@ -230,7 +311,81 @@ export class SecondaryIssuePool__getPausedStateResult {
   }
 }
 
-export class SecondaryIssuePool__onExitPoolResult {
+export class MetaStablePool__getPriceRateCacheResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: BigInt;
+
+  constructor(value0: BigInt, value1: BigInt, value2: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    return map;
+  }
+}
+
+export class MetaStablePool__getSampleResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: BigInt;
+  value3: BigInt;
+  value4: BigInt;
+  value5: BigInt;
+  value6: BigInt;
+
+  constructor(
+    value0: BigInt,
+    value1: BigInt,
+    value2: BigInt,
+    value3: BigInt,
+    value4: BigInt,
+    value5: BigInt,
+    value6: BigInt
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+    this.value4 = value4;
+    this.value5 = value5;
+    this.value6 = value6;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromSignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromSignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromSignedBigInt(this.value2));
+    map.set("value3", ethereum.Value.fromSignedBigInt(this.value3));
+    map.set("value4", ethereum.Value.fromSignedBigInt(this.value4));
+    map.set("value5", ethereum.Value.fromSignedBigInt(this.value5));
+    map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
+    return map;
+  }
+}
+
+export class MetaStablePool__getTimeWeightedAverageInputQueriesStruct extends ethereum.Tuple {
+  get variable(): i32 {
+    return this[0].toI32();
+  }
+
+  get secs(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get ago(): BigInt {
+    return this[2].toBigInt();
+  }
+}
+
+export class MetaStablePool__onExitPoolResult {
   value0: Array<BigInt>;
   value1: Array<BigInt>;
 
@@ -247,7 +402,7 @@ export class SecondaryIssuePool__onExitPoolResult {
   }
 }
 
-export class SecondaryIssuePool__onJoinPoolResult {
+export class MetaStablePool__onJoinPoolResult {
   value0: Array<BigInt>;
   value1: Array<BigInt>;
 
@@ -264,7 +419,7 @@ export class SecondaryIssuePool__onJoinPoolResult {
   }
 }
 
-export class SecondaryIssuePool__onSwapInputRequestStruct extends ethereum.Tuple {
+export class MetaStablePool__onSwapInputRequestStruct extends ethereum.Tuple {
   get kind(): i32 {
     return this[0].toI32();
   }
@@ -302,7 +457,45 @@ export class SecondaryIssuePool__onSwapInputRequestStruct extends ethereum.Tuple
   }
 }
 
-export class SecondaryIssuePool__queryExitResult {
+export class MetaStablePool__onSwap1InputRequestStruct extends ethereum.Tuple {
+  get kind(): i32 {
+    return this[0].toI32();
+  }
+
+  get tokenIn(): Address {
+    return this[1].toAddress();
+  }
+
+  get tokenOut(): Address {
+    return this[2].toAddress();
+  }
+
+  get amount(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get poolId(): Bytes {
+    return this[4].toBytes();
+  }
+
+  get lastChangeBlock(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get from(): Address {
+    return this[6].toAddress();
+  }
+
+  get to(): Address {
+    return this[7].toAddress();
+  }
+
+  get userData(): Bytes {
+    return this[8].toBytes();
+  }
+}
+
+export class MetaStablePool__queryExitResult {
   value0: BigInt;
   value1: Array<BigInt>;
 
@@ -319,7 +512,7 @@ export class SecondaryIssuePool__queryExitResult {
   }
 }
 
-export class SecondaryIssuePool__queryJoinResult {
+export class MetaStablePool__queryJoinResult {
   value0: BigInt;
   value1: Array<BigInt>;
 
@@ -336,9 +529,9 @@ export class SecondaryIssuePool__queryJoinResult {
   }
 }
 
-export class SecondaryIssuePool extends ethereum.SmartContract {
-  static bind(address: Address): SecondaryIssuePool {
-    return new SecondaryIssuePool("SecondaryIssuePool", address);
+export class MetaStablePool extends ethereum.SmartContract {
+  static bind(address: Address): MetaStablePool {
+    return new MetaStablePool("MetaStablePool", address);
   }
 
   DOMAIN_SEPARATOR(): Bytes {
@@ -362,21 +555,6 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  _orderbook(): Address {
-    let result = super.call("_orderbook", "_orderbook():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try__orderbook(): ethereum.CallResult<Address> {
-    let result = super.tryCall("_orderbook", "_orderbook():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   allowance(owner: Address, spender: Address): BigInt {
@@ -508,6 +686,41 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  getAmplificationParameter(): MetaStablePool__getAmplificationParameterResult {
+    let result = super.call(
+      "getAmplificationParameter",
+      "getAmplificationParameter():(uint256,bool,uint256)",
+      []
+    );
+
+    return new MetaStablePool__getAmplificationParameterResult(
+      result[0].toBigInt(),
+      result[1].toBoolean(),
+      result[2].toBigInt()
+    );
+  }
+
+  try_getAmplificationParameter(): ethereum.CallResult<
+    MetaStablePool__getAmplificationParameterResult
+  > {
+    let result = super.tryCall(
+      "getAmplificationParameter",
+      "getAmplificationParameter():(uint256,bool,uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new MetaStablePool__getAmplificationParameterResult(
+        value[0].toBigInt(),
+        value[1].toBoolean(),
+        value[2].toBigInt()
+      )
+    );
+  }
+
   getAuthorizer(): Address {
     let result = super.call("getAuthorizer", "getAuthorizer():(address)", []);
 
@@ -527,57 +740,21 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getCurrency(): Address {
-    let result = super.call("getCurrency", "getCurrency():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_getCurrency(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getCurrency", "getCurrency():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  getDomainSeparator(): Bytes {
+  getLargestSafeQueryWindow(): BigInt {
     let result = super.call(
-      "getDomainSeparator",
-      "getDomainSeparator():(bytes32)",
+      "getLargestSafeQueryWindow",
+      "getLargestSafeQueryWindow():(uint256)",
       []
     );
-
-    return result[0].toBytes();
-  }
-
-  try_getDomainSeparator(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "getDomainSeparator",
-      "getDomainSeparator():(bytes32)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  getNextNonce(account: Address): BigInt {
-    let result = super.call("getNextNonce", "getNextNonce(address):(uint256)", [
-      ethereum.Value.fromAddress(account)
-    ]);
 
     return result[0].toBigInt();
   }
 
-  try_getNextNonce(account: Address): ethereum.CallResult<BigInt> {
+  try_getLargestSafeQueryWindow(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getNextNonce",
-      "getNextNonce(address):(uint256)",
-      [ethereum.Value.fromAddress(account)]
+      "getLargestSafeQueryWindow",
+      "getLargestSafeQueryWindow():(uint256)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -586,19 +763,95 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getOrderbook(): Address {
-    let result = super.call("getOrderbook", "getOrderbook():(address)", []);
+  getLastInvariant(): MetaStablePool__getLastInvariantResult {
+    let result = super.call(
+      "getLastInvariant",
+      "getLastInvariant():(uint256,uint256)",
+      []
+    );
 
-    return result[0].toAddress();
+    return new MetaStablePool__getLastInvariantResult(
+      result[0].toBigInt(),
+      result[1].toBigInt()
+    );
   }
 
-  try_getOrderbook(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getOrderbook", "getOrderbook():(address)", []);
+  try_getLastInvariant(): ethereum.CallResult<
+    MetaStablePool__getLastInvariantResult
+  > {
+    let result = super.tryCall(
+      "getLastInvariant",
+      "getLastInvariant():(uint256,uint256)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(
+      new MetaStablePool__getLastInvariantResult(
+        value[0].toBigInt(),
+        value[1].toBigInt()
+      )
+    );
+  }
+
+  getLatest(variable: i32): BigInt {
+    let result = super.call("getLatest", "getLatest(uint8):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(variable))
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getLatest(variable: i32): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getLatest", "getLatest(uint8):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(variable))
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getOracleMiscData(): MetaStablePool__getOracleMiscDataResult {
+    let result = super.call(
+      "getOracleMiscData",
+      "getOracleMiscData():(int256,int256,uint256,uint256,bool)",
+      []
+    );
+
+    return new MetaStablePool__getOracleMiscDataResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toBigInt(),
+      result[3].toBigInt(),
+      result[4].toBoolean()
+    );
+  }
+
+  try_getOracleMiscData(): ethereum.CallResult<
+    MetaStablePool__getOracleMiscDataResult
+  > {
+    let result = super.tryCall(
+      "getOracleMiscData",
+      "getOracleMiscData():(int256,int256,uint256,uint256,bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new MetaStablePool__getOracleMiscDataResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toBigInt(),
+        value[3].toBigInt(),
+        value[4].toBoolean()
+      )
+    );
   }
 
   getOwner(): Address {
@@ -616,14 +869,41 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getPausedState(): SecondaryIssuePool__getPausedStateResult {
+  getPastAccumulators(
+    queries: Array<MetaStablePool__getPastAccumulatorsInputQueriesStruct>
+  ): Array<BigInt> {
+    let result = super.call(
+      "getPastAccumulators",
+      "getPastAccumulators((uint8,uint256)[]):(int256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getPastAccumulators(
+    queries: Array<MetaStablePool__getPastAccumulatorsInputQueriesStruct>
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getPastAccumulators",
+      "getPastAccumulators((uint8,uint256)[]):(int256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  getPausedState(): MetaStablePool__getPausedStateResult {
     let result = super.call(
       "getPausedState",
       "getPausedState():(bool,uint256,uint256)",
       []
     );
 
-    return new SecondaryIssuePool__getPausedStateResult(
+    return new MetaStablePool__getPausedStateResult(
       result[0].toBoolean(),
       result[1].toBigInt(),
       result[2].toBigInt()
@@ -631,7 +911,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
   }
 
   try_getPausedState(): ethereum.CallResult<
-    SecondaryIssuePool__getPausedStateResult
+    MetaStablePool__getPausedStateResult
   > {
     let result = super.tryCall(
       "getPausedState",
@@ -643,7 +923,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__getPausedStateResult(
+      new MetaStablePool__getPausedStateResult(
         value[0].toBoolean(),
         value[1].toBigInt(),
         value[2].toBigInt()
@@ -666,27 +946,120 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  getProtocolFeesCollector(): Address {
+  getPriceRateCache(token: Address): MetaStablePool__getPriceRateCacheResult {
     let result = super.call(
-      "getProtocolFeesCollector",
-      "getProtocolFeesCollector():(address)",
+      "getPriceRateCache",
+      "getPriceRateCache(address):(uint256,uint256,uint256)",
+      [ethereum.Value.fromAddress(token)]
+    );
+
+    return new MetaStablePool__getPriceRateCacheResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toBigInt()
+    );
+  }
+
+  try_getPriceRateCache(
+    token: Address
+  ): ethereum.CallResult<MetaStablePool__getPriceRateCacheResult> {
+    let result = super.tryCall(
+      "getPriceRateCache",
+      "getPriceRateCache(address):(uint256,uint256,uint256)",
+      [ethereum.Value.fromAddress(token)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new MetaStablePool__getPriceRateCacheResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toBigInt()
+      )
+    );
+  }
+
+  getRate(): BigInt {
+    let result = super.call("getRate", "getRate():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_getRate(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getRate", "getRate():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getRateProviders(): Array<Address> {
+    let result = super.call(
+      "getRateProviders",
+      "getRateProviders():(address[])",
       []
     );
 
-    return result[0].toAddress();
+    return result[0].toAddressArray();
   }
 
-  try_getProtocolFeesCollector(): ethereum.CallResult<Address> {
+  try_getRateProviders(): ethereum.CallResult<Array<Address>> {
     let result = super.tryCall(
-      "getProtocolFeesCollector",
-      "getProtocolFeesCollector():(address)",
+      "getRateProviders",
+      "getRateProviders():(address[])",
       []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
+  getSample(index: BigInt): MetaStablePool__getSampleResult {
+    let result = super.call(
+      "getSample",
+      "getSample(uint256):(int256,int256,int256,int256,int256,int256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(index)]
+    );
+
+    return new MetaStablePool__getSampleResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toBigInt(),
+      result[3].toBigInt(),
+      result[4].toBigInt(),
+      result[5].toBigInt(),
+      result[6].toBigInt()
+    );
+  }
+
+  try_getSample(
+    index: BigInt
+  ): ethereum.CallResult<MetaStablePool__getSampleResult> {
+    let result = super.tryCall(
+      "getSample",
+      "getSample(uint256):(int256,int256,int256,int256,int256,int256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(index)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new MetaStablePool__getSampleResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toBigInt(),
+        value[3].toBigInt(),
+        value[4].toBigInt(),
+        value[5].toBigInt(),
+        value[6].toBigInt()
+      )
+    );
   }
 
   getScalingFactors(): Array<BigInt> {
@@ -712,44 +1085,6 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigIntArray());
   }
 
-  getSecurity(): Address {
-    let result = super.call("getSecurity", "getSecurity():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_getSecurity(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getSecurity", "getSecurity():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  getSecurityOffered(): BigInt {
-    let result = super.call(
-      "getSecurityOffered",
-      "getSecurityOffered():(uint256)",
-      []
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_getSecurityOffered(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "getSecurityOffered",
-      "getSecurityOffered():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   getSwapFeePercentage(): BigInt {
     let result = super.call(
       "getSwapFeePercentage",
@@ -773,6 +1108,56 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getTimeWeightedAverage(
+    queries: Array<MetaStablePool__getTimeWeightedAverageInputQueriesStruct>
+  ): Array<BigInt> {
+    let result = super.call(
+      "getTimeWeightedAverage",
+      "getTimeWeightedAverage((uint8,uint256,uint256)[]):(uint256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getTimeWeightedAverage(
+    queries: Array<MetaStablePool__getTimeWeightedAverageInputQueriesStruct>
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getTimeWeightedAverage",
+      "getTimeWeightedAverage((uint8,uint256,uint256)[]):(uint256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  getTotalSamples(): BigInt {
+    let result = super.call(
+      "getTotalSamples",
+      "getTotalSamples():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getTotalSamples(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getTotalSamples",
+      "getTotalSamples():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getVault(): Address {
     let result = super.call("getVault", "getVault():(address)", []);
 
@@ -786,21 +1171,6 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  inRecoveryMode(): boolean {
-    let result = super.call("inRecoveryMode", "inRecoveryMode():(bool)", []);
-
-    return result[0].toBoolean();
-  }
-
-  try_inRecoveryMode(): ethereum.CallResult<boolean> {
-    let result = super.tryCall("inRecoveryMode", "inRecoveryMode():(bool)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   increaseAllowance(spender: Address, addedValue: BigInt): boolean {
@@ -877,7 +1247,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__onExitPoolResult {
+  ): MetaStablePool__onExitPoolResult {
     let result = super.call(
       "onExitPool",
       "onExitPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -892,7 +1262,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__onExitPoolResult(
+    return new MetaStablePool__onExitPoolResult(
       result[0].toBigIntArray(),
       result[1].toBigIntArray()
     );
@@ -906,7 +1276,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__onExitPoolResult> {
+  ): ethereum.CallResult<MetaStablePool__onExitPoolResult> {
     let result = super.tryCall(
       "onExitPool",
       "onExitPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -925,7 +1295,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__onExitPoolResult(
+      new MetaStablePool__onExitPoolResult(
         value[0].toBigIntArray(),
         value[1].toBigIntArray()
       )
@@ -940,7 +1310,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__onJoinPoolResult {
+  ): MetaStablePool__onJoinPoolResult {
     let result = super.call(
       "onJoinPool",
       "onJoinPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -955,7 +1325,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__onJoinPoolResult(
+    return new MetaStablePool__onJoinPoolResult(
       result[0].toBigIntArray(),
       result[1].toBigIntArray()
     );
@@ -969,7 +1339,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__onJoinPoolResult> {
+  ): ethereum.CallResult<MetaStablePool__onJoinPoolResult> {
     let result = super.tryCall(
       "onJoinPool",
       "onJoinPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -988,7 +1358,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__onJoinPoolResult(
+      new MetaStablePool__onJoinPoolResult(
         value[0].toBigIntArray(),
         value[1].toBigIntArray()
       )
@@ -996,7 +1366,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
   }
 
   onSwap(
-    request: SecondaryIssuePool__onSwapInputRequestStruct,
+    request: MetaStablePool__onSwapInputRequestStruct,
     balances: Array<BigInt>,
     indexIn: BigInt,
     indexOut: BigInt
@@ -1016,7 +1386,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
   }
 
   try_onSwap(
-    request: SecondaryIssuePool__onSwapInputRequestStruct,
+    request: MetaStablePool__onSwapInputRequestStruct,
     balances: Array<BigInt>,
     indexIn: BigInt,
     indexOut: BigInt
@@ -1038,6 +1408,45 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  onSwap1(
+    request: MetaStablePool__onSwap1InputRequestStruct,
+    balanceTokenIn: BigInt,
+    balanceTokenOut: BigInt
+  ): BigInt {
+    let result = super.call(
+      "onSwap",
+      "onSwap((uint8,address,address,uint256,bytes32,uint256,address,address,bytes),uint256,uint256):(uint256)",
+      [
+        ethereum.Value.fromTuple(request),
+        ethereum.Value.fromUnsignedBigInt(balanceTokenIn),
+        ethereum.Value.fromUnsignedBigInt(balanceTokenOut)
+      ]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_onSwap1(
+    request: MetaStablePool__onSwap1InputRequestStruct,
+    balanceTokenIn: BigInt,
+    balanceTokenOut: BigInt
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "onSwap",
+      "onSwap((uint8,address,address,uint256,bytes32,uint256,address,address,bytes),uint256,uint256):(uint256)",
+      [
+        ethereum.Value.fromTuple(request),
+        ethereum.Value.fromUnsignedBigInt(balanceTokenIn),
+        ethereum.Value.fromUnsignedBigInt(balanceTokenOut)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   queryExit(
     poolId: Bytes,
     sender: Address,
@@ -1046,7 +1455,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__queryExitResult {
+  ): MetaStablePool__queryExitResult {
     let result = super.call(
       "queryExit",
       "queryExit(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1061,7 +1470,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__queryExitResult(
+    return new MetaStablePool__queryExitResult(
       result[0].toBigInt(),
       result[1].toBigIntArray()
     );
@@ -1075,7 +1484,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__queryExitResult> {
+  ): ethereum.CallResult<MetaStablePool__queryExitResult> {
     let result = super.tryCall(
       "queryExit",
       "queryExit(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1094,7 +1503,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__queryExitResult(
+      new MetaStablePool__queryExitResult(
         value[0].toBigInt(),
         value[1].toBigIntArray()
       )
@@ -1109,7 +1518,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__queryJoinResult {
+  ): MetaStablePool__queryJoinResult {
     let result = super.call(
       "queryJoin",
       "queryJoin(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1124,7 +1533,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__queryJoinResult(
+    return new MetaStablePool__queryJoinResult(
       result[0].toBigInt(),
       result[1].toBigIntArray()
     );
@@ -1138,7 +1547,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__queryJoinResult> {
+  ): ethereum.CallResult<MetaStablePool__queryJoinResult> {
     let result = super.tryCall(
       "queryJoin",
       "queryJoin(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1157,7 +1566,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__queryJoinResult(
+      new MetaStablePool__queryJoinResult(
         value[0].toBigInt(),
         value[1].toBigIntArray()
       )
@@ -1271,44 +1680,10 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get vault(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get name(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
-  get symbol(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get security(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
-  get currency(): Address {
-    return this._call.inputValues[4].value.toAddress();
-  }
-
-  get maxSecurityOffered(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
-  get tradeFeePercentage(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
-  }
-
-  get pauseWindowDuration(): BigInt {
-    return this._call.inputValues[7].value.toBigInt();
-  }
-
-  get bufferPeriodDuration(): BigInt {
-    return this._call.inputValues[8].value.toBigInt();
-  }
-
-  get owner(): Address {
-    return this._call.inputValues[9].value.toAddress();
+  get params(): ConstructorCallParamsStruct {
+    return changetype<ConstructorCallParamsStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 }
 
@@ -1317,6 +1692,56 @@ export class ConstructorCall__Outputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
+  }
+}
+
+export class ConstructorCallParamsStruct extends ethereum.Tuple {
+  get vault(): Address {
+    return this[0].toAddress();
+  }
+
+  get name(): string {
+    return this[1].toString();
+  }
+
+  get symbol(): string {
+    return this[2].toString();
+  }
+
+  get tokens(): Array<Address> {
+    return this[3].toAddressArray();
+  }
+
+  get rateProviders(): Array<Address> {
+    return this[4].toAddressArray();
+  }
+
+  get priceRateCacheDuration(): Array<BigInt> {
+    return this[5].toBigIntArray();
+  }
+
+  get amplificationParameter(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get swapFeePercentage(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get pauseWindowDuration(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get bufferPeriodDuration(): BigInt {
+    return this[9].toBigInt();
+  }
+
+  get oracleEnabled(): boolean {
+    return this[10].toBoolean();
+  }
+
+  get owner(): Address {
+    return this[11].toAddress();
   }
 }
 
@@ -1396,54 +1821,28 @@ export class DecreaseAllowanceCall__Outputs {
   }
 }
 
-export class DisableRecoveryModeCall extends ethereum.Call {
-  get inputs(): DisableRecoveryModeCall__Inputs {
-    return new DisableRecoveryModeCall__Inputs(this);
+export class EnableOracleCall extends ethereum.Call {
+  get inputs(): EnableOracleCall__Inputs {
+    return new EnableOracleCall__Inputs(this);
   }
 
-  get outputs(): DisableRecoveryModeCall__Outputs {
-    return new DisableRecoveryModeCall__Outputs(this);
+  get outputs(): EnableOracleCall__Outputs {
+    return new EnableOracleCall__Outputs(this);
   }
 }
 
-export class DisableRecoveryModeCall__Inputs {
-  _call: DisableRecoveryModeCall;
+export class EnableOracleCall__Inputs {
+  _call: EnableOracleCall;
 
-  constructor(call: DisableRecoveryModeCall) {
+  constructor(call: EnableOracleCall) {
     this._call = call;
   }
 }
 
-export class DisableRecoveryModeCall__Outputs {
-  _call: DisableRecoveryModeCall;
+export class EnableOracleCall__Outputs {
+  _call: EnableOracleCall;
 
-  constructor(call: DisableRecoveryModeCall) {
-    this._call = call;
-  }
-}
-
-export class EnableRecoveryModeCall extends ethereum.Call {
-  get inputs(): EnableRecoveryModeCall__Inputs {
-    return new EnableRecoveryModeCall__Inputs(this);
-  }
-
-  get outputs(): EnableRecoveryModeCall__Outputs {
-    return new EnableRecoveryModeCall__Outputs(this);
-  }
-}
-
-export class EnableRecoveryModeCall__Inputs {
-  _call: EnableRecoveryModeCall;
-
-  constructor(call: EnableRecoveryModeCall) {
-    this._call = call;
-  }
-}
-
-export class EnableRecoveryModeCall__Outputs {
-  _call: EnableRecoveryModeCall;
-
-  constructor(call: EnableRecoveryModeCall) {
+  constructor(call: EnableOracleCall) {
     this._call = call;
   }
 }
@@ -1539,11 +1938,11 @@ export class OnExitPoolCall__Outputs {
     this._call = call;
   }
 
-  get value0(): Array<BigInt> {
+  get amountsOut(): Array<BigInt> {
     return this._call.outputValues[0].value.toBigIntArray();
   }
 
-  get value1(): Array<BigInt> {
+  get dueProtocolFeeAmounts(): Array<BigInt> {
     return this._call.outputValues[1].value.toBigIntArray();
   }
 }
@@ -1601,11 +2000,11 @@ export class OnJoinPoolCall__Outputs {
     this._call = call;
   }
 
-  get value0(): Array<BigInt> {
+  get amountsIn(): Array<BigInt> {
     return this._call.outputValues[0].value.toBigIntArray();
   }
 
-  get value1(): Array<BigInt> {
+  get dueProtocolFeeAmounts(): Array<BigInt> {
     return this._call.outputValues[1].value.toBigIntArray();
   }
 }
@@ -1696,29 +2095,85 @@ export class OnSwapCallRequestStruct extends ethereum.Tuple {
   }
 }
 
-export class PauseCall extends ethereum.Call {
-  get inputs(): PauseCall__Inputs {
-    return new PauseCall__Inputs(this);
+export class OnSwap1Call extends ethereum.Call {
+  get inputs(): OnSwap1Call__Inputs {
+    return new OnSwap1Call__Inputs(this);
   }
 
-  get outputs(): PauseCall__Outputs {
-    return new PauseCall__Outputs(this);
-  }
-}
-
-export class PauseCall__Inputs {
-  _call: PauseCall;
-
-  constructor(call: PauseCall) {
-    this._call = call;
+  get outputs(): OnSwap1Call__Outputs {
+    return new OnSwap1Call__Outputs(this);
   }
 }
 
-export class PauseCall__Outputs {
-  _call: PauseCall;
+export class OnSwap1Call__Inputs {
+  _call: OnSwap1Call;
 
-  constructor(call: PauseCall) {
+  constructor(call: OnSwap1Call) {
     this._call = call;
+  }
+
+  get request(): OnSwap1CallRequestStruct {
+    return changetype<OnSwap1CallRequestStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
+  }
+
+  get balanceTokenIn(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get balanceTokenOut(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class OnSwap1Call__Outputs {
+  _call: OnSwap1Call;
+
+  constructor(call: OnSwap1Call) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class OnSwap1CallRequestStruct extends ethereum.Tuple {
+  get kind(): i32 {
+    return this[0].toI32();
+  }
+
+  get tokenIn(): Address {
+    return this[1].toAddress();
+  }
+
+  get tokenOut(): Address {
+    return this[2].toAddress();
+  }
+
+  get amount(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get poolId(): Bytes {
+    return this[4].toBytes();
+  }
+
+  get lastChangeBlock(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get from(): Address {
+    return this[6].toAddress();
+  }
+
+  get to(): Address {
+    return this[7].toAddress();
+  }
+
+  get userData(): Bytes {
+    return this[8].toBytes();
   }
 }
 
@@ -1810,6 +2265,70 @@ export class SetAssetManagerPoolConfigCall__Outputs {
   }
 }
 
+export class SetPausedCall extends ethereum.Call {
+  get inputs(): SetPausedCall__Inputs {
+    return new SetPausedCall__Inputs(this);
+  }
+
+  get outputs(): SetPausedCall__Outputs {
+    return new SetPausedCall__Outputs(this);
+  }
+}
+
+export class SetPausedCall__Inputs {
+  _call: SetPausedCall;
+
+  constructor(call: SetPausedCall) {
+    this._call = call;
+  }
+
+  get paused(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SetPausedCall__Outputs {
+  _call: SetPausedCall;
+
+  constructor(call: SetPausedCall) {
+    this._call = call;
+  }
+}
+
+export class SetPriceRateCacheDurationCall extends ethereum.Call {
+  get inputs(): SetPriceRateCacheDurationCall__Inputs {
+    return new SetPriceRateCacheDurationCall__Inputs(this);
+  }
+
+  get outputs(): SetPriceRateCacheDurationCall__Outputs {
+    return new SetPriceRateCacheDurationCall__Outputs(this);
+  }
+}
+
+export class SetPriceRateCacheDurationCall__Inputs {
+  _call: SetPriceRateCacheDurationCall;
+
+  constructor(call: SetPriceRateCacheDurationCall) {
+    this._call = call;
+  }
+
+  get token(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get duration(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class SetPriceRateCacheDurationCall__Outputs {
+  _call: SetPriceRateCacheDurationCall;
+
+  constructor(call: SetPriceRateCacheDurationCall) {
+    this._call = call;
+  }
+}
+
 export class SetSwapFeePercentageCall extends ethereum.Call {
   get inputs(): SetSwapFeePercentageCall__Inputs {
     return new SetSwapFeePercentageCall__Inputs(this);
@@ -1836,6 +2355,66 @@ export class SetSwapFeePercentageCall__Outputs {
   _call: SetSwapFeePercentageCall;
 
   constructor(call: SetSwapFeePercentageCall) {
+    this._call = call;
+  }
+}
+
+export class StartAmplificationParameterUpdateCall extends ethereum.Call {
+  get inputs(): StartAmplificationParameterUpdateCall__Inputs {
+    return new StartAmplificationParameterUpdateCall__Inputs(this);
+  }
+
+  get outputs(): StartAmplificationParameterUpdateCall__Outputs {
+    return new StartAmplificationParameterUpdateCall__Outputs(this);
+  }
+}
+
+export class StartAmplificationParameterUpdateCall__Inputs {
+  _call: StartAmplificationParameterUpdateCall;
+
+  constructor(call: StartAmplificationParameterUpdateCall) {
+    this._call = call;
+  }
+
+  get rawEndValue(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get endTime(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class StartAmplificationParameterUpdateCall__Outputs {
+  _call: StartAmplificationParameterUpdateCall;
+
+  constructor(call: StartAmplificationParameterUpdateCall) {
+    this._call = call;
+  }
+}
+
+export class StopAmplificationParameterUpdateCall extends ethereum.Call {
+  get inputs(): StopAmplificationParameterUpdateCall__Inputs {
+    return new StopAmplificationParameterUpdateCall__Inputs(this);
+  }
+
+  get outputs(): StopAmplificationParameterUpdateCall__Outputs {
+    return new StopAmplificationParameterUpdateCall__Outputs(this);
+  }
+}
+
+export class StopAmplificationParameterUpdateCall__Inputs {
+  _call: StopAmplificationParameterUpdateCall;
+
+  constructor(call: StopAmplificationParameterUpdateCall) {
+    this._call = call;
+  }
+}
+
+export class StopAmplificationParameterUpdateCall__Outputs {
+  _call: StopAmplificationParameterUpdateCall;
+
+  constructor(call: StopAmplificationParameterUpdateCall) {
     this._call = call;
   }
 }
@@ -1920,28 +2499,32 @@ export class TransferFromCall__Outputs {
   }
 }
 
-export class UnpauseCall extends ethereum.Call {
-  get inputs(): UnpauseCall__Inputs {
-    return new UnpauseCall__Inputs(this);
+export class UpdatePriceRateCacheCall extends ethereum.Call {
+  get inputs(): UpdatePriceRateCacheCall__Inputs {
+    return new UpdatePriceRateCacheCall__Inputs(this);
   }
 
-  get outputs(): UnpauseCall__Outputs {
-    return new UnpauseCall__Outputs(this);
+  get outputs(): UpdatePriceRateCacheCall__Outputs {
+    return new UpdatePriceRateCacheCall__Outputs(this);
   }
 }
 
-export class UnpauseCall__Inputs {
-  _call: UnpauseCall;
+export class UpdatePriceRateCacheCall__Inputs {
+  _call: UpdatePriceRateCacheCall;
 
-  constructor(call: UnpauseCall) {
+  constructor(call: UpdatePriceRateCacheCall) {
     this._call = call;
   }
+
+  get token(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
 }
 
-export class UnpauseCall__Outputs {
-  _call: UnpauseCall;
+export class UpdatePriceRateCacheCall__Outputs {
+  _call: UpdatePriceRateCacheCall;
 
-  constructor(call: UnpauseCall) {
+  constructor(call: UpdatePriceRateCacheCall) {
     this._call = call;
   }
 }

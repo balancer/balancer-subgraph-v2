@@ -20,6 +20,20 @@ export class WeightedPool extends DataSourceTemplate {
   }
 }
 
+export class WeightedPoolV2 extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("WeightedPoolV2", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "WeightedPoolV2",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
 export class WeightedPool2Tokens extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("WeightedPool2Tokens", [address.toHex()]);
@@ -118,6 +132,20 @@ export class StablePhantomPool extends DataSourceTemplate {
   }
 }
 
+export class StablePhantomPoolV2 extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("StablePhantomPoolV2", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "StablePhantomPoolV2",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
 export class LinearPool extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("LinearPool", [address.toHex()]);
@@ -185,5 +213,29 @@ export class Gyro3Pool extends DataSourceTemplate {
       [address.toHex()],
       context
     );
+  }
+}
+
+export class GyroCEMMPool extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("GyroCEMMPool", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "GyroCEMMPool",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class FXPool extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("FXPool", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext("FXPool", [address.toHex()], context);
   }
 }

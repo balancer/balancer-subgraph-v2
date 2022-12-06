@@ -36,47 +36,115 @@ export class Approval__Params {
   }
 }
 
-export class BestAvailableTrades extends ethereum.Event {
-  get params(): BestAvailableTrades__Params {
-    return new BestAvailableTrades__Params(this);
+export class CEMMDerivedParamsValidated extends ethereum.Event {
+  get params(): CEMMDerivedParamsValidated__Params {
+    return new CEMMDerivedParamsValidated__Params(this);
   }
 }
 
-export class BestAvailableTrades__Params {
-  _event: BestAvailableTrades;
+export class CEMMDerivedParamsValidated__Params {
+  _event: CEMMDerivedParamsValidated;
 
-  constructor(event: BestAvailableTrades) {
+  constructor(event: CEMMDerivedParamsValidated) {
     this._event = event;
   }
 
-  get bestUnfilledBid(): BigInt {
+  get derivedParamsValidated(): boolean {
+    return this._event.parameters[0].value.toBoolean();
+  }
+}
+
+export class CEMMParamsValidated extends ethereum.Event {
+  get params(): CEMMParamsValidated__Params {
+    return new CEMMParamsValidated__Params(this);
+  }
+}
+
+export class CEMMParamsValidated__Params {
+  _event: CEMMParamsValidated;
+
+  constructor(event: CEMMParamsValidated) {
+    this._event = event;
+  }
+
+  get paramsValidated(): boolean {
+    return this._event.parameters[0].value.toBoolean();
+  }
+}
+
+export class InvariantAterInitializeJoin extends ethereum.Event {
+  get params(): InvariantAterInitializeJoin__Params {
+    return new InvariantAterInitializeJoin__Params(this);
+  }
+}
+
+export class InvariantAterInitializeJoin__Params {
+  _event: InvariantAterInitializeJoin;
+
+  constructor(event: InvariantAterInitializeJoin) {
+    this._event = event;
+  }
+
+  get invariantAfterJoin(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class InvariantOldAndNew extends ethereum.Event {
+  get params(): InvariantOldAndNew__Params {
+    return new InvariantOldAndNew__Params(this);
+  }
+}
+
+export class InvariantOldAndNew__Params {
+  _event: InvariantOldAndNew;
+
+  constructor(event: InvariantOldAndNew) {
+    this._event = event;
+  }
+
+  get oldInvariant(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get bestUnfilledOffer(): BigInt {
+  get newInvariant(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
 }
 
-export class Offer extends ethereum.Event {
-  get params(): Offer__Params {
-    return new Offer__Params(this);
+export class OracleEnabledChanged extends ethereum.Event {
+  get params(): OracleEnabledChanged__Params {
+    return new OracleEnabledChanged__Params(this);
   }
 }
 
-export class Offer__Params {
-  _event: Offer;
+export class OracleEnabledChanged__Params {
+  _event: OracleEnabledChanged;
 
-  constructor(event: Offer) {
+  constructor(event: OracleEnabledChanged) {
     this._event = event;
   }
 
-  get security(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get enabled(): boolean {
+    return this._event.parameters[0].value.toBoolean();
+  }
+}
+
+export class OracleIndexUpdated extends ethereum.Event {
+  get params(): OracleIndexUpdated__Params {
+    return new OracleIndexUpdated__Params(this);
+  }
+}
+
+export class OracleIndexUpdated__Params {
+  _event: OracleIndexUpdated;
+
+  constructor(event: OracleIndexUpdated) {
+    this._event = event;
   }
 
-  get secondaryOffer(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get oracleUpdatedIndex(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -94,24 +162,6 @@ export class PausedStateChanged__Params {
   }
 
   get paused(): boolean {
-    return this._event.parameters[0].value.toBoolean();
-  }
-}
-
-export class RecoveryModeStateChanged extends ethereum.Event {
-  get params(): RecoveryModeStateChanged__Params {
-    return new RecoveryModeStateChanged__Params(this);
-  }
-}
-
-export class RecoveryModeStateChanged__Params {
-  _event: RecoveryModeStateChanged;
-
-  constructor(event: RecoveryModeStateChanged) {
-    this._event = event;
-  }
-
-  get enabled(): boolean {
     return this._event.parameters[0].value.toBoolean();
   }
 }
@@ -134,53 +184,41 @@ export class SwapFeePercentageChanged__Params {
   }
 }
 
-export class TradeReport extends ethereum.Event {
-  get params(): TradeReport__Params {
-    return new TradeReport__Params(this);
+export class SwapParams extends ethereum.Event {
+  get params(): SwapParams__Params {
+    return new SwapParams__Params(this);
   }
 }
 
-export class TradeReport__Params {
-  _event: TradeReport;
+export class SwapParams__Params {
+  _event: SwapParams;
 
-  constructor(event: TradeReport) {
+  constructor(event: SwapParams) {
     this._event = event;
   }
 
-  get security(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get balances(): Array<BigInt> {
+    return this._event.parameters[0].value.toBigIntArray();
   }
 
-  get party(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get counterparty(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get price(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get askprice(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get currency(): Address {
-    return this._event.parameters[5].value.toAddress();
+  get invariant(): SwapParamsInvariantStruct {
+    return changetype<SwapParamsInvariantStruct>(
+      this._event.parameters[1].value.toTuple()
+    );
   }
 
   get amount(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
+export class SwapParamsInvariantStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
   }
 
-  get status(): Bytes {
-    return this._event.parameters[7].value.toBytes();
-  }
-
-  get executionDate(): BigInt {
-    return this._event.parameters[8].value.toBigInt();
+  get y(): BigInt {
+    return this[1].toBigInt();
   }
 }
 
@@ -210,7 +248,149 @@ export class Transfer__Params {
   }
 }
 
-export class SecondaryIssuePool__getPausedStateResult {
+export class GyroCEMMPool__getCEMMParamsResultParamsStruct extends ethereum.Tuple {
+  get alpha(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get beta(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get c(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get s(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get lambda(): BigInt {
+    return this[4].toBigInt();
+  }
+}
+
+export class GyroCEMMPool__getCEMMParamsResultDStruct extends ethereum.Tuple {
+  get tauAlpha(): GyroCEMMPool__getCEMMParamsResultDTauAlphaStruct {
+    return changetype<GyroCEMMPool__getCEMMParamsResultDTauAlphaStruct>(
+      this[0].toTuple()
+    );
+  }
+
+  get tauBeta(): GyroCEMMPool__getCEMMParamsResultDTauBetaStruct {
+    return changetype<GyroCEMMPool__getCEMMParamsResultDTauBetaStruct>(
+      this[1].toTuple()
+    );
+  }
+
+  get u(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get v(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get w(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get z(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get dSq(): BigInt {
+    return this[6].toBigInt();
+  }
+}
+
+export class GyroCEMMPool__getCEMMParamsResultDTauAlphaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get y(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class GyroCEMMPool__getCEMMParamsResultDTauBetaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get y(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class GyroCEMMPool__getCEMMParamsResult {
+  value0: GyroCEMMPool__getCEMMParamsResultParamsStruct;
+  value1: GyroCEMMPool__getCEMMParamsResultDStruct;
+
+  constructor(
+    value0: GyroCEMMPool__getCEMMParamsResultParamsStruct,
+    value1: GyroCEMMPool__getCEMMParamsResultDStruct
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromTuple(this.value0));
+    map.set("value1", ethereum.Value.fromTuple(this.value1));
+    return map;
+  }
+}
+
+export class GyroCEMMPool__getMiscDataResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: BigInt;
+  value3: BigInt;
+  value4: boolean;
+  value5: BigInt;
+
+  constructor(
+    value0: BigInt,
+    value1: BigInt,
+    value2: BigInt,
+    value3: BigInt,
+    value4: boolean,
+    value5: BigInt
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+    this.value4 = value4;
+    this.value5 = value5;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromSignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromSignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
+    map.set("value4", ethereum.Value.fromBoolean(this.value4));
+    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
+    return map;
+  }
+}
+
+export class GyroCEMMPool__getPastAccumulatorsInputQueriesStruct extends ethereum.Tuple {
+  get variable(): i32 {
+    return this[0].toI32();
+  }
+
+  get ago(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class GyroCEMMPool__getPausedStateResult {
   value0: boolean;
   value1: BigInt;
   value2: BigInt;
@@ -230,7 +410,61 @@ export class SecondaryIssuePool__getPausedStateResult {
   }
 }
 
-export class SecondaryIssuePool__onExitPoolResult {
+export class GyroCEMMPool__getSampleResult {
+  value0: BigInt;
+  value1: BigInt;
+  value2: BigInt;
+  value3: BigInt;
+  value4: BigInt;
+  value5: BigInt;
+  value6: BigInt;
+
+  constructor(
+    value0: BigInt,
+    value1: BigInt,
+    value2: BigInt,
+    value3: BigInt,
+    value4: BigInt,
+    value5: BigInt,
+    value6: BigInt
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+    this.value4 = value4;
+    this.value5 = value5;
+    this.value6 = value6;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromSignedBigInt(this.value0));
+    map.set("value1", ethereum.Value.fromSignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromSignedBigInt(this.value2));
+    map.set("value3", ethereum.Value.fromSignedBigInt(this.value3));
+    map.set("value4", ethereum.Value.fromSignedBigInt(this.value4));
+    map.set("value5", ethereum.Value.fromSignedBigInt(this.value5));
+    map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
+    return map;
+  }
+}
+
+export class GyroCEMMPool__getTimeWeightedAverageInputQueriesStruct extends ethereum.Tuple {
+  get variable(): i32 {
+    return this[0].toI32();
+  }
+
+  get secs(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get ago(): BigInt {
+    return this[2].toBigInt();
+  }
+}
+
+export class GyroCEMMPool__onExitPoolResult {
   value0: Array<BigInt>;
   value1: Array<BigInt>;
 
@@ -247,7 +481,7 @@ export class SecondaryIssuePool__onExitPoolResult {
   }
 }
 
-export class SecondaryIssuePool__onJoinPoolResult {
+export class GyroCEMMPool__onJoinPoolResult {
   value0: Array<BigInt>;
   value1: Array<BigInt>;
 
@@ -264,7 +498,7 @@ export class SecondaryIssuePool__onJoinPoolResult {
   }
 }
 
-export class SecondaryIssuePool__onSwapInputRequestStruct extends ethereum.Tuple {
+export class GyroCEMMPool__onSwapInputRequestStruct extends ethereum.Tuple {
   get kind(): i32 {
     return this[0].toI32();
   }
@@ -302,7 +536,7 @@ export class SecondaryIssuePool__onSwapInputRequestStruct extends ethereum.Tuple
   }
 }
 
-export class SecondaryIssuePool__queryExitResult {
+export class GyroCEMMPool__queryExitResult {
   value0: BigInt;
   value1: Array<BigInt>;
 
@@ -319,7 +553,7 @@ export class SecondaryIssuePool__queryExitResult {
   }
 }
 
-export class SecondaryIssuePool__queryJoinResult {
+export class GyroCEMMPool__queryJoinResult {
   value0: BigInt;
   value1: Array<BigInt>;
 
@@ -336,9 +570,9 @@ export class SecondaryIssuePool__queryJoinResult {
   }
 }
 
-export class SecondaryIssuePool extends ethereum.SmartContract {
-  static bind(address: Address): SecondaryIssuePool {
-    return new SecondaryIssuePool("SecondaryIssuePool", address);
+export class GyroCEMMPool extends ethereum.SmartContract {
+  static bind(address: Address): GyroCEMMPool {
+    return new GyroCEMMPool("GyroCEMMPool", address);
   }
 
   DOMAIN_SEPARATOR(): Bytes {
@@ -364,19 +598,214 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  _orderbook(): Address {
-    let result = super.call("_orderbook", "_orderbook():(address)", []);
+  _dSq(): BigInt {
+    let result = super.call("_dSq", "_dSq():(int256)", []);
 
-    return result[0].toAddress();
+    return result[0].toBigInt();
   }
 
-  try__orderbook(): ethereum.CallResult<Address> {
-    let result = super.tryCall("_orderbook", "_orderbook():(address)", []);
+  try__dSq(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_dSq", "_dSq():(int256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _paramsAlpha(): BigInt {
+    let result = super.call("_paramsAlpha", "_paramsAlpha():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__paramsAlpha(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_paramsAlpha", "_paramsAlpha():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _paramsBeta(): BigInt {
+    let result = super.call("_paramsBeta", "_paramsBeta():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__paramsBeta(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_paramsBeta", "_paramsBeta():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _paramsC(): BigInt {
+    let result = super.call("_paramsC", "_paramsC():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__paramsC(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_paramsC", "_paramsC():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _paramsLambda(): BigInt {
+    let result = super.call("_paramsLambda", "_paramsLambda():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__paramsLambda(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_paramsLambda", "_paramsLambda():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _paramsS(): BigInt {
+    let result = super.call("_paramsS", "_paramsS():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__paramsS(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_paramsS", "_paramsS():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _tauAlphaX(): BigInt {
+    let result = super.call("_tauAlphaX", "_tauAlphaX():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__tauAlphaX(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_tauAlphaX", "_tauAlphaX():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _tauAlphaY(): BigInt {
+    let result = super.call("_tauAlphaY", "_tauAlphaY():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__tauAlphaY(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_tauAlphaY", "_tauAlphaY():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _tauBetaX(): BigInt {
+    let result = super.call("_tauBetaX", "_tauBetaX():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__tauBetaX(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_tauBetaX", "_tauBetaX():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _tauBetaY(): BigInt {
+    let result = super.call("_tauBetaY", "_tauBetaY():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__tauBetaY(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_tauBetaY", "_tauBetaY():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _u(): BigInt {
+    let result = super.call("_u", "_u():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__u(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_u", "_u():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _v(): BigInt {
+    let result = super.call("_v", "_v():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__v(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_v", "_v():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _w(): BigInt {
+    let result = super.call("_w", "_w():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__w(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_w", "_w():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  _z(): BigInt {
+    let result = super.call("_z", "_z():(int256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try__z(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("_z", "_z():(int256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   allowance(owner: Address, spender: Address): BigInt {
@@ -527,57 +956,79 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getCurrency(): Address {
-    let result = super.call("getCurrency", "getCurrency():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_getCurrency(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getCurrency", "getCurrency():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  getDomainSeparator(): Bytes {
+  getCEMMParams(): GyroCEMMPool__getCEMMParamsResult {
     let result = super.call(
-      "getDomainSeparator",
-      "getDomainSeparator():(bytes32)",
+      "getCEMMParams",
+      "getCEMMParams():((int256,int256,int256,int256,int256),((int256,int256),(int256,int256),int256,int256,int256,int256,int256))",
       []
     );
 
-    return result[0].toBytes();
+    return changetype<GyroCEMMPool__getCEMMParamsResult>(
+      new GyroCEMMPool__getCEMMParamsResult(
+        changetype<GyroCEMMPool__getCEMMParamsResultParamsStruct>(
+          result[0].toTuple()
+        ),
+        changetype<GyroCEMMPool__getCEMMParamsResultDStruct>(
+          result[1].toTuple()
+        )
+      )
+    );
   }
 
-  try_getDomainSeparator(): ethereum.CallResult<Bytes> {
+  try_getCEMMParams(): ethereum.CallResult<GyroCEMMPool__getCEMMParamsResult> {
     let result = super.tryCall(
-      "getDomainSeparator",
-      "getDomainSeparator():(bytes32)",
+      "getCEMMParams",
+      "getCEMMParams():((int256,int256,int256,int256,int256),((int256,int256),(int256,int256),int256,int256,int256,int256,int256))",
       []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(
+      changetype<GyroCEMMPool__getCEMMParamsResult>(
+        new GyroCEMMPool__getCEMMParamsResult(
+          changetype<GyroCEMMPool__getCEMMParamsResultParamsStruct>(
+            value[0].toTuple()
+          ),
+          changetype<GyroCEMMPool__getCEMMParamsResultDStruct>(
+            value[1].toTuple()
+          )
+        )
+      )
+    );
   }
 
-  getNextNonce(account: Address): BigInt {
-    let result = super.call("getNextNonce", "getNextNonce(address):(uint256)", [
-      ethereum.Value.fromAddress(account)
-    ]);
+  getInvariant(): BigInt {
+    let result = super.call("getInvariant", "getInvariant():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try_getNextNonce(account: Address): ethereum.CallResult<BigInt> {
+  try_getInvariant(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getInvariant", "getInvariant():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getLargestSafeQueryWindow(): BigInt {
+    let result = super.call(
+      "getLargestSafeQueryWindow",
+      "getLargestSafeQueryWindow():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getLargestSafeQueryWindow(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getNextNonce",
-      "getNextNonce(address):(uint256)",
-      [ethereum.Value.fromAddress(account)]
+      "getLargestSafeQueryWindow",
+      "getLargestSafeQueryWindow():(uint256)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -586,19 +1037,108 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getOrderbook(): Address {
-    let result = super.call("getOrderbook", "getOrderbook():(address)", []);
+  getLastInvariant(): BigInt {
+    let result = super.call(
+      "getLastInvariant",
+      "getLastInvariant():(uint256)",
+      []
+    );
 
-    return result[0].toAddress();
+    return result[0].toBigInt();
   }
 
-  try_getOrderbook(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getOrderbook", "getOrderbook():(address)", []);
+  try_getLastInvariant(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getLastInvariant",
+      "getLastInvariant():(uint256)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getLatest(variable: i32): BigInt {
+    let result = super.call("getLatest", "getLatest(uint8):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(variable))
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getLatest(variable: i32): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getLatest", "getLatest(uint8):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(variable))
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getMiscData(): GyroCEMMPool__getMiscDataResult {
+    let result = super.call(
+      "getMiscData",
+      "getMiscData():(int256,int256,uint256,uint256,bool,uint256)",
+      []
+    );
+
+    return new GyroCEMMPool__getMiscDataResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toBigInt(),
+      result[3].toBigInt(),
+      result[4].toBoolean(),
+      result[5].toBigInt()
+    );
+  }
+
+  try_getMiscData(): ethereum.CallResult<GyroCEMMPool__getMiscDataResult> {
+    let result = super.tryCall(
+      "getMiscData",
+      "getMiscData():(int256,int256,uint256,uint256,bool,uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new GyroCEMMPool__getMiscDataResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toBigInt(),
+        value[3].toBigInt(),
+        value[4].toBoolean(),
+        value[5].toBigInt()
+      )
+    );
+  }
+
+  getNormalizedWeights(): Array<BigInt> {
+    let result = super.call(
+      "getNormalizedWeights",
+      "getNormalizedWeights():(uint256[])",
+      []
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getNormalizedWeights(): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getNormalizedWeights",
+      "getNormalizedWeights():(uint256[])",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
   }
 
   getOwner(): Address {
@@ -616,14 +1156,41 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getPausedState(): SecondaryIssuePool__getPausedStateResult {
+  getPastAccumulators(
+    queries: Array<GyroCEMMPool__getPastAccumulatorsInputQueriesStruct>
+  ): Array<BigInt> {
+    let result = super.call(
+      "getPastAccumulators",
+      "getPastAccumulators((uint8,uint256)[]):(int256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getPastAccumulators(
+    queries: Array<GyroCEMMPool__getPastAccumulatorsInputQueriesStruct>
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getPastAccumulators",
+      "getPastAccumulators((uint8,uint256)[]):(int256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  getPausedState(): GyroCEMMPool__getPausedStateResult {
     let result = super.call(
       "getPausedState",
       "getPausedState():(bool,uint256,uint256)",
       []
     );
 
-    return new SecondaryIssuePool__getPausedStateResult(
+    return new GyroCEMMPool__getPausedStateResult(
       result[0].toBoolean(),
       result[1].toBigInt(),
       result[2].toBigInt()
@@ -631,7 +1198,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
   }
 
   try_getPausedState(): ethereum.CallResult<
-    SecondaryIssuePool__getPausedStateResult
+    GyroCEMMPool__getPausedStateResult
   > {
     let result = super.tryCall(
       "getPausedState",
@@ -643,7 +1210,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__getPausedStateResult(
+      new GyroCEMMPool__getPausedStateResult(
         value[0].toBoolean(),
         value[1].toBigInt(),
         value[2].toBigInt()
@@ -666,88 +1233,62 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  getProtocolFeesCollector(): Address {
-    let result = super.call(
-      "getProtocolFeesCollector",
-      "getProtocolFeesCollector():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_getProtocolFeesCollector(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getProtocolFeesCollector",
-      "getProtocolFeesCollector():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  getScalingFactors(): Array<BigInt> {
-    let result = super.call(
-      "getScalingFactors",
-      "getScalingFactors():(uint256[])",
-      []
-    );
-
-    return result[0].toBigIntArray();
-  }
-
-  try_getScalingFactors(): ethereum.CallResult<Array<BigInt>> {
-    let result = super.tryCall(
-      "getScalingFactors",
-      "getScalingFactors():(uint256[])",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
-  }
-
-  getSecurity(): Address {
-    let result = super.call("getSecurity", "getSecurity():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_getSecurity(): ethereum.CallResult<Address> {
-    let result = super.tryCall("getSecurity", "getSecurity():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  getSecurityOffered(): BigInt {
-    let result = super.call(
-      "getSecurityOffered",
-      "getSecurityOffered():(uint256)",
-      []
-    );
+  getRate(): BigInt {
+    let result = super.call("getRate", "getRate():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try_getSecurityOffered(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "getSecurityOffered",
-      "getSecurityOffered():(uint256)",
-      []
-    );
+  try_getRate(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getRate", "getRate():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getSample(index: BigInt): GyroCEMMPool__getSampleResult {
+    let result = super.call(
+      "getSample",
+      "getSample(uint256):(int256,int256,int256,int256,int256,int256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(index)]
+    );
+
+    return new GyroCEMMPool__getSampleResult(
+      result[0].toBigInt(),
+      result[1].toBigInt(),
+      result[2].toBigInt(),
+      result[3].toBigInt(),
+      result[4].toBigInt(),
+      result[5].toBigInt(),
+      result[6].toBigInt()
+    );
+  }
+
+  try_getSample(
+    index: BigInt
+  ): ethereum.CallResult<GyroCEMMPool__getSampleResult> {
+    let result = super.tryCall(
+      "getSample",
+      "getSample(uint256):(int256,int256,int256,int256,int256,int256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(index)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new GyroCEMMPool__getSampleResult(
+        value[0].toBigInt(),
+        value[1].toBigInt(),
+        value[2].toBigInt(),
+        value[3].toBigInt(),
+        value[4].toBigInt(),
+        value[5].toBigInt(),
+        value[6].toBigInt()
+      )
+    );
   }
 
   getSwapFeePercentage(): BigInt {
@@ -773,6 +1314,56 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getTimeWeightedAverage(
+    queries: Array<GyroCEMMPool__getTimeWeightedAverageInputQueriesStruct>
+  ): Array<BigInt> {
+    let result = super.call(
+      "getTimeWeightedAverage",
+      "getTimeWeightedAverage((uint8,uint256,uint256)[]):(uint256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getTimeWeightedAverage(
+    queries: Array<GyroCEMMPool__getTimeWeightedAverageInputQueriesStruct>
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getTimeWeightedAverage",
+      "getTimeWeightedAverage((uint8,uint256,uint256)[]):(uint256[])",
+      [ethereum.Value.fromTupleArray(queries)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  getTotalSamples(): BigInt {
+    let result = super.call(
+      "getTotalSamples",
+      "getTotalSamples():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getTotalSamples(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getTotalSamples",
+      "getTotalSamples():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getVault(): Address {
     let result = super.call("getVault", "getVault():(address)", []);
 
@@ -788,19 +1379,19 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  inRecoveryMode(): boolean {
-    let result = super.call("inRecoveryMode", "inRecoveryMode():(bool)", []);
+  gyroConfig(): Address {
+    let result = super.call("gyroConfig", "gyroConfig():(address)", []);
 
-    return result[0].toBoolean();
+    return result[0].toAddress();
   }
 
-  try_inRecoveryMode(): ethereum.CallResult<boolean> {
-    let result = super.tryCall("inRecoveryMode", "inRecoveryMode():(bool)", []);
+  try_gyroConfig(): ethereum.CallResult<Address> {
+    let result = super.tryCall("gyroConfig", "gyroConfig():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   increaseAllowance(spender: Address, addedValue: BigInt): boolean {
@@ -877,7 +1468,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__onExitPoolResult {
+  ): GyroCEMMPool__onExitPoolResult {
     let result = super.call(
       "onExitPool",
       "onExitPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -892,7 +1483,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__onExitPoolResult(
+    return new GyroCEMMPool__onExitPoolResult(
       result[0].toBigIntArray(),
       result[1].toBigIntArray()
     );
@@ -906,7 +1497,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__onExitPoolResult> {
+  ): ethereum.CallResult<GyroCEMMPool__onExitPoolResult> {
     let result = super.tryCall(
       "onExitPool",
       "onExitPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -925,7 +1516,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__onExitPoolResult(
+      new GyroCEMMPool__onExitPoolResult(
         value[0].toBigIntArray(),
         value[1].toBigIntArray()
       )
@@ -940,7 +1531,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__onJoinPoolResult {
+  ): GyroCEMMPool__onJoinPoolResult {
     let result = super.call(
       "onJoinPool",
       "onJoinPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -955,7 +1546,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__onJoinPoolResult(
+    return new GyroCEMMPool__onJoinPoolResult(
       result[0].toBigIntArray(),
       result[1].toBigIntArray()
     );
@@ -969,7 +1560,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__onJoinPoolResult> {
+  ): ethereum.CallResult<GyroCEMMPool__onJoinPoolResult> {
     let result = super.tryCall(
       "onJoinPool",
       "onJoinPool(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256[],uint256[])",
@@ -988,7 +1579,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__onJoinPoolResult(
+      new GyroCEMMPool__onJoinPoolResult(
         value[0].toBigIntArray(),
         value[1].toBigIntArray()
       )
@@ -996,19 +1587,17 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
   }
 
   onSwap(
-    request: SecondaryIssuePool__onSwapInputRequestStruct,
-    balances: Array<BigInt>,
-    indexIn: BigInt,
-    indexOut: BigInt
+    request: GyroCEMMPool__onSwapInputRequestStruct,
+    balanceTokenIn: BigInt,
+    balanceTokenOut: BigInt
   ): BigInt {
     let result = super.call(
       "onSwap",
-      "onSwap((uint8,address,address,uint256,bytes32,uint256,address,address,bytes),uint256[],uint256,uint256):(uint256)",
+      "onSwap((uint8,address,address,uint256,bytes32,uint256,address,address,bytes),uint256,uint256):(uint256)",
       [
         ethereum.Value.fromTuple(request),
-        ethereum.Value.fromUnsignedBigIntArray(balances),
-        ethereum.Value.fromUnsignedBigInt(indexIn),
-        ethereum.Value.fromUnsignedBigInt(indexOut)
+        ethereum.Value.fromUnsignedBigInt(balanceTokenIn),
+        ethereum.Value.fromUnsignedBigInt(balanceTokenOut)
       ]
     );
 
@@ -1016,19 +1605,17 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
   }
 
   try_onSwap(
-    request: SecondaryIssuePool__onSwapInputRequestStruct,
-    balances: Array<BigInt>,
-    indexIn: BigInt,
-    indexOut: BigInt
+    request: GyroCEMMPool__onSwapInputRequestStruct,
+    balanceTokenIn: BigInt,
+    balanceTokenOut: BigInt
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "onSwap",
-      "onSwap((uint8,address,address,uint256,bytes32,uint256,address,address,bytes),uint256[],uint256,uint256):(uint256)",
+      "onSwap((uint8,address,address,uint256,bytes32,uint256,address,address,bytes),uint256,uint256):(uint256)",
       [
         ethereum.Value.fromTuple(request),
-        ethereum.Value.fromUnsignedBigIntArray(balances),
-        ethereum.Value.fromUnsignedBigInt(indexIn),
-        ethereum.Value.fromUnsignedBigInt(indexOut)
+        ethereum.Value.fromUnsignedBigInt(balanceTokenIn),
+        ethereum.Value.fromUnsignedBigInt(balanceTokenOut)
       ]
     );
     if (result.reverted) {
@@ -1046,7 +1633,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__queryExitResult {
+  ): GyroCEMMPool__queryExitResult {
     let result = super.call(
       "queryExit",
       "queryExit(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1061,7 +1648,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__queryExitResult(
+    return new GyroCEMMPool__queryExitResult(
       result[0].toBigInt(),
       result[1].toBigIntArray()
     );
@@ -1075,7 +1662,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__queryExitResult> {
+  ): ethereum.CallResult<GyroCEMMPool__queryExitResult> {
     let result = super.tryCall(
       "queryExit",
       "queryExit(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1094,7 +1681,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__queryExitResult(
+      new GyroCEMMPool__queryExitResult(
         value[0].toBigInt(),
         value[1].toBigIntArray()
       )
@@ -1109,7 +1696,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): SecondaryIssuePool__queryJoinResult {
+  ): GyroCEMMPool__queryJoinResult {
     let result = super.call(
       "queryJoin",
       "queryJoin(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1124,7 +1711,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
       ]
     );
 
-    return new SecondaryIssuePool__queryJoinResult(
+    return new GyroCEMMPool__queryJoinResult(
       result[0].toBigInt(),
       result[1].toBigIntArray()
     );
@@ -1138,7 +1725,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     lastChangeBlock: BigInt,
     protocolSwapFeePercentage: BigInt,
     userData: Bytes
-  ): ethereum.CallResult<SecondaryIssuePool__queryJoinResult> {
+  ): ethereum.CallResult<GyroCEMMPool__queryJoinResult> {
     let result = super.tryCall(
       "queryJoin",
       "queryJoin(bytes32,address,address,uint256[],uint256,uint256,bytes):(uint256,uint256[])",
@@ -1157,7 +1744,7 @@ export class SecondaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new SecondaryIssuePool__queryJoinResult(
+      new GyroCEMMPool__queryJoinResult(
         value[0].toBigInt(),
         value[1].toBigIntArray()
       )
@@ -1271,44 +1858,14 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get vault(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get params(): ConstructorCallParamsStruct {
+    return changetype<ConstructorCallParamsStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
   }
 
-  get name(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
-  get symbol(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get security(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
-  get currency(): Address {
-    return this._call.inputValues[4].value.toAddress();
-  }
-
-  get maxSecurityOffered(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
-  get tradeFeePercentage(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
-  }
-
-  get pauseWindowDuration(): BigInt {
-    return this._call.inputValues[7].value.toBigInt();
-  }
-
-  get bufferPeriodDuration(): BigInt {
-    return this._call.inputValues[8].value.toBigInt();
-  }
-
-  get owner(): Address {
-    return this._call.inputValues[9].value.toAddress();
+  get configAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 
@@ -1317,6 +1874,140 @@ export class ConstructorCall__Outputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
+  }
+}
+
+export class ConstructorCallParamsStruct extends ethereum.Tuple {
+  get baseParams(): ConstructorCallParamsBaseParamsStruct {
+    return changetype<ConstructorCallParamsBaseParamsStruct>(this[0].toTuple());
+  }
+
+  get cemmParams(): ConstructorCallParamsCemmParamsStruct {
+    return changetype<ConstructorCallParamsCemmParamsStruct>(this[1].toTuple());
+  }
+
+  get derivedCemmParams(): ConstructorCallParamsDerivedCemmParamsStruct {
+    return changetype<ConstructorCallParamsDerivedCemmParamsStruct>(
+      this[2].toTuple()
+    );
+  }
+}
+
+export class ConstructorCallParamsBaseParamsStruct extends ethereum.Tuple {
+  get vault(): Address {
+    return this[0].toAddress();
+  }
+
+  get name(): string {
+    return this[1].toString();
+  }
+
+  get symbol(): string {
+    return this[2].toString();
+  }
+
+  get token0(): Address {
+    return this[3].toAddress();
+  }
+
+  get token1(): Address {
+    return this[4].toAddress();
+  }
+
+  get swapFeePercentage(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get pauseWindowDuration(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get bufferPeriodDuration(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get oracleEnabled(): boolean {
+    return this[8].toBoolean();
+  }
+
+  get owner(): Address {
+    return this[9].toAddress();
+  }
+}
+
+export class ConstructorCallParamsCemmParamsStruct extends ethereum.Tuple {
+  get alpha(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get beta(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get c(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get s(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get lambda(): BigInt {
+    return this[4].toBigInt();
+  }
+}
+
+export class ConstructorCallParamsDerivedCemmParamsStruct extends ethereum.Tuple {
+  get tauAlpha(): ConstructorCallParamsDerivedCemmParamsTauAlphaStruct {
+    return changetype<ConstructorCallParamsDerivedCemmParamsTauAlphaStruct>(
+      this[0].toTuple()
+    );
+  }
+
+  get tauBeta(): ConstructorCallParamsDerivedCemmParamsTauBetaStruct {
+    return changetype<ConstructorCallParamsDerivedCemmParamsTauBetaStruct>(
+      this[1].toTuple()
+    );
+  }
+
+  get u(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get v(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get w(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get z(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get dSq(): BigInt {
+    return this[6].toBigInt();
+  }
+}
+
+export class ConstructorCallParamsDerivedCemmParamsTauAlphaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get y(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class ConstructorCallParamsDerivedCemmParamsTauBetaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get y(): BigInt {
+    return this[1].toBigInt();
   }
 }
 
@@ -1396,54 +2087,62 @@ export class DecreaseAllowanceCall__Outputs {
   }
 }
 
-export class DisableRecoveryModeCall extends ethereum.Call {
-  get inputs(): DisableRecoveryModeCall__Inputs {
-    return new DisableRecoveryModeCall__Inputs(this);
+export class DirtyUninitializedOracleSamplesCall extends ethereum.Call {
+  get inputs(): DirtyUninitializedOracleSamplesCall__Inputs {
+    return new DirtyUninitializedOracleSamplesCall__Inputs(this);
   }
 
-  get outputs(): DisableRecoveryModeCall__Outputs {
-    return new DisableRecoveryModeCall__Outputs(this);
+  get outputs(): DirtyUninitializedOracleSamplesCall__Outputs {
+    return new DirtyUninitializedOracleSamplesCall__Outputs(this);
   }
 }
 
-export class DisableRecoveryModeCall__Inputs {
-  _call: DisableRecoveryModeCall;
+export class DirtyUninitializedOracleSamplesCall__Inputs {
+  _call: DirtyUninitializedOracleSamplesCall;
 
-  constructor(call: DisableRecoveryModeCall) {
+  constructor(call: DirtyUninitializedOracleSamplesCall) {
+    this._call = call;
+  }
+
+  get startIndex(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get endIndex(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class DirtyUninitializedOracleSamplesCall__Outputs {
+  _call: DirtyUninitializedOracleSamplesCall;
+
+  constructor(call: DirtyUninitializedOracleSamplesCall) {
     this._call = call;
   }
 }
 
-export class DisableRecoveryModeCall__Outputs {
-  _call: DisableRecoveryModeCall;
+export class EnableOracleCall extends ethereum.Call {
+  get inputs(): EnableOracleCall__Inputs {
+    return new EnableOracleCall__Inputs(this);
+  }
 
-  constructor(call: DisableRecoveryModeCall) {
+  get outputs(): EnableOracleCall__Outputs {
+    return new EnableOracleCall__Outputs(this);
+  }
+}
+
+export class EnableOracleCall__Inputs {
+  _call: EnableOracleCall;
+
+  constructor(call: EnableOracleCall) {
     this._call = call;
   }
 }
 
-export class EnableRecoveryModeCall extends ethereum.Call {
-  get inputs(): EnableRecoveryModeCall__Inputs {
-    return new EnableRecoveryModeCall__Inputs(this);
-  }
+export class EnableOracleCall__Outputs {
+  _call: EnableOracleCall;
 
-  get outputs(): EnableRecoveryModeCall__Outputs {
-    return new EnableRecoveryModeCall__Outputs(this);
-  }
-}
-
-export class EnableRecoveryModeCall__Inputs {
-  _call: EnableRecoveryModeCall;
-
-  constructor(call: EnableRecoveryModeCall) {
-    this._call = call;
-  }
-}
-
-export class EnableRecoveryModeCall__Outputs {
-  _call: EnableRecoveryModeCall;
-
-  constructor(call: EnableRecoveryModeCall) {
+  constructor(call: EnableOracleCall) {
     this._call = call;
   }
 }
@@ -1601,11 +2300,11 @@ export class OnJoinPoolCall__Outputs {
     this._call = call;
   }
 
-  get value0(): Array<BigInt> {
+  get amountsIn(): Array<BigInt> {
     return this._call.outputValues[0].value.toBigIntArray();
   }
 
-  get value1(): Array<BigInt> {
+  get dueProtocolFeeAmounts(): Array<BigInt> {
     return this._call.outputValues[1].value.toBigIntArray();
   }
 }
@@ -1633,16 +2332,12 @@ export class OnSwapCall__Inputs {
     );
   }
 
-  get balances(): Array<BigInt> {
-    return this._call.inputValues[1].value.toBigIntArray();
+  get balanceTokenIn(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
   }
 
-  get indexIn(): BigInt {
+  get balanceTokenOut(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get indexOut(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
   }
 }
 
@@ -1693,32 +2388,6 @@ export class OnSwapCallRequestStruct extends ethereum.Tuple {
 
   get userData(): Bytes {
     return this[8].toBytes();
-  }
-}
-
-export class PauseCall extends ethereum.Call {
-  get inputs(): PauseCall__Inputs {
-    return new PauseCall__Inputs(this);
-  }
-
-  get outputs(): PauseCall__Outputs {
-    return new PauseCall__Outputs(this);
-  }
-}
-
-export class PauseCall__Inputs {
-  _call: PauseCall;
-
-  constructor(call: PauseCall) {
-    this._call = call;
-  }
-}
-
-export class PauseCall__Outputs {
-  _call: PauseCall;
-
-  constructor(call: PauseCall) {
-    this._call = call;
   }
 }
 
@@ -1776,36 +2445,156 @@ export class PermitCall__Outputs {
   }
 }
 
-export class SetAssetManagerPoolConfigCall extends ethereum.Call {
-  get inputs(): SetAssetManagerPoolConfigCall__Inputs {
-    return new SetAssetManagerPoolConfigCall__Inputs(this);
+export class QueryExitCall extends ethereum.Call {
+  get inputs(): QueryExitCall__Inputs {
+    return new QueryExitCall__Inputs(this);
   }
 
-  get outputs(): SetAssetManagerPoolConfigCall__Outputs {
-    return new SetAssetManagerPoolConfigCall__Outputs(this);
+  get outputs(): QueryExitCall__Outputs {
+    return new QueryExitCall__Outputs(this);
   }
 }
 
-export class SetAssetManagerPoolConfigCall__Inputs {
-  _call: SetAssetManagerPoolConfigCall;
+export class QueryExitCall__Inputs {
+  _call: QueryExitCall;
 
-  constructor(call: SetAssetManagerPoolConfigCall) {
+  constructor(call: QueryExitCall) {
     this._call = call;
   }
 
-  get token(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get poolId(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
   }
 
-  get poolConfig(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
+  get sender(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get recipient(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get balances(): Array<BigInt> {
+    return this._call.inputValues[3].value.toBigIntArray();
+  }
+
+  get lastChangeBlock(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+
+  get protocolSwapFeePercentage(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
+  }
+
+  get userData(): Bytes {
+    return this._call.inputValues[6].value.toBytes();
   }
 }
 
-export class SetAssetManagerPoolConfigCall__Outputs {
-  _call: SetAssetManagerPoolConfigCall;
+export class QueryExitCall__Outputs {
+  _call: QueryExitCall;
 
-  constructor(call: SetAssetManagerPoolConfigCall) {
+  constructor(call: QueryExitCall) {
+    this._call = call;
+  }
+
+  get bptIn(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+
+  get amountsOut(): Array<BigInt> {
+    return this._call.outputValues[1].value.toBigIntArray();
+  }
+}
+
+export class QueryJoinCall extends ethereum.Call {
+  get inputs(): QueryJoinCall__Inputs {
+    return new QueryJoinCall__Inputs(this);
+  }
+
+  get outputs(): QueryJoinCall__Outputs {
+    return new QueryJoinCall__Outputs(this);
+  }
+}
+
+export class QueryJoinCall__Inputs {
+  _call: QueryJoinCall;
+
+  constructor(call: QueryJoinCall) {
+    this._call = call;
+  }
+
+  get poolId(): Bytes {
+    return this._call.inputValues[0].value.toBytes();
+  }
+
+  get sender(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get recipient(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get balances(): Array<BigInt> {
+    return this._call.inputValues[3].value.toBigIntArray();
+  }
+
+  get lastChangeBlock(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+
+  get protocolSwapFeePercentage(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
+  }
+
+  get userData(): Bytes {
+    return this._call.inputValues[6].value.toBytes();
+  }
+}
+
+export class QueryJoinCall__Outputs {
+  _call: QueryJoinCall;
+
+  constructor(call: QueryJoinCall) {
+    this._call = call;
+  }
+
+  get bptOut(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+
+  get amountsIn(): Array<BigInt> {
+    return this._call.outputValues[1].value.toBigIntArray();
+  }
+}
+
+export class SetPausedCall extends ethereum.Call {
+  get inputs(): SetPausedCall__Inputs {
+    return new SetPausedCall__Inputs(this);
+  }
+
+  get outputs(): SetPausedCall__Outputs {
+    return new SetPausedCall__Outputs(this);
+  }
+}
+
+export class SetPausedCall__Inputs {
+  _call: SetPausedCall;
+
+  constructor(call: SetPausedCall) {
+    this._call = call;
+  }
+
+  get paused(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SetPausedCall__Outputs {
+  _call: SetPausedCall;
+
+  constructor(call: SetPausedCall) {
     this._call = call;
   }
 }
@@ -1917,31 +2706,5 @@ export class TransferFromCall__Outputs {
 
   get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
-  }
-}
-
-export class UnpauseCall extends ethereum.Call {
-  get inputs(): UnpauseCall__Inputs {
-    return new UnpauseCall__Inputs(this);
-  }
-
-  get outputs(): UnpauseCall__Outputs {
-    return new UnpauseCall__Outputs(this);
-  }
-}
-
-export class UnpauseCall__Inputs {
-  _call: UnpauseCall;
-
-  constructor(call: UnpauseCall) {
-    this._call = call;
-  }
-}
-
-export class UnpauseCall__Outputs {
-  _call: UnpauseCall;
-
-  constructor(call: UnpauseCall) {
-    this._call = call;
   }
 }

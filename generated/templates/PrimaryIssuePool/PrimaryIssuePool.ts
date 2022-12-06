@@ -68,6 +68,10 @@ export class OpenIssue__Params {
   get cutoffTime(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
+
+  get offeringDocs(): string {
+    return this._event.parameters[5].value.toString();
+  }
 }
 
 export class PausedStateChanged extends ethereum.Event {
@@ -654,6 +658,29 @@ export class PrimaryIssuePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getOfferingDocuments(): string {
+    let result = super.call(
+      "getOfferingDocuments",
+      "getOfferingDocuments():(string)",
+      []
+    );
+
+    return result[0].toString();
+  }
+
+  try_getOfferingDocuments(): ethereum.CallResult<string> {
+    let result = super.tryCall(
+      "getOfferingDocuments",
+      "getOfferingDocuments():(string)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
   }
 
   getOwner(): Address {
@@ -1353,8 +1380,8 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _factoryPoolParams(): ConstructorCall_factoryPoolParamsStruct {
-    return changetype<ConstructorCall_factoryPoolParamsStruct>(
+  get factoryPoolParams(): ConstructorCallFactoryPoolParamsStruct {
+    return changetype<ConstructorCallFactoryPoolParamsStruct>(
       this._call.inputValues[1].value.toTuple()
     );
   }
@@ -1380,7 +1407,7 @@ export class ConstructorCall__Outputs {
   }
 }
 
-export class ConstructorCall_factoryPoolParamsStruct extends ethereum.Tuple {
+export class ConstructorCallFactoryPoolParamsStruct extends ethereum.Tuple {
   get name(): string {
     return this[0].toString();
   }
@@ -1415,6 +1442,10 @@ export class ConstructorCall_factoryPoolParamsStruct extends ethereum.Tuple {
 
   get cutOffTime(): BigInt {
     return this[8].toBigInt();
+  }
+
+  get offeringDocs(): string {
+    return this[9].toString();
   }
 }
 
@@ -1546,32 +1577,6 @@ export class EnableRecoveryModeCall__Outputs {
   }
 }
 
-export class ExitCall extends ethereum.Call {
-  get inputs(): ExitCall__Inputs {
-    return new ExitCall__Inputs(this);
-  }
-
-  get outputs(): ExitCall__Outputs {
-    return new ExitCall__Outputs(this);
-  }
-}
-
-export class ExitCall__Inputs {
-  _call: ExitCall;
-
-  constructor(call: ExitCall) {
-    this._call = call;
-  }
-}
-
-export class ExitCall__Outputs {
-  _call: ExitCall;
-
-  constructor(call: ExitCall) {
-    this._call = call;
-  }
-}
-
 export class IncreaseAllowanceCall extends ethereum.Call {
   get inputs(): IncreaseAllowanceCall__Inputs {
     return new IncreaseAllowanceCall__Inputs(this);
@@ -1607,32 +1612,6 @@ export class IncreaseAllowanceCall__Outputs {
 
   get value0(): boolean {
     return this._call.outputValues[0].value.toBoolean();
-  }
-}
-
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
-  }
-
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
-  }
-}
-
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-}
-
-export class InitializeCall__Outputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
   }
 }
 
