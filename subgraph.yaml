@@ -156,6 +156,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: PrimaryIssuePoolFactory
           file: ./abis/PrimaryIssuePoolFactory.json
         - name: PrimaryIssuePool
@@ -183,6 +185,8 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: SecondaryIssuePoolFactory
           file: ./abis/SecondaryIssuePoolFactory.json
         - name: SecondaryIssuePool
@@ -918,6 +922,8 @@ templates:
         - Swap
         - PoolToken
       abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: PrimaryIssuePool
           file: ./abis/PrimaryIssuePool.json
       eventHandlers:
@@ -945,6 +951,8 @@ templates:
         - Swap
         - PoolToken
       abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
         - name: SecondaryIssuePool
           file: ./abis/SecondaryIssuePool.json
       eventHandlers:

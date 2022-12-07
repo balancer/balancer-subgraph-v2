@@ -10,20 +10,6 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class FactoryDisabled extends ethereum.Event {
-  get params(): FactoryDisabled__Params {
-    return new FactoryDisabled__Params(this);
-  }
-}
-
-export class FactoryDisabled__Params {
-  _event: FactoryDisabled;
-
-  constructor(event: FactoryDisabled) {
-    this._event = event;
-  }
-}
-
 export class PoolCreated extends ethereum.Event {
   get params(): PoolCreated__Params {
     return new PoolCreated__Params(this);
@@ -42,7 +28,83 @@ export class PoolCreated__Params {
   }
 }
 
-export class WeightedPoolFactory__getCreationCodeContractsResult {
+export class GyroCEMMPoolFactory__createInputCemmParamsStruct extends ethereum.Tuple {
+  get alpha(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get beta(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get c(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get s(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get lambda(): BigInt {
+    return this[4].toBigInt();
+  }
+}
+
+export class GyroCEMMPoolFactory__createInputDerivedCemmParamsStruct extends ethereum.Tuple {
+  get tauAlpha(): GyroCEMMPoolFactory__createInputDerivedCemmParamsTauAlphaStruct {
+    return changetype<
+      GyroCEMMPoolFactory__createInputDerivedCemmParamsTauAlphaStruct
+    >(this[0].toTuple());
+  }
+
+  get tauBeta(): GyroCEMMPoolFactory__createInputDerivedCemmParamsTauBetaStruct {
+    return changetype<
+      GyroCEMMPoolFactory__createInputDerivedCemmParamsTauBetaStruct
+    >(this[1].toTuple());
+  }
+
+  get u(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get v(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get w(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get z(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get dSq(): BigInt {
+    return this[6].toBigInt();
+  }
+}
+
+export class GyroCEMMPoolFactory__createInputDerivedCemmParamsTauAlphaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get y(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class GyroCEMMPoolFactory__createInputDerivedCemmParamsTauBetaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get y(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class GyroCEMMPoolFactory__getCreationCodeContractsResult {
   value0: Address;
   value1: Address;
 
@@ -59,7 +121,7 @@ export class WeightedPoolFactory__getCreationCodeContractsResult {
   }
 }
 
-export class WeightedPoolFactory__getPauseConfigurationResult {
+export class GyroCEMMPoolFactory__getPauseConfigurationResult {
   value0: BigInt;
   value1: BigInt;
 
@@ -76,30 +138,78 @@ export class WeightedPoolFactory__getPauseConfigurationResult {
   }
 }
 
-export class WeightedPoolFactory extends ethereum.SmartContract {
-  static bind(address: Address): WeightedPoolFactory {
-    return new WeightedPoolFactory("WeightedPoolFactory", address);
+export class GyroCEMMPoolFactory extends ethereum.SmartContract {
+  static bind(address: Address): GyroCEMMPoolFactory {
+    return new GyroCEMMPoolFactory("GyroCEMMPoolFactory", address);
+  }
+
+  BUFFER_PERIOD_DURATION(): BigInt {
+    let result = super.call(
+      "BUFFER_PERIOD_DURATION",
+      "BUFFER_PERIOD_DURATION():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_BUFFER_PERIOD_DURATION(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "BUFFER_PERIOD_DURATION",
+      "BUFFER_PERIOD_DURATION():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  PAUSE_WINDOW_DURATION(): BigInt {
+    let result = super.call(
+      "PAUSE_WINDOW_DURATION",
+      "PAUSE_WINDOW_DURATION():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_PAUSE_WINDOW_DURATION(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "PAUSE_WINDOW_DURATION",
+      "PAUSE_WINDOW_DURATION():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   create(
     name: string,
     symbol: string,
     tokens: Array<Address>,
-    normalizedWeights: Array<BigInt>,
-    rateProviders: Array<Address>,
+    cemmParams: GyroCEMMPoolFactory__createInputCemmParamsStruct,
+    derivedCemmParams: GyroCEMMPoolFactory__createInputDerivedCemmParamsStruct,
     swapFeePercentage: BigInt,
+    oracleEnabled: boolean,
     owner: Address
   ): Address {
     let result = super.call(
       "create",
-      "create(string,string,address[],uint256[],address[],uint256,address):(address)",
+      "create(string,string,address[],(int256,int256,int256,int256,int256),((int256,int256),(int256,int256),int256,int256,int256,int256,int256),uint256,bool,address):(address)",
       [
         ethereum.Value.fromString(name),
         ethereum.Value.fromString(symbol),
         ethereum.Value.fromAddressArray(tokens),
-        ethereum.Value.fromUnsignedBigIntArray(normalizedWeights),
-        ethereum.Value.fromAddressArray(rateProviders),
+        ethereum.Value.fromTuple(cemmParams),
+        ethereum.Value.fromTuple(derivedCemmParams),
         ethereum.Value.fromUnsignedBigInt(swapFeePercentage),
+        ethereum.Value.fromBoolean(oracleEnabled),
         ethereum.Value.fromAddress(owner)
       ]
     );
@@ -111,61 +221,25 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     name: string,
     symbol: string,
     tokens: Array<Address>,
-    normalizedWeights: Array<BigInt>,
-    rateProviders: Array<Address>,
+    cemmParams: GyroCEMMPoolFactory__createInputCemmParamsStruct,
+    derivedCemmParams: GyroCEMMPoolFactory__createInputDerivedCemmParamsStruct,
     swapFeePercentage: BigInt,
+    oracleEnabled: boolean,
     owner: Address
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "create",
-      "create(string,string,address[],uint256[],address[],uint256,address):(address)",
+      "create(string,string,address[],(int256,int256,int256,int256,int256),((int256,int256),(int256,int256),int256,int256,int256,int256,int256),uint256,bool,address):(address)",
       [
         ethereum.Value.fromString(name),
         ethereum.Value.fromString(symbol),
         ethereum.Value.fromAddressArray(tokens),
-        ethereum.Value.fromUnsignedBigIntArray(normalizedWeights),
-        ethereum.Value.fromAddressArray(rateProviders),
+        ethereum.Value.fromTuple(cemmParams),
+        ethereum.Value.fromTuple(derivedCemmParams),
         ethereum.Value.fromUnsignedBigInt(swapFeePercentage),
+        ethereum.Value.fromBoolean(oracleEnabled),
         ethereum.Value.fromAddress(owner)
       ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  getActionId(selector: Bytes): Bytes {
-    let result = super.call("getActionId", "getActionId(bytes4):(bytes32)", [
-      ethereum.Value.fromFixedBytes(selector)
-    ]);
-
-    return result[0].toBytes();
-  }
-
-  try_getActionId(selector: Bytes): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("getActionId", "getActionId(bytes4):(bytes32)", [
-      ethereum.Value.fromFixedBytes(selector)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  getAuthorizer(): Address {
-    let result = super.call("getAuthorizer", "getAuthorizer():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_getAuthorizer(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getAuthorizer",
-      "getAuthorizer():(address)",
-      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -193,21 +267,21 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  getCreationCodeContracts(): WeightedPoolFactory__getCreationCodeContractsResult {
+  getCreationCodeContracts(): GyroCEMMPoolFactory__getCreationCodeContractsResult {
     let result = super.call(
       "getCreationCodeContracts",
       "getCreationCodeContracts():(address,address)",
       []
     );
 
-    return new WeightedPoolFactory__getCreationCodeContractsResult(
+    return new GyroCEMMPoolFactory__getCreationCodeContractsResult(
       result[0].toAddress(),
       result[1].toAddress()
     );
   }
 
   try_getCreationCodeContracts(): ethereum.CallResult<
-    WeightedPoolFactory__getCreationCodeContractsResult
+    GyroCEMMPoolFactory__getCreationCodeContractsResult
   > {
     let result = super.tryCall(
       "getCreationCodeContracts",
@@ -219,28 +293,28 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new WeightedPoolFactory__getCreationCodeContractsResult(
+      new GyroCEMMPoolFactory__getCreationCodeContractsResult(
         value[0].toAddress(),
         value[1].toAddress()
       )
     );
   }
 
-  getPauseConfiguration(): WeightedPoolFactory__getPauseConfigurationResult {
+  getPauseConfiguration(): GyroCEMMPoolFactory__getPauseConfigurationResult {
     let result = super.call(
       "getPauseConfiguration",
       "getPauseConfiguration():(uint256,uint256)",
       []
     );
 
-    return new WeightedPoolFactory__getPauseConfigurationResult(
+    return new GyroCEMMPoolFactory__getPauseConfigurationResult(
       result[0].toBigInt(),
       result[1].toBigInt()
     );
   }
 
   try_getPauseConfiguration(): ethereum.CallResult<
-    WeightedPoolFactory__getPauseConfigurationResult
+    GyroCEMMPoolFactory__getPauseConfigurationResult
   > {
     let result = super.tryCall(
       "getPauseConfiguration",
@@ -252,34 +326,11 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new WeightedPoolFactory__getPauseConfigurationResult(
+      new GyroCEMMPoolFactory__getPauseConfigurationResult(
         value[0].toBigInt(),
         value[1].toBigInt()
       )
     );
-  }
-
-  getProtocolFeePercentagesProvider(): Address {
-    let result = super.call(
-      "getProtocolFeePercentagesProvider",
-      "getProtocolFeePercentagesProvider():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_getProtocolFeePercentagesProvider(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getProtocolFeePercentagesProvider",
-      "getProtocolFeePercentagesProvider():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getVault(): Address {
@@ -297,19 +348,27 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  isDisabled(): boolean {
-    let result = super.call("isDisabled", "isDisabled():(bool)", []);
+  gyroConfigAddress(): Address {
+    let result = super.call(
+      "gyroConfigAddress",
+      "gyroConfigAddress():(address)",
+      []
+    );
 
-    return result[0].toBoolean();
+    return result[0].toAddress();
   }
 
-  try_isDisabled(): ethereum.CallResult<boolean> {
-    let result = super.tryCall("isDisabled", "isDisabled():(bool)", []);
+  try_gyroConfigAddress(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "gyroConfigAddress",
+      "gyroConfigAddress():(address)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   isPoolFromFactory(pool: Address): boolean {
@@ -357,7 +416,7 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get protocolFeeProvider(): Address {
+  get _gyroConfigAddress(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 }
@@ -399,20 +458,28 @@ export class CreateCall__Inputs {
     return this._call.inputValues[2].value.toAddressArray();
   }
 
-  get normalizedWeights(): Array<BigInt> {
-    return this._call.inputValues[3].value.toBigIntArray();
+  get cemmParams(): CreateCallCemmParamsStruct {
+    return changetype<CreateCallCemmParamsStruct>(
+      this._call.inputValues[3].value.toTuple()
+    );
   }
 
-  get rateProviders(): Array<Address> {
-    return this._call.inputValues[4].value.toAddressArray();
+  get derivedCemmParams(): CreateCallDerivedCemmParamsStruct {
+    return changetype<CreateCallDerivedCemmParamsStruct>(
+      this._call.inputValues[4].value.toTuple()
+    );
   }
 
   get swapFeePercentage(): BigInt {
     return this._call.inputValues[5].value.toBigInt();
   }
 
+  get oracleEnabled(): boolean {
+    return this._call.inputValues[6].value.toBoolean();
+  }
+
   get owner(): Address {
-    return this._call.inputValues[6].value.toAddress();
+    return this._call.inputValues[7].value.toAddress();
   }
 }
 
@@ -428,28 +495,78 @@ export class CreateCall__Outputs {
   }
 }
 
-export class DisableCall extends ethereum.Call {
-  get inputs(): DisableCall__Inputs {
-    return new DisableCall__Inputs(this);
+export class CreateCallCemmParamsStruct extends ethereum.Tuple {
+  get alpha(): BigInt {
+    return this[0].toBigInt();
   }
 
-  get outputs(): DisableCall__Outputs {
-    return new DisableCall__Outputs(this);
+  get beta(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get c(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get s(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get lambda(): BigInt {
+    return this[4].toBigInt();
   }
 }
 
-export class DisableCall__Inputs {
-  _call: DisableCall;
+export class CreateCallDerivedCemmParamsStruct extends ethereum.Tuple {
+  get tauAlpha(): CreateCallDerivedCemmParamsTauAlphaStruct {
+    return changetype<CreateCallDerivedCemmParamsTauAlphaStruct>(
+      this[0].toTuple()
+    );
+  }
 
-  constructor(call: DisableCall) {
-    this._call = call;
+  get tauBeta(): CreateCallDerivedCemmParamsTauBetaStruct {
+    return changetype<CreateCallDerivedCemmParamsTauBetaStruct>(
+      this[1].toTuple()
+    );
+  }
+
+  get u(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get v(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get w(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get z(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get dSq(): BigInt {
+    return this[6].toBigInt();
   }
 }
 
-export class DisableCall__Outputs {
-  _call: DisableCall;
+export class CreateCallDerivedCemmParamsTauAlphaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
 
-  constructor(call: DisableCall) {
-    this._call = call;
+  get y(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class CreateCallDerivedCemmParamsTauBetaStruct extends ethereum.Tuple {
+  get x(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get y(): BigInt {
+    return this[1].toBigInt();
   }
 }

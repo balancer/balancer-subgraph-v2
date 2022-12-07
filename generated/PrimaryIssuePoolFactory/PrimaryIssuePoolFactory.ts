@@ -78,6 +78,10 @@ export class PrimaryIssuePoolFactory__createInput_factoryPoolParamsStruct extend
   get cutOffTime(): BigInt {
     return this[8].toBigInt();
   }
+
+  get offeringDocs(): string {
+    return this[9].toString();
+  }
 }
 
 export class PrimaryIssuePoolFactory__getCreationCodeContractsResult {
@@ -124,7 +128,7 @@ export class PrimaryIssuePoolFactory extends ethereum.SmartContract {
   ): Address {
     let result = super.call(
       "create",
-      "create((string,string,address,address,uint256,uint256,uint256,uint256,uint256)):(address)",
+      "create((string,string,address,address,uint256,uint256,uint256,uint256,uint256,string)):(address)",
       [ethereum.Value.fromTuple(_factoryPoolParams)]
     );
 
@@ -136,7 +140,7 @@ export class PrimaryIssuePoolFactory extends ethereum.SmartContract {
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "create",
-      "create((string,string,address,address,uint256,uint256,uint256,uint256,uint256)):(address)",
+      "create((string,string,address,address,uint256,uint256,uint256,uint256,uint256,string)):(address)",
       [ethereum.Value.fromTuple(_factoryPoolParams)]
     );
     if (result.reverted) {
@@ -451,6 +455,10 @@ export class CreateCall_factoryPoolParamsStruct extends ethereum.Tuple {
 
   get cutOffTime(): BigInt {
     return this[8].toBigInt();
+  }
+
+  get offeringDocs(): string {
+    return this[9].toString();
   }
 }
 

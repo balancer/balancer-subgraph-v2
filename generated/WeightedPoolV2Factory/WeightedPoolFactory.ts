@@ -10,6 +10,20 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class FactoryDisabled extends ethereum.Event {
+  get params(): FactoryDisabled__Params {
+    return new FactoryDisabled__Params(this);
+  }
+}
+
+export class FactoryDisabled__Params {
+  _event: FactoryDisabled;
+
+  constructor(event: FactoryDisabled) {
+    this._event = event;
+  }
+}
+
 export class PoolCreated extends ethereum.Event {
   get params(): PoolCreated__Params {
     return new PoolCreated__Params(this);
@@ -25,6 +39,23 @@ export class PoolCreated__Params {
 
   get pool(): Address {
     return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class WeightedPoolFactory__getCreationCodeContractsResult {
+  value0: Address;
+  value1: Address;
+
+  constructor(value0: Address, value1: Address) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value1", ethereum.Value.fromAddress(this.value1));
+    return map;
   }
 }
 
@@ -54,18 +85,20 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     name: string,
     symbol: string,
     tokens: Array<Address>,
-    weights: Array<BigInt>,
+    normalizedWeights: Array<BigInt>,
+    rateProviders: Array<Address>,
     swapFeePercentage: BigInt,
     owner: Address
   ): Address {
     let result = super.call(
       "create",
-      "create(string,string,address[],uint256[],uint256,address):(address)",
+      "create(string,string,address[],uint256[],address[],uint256,address):(address)",
       [
         ethereum.Value.fromString(name),
         ethereum.Value.fromString(symbol),
         ethereum.Value.fromAddressArray(tokens),
-        ethereum.Value.fromUnsignedBigIntArray(weights),
+        ethereum.Value.fromUnsignedBigIntArray(normalizedWeights),
+        ethereum.Value.fromAddressArray(rateProviders),
         ethereum.Value.fromUnsignedBigInt(swapFeePercentage),
         ethereum.Value.fromAddress(owner)
       ]
@@ -78,18 +111,20 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     name: string,
     symbol: string,
     tokens: Array<Address>,
-    weights: Array<BigInt>,
+    normalizedWeights: Array<BigInt>,
+    rateProviders: Array<Address>,
     swapFeePercentage: BigInt,
     owner: Address
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "create",
-      "create(string,string,address[],uint256[],uint256,address):(address)",
+      "create(string,string,address[],uint256[],address[],uint256,address):(address)",
       [
         ethereum.Value.fromString(name),
         ethereum.Value.fromString(symbol),
         ethereum.Value.fromAddressArray(tokens),
-        ethereum.Value.fromUnsignedBigIntArray(weights),
+        ethereum.Value.fromUnsignedBigIntArray(normalizedWeights),
+        ethereum.Value.fromAddressArray(rateProviders),
         ethereum.Value.fromUnsignedBigInt(swapFeePercentage),
         ethereum.Value.fromAddress(owner)
       ]
@@ -99,6 +134,96 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getActionId(selector: Bytes): Bytes {
+    let result = super.call("getActionId", "getActionId(bytes4):(bytes32)", [
+      ethereum.Value.fromFixedBytes(selector)
+    ]);
+
+    return result[0].toBytes();
+  }
+
+  try_getActionId(selector: Bytes): ethereum.CallResult<Bytes> {
+    let result = super.tryCall("getActionId", "getActionId(bytes4):(bytes32)", [
+      ethereum.Value.fromFixedBytes(selector)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  getAuthorizer(): Address {
+    let result = super.call("getAuthorizer", "getAuthorizer():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_getAuthorizer(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getAuthorizer",
+      "getAuthorizer():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  getCreationCode(): Bytes {
+    let result = super.call("getCreationCode", "getCreationCode():(bytes)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_getCreationCode(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "getCreationCode",
+      "getCreationCode():(bytes)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  getCreationCodeContracts(): WeightedPoolFactory__getCreationCodeContractsResult {
+    let result = super.call(
+      "getCreationCodeContracts",
+      "getCreationCodeContracts():(address,address)",
+      []
+    );
+
+    return new WeightedPoolFactory__getCreationCodeContractsResult(
+      result[0].toAddress(),
+      result[1].toAddress()
+    );
+  }
+
+  try_getCreationCodeContracts(): ethereum.CallResult<
+    WeightedPoolFactory__getCreationCodeContractsResult
+  > {
+    let result = super.tryCall(
+      "getCreationCodeContracts",
+      "getCreationCodeContracts():(address,address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new WeightedPoolFactory__getCreationCodeContractsResult(
+        value[0].toAddress(),
+        value[1].toAddress()
+      )
+    );
   }
 
   getPauseConfiguration(): WeightedPoolFactory__getPauseConfigurationResult {
@@ -134,6 +259,29 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     );
   }
 
+  getProtocolFeePercentagesProvider(): Address {
+    let result = super.call(
+      "getProtocolFeePercentagesProvider",
+      "getProtocolFeePercentagesProvider():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getProtocolFeePercentagesProvider(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getProtocolFeePercentagesProvider",
+      "getProtocolFeePercentagesProvider():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getVault(): Address {
     let result = super.call("getVault", "getVault():(address)", []);
 
@@ -147,6 +295,21 @@ export class WeightedPoolFactory extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  isDisabled(): boolean {
+    let result = super.call("isDisabled", "isDisabled():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_isDisabled(): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isDisabled", "isDisabled():(bool)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   isPoolFromFactory(pool: Address): boolean {
@@ -193,6 +356,10 @@ export class ConstructorCall__Inputs {
   get vault(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
+
+  get protocolFeeProvider(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
@@ -232,16 +399,20 @@ export class CreateCall__Inputs {
     return this._call.inputValues[2].value.toAddressArray();
   }
 
-  get weights(): Array<BigInt> {
+  get normalizedWeights(): Array<BigInt> {
     return this._call.inputValues[3].value.toBigIntArray();
   }
 
+  get rateProviders(): Array<Address> {
+    return this._call.inputValues[4].value.toAddressArray();
+  }
+
   get swapFeePercentage(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
+    return this._call.inputValues[5].value.toBigInt();
   }
 
   get owner(): Address {
-    return this._call.inputValues[5].value.toAddress();
+    return this._call.inputValues[6].value.toAddress();
   }
 }
 
@@ -254,5 +425,31 @@ export class CreateCall__Outputs {
 
   get value0(): Address {
     return this._call.outputValues[0].value.toAddress();
+  }
+}
+
+export class DisableCall extends ethereum.Call {
+  get inputs(): DisableCall__Inputs {
+    return new DisableCall__Inputs(this);
+  }
+
+  get outputs(): DisableCall__Outputs {
+    return new DisableCall__Outputs(this);
+  }
+}
+
+export class DisableCall__Inputs {
+  _call: DisableCall;
+
+  constructor(call: DisableCall) {
+    this._call = call;
+  }
+}
+
+export class DisableCall__Outputs {
+  _call: DisableCall;
+
+  constructor(call: DisableCall) {
+    this._call = call;
   }
 }
