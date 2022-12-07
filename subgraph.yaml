@@ -140,9 +140,9 @@ dataSources:
     name: PrimaryIssuePoolFactory
     network: goerli
     source:
-      address: '0xA3b2c452dE0d7F70f60862d8f0EBC6540F928E4b'
+      address: '0xfA818981Fe058d273e6b7c51B8DCDe7060A4fAD2'
       abi: PrimaryIssuePoolFactory
-      startBlock: 8080943
+      startBlock: 8087176
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -169,9 +169,9 @@ dataSources:
     name: SecondaryIssuePoolFactory
     network: goerli
     source:
-      address: '0x55ec2F142E9f1aAd7694CA049940764a9CaEEc92'
+      address: '0x06A1Ce95931B274b311a48A6830070266fEabc02'
       abi: SecondaryIssuePoolFactory
-      startBlock: 8080965
+      startBlock: 8087182
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
