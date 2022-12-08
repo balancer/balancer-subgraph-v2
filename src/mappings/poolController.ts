@@ -22,7 +22,7 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate } from '../types/schema';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PrimaryIssues, SecondaryTrades } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -259,6 +259,9 @@ export function handleTargetsSet(event: TargetsSet): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
   
+  pool.security = event.params.security;
+  pool.cutoffTime = tokenToDecimal(event.params.cutoffTime, 18);
+  pool.offeringDocs = event.params.offeringDocs;
   pool.openingPrice = tokenToDecimal(event.params.openingPrice, 18);
   pool.securityOffered = tokenToDecimal(event.params.securityOffered, 18);
   pool.save();
@@ -274,14 +277,14 @@ export function handleSubscription(event: Subscription): void {
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
   let provider = loadPrimarySubscriptions(poolId.toHexString(), event.params.security);
-  /*if (provider == null) {
+  if (provider == null) {
     // Primary subscriptions and pooltokens share an ID
     let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
     provider = new PrimaryIssues(providerId);
-    provider.pool = poolId.toHexString();
-  }*/
-  
-  pool.save();
+    provider.pool = poolId.toHexString(); 
+  }
+    
+  provider.save();
 }
 
 /************************************
@@ -297,6 +300,7 @@ export function handleSubscription(event: Subscription): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
   
+  pool.security = event.params.security;
   pool.secondaryOffer = tokenToDecimal(event.params.secondaryOffer, 18);
   
   pool.save();
@@ -325,15 +329,15 @@ export function handleTradeReport(event: TradeReport): void {
 
   let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  let provider = loadSecondaryTrades(poolId.toHexString(), event.params.security);
-  /*if (provider == null) {
+  let provider  = loadSecondaryTrades(poolId.toHexString(), event.params.security);
+  if (provider == null) {
     // Secondary trades and pooltokens share an ID
     let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
     provider = new SecondaryTrades(providerId);
     provider.pool = poolId.toHexString();
-  }*/
+  }
   
-  pool.save();
+  provider.save();
 }
 
 /************************************
