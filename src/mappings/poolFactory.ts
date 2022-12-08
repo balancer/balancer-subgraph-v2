@@ -234,6 +234,10 @@ export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
+export function handleNewYearnLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.YearnLinear);
+}
+
 function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
 
