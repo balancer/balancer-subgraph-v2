@@ -117,6 +117,7 @@ type Pool @entity {
   
   # SecondaryPool only
   secondaryOffer: BigDecimal
+  orderBook: Bytes
   bestUnfilledBid: BigDecimal 
   bestUnfilledOffer: BigDecimal
   secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "pool")

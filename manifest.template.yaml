@@ -1160,7 +1160,7 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: OpenIssue(indexed address,uint256,uint256,uint256,uint256,string)
+        - event: OpenIssue(indexed address,uint256,address,uint256,uint256,string)
           handler: handleOpenIssue
         - event: Subscription(indexed address,address,string,uint256,address,uint256)
           handler: handleSubscription
@@ -1189,7 +1189,7 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: Offer(indexed address,uint256)
+        - event: Offer(indexed address,uint256,address,address)
           handler: handleSecondaryOffer
         - event: TradeReport(indexed address,address,address,uint256,uint256,address,uint256,bytes32,uint256)
           handler: handleTradeReport

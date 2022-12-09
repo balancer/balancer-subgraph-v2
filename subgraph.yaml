@@ -140,9 +140,9 @@ dataSources:
     name: PrimaryIssuePoolFactory
     network: goerli
     source:
-      address: '0xfA818981Fe058d273e6b7c51B8DCDe7060A4fAD2'
+      address: '0x98d83E59A1751515D8f8813B17Ec05C307C04000'
       abi: PrimaryIssuePoolFactory
-      startBlock: 8087176
+      startBlock: 8101980
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -169,9 +169,9 @@ dataSources:
     name: SecondaryIssuePoolFactory
     network: goerli
     source:
-      address: '0x06A1Ce95931B274b311a48A6830070266fEabc02'
+      address: '0xB665af88c7a1Cf8a9fAb4469160b245c13476741'
       abi: SecondaryIssuePoolFactory
-      startBlock: 8087182
+      startBlock: 8101987
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -931,7 +931,7 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: OpenIssue(indexed address,uint256,uint256,uint256,uint256,string)
+        - event: OpenIssue(indexed address,uint256,address,uint256,uint256,string)
           handler: handleOpenIssue
         - event: Subscription(indexed address,address,string,uint256,address,uint256)
           handler: handleSubscription
@@ -960,7 +960,7 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: Offer(indexed address,uint256)
+        - event: Offer(indexed address,uint256,address,address)
           handler: handleSecondaryOffer
         - event: TradeReport(indexed address,address,address,uint256,uint256,address,uint256,bytes32,uint256)
           handler: handleTradeReport

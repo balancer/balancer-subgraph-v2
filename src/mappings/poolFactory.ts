@@ -276,12 +276,16 @@ export function handleNewSecondaryPool(event: PoolCreated): void {
   let ownerCall = poolContract.try_getOwner();
   let balancerManager = ownerCall.value;
 
+  let orderBookCall = poolContract.try_getOrderbook();
+  let orderBook = orderBookCall.value;
+
   let pool = handleNewPool(event, poolId, swapFee);
   pool.poolType = PoolType.SecondaryIssue;
   pool.factory = event.address;
   pool.owner = balancerManager;
   pool.principalToken = security;
   pool.baseToken = currency;
+  pool.orderBook = orderBook;
 
   let tokens = getPoolTokens(poolId);
   if (tokens == null) return;
