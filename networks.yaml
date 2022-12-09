@@ -165,7 +165,7 @@ polygon:
     startBlock: 35414865
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
-    startBlock: 32054794
+    startBlock: 32054793
 arbitrum:
   network: arbitrum-one
   # graft:
