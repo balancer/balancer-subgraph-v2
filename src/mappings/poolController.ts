@@ -275,20 +275,14 @@ export function handleSubscription(event: Subscription): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  let subscriptions = loadPrimarySubscriptions(poolId.toHexString(), event.params.security);
-  if (subscriptions == null) {
-    // Primary subscriptions and pooltokens share an ID
-    let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
-    subscriptions = new PrimaryIssues(providerId);    
-  }
+  let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
+  let subscriptions = new PrimaryIssues(providerId);    
   
   subscriptions.pool = poolId.toHexString(); 
-  subscriptions.assetName = event.params.assetName;
   subscriptions.amount = tokenToDecimal(event.params.amount, 18);
   subscriptions.price = tokenToDecimal(event.params.price, 18);
-    
+  subscriptions.executionDate = event.block.timestamp;
+  
   subscriptions.save();
 }
 
@@ -334,19 +328,14 @@ export function handleTradeReport(event: TradeReport): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  let trades  = loadSecondaryTrades(poolId.toHexString(), event.params.security);
-  if (trades == null) {
-    // Secondary trades and pooltokens share an ID
-    let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
-    trades = new SecondaryTrades(providerId);    
-  }
+  let providerId = getPoolTokenId(poolId.toHexString(), event.params.security);
+  let trades = new SecondaryTrades(providerId);    
   
   trades.pool = poolId.toHexString();
   trades.amount = tokenToDecimal(event.params.amount, 18);
   trades.askPrice = tokenToDecimal(event.params.askprice, 18);
   trades.price = tokenToDecimal(event.params.price, 18);
+  trades.executionDate = event.params.executionDate;
 
   trades.save();
 }

@@ -1188,24 +1188,13 @@ export class Pool extends Entity {
     }
   }
 
-  get primarySubscriptions(): Array<string> | null {
+  get primarySubscriptions(): Array<string> {
     let value = this.get("primarySubscriptions");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
+    return value!.toStringArray();
   }
 
-  set primarySubscriptions(value: Array<string> | null) {
-    if (!value) {
-      this.unset("primarySubscriptions");
-    } else {
-      this.set(
-        "primarySubscriptions",
-        Value.fromStringArray(<Array<string>>value)
-      );
-    }
+  set primarySubscriptions(value: Array<string>) {
+    this.set("primarySubscriptions", Value.fromStringArray(value));
   }
 
   get secondaryOffer(): BigDecimal | null {
@@ -1276,21 +1265,13 @@ export class Pool extends Entity {
     }
   }
 
-  get secondaryTrades(): Array<string> | null {
+  get secondaryTrades(): Array<string> {
     let value = this.get("secondaryTrades");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
+    return value!.toStringArray();
   }
 
-  set secondaryTrades(value: Array<string> | null) {
-    if (!value) {
-      this.unset("secondaryTrades");
-    } else {
-      this.set("secondaryTrades", Value.fromStringArray(<Array<string>>value));
-    }
+  set secondaryTrades(value: Array<string>) {
+    this.set("secondaryTrades", Value.fromStringArray(value));
   }
 }
 
@@ -1300,12 +1281,10 @@ export class PrimaryIssues extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("pool", Value.fromString(""));
-    this.set("security", Value.fromString(""));
-    this.set("assetIn", Value.fromString(""));
-    this.set("assetName", Value.fromString(""));
     this.set("amount", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("investor", Value.fromString(""));
     this.set("price", Value.fromBigDecimal(BigDecimal.zero()));
+    this.set("executionDate", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -1343,33 +1322,6 @@ export class PrimaryIssues extends Entity {
     this.set("pool", Value.fromString(value));
   }
 
-  get security(): string {
-    let value = this.get("security");
-    return value!.toString();
-  }
-
-  set security(value: string) {
-    this.set("security", Value.fromString(value));
-  }
-
-  get assetIn(): string {
-    let value = this.get("assetIn");
-    return value!.toString();
-  }
-
-  set assetIn(value: string) {
-    this.set("assetIn", Value.fromString(value));
-  }
-
-  get assetName(): string {
-    let value = this.get("assetName");
-    return value!.toString();
-  }
-
-  set assetName(value: string) {
-    this.set("assetName", Value.fromString(value));
-  }
-
   get amount(): BigDecimal {
     let value = this.get("amount");
     return value!.toBigDecimal();
@@ -1396,6 +1348,15 @@ export class PrimaryIssues extends Entity {
   set price(value: BigDecimal) {
     this.set("price", Value.fromBigDecimal(value));
   }
+
+  get executionDate(): BigInt {
+    let value = this.get("executionDate");
+    return value!.toBigInt();
+  }
+
+  set executionDate(value: BigInt) {
+    this.set("executionDate", Value.fromBigInt(value));
+  }
 }
 
 export class SecondaryTrades extends Entity {
@@ -1404,15 +1365,13 @@ export class SecondaryTrades extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("pool", Value.fromString(""));
-    this.set("security", Value.fromString(""));
     this.set("party", Value.fromString(""));
     this.set("counterparty", Value.fromString(""));
     this.set("price", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("askPrice", Value.fromBigDecimal(BigDecimal.zero()));
-    this.set("currency", Value.fromString(""));
     this.set("amount", Value.fromBigDecimal(BigDecimal.zero()));
     this.set("status", Value.fromBytes(Bytes.empty()));
-    this.set("executionDate", Value.fromI32(0));
+    this.set("executionDate", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -1448,15 +1407,6 @@ export class SecondaryTrades extends Entity {
 
   set pool(value: string) {
     this.set("pool", Value.fromString(value));
-  }
-
-  get security(): string {
-    let value = this.get("security");
-    return value!.toString();
-  }
-
-  set security(value: string) {
-    this.set("security", Value.fromString(value));
   }
 
   get party(): string {
@@ -1495,15 +1445,6 @@ export class SecondaryTrades extends Entity {
     this.set("askPrice", Value.fromBigDecimal(value));
   }
 
-  get currency(): string {
-    let value = this.get("currency");
-    return value!.toString();
-  }
-
-  set currency(value: string) {
-    this.set("currency", Value.fromString(value));
-  }
-
   get amount(): BigDecimal {
     let value = this.get("amount");
     return value!.toBigDecimal();
@@ -1522,13 +1463,13 @@ export class SecondaryTrades extends Entity {
     this.set("status", Value.fromBytes(value));
   }
 
-  get executionDate(): i32 {
+  get executionDate(): BigInt {
     let value = this.get("executionDate");
-    return value!.toI32();
+    return value!.toBigInt();
   }
 
-  set executionDate(value: i32) {
-    this.set("executionDate", Value.fromI32(value));
+  set executionDate(value: BigInt) {
+    this.set("executionDate", Value.fromBigInt(value));
   }
 }
 
