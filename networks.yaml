@@ -21,6 +21,9 @@ mainnet:
   ComposableStablePoolFactory:
     address: "0xf9ac7B9dF2b3454E841110CcE5550bD5AC6f875F"
     startBlock: 15485885
+  ComposableStablePoolV2Factory:
+    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
+    startBlock: 16083775
   HighAmpComposableStablePoolFactory:
     address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
     startBlock: 15852258
@@ -89,6 +92,9 @@ goerli:
   ComposableStablePoolFactory:
     address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
     startBlock: 7542764
+  ComposableStablePoolV2Factory:
+    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
+    startBlock: 16083775
   HighAmpComposableStablePoolFactory:
     address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
     startBlock: 7842251
@@ -127,6 +133,9 @@ polygon:
   ComposableStablePoolFactory:
     address: "0x136FD06Fa01eCF624C7F2B3CB15742c1339dC2c4"
     startBlock: 32774224
+  ComposableStablePoolV2Factory:
+    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
+    startBlock: 36258226
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 17913016
@@ -192,6 +201,9 @@ arbitrum:
   ComposableStablePoolFactory:
     address: "0xaEb406b0E430BF5Ea2Dc0B9Fe62E4E53f74B3a33"
     startBlock: 23227044
+  ComposableStablePoolV2Factory:
+    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
+    startBlock: 42468618
   LiquidityBootstrappingPoolFactory:
     address: "0x142B9666a0a3A30477b052962ddA81547E7029ab"
     startBlock: 222870
