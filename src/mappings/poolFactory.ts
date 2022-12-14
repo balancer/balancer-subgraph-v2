@@ -223,23 +223,37 @@ export function handleNewCCPPool(event: PoolCreated): void {
   CCPoolTemplate.create(poolAddress);
 }
 
-export function handleNewAaveLinearPool(event: AaveLinearPoolCreated): void {
+export function handleNewAaveLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear);
 }
 
-export function handleNewAaveLinearPoolV2(event: AaveLinearPoolCreated): void {
+export function handleNewAaveLinearPoolV2(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear, 2);
 }
 
 export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
-  handleNewLinearPool(event, PoolType.AaveLinear, 2);
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
 }
 
-export function handleNewERC4626LinearPool(event: AaveLinearPoolCreated): void {
+export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
-function handleNewLinearPool(event: AaveLinearPoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
+function handleNewLinearPool(
+  event: PoolCreated,
+  poolType: string,
+  poolTypeVersion: i32 = 1,
+  protocolId: i32 = null
+): void {
   let poolAddress: Address = event.params.pool;
 
   let poolContract = LinearPool.bind(poolAddress);
@@ -254,9 +268,7 @@ function handleNewLinearPool(event: AaveLinearPoolCreated, poolType: string, poo
 
   pool.poolType = poolType;
   pool.poolTypeVersion = poolTypeVersion;
-  if (event.params.protocolId) {
-    pool.protocolId = event.params.protocolId.toI32();
-  }
+  pool.protocolId = protocolId;
 
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
