@@ -102,6 +102,9 @@ type Pool @entity {
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
+
+  # AaveLinearV3 Only
+  protocolId: Int
 }
 
 type PoolContract @entity {

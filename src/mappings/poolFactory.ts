@@ -19,6 +19,7 @@ import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
+import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -222,19 +223,23 @@ export function handleNewCCPPool(event: PoolCreated): void {
   CCPoolTemplate.create(poolAddress);
 }
 
-export function handleNewAaveLinearPool(event: PoolCreated): void {
+export function handleNewAaveLinearPool(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear);
 }
 
-export function handleNewAaveLinearPoolV2(event: PoolCreated): void {
+export function handleNewAaveLinearPoolV2(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear, 2);
 }
 
-export function handleNewERC4626LinearPool(event: PoolCreated): void {
+export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear, 2);
+}
+
+export function handleNewERC4626LinearPool(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
-function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
+function handleNewLinearPool(event: AaveLinearPoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
 
   let poolContract = LinearPool.bind(poolAddress);
@@ -249,6 +254,9 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
 
   pool.poolType = poolType;
   pool.poolTypeVersion = poolTypeVersion;
+  if (event.params.protocolId) {
+    pool.protocolId = event.params.protocolId.toI32();
+  }
 
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
