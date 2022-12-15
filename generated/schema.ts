@@ -1188,13 +1188,24 @@ export class Pool extends Entity {
     }
   }
 
-  get primarySubscriptions(): Array<string> {
+  get primarySubscriptions(): Array<string> | null {
     let value = this.get("primarySubscriptions");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set primarySubscriptions(value: Array<string>) {
-    this.set("primarySubscriptions", Value.fromStringArray(value));
+  set primarySubscriptions(value: Array<string> | null) {
+    if (!value) {
+      this.unset("primarySubscriptions");
+    } else {
+      this.set(
+        "primarySubscriptions",
+        Value.fromStringArray(<Array<string>>value)
+      );
+    }
   }
 
   get secondaryOffer(): BigDecimal | null {
@@ -1265,13 +1276,21 @@ export class Pool extends Entity {
     }
   }
 
-  get secondaryTrades(): Array<string> {
+  get secondaryTrades(): Array<string> | null {
     let value = this.get("secondaryTrades");
-    return value!.toStringArray();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set secondaryTrades(value: Array<string>) {
-    this.set("secondaryTrades", Value.fromStringArray(value));
+  set secondaryTrades(value: Array<string> | null) {
+    if (!value) {
+      this.unset("secondaryTrades");
+    } else {
+      this.set("secondaryTrades", Value.fromStringArray(<Array<string>>value));
+    }
   }
 }
 

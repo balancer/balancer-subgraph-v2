@@ -275,28 +275,28 @@ export function handleSubscription(event: Subscription): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  //let pool = Pool.load(poolId.toHexString()) as Pool;
   
-  let subscriptions = loadPrimarySubscriptions(pool.primarySubscriptions.length.toString(), event.params.security);
+  let subscriptions = loadPrimarySubscriptions(event.transaction.hash.toHexString(), event.params.security);
   if (subscriptions == null) {
-    let providerId = getPoolTokenId(pool.primarySubscriptions.length.toString(), event.params.security);
+    let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.security);
     let subscriptions = new PrimaryIssues(providerId); 
     subscriptions.pool = poolId.toHexString();   
     subscriptions.amount = tokenToDecimal(event.params.amount, 18);
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.save();
-    pool.primarySubscriptions.push(subscriptions.id); 
+    //pool.primarySubscriptions.push(subscriptions.id.toString()); 
   }
   else{
     subscriptions.amount = tokenToDecimal(event.params.amount, 18);
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.save();
-    pool.primarySubscriptions.push(subscriptions.id); 
+  //  pool.primarySubscriptions.push(subscriptions.id.toString()); 
   }
   
-  pool.save();
+  //pool.save();
 }
 
 /************************************
@@ -341,11 +341,11 @@ export function handleTradeReport(event: TradeReport): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  //let pool = Pool.load(poolId.toHexString()) as Pool;
 
-  let trades  = loadSecondaryTrades(pool.secondaryTrades.length.toString(), event.params.security);
+  let trades  = loadSecondaryTrades(event.transaction.hash.toHexString(), event.params.security);
   if (trades == null) {
-    let providerId = getPoolTokenId(pool.secondaryTrades.length.toString(), event.params.security);
+    let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.security);
     let trades = new SecondaryTrades(providerId);   
     trades.pool = poolId.toHexString(); 
     trades.amount = tokenToDecimal(event.params.amount, 18);
@@ -353,7 +353,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.executionDate = event.params.executionDate;
     trades.save();
-    pool.secondaryTrades.push(trades.id);
+    //pool.secondaryTrades.push(trades.id.toString());
   } 
   else{
     trades.amount = tokenToDecimal(event.params.amount, 18);
@@ -361,10 +361,10 @@ export function handleTradeReport(event: TradeReport): void {
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.executionDate = event.params.executionDate;
     trades.save();
-    pool.secondaryTrades.push(trades.id);
+  //  pool.secondaryTrades.push(trades.id.toString());
   }
   
-  pool.save();
+  //pool.save();
 }
 
 /************************************

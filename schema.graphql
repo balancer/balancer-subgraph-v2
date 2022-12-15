@@ -113,14 +113,14 @@ type Pool @entity {
   securityOffered: BigDecimal
   cutoffTime: BigDecimal
   offeringDocs: String
-  primarySubscriptions: [PrimaryIssues!]! @derivedFrom(field: "pool")
-  
+  primarySubscriptions: [PrimaryIssues!] @derivedFrom(field: "pool")
+
   # SecondaryPool only
   secondaryOffer: BigDecimal
   orderBook: Bytes
   bestUnfilledBid: BigDecimal 
   bestUnfilledOffer: BigDecimal
-  secondaryTrades: [SecondaryTrades!]! @derivedFrom(field: "pool")
+  secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "pool")
 }
 
 type PrimaryIssues @entity {
