@@ -5,7 +5,16 @@ import {
   PoolBalanceManaged,
   InternalBalanceChanged,
 } from '../types/Vault/Vault';
-import { Balancer, Pool, Swap, JoinExit, TokenPrice, UserInternalBalance, ManagementOperation } from '../types/schema';
+import {
+  Balancer,
+  Pool,
+  Swap,
+  JoinExit,
+  TokenPrice,
+  UserInternalBalance,
+  ManagementOperation,
+  Token,
+} from '../types/schema';
 import {
   tokenToDecimal,
   getTokenPriceId,
@@ -50,7 +59,6 @@ import {
   isComposableStablePool,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
-import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
 import { USDC_ADDRESS } from './helpers/assets';
 
 /************************************
@@ -390,26 +398,16 @@ export function handleSwapEvent(event: SwapEvent): void {
     } else if (isFXPool(pool)) {
       // Custom logic for calculating trading fee for FXPools
       let isTokenInBase = tokenOutAddress == USDC_ADDRESS;
-      let baseAssimilator = isTokenInBase ? poolTokenIn.assimilator : poolTokenOut.assimilator;
-      let quoteAssimilator = isTokenInBase ? poolTokenOut.assimilator : poolTokenIn.assimilator;
+      let baseToken = Token.load((isTokenInBase ? tokenInAddress : tokenOutAddress).toHexString());
+      let quoteToken = Token.load((isTokenInBase ? tokenOutAddress : tokenInAddress).toHexString());
+      let baseRate = baseToken != null ? baseToken.latestFXPrice : null;
+      let quoteRate = quoteToken != null ? quoteToken.latestFXPrice : null;
 
-      if (baseAssimilator && quoteAssimilator) {
-        let baseAssimilatorAddress = Address.fromString(baseAssimilator.toHexString());
-        let baseAssimilatorContract = BaseToUsdAssimilator.bind(baseAssimilatorAddress);
-        let quoteAssimilatorAddress = Address.fromString(quoteAssimilator.toHexString());
-        let quoteAssimilatorContract = BaseToUsdAssimilator.bind(quoteAssimilatorAddress);
-
-        let baseRateRes = baseAssimilatorContract.try_getRate();
-        let quoteRateRes = quoteAssimilatorContract.try_getRate();
-
-        if (!baseRateRes.reverted && !quoteRateRes.reverted) {
-          let baseRate = scaleDown(baseRateRes.value, 8);
-          let quoteRate = scaleDown(quoteRateRes.value, 8);
-          if (isTokenInBase) {
-            swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut.times(quoteRate));
-          } else {
-            swapFeesUSD = tokenAmountIn.times(quoteRate).minus(tokenAmountOut.times(baseRate));
-          }
+      if (baseRate && quoteRate) {
+        if (isTokenInBase) {
+          swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut.times(quoteRate));
+        } else {
+          swapFeesUSD = tokenAmountIn.times(quoteRate).minus(tokenAmountOut.times(baseRate));
         }
       }
     }

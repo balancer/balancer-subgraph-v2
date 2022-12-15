@@ -17,7 +17,7 @@ import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
-import { AssimilatorIncluded, ParametersSet } from '../types/templates/FXPool/FXPool';
+import { ParametersSet } from '../types/templates/FXPool/FXPool';
 import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PoolContract } from '../types/schema';
 
 import {
@@ -422,17 +422,4 @@ export function handleParametersSet(event: ParametersSet): void {
   pool.epsilon = scaleDown(event.params.epsilon, 18);
   pool.lambda = scaleDown(event.params.lambda, 18);
   pool.save();
-}
-
-export function handleAssimilatorIncluded(event: AssimilatorIncluded): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let tokenAddress = event.params.reserve;
-  let poolToken = loadPoolToken(poolContract.pool, tokenAddress);
-  if (poolToken == null) return;
-
-  poolToken.assimilator = event.params.assimilator;
-  poolToken.save();
 }

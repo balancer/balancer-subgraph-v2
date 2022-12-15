@@ -1,8 +1,17 @@
-import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
-import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS } from './helpers/constants';
+import { Address, Bytes, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
+import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
+import {
+  ZERO_BD,
+  PRICING_ASSETS,
+  USD_STABLE_ASSETS,
+  ONE_BD,
+  ZERO_ADDRESS,
+  FX_AGGREGATOR_ADDRESSES,
+  FX_TOKEN_ADDRESSES,
+} from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, PoolType } from './helpers/pools';
-import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken } from './helpers/misc';
+import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken, scaleDown } from './helpers/misc';
+import { AnswerUpdated } from '../types/templates/OffchainAggregator/AccessControlledOffchainAggregator';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -239,4 +248,29 @@ export function isUSDStable(asset: Address): boolean {
     if (USD_STABLE_ASSETS[i] == asset) return true;
   }
   return false;
+}
+
+export function handleAnswerUpdated(event: AnswerUpdated): void {
+  let tokenAddress = ZERO_ADDRESS;
+  const aggregatorAddress = event.address;
+
+  for (let i = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
+    if (aggregatorAddress == FX_AGGREGATOR_ADDRESSES[i]) {
+      tokenAddress = FX_TOKEN_ADDRESSES[i];
+      break;
+    }
+  }
+
+  // Return if this answer is for another token we don't track
+  if (tokenAddress == ZERO_ADDRESS) return;
+
+  const token = Token.load(tokenAddress.toHexString());
+  if (token == null) {
+    log.warning('Token with address {} not found', [tokenAddress.toHexString()]);
+    return;
+  }
+
+  let rate = scaleDown(event.params.current, 8);
+  token.latestFXPrice = rate;
+  token.save();
 }
