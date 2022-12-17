@@ -275,8 +275,6 @@ export function handleSubscription(event: Subscription): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  //let pool = Pool.load(poolId.toHexString()) as Pool;
-  
   let subscriptions = loadPrimarySubscriptions(event.transaction.hash.toHexString(), event.params.security);
   if (subscriptions == null) {
     let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.security);
@@ -285,18 +283,17 @@ export function handleSubscription(event: Subscription): void {
     subscriptions.amount = tokenToDecimal(event.params.amount, 18);
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
+    subscriptions.investor = event.params.investor.toString();
     subscriptions.save();
-    //pool.primarySubscriptions.push(subscriptions.id.toString()); 
   }
   else{
     subscriptions.amount = tokenToDecimal(event.params.amount, 18);
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
+    subscriptions.investor = event.params.investor.toString();
     subscriptions.save();
-  //  pool.primarySubscriptions.push(subscriptions.id.toString()); 
   }
-  
-  //pool.save();
+
 }
 
 /************************************
@@ -341,8 +338,6 @@ export function handleTradeReport(event: TradeReport): void {
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
-  //let pool = Pool.load(poolId.toHexString()) as Pool;
-
   let trades  = loadSecondaryTrades(event.transaction.hash.toHexString(), event.params.security);
   if (trades == null) {
     let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.security);
@@ -352,19 +347,20 @@ export function handleTradeReport(event: TradeReport): void {
     trades.askPrice = tokenToDecimal(event.params.askprice, 18);
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.executionDate = event.params.executionDate;
+    trades.party = event.params.party.toString();
+    trades.counterparty = event.params.counterparty.toString();
     trades.save();
-    //pool.secondaryTrades.push(trades.id.toString());
   } 
   else{
     trades.amount = tokenToDecimal(event.params.amount, 18);
     trades.askPrice = tokenToDecimal(event.params.askprice, 18);
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.executionDate = event.params.executionDate;
+    trades.party = event.params.party.toString();
+    trades.counterparty = event.params.counterparty.toString();
     trades.save();
-  //  pool.secondaryTrades.push(trades.id.toString());
   }
   
-  //pool.save();
 }
 
 /************************************
