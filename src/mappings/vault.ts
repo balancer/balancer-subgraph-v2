@@ -297,12 +297,12 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
     return;
   }
 
-  let token: Address = event.params.token;
+  let tokenAddress: Address = event.params.token;
 
   let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
 
-  let poolToken = loadPoolToken(poolId.toHexString(), token);
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
   if (poolToken == null) {
     throw new Error('poolToken not found');
   }
@@ -315,6 +315,18 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   poolToken.cashBalance = poolToken.cashBalance.plus(cashDeltaAmount);
   poolToken.managedBalance = poolToken.managedBalance.plus(managedDeltaAmount);
   poolToken.save();
+
+  let token = getToken(tokenAddress);
+  const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(deltaAmount);
+  const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+  token.totalBalanceNotional = tokenTotalBalanceNotional;
+  token.totalBalanceUSD = tokenTotalBalanceUSD;
+  token.save();
+
+  let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
+  tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+  tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
+  tokenSnapshot.save();
 
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
