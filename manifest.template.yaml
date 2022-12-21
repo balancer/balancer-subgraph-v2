@@ -834,8 +834,8 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: ProtocolFeePercentageCacheUpdated(indexed uint256,uint256)
           handler: handleProtocolFeePercentageCacheUpdated
-        - event: RecoveryModeStateChanged(bool)
-          handler: handleRecoveryModeStateChanged
+        # - event: RecoveryModeStateChanged(bool)
+        #   handler: handleRecoveryModeStateChanged
   - kind: ethereum/contract
     name: WeightedPool2Tokens
     network: {{network}}
@@ -1075,8 +1075,8 @@ templates:
           handler: handleTokenRateCacheUpdated
         - event: ProtocolFeePercentageCacheUpdated(indexed uint256,uint256)
           handler: handleProtocolFeePercentageCacheUpdated
-        - event: RecoveryModeStateChanged(bool)
-          handler: handleRecoveryModeStateChanged
+        # - event: RecoveryModeStateChanged(bool)
+        #   handler: handleRecoveryModeStateChanged
   - kind: ethereum/contract
     name: LinearPool
     network: {{network}}
