@@ -251,3 +251,26 @@ bnb:
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
     startBlock: 22895868
+gnosis:
+  network: gnosis
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 24821598
+  WeightedPoolV2Factory:
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 25414470
+  StablePoolV2Factory:
+    address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
+    startBlock: 25415344
+  ComposableStablePoolV2Factory:
+    address: "0x76578ecf9a141296Ec657847fb45B0585bCDa3a6"
+    startBlock: 25415385
+  AaveLinearPoolV3Factory:
+    address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
+    startBlock: 25415464
+  ERC4626LinearPoolFactory:
+    address: "0x4132f7AcC9dB7A6cF7BE2Dd3A9DC8b30C7E6E6c8"
+    startBlock: 25415264
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
+    startBlock: 25415236
