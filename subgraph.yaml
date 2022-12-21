@@ -169,9 +169,9 @@ dataSources:
     name: SecondaryIssuePoolFactory
     network: goerli
     source:
-      address: '0x3Aa9Df349B9FDE92249DeC0fef0d34EdDE2B7833'
+      address: '0xa4BD7e9F5d2b690B0be4a75aB961d4cc633FE516'
       abi: SecondaryIssuePoolFactory
-      startBlock: 8148638
+      startBlock: 8173046
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

@@ -283,14 +283,14 @@ export function handleSubscription(event: Subscription): void {
     subscriptions.amount = tokenToDecimal(event.params.amount, 18);
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
-    subscriptions.investor = event.params.investor.toString();
+    subscriptions.investor = event.params.investor.toHexString();
     subscriptions.save();
   }
   else{
     subscriptions.amount = tokenToDecimal(event.params.amount, 18);
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
-    subscriptions.investor = event.params.investor.toString();
+    subscriptions.investor = event.params.investor.toHexString();
     subscriptions.save();
   }
 
@@ -348,7 +348,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toString();
-    trades.counterparty = event.params.counterparty.toString();
+    trades.counterparty = event.params.counterparty.toHexString();
     trades.save();
   } 
   else{
@@ -357,7 +357,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toString();
-    trades.counterparty = event.params.counterparty.toString();
+    trades.counterparty = event.params.counterparty.toHexString();
     trades.save();
   }
   
