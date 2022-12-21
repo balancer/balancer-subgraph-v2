@@ -562,6 +562,39 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewAaveLinearPoolV2
   {{/if}}
+  {{#if AaveLinearPoolV3Factory}}
+  - kind: ethereum/contract
+    name: AaveLinearPoolV3Factory
+    network: {{network}}
+    source:
+      address: '{{AaveLinearPoolV3Factory.address}}'
+      abi: AaveLinearPoolV3Factory
+      startBlock: {{AaveLinearPoolV3Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: AaveLinearPoolV3Factory
+          file: ./abis/AaveLinearPoolV3Factory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
+      eventHandlers:
+        - event: AaveLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleNewAaveLinearPoolV3
+  {{/if}}
   {{#if ERC4626LinearPoolFactoryBeta}}
   - kind: ethereum/contract
     name: ERC4626LinearPoolFactoryBeta
