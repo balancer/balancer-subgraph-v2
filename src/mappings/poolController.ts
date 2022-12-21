@@ -82,14 +82,14 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
 }
 
 export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
+  // let poolAddress = event.address;
+  // let poolContract = PoolContract.load(poolAddress.toHexString());
+  // if (poolContract == null) return;
 
-  let pool = Pool.load(poolContract.pool) as Pool;
-  // when recovery mode is enabled, swaps are disabled; and vice versa
-  pool.swapEnabled = !event.params.enabled;
-  pool.save();
+  // let pool = Pool.load(poolContract.pool) as Pool;
+  // // when recovery mode is enabled, swaps are disabled; and vice versa
+  // pool.swapEnabled = !event.params.enabled;
+  // pool.save();
 }
 
 export function handlePauseGyroPool(event: PausedLocally): void {
