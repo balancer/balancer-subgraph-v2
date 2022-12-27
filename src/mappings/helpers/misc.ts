@@ -14,6 +14,7 @@ import {
   Balancer,
   PrimaryIssues,
   SecondaryTrades,
+  SecondaryOrders,
 } from '../../types/schema';
 import { PrimaryIssuePool } from '../../types/templates';
 import { SecondaryIssuePool } from '../../types/templates';
@@ -176,6 +177,10 @@ export function loadPrimarySubscriptions(poolId: string, tokenAddress: Address):
 
 export function loadSecondaryTrades(poolId: string, tokenAddress: Address): SecondaryTrades | null {
   return SecondaryTrades.load(getPoolTokenId(poolId, tokenAddress));
+}
+
+export function loadSecondaryOrders(poolId: string, tokenAddress: Address): SecondaryOrders | null {
+  return SecondaryOrders.load(getPoolTokenId(poolId, tokenAddress));
 }
 
 export function getTokenPriceId(

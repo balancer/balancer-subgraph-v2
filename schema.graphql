@@ -118,14 +118,15 @@ type Pool @entity {
   # SecondaryPool only
   secondaryOffer: BigDecimal
   orderBook: Bytes
-  bestUnfilledBid: BigDecimal 
-  bestUnfilledOffer: BigDecimal
   secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "pool")
+  orders: [SecondaryOrders!]@derivedFrom(field: "pool")
 }
 
 type PrimaryIssues @entity {
   id: ID!
   pool: Pool!
+  assetIn: Bytes!
+  assetOut: Bytes!
   amount: BigDecimal!
   investor: User!
   price: BigDecimal!
@@ -138,11 +139,19 @@ type SecondaryTrades @entity {
   party: User! 
   counterparty: User! 
   price: BigDecimal!
-  askPrice: BigDecimal! 
+  currency: Bytes!
   amount: BigDecimal! 
-  status: Bytes!
   executionDate: BigInt!
 }  
+
+type SecondaryOrders @entity {
+  id: ID!
+  pool: Pool!
+  tokenIn: Bytes!
+  tokenOut: Bytes!
+  amountOffered: BigDecimal!
+  priceOffered: BigDecimal!
+}
 
 type PoolToken @entity {
   id: ID!
