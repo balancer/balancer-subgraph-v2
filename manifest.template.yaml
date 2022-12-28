@@ -1162,7 +1162,7 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: OpenIssue(indexed address,uint256,address,uint256,uint256,string)
           handler: handleOpenIssue
-        - event: Subscription(indexed address,address,string,uint256,address,uint256)
+        - event: Subscription(indexed address,address,uint256,address,uint256,uint256)
           handler: handleSubscription
   - kind: ethereum/contract
     name: SecondaryIssuePool
@@ -1191,10 +1191,10 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: Offer(indexed address,uint256,address,address)
           handler: handleSecondaryOffer
-        - event: TradeReport(indexed address,address,address,uint256,uint256,address,uint256,bytes32,uint256)
+        - event: TradeReport(indexed address,address,address,uint256,address,uint256,uint256)
           handler: handleTradeReport
-        - event: BestAvailableTrades(uint256,uint256)
-          handler: handleBestAvailableTrades
+        - event: OrderBook(address,address,uint256,uint256)
+          handler: handleOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool
     network: {{network}}

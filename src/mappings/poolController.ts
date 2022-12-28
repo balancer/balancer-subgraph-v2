@@ -285,8 +285,8 @@ export function handleSubscription(event: Subscription): void {
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.investor = event.params.investor.toHexString();
-    subscriptions.assetIn = event.params.assetIn;
-    subscriptions.assetOut = event.params.assetOut;
+    subscriptions.assetIn = event.params.assetIn.toHexString();
+    subscriptions.assetOut = event.params.assetOut.toHexString();
     subscriptions.save();
   }
   else{
@@ -294,8 +294,8 @@ export function handleSubscription(event: Subscription): void {
     subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.investor = event.params.investor.toHexString();
-    subscriptions.assetIn = event.params.assetIn;
-    subscriptions.assetOut = event.params.assetOut;
+    subscriptions.assetIn = event.params.assetIn.toHexString();
+    subscriptions.assetOut = event.params.assetOut.toHexString();
     subscriptions.save();
   }
 
@@ -336,15 +336,15 @@ export function handleOrderBook(event: OrderBook): void {
     orders.pool = poolId.toHexString(); 
     orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
-    orders.tokenIn = event.params.tokenIn;
-    orders.tokenOut = event.params.tokenOut;
+    orders.tokenIn = event.params.tokenIn.toHexString();
+    orders.tokenOut = event.params.tokenOut.toHexString();
     orders.save();
   } 
   else{
     orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
-    orders.tokenIn = event.params.tokenIn;
-    orders.tokenOut = event.params.tokenOut;
+    orders.tokenIn = event.params.tokenIn.toHexString();
+    orders.tokenOut = event.params.tokenOut.toHexString();
     orders.save();
   }
 }
@@ -363,7 +363,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.pool = poolId.toHexString(); 
     trades.amount = tokenToDecimal(event.params.amount, 18);
     trades.price = tokenToDecimal(event.params.price, 18);
-    trades.currency = event.params.currency;
+    trades.currency = event.params.currency.toHexString();
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();
@@ -372,7 +372,7 @@ export function handleTradeReport(event: TradeReport): void {
   else{
     trades.amount = tokenToDecimal(event.params.amount, 18);
     trades.price = tokenToDecimal(event.params.price, 18);
-    trades.currency = event.params.currency;
+    trades.currency = event.params.currency.toHexString();
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();

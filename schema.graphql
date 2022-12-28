@@ -125,8 +125,8 @@ type Pool @entity {
 type PrimaryIssues @entity {
   id: ID!
   pool: Pool!
-  assetIn: Bytes!
-  assetOut: Bytes!
+  assetIn: Token!
+  assetOut: Token!
   amount: BigDecimal!
   investor: User!
   price: BigDecimal!
@@ -139,7 +139,7 @@ type SecondaryTrades @entity {
   party: User! 
   counterparty: User! 
   price: BigDecimal!
-  currency: Bytes!
+  currency: Token!
   amount: BigDecimal! 
   executionDate: BigInt!
 }  
@@ -147,8 +147,8 @@ type SecondaryTrades @entity {
 type SecondaryOrders @entity {
   id: ID!
   pool: Pool!
-  tokenIn: Bytes!
-  tokenOut: Bytes!
+  tokenIn: Token!
+  tokenOut: Token!
   amountOffered: BigDecimal!
   priceOffered: BigDecimal!
 }
