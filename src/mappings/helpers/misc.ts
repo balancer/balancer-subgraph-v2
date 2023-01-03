@@ -100,7 +100,12 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
   return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
 }
 
-export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, assetManagerAddress: Address): void {
+export function createPoolTokenEntity(
+  pool: Pool,
+  tokenAddress: Address,
+  tokenIndex: i32,
+  assetManagerAddress: Address
+): void {
   let poolTokenId = getPoolTokenId(pool.id, tokenAddress);
 
   let token = ERC20.bind(tokenAddress);
@@ -148,6 +153,7 @@ export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, assetMa
   poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
   poolToken.token = _token.id;
+  poolToken.index = tokenIndex;
 
   if (isComposableStablePool(pool)) {
     let poolAddress = bytesToAddress(pool.address);

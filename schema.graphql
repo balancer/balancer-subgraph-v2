@@ -120,6 +120,7 @@ type PoolToken @entity {
   symbol: String!
   name: String!
   decimals: Int!
+  index: Int!
   address: String!
   priceRate: BigDecimal!
   balance: BigDecimal!
