@@ -102,6 +102,9 @@ type Pool @entity {
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
+
+  # AaveLinearV3 Only
+  protocolId: Int
 }
 
 type PoolContract @entity {
@@ -129,9 +132,6 @@ type PoolToken @entity {
 
   # ComposableStablePool Only
   isExemptFromYieldProtocolFee: Boolean
-
-  # FXPool Only
-  assimilator: Bytes
 }
 
 type PriceRateProvider @entity {
@@ -301,6 +301,7 @@ type Token @entity {
   totalSwapCount: BigInt!
   latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
   latestUSDPrice: BigDecimal # latest price of token in USD, updated when pool liquidity changes
+  latestFXPrice: BigDecimal # latest "off-chain" price of token in USD, only available if token has an offchain price aggregator
   pool: Pool # pool entity associated with the token, if it is a Balancer pool
 }
 

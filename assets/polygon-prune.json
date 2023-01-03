@@ -45,42 +45,10 @@
     {
       "address": "0x5FFD62D3C3eE2E81C00A7b9079FB248e7dF024A8", 
       "symbol": "GNO"
-    }
-  ],
-  "fxAssets": [
-    {
-      "address": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-      "symbol": "USDC"
     },
     {
-      "address": "0xDC3326e71D45186F113a2F448984CA0e8D201995",
-      "symbol": "XSGD"
-    },
-    {
-      "address": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-      "symbol": "DAI"
-    },
-    {
-      "address": "0xE111178A87A3BFf0c8d18DECBa5798827539Ae99",
-      "symbol":  "EURS"
-    }
-  ],
-  "fxAggregators": [
-    {
-      "address": "0xf9c53A834F60cBbE40E27702276fBc0819B3aFAD",
-      "symbol": "USDC-USD"
-    },
-    {
-      "address": "0x45ede0Ea5cBbE380C663C7C3015Cc7c986669FEc",
-      "symbol": "XSGD-USD"
-    },
-    {
-      "address": "0x62439095489Eb5dE4572de632248682c09a05Ad4",
-      "symbol": "DAI-USD"
-    },
-    {
-      "address": "0x310990E8091b5cF083fA55F500F140CFBb959016",
-      "symbol": "EURS-USD"
+      "address": "0xBA1BA1ba1BA1bA1bA1Ba1BA1ba1BA1bA1ba1ba1B", 
+      "symbol": "Mock pricing asset to distinguish between pruned and full deployment"
     }
   ]
 }
