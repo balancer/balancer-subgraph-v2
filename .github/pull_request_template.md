@@ -32,4 +32,4 @@ Please provide instructions so we can test. Please also list any relevant detail
 - [ ] I have checked that core metrics are the same in the beta and production deployments
 
 ### Merges to `dev`
-- [ ] If have checked that the graft base is not a pruned deployment
+- [ ] I have checked that the graft base is not a pruned deployment
