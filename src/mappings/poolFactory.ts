@@ -517,6 +517,6 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 
     if (!assetManager) continue;
 
-    createPoolTokenEntity(pool, tokensAddresses[i], assetManager);
+    createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
   }
 }
