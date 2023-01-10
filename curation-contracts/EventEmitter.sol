@@ -1,6 +1,6 @@
 pragma solidity ^0.6.0;
 
-contract MyContract {
+contract EventEmitter {
     // Define the owner of the contract
     address private owner;
 
