@@ -45,4 +45,9 @@ contract MyContract {
     // Define a function to transfer ownership of the contract
     function transferOwnership(address newOwner) public {
         // Only allow the owner to transfer ownership
-        require(msg.sender == owner
+        require(msg.sender == owner, "Only the owner can transfer ownership");
+
+        // Transfer ownership to the new owner
+        owner = newOwner;
+    }
+}
