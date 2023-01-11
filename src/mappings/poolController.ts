@@ -1,6 +1,9 @@
 import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
-import { SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
+import {
+  PausedStateChanged,
+  SwapFeePercentageChanged,
+} from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
   SwapEnabledSet,
@@ -71,6 +74,7 @@ export function handleOracleEnabledChanged(event: OracleEnabledChanged): void {
 /************************************
  *********** SWAP ENABLED ***********
  ************************************/
+
 export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
@@ -81,14 +85,21 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   pool.save();
 }
 
+export function handlePausedStateChanged(event: PausedStateChanged): void {
+  let poolAddress = event.address;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+  let pool = Pool.load(poolContract.pool) as Pool;
+  pool.swapEnabled = event.params.paused;
+  pool.save();
+}
+
 export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
-
   let pool = Pool.load(poolContract.pool) as Pool;
-  // when recovery mode is enabled, swaps are disabled; and vice versa
-  pool.swapEnabled = !event.params.enabled;
+  pool.recoveryMode = event.params.enabled;
   pool.save();
 }
 
