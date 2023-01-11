@@ -220,6 +220,9 @@ arbitrum:
   ComposableStablePoolV2Factory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 42468618
+  MetaStablePoolFactory:
+    address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
+    startBlock: 222868
   LiquidityBootstrappingPoolFactory:
     address: "0x142B9666a0a3A30477b052962ddA81547E7029ab"
     startBlock: 222870
