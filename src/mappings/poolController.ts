@@ -99,7 +99,7 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.recoveryMode = event.params.enabled;
+  pool.isInRecoveryMode = event.params.enabled;
   pool.save();
 }
 
