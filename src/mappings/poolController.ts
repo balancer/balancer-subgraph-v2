@@ -100,6 +100,13 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.isInRecoveryMode = event.params.enabled;
+  if (event.params.enabled) {
+    pool.protocolAumFeeCache = ZERO_BD;
+    pool.protocolSwapFeeCache = ZERO_BD;
+    pool.protocolYieldFeeCache = ZERO_BD;
+  } else {
+    // TODO: handle the case where pools are taken out of recovery mode
+  }
   pool.save();
 }
 
