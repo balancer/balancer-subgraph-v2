@@ -90,7 +90,7 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = event.params.paused;
+  pool.swapEnabled = !event.params.paused;
   pool.isPaused = event.params.paused;
   pool.save();
 }
