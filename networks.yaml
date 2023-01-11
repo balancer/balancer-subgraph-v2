@@ -62,6 +62,9 @@ mainnet:
     startBlock: 15981805
 goerli:
   network: goerli
+  EventEmitter:
+    address: "0xba898E52644f7A009361Ec5D5FFCb73aC8A9b850"
+    startBlock: 8294218
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 4648099
@@ -119,7 +122,7 @@ goerli:
 polygon:
   network: matic
   # graft:
-  #   # The fix to the accounting of token.totalBalanceNotional (PR #342) require that we reindex 
+  #   # The fix to the accounting of token.totalBalanceNotional (PR #342) require that we reindex
   #   # from the start block of the AaveLinearPool with embedded rebalancer
   #   block: 31996915
   #   # always make sure the base subgraph has not been pruned
