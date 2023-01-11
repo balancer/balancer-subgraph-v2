@@ -1,9 +1,6 @@
 import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
-import {
-  PausedStateChanged,
-  SwapFeePercentageChanged,
-} from '../types/templates/WeightedPool/WeightedPool';
+import { PausedStateChanged, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
   GradualWeightUpdateScheduled,
   SwapEnabledSet,
