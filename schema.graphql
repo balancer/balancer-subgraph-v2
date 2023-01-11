@@ -122,7 +122,7 @@ type PoolToken @entity {
   symbol: String!
   name: String!
   decimals: Int!
-  index: Int!
+  index: Int # TODO: make mandatory at next full sync
   address: String!
   priceRate: BigDecimal!
   balance: BigDecimal!
