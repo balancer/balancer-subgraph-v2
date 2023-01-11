@@ -118,13 +118,12 @@ goerli:
     startBlock: 7928618
 polygon:
   network: matic
-  # graft:
-  #   # The fix to the accounting of token.totalBalanceNotional (PR #342) require that we reindex 
-  #   # from the start block of the AaveLinearPool with embedded rebalancer
-  #   block: 31996915
-  #   # always make sure the base subgraph has not been pruned
-  #   # it should be possible to run time travel queries on it going back to the vault's startBlock
-  #   base: QmQmZiZwgW7vgjnfYs2BPqeM4ufHeURcFqwFzwh4JLNwb5
+  graft:
+    # One block before we set all pools to recovery mode
+    block: 37742709
+    # always make sure the base subgraph has not been pruned
+    # it should be possible to run time travel queries on it going back to the vault's startBlock
+    base: QmPw3GRthhgc33ArNCMRVM7nHNWcqysftFmCh4AHoD5qEj
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -220,6 +219,9 @@ arbitrum:
   ComposableStablePoolV2Factory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 42468618
+  MetaStablePoolFactory:
+    address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
+    startBlock: 222868
   LiquidityBootstrappingPoolFactory:
     address: "0x142B9666a0a3A30477b052962ddA81547E7029ab"
     startBlock: 222870
