@@ -118,6 +118,13 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()]);
     return;
   }
+
+  // if a pool that was paused is joined, it means it's pause has expired
+  if (pool.isPaused) {
+    pool.isPaused = false;
+    pool.swapEnabled = true;
+  }
+
   let tokenAddresses = pool.tokensList;
 
   let joinId = transactionHash.toHexString().concat(logIndex.toString());
@@ -358,6 +365,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (pool == null) {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
+  }
+
+  // if a swap happens in a pool that was paused, it means it's pause has expired
+  if (pool.isPaused) {
+    pool.isPaused = false;
+    pool.swapEnabled = true;
   }
 
   if (isVariableWeightPool(pool)) {
