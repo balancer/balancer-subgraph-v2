@@ -57,7 +57,6 @@ import {
   isLinearPool,
   isFXPool,
   isComposableStablePool,
-  updatePoolSwapEnabled,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
 import { USDC_ADDRESS } from './helpers/assets';
@@ -118,6 +117,12 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   if (pool == null) {
     log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()]);
     return;
+  }
+  
+  // if a pool that was paused is joined, it means it's pause has expired
+  if (pool.isPaused) {
+    pool.isPaused = false;
+    pool.swapEnabled = true;
   }
 
   let tokenAddresses = pool.tokensList;
@@ -201,7 +206,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.save();
   }
 
-  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -286,7 +290,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
-  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId, blockTimestamp);
 }
 
@@ -362,6 +365,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (pool == null) {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
+  }
+  
+  // if a swap happens in a pool that was paused, it means it's pause has expired
+  if (pool.isPaused) {
+    pool.isPaused = false;
+    pool.swapEnabled = true;
   }
 
   if (isVariableWeightPool(pool)) {
@@ -569,6 +578,5 @@ export function handleSwapEvent(event: SwapEvent): void {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
   }
 
-  updatePoolSwapEnabled(pool);
   updatePoolLiquidity(poolId.toHex(), blockTimestamp);
 }

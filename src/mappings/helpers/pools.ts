@@ -125,10 +125,3 @@ export function setPriceRateProviders(poolId: string, poolAddress: Address, toke
     provider.save();
   }
 }
-
-export function updatePoolSwapEnabled(pool: Pool): void {
-  if (pool.swapEnabled) return;
-
-  pool.swapEnabled = true;
-  pool.save();
-}
