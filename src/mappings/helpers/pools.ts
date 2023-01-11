@@ -61,9 +61,17 @@ export function isFXPool(pool: Pool): boolean {
 export function isMetaStableDeprecated(blockNumber: i32): boolean {
   let network = dataSource.network();
 
-  if (network == 'ethereum' && blockNumber > 15008557) {
+  if (network == 'ethereum' && blockNumber > 15008557 && blockNumber < 16380140) {
+    // Between blocks 15008557 and 16380140 metastable was considered deprecated because subject to faulty rate providers.
+    // But due to recent issues with composable stable pools we decided to start creating pools with it again.
+    // This conditional prevents pools created between those blocks from being indexed, 
+    // because we know pools with faulty rate providers were created then
     return true;
-  } else if (network == 'matic' && blockNumber > 35414865) {
+  } else if (network == 'matic' && blockNumber > 35414865 && blockNumber < 37921111) {
+    // Between blocks 35414865 and 37921111 metastable was considered deprecated because subject to faulty rate providers
+    // But due to recent issues with composable stable pools we decided to start creating pools with it again
+    // This conditional prevents pools created between those blocks from being indexed, 
+    // because we know pools with faulty rate providers were created then
     return true;
   } else {
     return false;
