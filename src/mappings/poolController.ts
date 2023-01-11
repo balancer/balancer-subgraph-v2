@@ -91,6 +91,7 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.swapEnabled = event.params.paused;
+  pool.isPaused = event.params.paused;
   pool.save();
 }
 
@@ -116,6 +117,7 @@ export function handlePauseGyroPool(event: PausedLocally): void {
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
+  pool.isPaused = true;
   pool.swapEnabled = false;
   pool.save();
 }
@@ -126,6 +128,7 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
+  pool.isPaused = false;
   pool.swapEnabled = true;
   pool.save();
 }
