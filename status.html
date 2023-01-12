@@ -1,0 +1,164 @@
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    const api = 'https://api.thegraph.com/index-node/graphql';
+    function buildQuery(entity, subgraph) {
+  const baseQuery = `{
+    ${entity}(subgraphName: "balancer-labs/${subgraph}") {    
+      subgraph
+      synced
+      health
+      entityCount
+      fatalError {
+        handler
+        message
+        deterministic
+        block {
+          hash
+          number
+        }
+      }
+      chains {
+        chainHeadBlock {
+          number
+        }
+        latestBlock {
+          number
+        }
+        earliestBlock {
+          number
+        }
+      }
+    }
+  }`;
+  return baseQuery;
+}
+
+function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'balancer-v2') {
+  const query = buildQuery(entity, subgraph);
+  axios.post(api, {query: query})
+    .then(response => {
+      const data = response.data.data;
+      const subgraphData = Object.values(data)[0];
+      let status = '';
+      let link = null;
+      if (subgraphData) {
+        status += subgraphData.subgraph.substring(0, 5) + '...' + subgraphData.subgraph.substring(subgraphData.subgraph.length - 5);
+        status += '<br>';
+        status += 'earliestBlock: ' + (subgraphData.chains[0].earliestBlock.number);
+        status += '<br>';
+        if (subgraphData.synced) {
+          if (subgraphData.chains[0].latestBlock) {
+            const lag = parseInt(subgraphData.chains[0].chainHeadBlock.number) - parseInt(subgraphData.chains[0].latestBlock.number);
+            status += `${lag} blocks behind head`;
+          }
+        } else {
+          if (subgraphData.chains[0].latestBlock) {
+            const blocksIndexed = parseInt(subgraphData.chains[0].latestBlock.number) - parseInt(subgraphData.chains[0].earliestBlock.number);
+            const blocksToIndex = parseInt(subgraphData.chains[0].chainHeadBlock.number) - parseInt(subgraphData.chains[0].earliestBlock.number);
+            status += `${(blocksIndexed/blocksToIndex*100).toFixed(1)}%`;
+          } else {
+            status += '??%';
+          }
+        }
+        if (subgraphData.health != 'healthy') {
+          console.log(`-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-`);
+          console.log(`${subgraph} ${subgraphData.health}`);
+        }
+        $('#subgraph-table tbody').append(`
+         
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;">${subgraph}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${entity.includes('Current') ? 'current' : 'pending'}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${status}</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">${subgraphData.health}</td>
+              </tr>
+            `);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    $(document).ready(() => {
+
+    $("th").click(function() {
+      var table = $(this).parents("table").eq(0)
+      var rows = table.find("tr:gt(0)").toArray().sort(comparer($(this).index()))
+      this.asc = !this.asc
+      if (!this.asc){rows = rows.reverse()}
+      for (var i = 0; i < rows.length; i++){table.append(rows[i])}
+    })
+    function comparer(index) {
+      return function(a, b) {
+        var valA = $(a).children("td").eq(index).text().toUpperCase()
+        var valB = $(b).children("td").eq(index).text().toUpperCase()
+        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB)
+      }
+    }
+  
+
+
+      const subgraphs = [
+    'balancer',
+    'balancer-gauges'
+  ];
+  const networks = [
+    '',          // mainnet
+    '-polygon',
+    '-polygon-prune',
+    '-gnosis-chain',
+    '-arbitrum',
+    '-optimism',
+    '-bnbchain',
+    '-goerli'
+  ];
+  const versions = [
+    '',         //prod
+    '-beta'
+  ];
+  const entities = [
+    'indexingStatusForCurrentVersion',
+    'indexingStatusForPendingVersion'
+  ];
+
+  for (let s of subgraphs) {
+    for (let n of networks) {
+      if ((s === 'balancer-gauges') && (n === '-polygon-pruned')) {
+        continue;
+      }
+      if (s === 'balancer') {
+        if (n === '-optimism') {
+          continue;
+        }
+        n += '-v2';
+      }
+      for (let v of versions) {
+        for (let e of entities) {
+          const subgraphName = s + n + v;
+          querySubgraph(e, subgraphName);
+        }
+      }
+    }
+  }
+});
+</script>
+</head>
+<body>
+  <table id="subgraph-table" style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background-color: #f2f2f2;">
+        <th style="padding: 8px; border: 1px solid #ddd;">Subgraph</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Version</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Status</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Health</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+</body>
+</html>
