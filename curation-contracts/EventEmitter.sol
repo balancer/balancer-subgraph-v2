@@ -16,7 +16,7 @@ pragma solidity ^0.8.0;
 
 contract EventEmitter {
     // Define the owner of the contract
-    address private owner;
+    address public owner;
 
     // Define a mapping to store the authorization status of each address for each identifier
     mapping(address => mapping(string => bool)) private isAuthorized;
