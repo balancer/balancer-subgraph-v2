@@ -19,10 +19,10 @@ contract EventEmitter {
     address public owner;
 
     // Define a mapping to store the authorization status of each address for each identifier
-    mapping(address => mapping(string => bool)) public isAuthorized;
+    mapping(address => mapping(bytes32 => bool)) public isAuthorized;
 
     // Define the event that will be emitted when the function is called
-    event LogArgument(address indexed sender, string indexed identifier, bytes message, uint256 value);
+    event LogArgument(address indexed sender, bytes32 indexed identifier, bytes message, uint256 value);
 
     constructor() {
         // Set the contract owner to the address that deployed the contract
@@ -30,7 +30,7 @@ contract EventEmitter {
     }
 
     // Define the function that will emit the event
-    function emitEvent(string memory identifier, bytes memory message, uint256 value) public {
+    function emitEvent(bytes32 identifier, bytes memory message, uint256 value) public {
         // Only allow authorized addresses to call this function
         require(isAuthorized[msg.sender][identifier], "Unauthorized address");
 
@@ -39,7 +39,7 @@ contract EventEmitter {
     }
 
     // Define a function to authorize an address for a specific identifier
-    function authorize(string memory identifier, address addr) public {
+    function authorize(bytes32 identifier, address addr) public {
         // Only allow the owner to authorize addresses
         require(msg.sender == owner, "Only the owner can authorize addresses");
 
@@ -48,7 +48,7 @@ contract EventEmitter {
     }
 
     // Define a function to remove authorization for an address for a specific identifier
-    function removeAuthorization(string memory identifier, address addr) public {
+    function removeAuthorization(bytes32 identifier, address addr) public {
         // Only allow the owner to remove authorization
         require(msg.sender == owner, "Only the owner can remove authorization");
 
