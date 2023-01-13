@@ -24,6 +24,15 @@ contract EventEmitter {
     // Define the event that will be emitted when the function is called
     event LogArgument(address indexed sender, bytes32 indexed identifier, bytes message, uint256 value);
 
+    // Define the event that will be emitted when an address is granted a permission
+    event AuthorizationGranted(address indexed addr, bytes32 indexed identifier);
+
+    // Define the event that will be emitted when an address has a permission revoked
+    event AuthorizationRevoked(address indexed addr, bytes32 indexed identifier);
+
+    // Define the event that will be emitted when an ownership is transferred
+    event OwnershipTransferred(address indexed newOwner);
+
     constructor() {
         // Set the contract owner to the address that deployed the contract
         owner = msg.sender;
@@ -45,6 +54,8 @@ contract EventEmitter {
 
         // Set the authorization status of the address for the given identifier to true
         isAuthorized[addr][identifier] = true;
+
+        emit AuthorizationGranted(addr, identifier);
     }
 
     // Define a function to remove authorization for an address for a specific identifier
@@ -54,6 +65,8 @@ contract EventEmitter {
 
         // Set the authorization status of the address for the given identifier to false
         isAuthorized[addr][identifier] = false;
+
+        emit AuthorizationRevoked(addr, identifier);
     }
 
     // Define a function to transfer ownership of the contract
@@ -63,5 +76,7 @@ contract EventEmitter {
 
         // Transfer ownership to the new owner
         owner = newOwner;
+
+        emit OwnershipTransferred(newOwner);
     }
 }
