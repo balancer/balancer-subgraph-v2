@@ -22,7 +22,7 @@ contract EventEmitter {
     mapping(address => mapping(string => bool)) public isAuthorized;
 
     // Define the event that will be emitted when the function is called
-    event LogArgument(address sender, string identifier, bytes message);
+    event LogArgument(address sender, string identifier, bytes message, uint256 value);
 
     constructor() {
         // Set the contract owner to the address that deployed the contract
@@ -30,12 +30,12 @@ contract EventEmitter {
     }
 
     // Define the function that will emit the event
-    function emitEvent(string memory identifier, bytes memory message) public {
+    function emitEvent(string memory identifier, bytes memory message, uint256 value) public {
         // Only allow authorized addresses to call this function
         require(isAuthorized[msg.sender][identifier], "Unauthorized address");
 
         // Emit the event with the message sender, identifier, and message passed into the function
-        emit LogArgument(msg.sender, identifier, message);
+        emit LogArgument(msg.sender, identifier, message, value);
     }
 
     // Define a function to authorize an address for a specific identifier
