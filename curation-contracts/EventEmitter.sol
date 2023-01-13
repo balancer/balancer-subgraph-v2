@@ -22,7 +22,7 @@ contract EventEmitter {
     mapping(address => mapping(string => bool)) public isAuthorized;
 
     // Define the event that will be emitted when the function is called
-    event LogArgument(address sender, string identifier, bytes message, uint256 value);
+    event LogArgument(address indexed sender, string indexed identifier, bytes message, uint256 value);
 
     constructor() {
         // Set the contract owner to the address that deployed the contract
