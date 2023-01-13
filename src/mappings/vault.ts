@@ -120,10 +120,12 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   }
 
   // if a pool that was paused is joined, it means it's pause has expired
-  if (pool.isPaused) {
-    pool.isPaused = false;
-    pool.swapEnabled = true;
-  }
+  // TODO: fix this for when pool.isPaused is null 
+  // TODO: handle the case where the pool's actual swapEnabled is false
+  // if (pool.isPaused) {
+  //   pool.isPaused = false;
+  //   pool.swapEnabled = true;
+  // }
 
   let tokenAddresses = pool.tokensList;
 
@@ -368,10 +370,12 @@ export function handleSwapEvent(event: SwapEvent): void {
   }
 
   // if a swap happens in a pool that was paused, it means it's pause has expired
-  if (pool.isPaused) {
-    pool.isPaused = false;
-    pool.swapEnabled = true;
-  }
+  // TODO: fix this for when pool.isPaused is null 
+  // TODO: handle the case where the pool's actual swapEnabled is false
+  // if (pool.isPaused) {
+  //   pool.isPaused = false;
+  //   pool.swapEnabled = true;
+  // }
 
   if (isVariableWeightPool(pool)) {
     // Some pools' weights update over time so we need to update them after each swap
