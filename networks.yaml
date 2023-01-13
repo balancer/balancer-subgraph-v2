@@ -63,8 +63,8 @@ mainnet:
 goerli:
   network: goerli
   EventEmitter:
-    address: "0xba898E52644f7A009361Ec5D5FFCb73aC8A9b850"
-    startBlock: 8294218
+    address: "0x4bcFCEDF1114030ff85a647dD436B7b3dEb45d9E"
+    startBlock: 8305794
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 4648099
