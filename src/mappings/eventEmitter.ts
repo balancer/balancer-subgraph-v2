@@ -1,11 +1,10 @@
-import { Bytes, crypto } from '@graphprotocol/graph-ts';
 import { LogArgument } from '../types/EventEmitter/EventEmitter';
 import { Pool } from '../types/schema';
 
 export function handleLogArgument(event: LogArgument): void {
   const identifier = event.params.identifier.toHexString();
 
-  if (identifier == '0xe84220e19c54dd2a96deb4cb59ea58e10e36ae2e5c0887f3af0a1ac8e04b0e29') { //setSwapEnabled
+    if (identifier == '0xe84220e19c54dd2a96deb4cb59ea58e10e36ae2e5c0887f3af0a1ac8e04b0e29') {
     setSwapEnabled(event);
   }
 }
