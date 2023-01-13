@@ -14,7 +14,7 @@ function setSwapEnabled(event: LogArgument): void {
   const pool = Pool.load(poolId);
   if (!pool) return;
 
-  if (event.params.value == 0) {
+  if (event.params.value.toI32() == 0) {
     pool.swapEnabled = false;
   } else {
     pool.swapEnabled = true;
