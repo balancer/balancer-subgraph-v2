@@ -192,9 +192,12 @@ polygon:
     startBlock: 32054793
 arbitrum:
   network: arbitrum-one
-  # graft:
-  #   block: 37991130
-  #   base: QmfXWg4feoambxkeA8RssHqeehhjFP4ALGUQsfYZQPq7iG
+  graft:
+    # One block before we set all pools to recovery mode
+    block: 51220352
+    # always make sure the base subgraph has not been pruned
+    # it should be possible to run time travel queries on it going back to the vault's startBlock
+    base: QmVsBgEoAUgwUXDh1LifikMvffxikNzvHyEp2UeS27TspF
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832
