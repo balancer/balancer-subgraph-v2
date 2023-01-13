@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+pragma solidity ^0.8.0;
 
 contract EventEmitter {
     // Define the owner of the contract
@@ -23,7 +24,7 @@ contract EventEmitter {
     // Define the event that will be emitted when the function is called
     event LogArgument(address sender, string identifier, bytes message);
 
-    constructor() public {
+    constructor() {
         // Set the contract owner to the address that deployed the contract
         owner = msg.sender;
     }
