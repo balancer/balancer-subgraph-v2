@@ -19,7 +19,7 @@ contract EventEmitter {
     address public owner;
 
     // Define a mapping to store the authorization status of each address for each identifier
-    mapping(address => mapping(string => bool)) private isAuthorized;
+    mapping(address => mapping(string => bool)) public isAuthorized;
 
     // Define the event that will be emitted when the function is called
     event LogArgument(address sender, string identifier, bytes message);
