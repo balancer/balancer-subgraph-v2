@@ -125,11 +125,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # One block before we set all pools to recovery mode
-    block: 37742709
+    # One block before we deployed EventEmitter
+    block: 38152460
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmPw3GRthhgc33ArNCMRVM7nHNWcqysftFmCh4AHoD5qEj
+    base: QmWfbmFA9ZHUAuhjJCbAagjr87sL31g1RSdCBNEfLKCwec
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -202,11 +202,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # One block before we set all pools to recovery mode
-    block: 51220351
+    # One block before we deployed EventEmitter
+    block: 53475239
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmVsBgEoAUgwUXDh1LifikMvffxikNzvHyEp2UeS27TspF
+    base: QmYGs1AbebPYzZANhfmjiDHmuC2ogEcF1dwCFMuiSiqTMU
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
