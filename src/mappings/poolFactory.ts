@@ -475,6 +475,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
     pool.swapEnabled = true;
+    pool.isPaused = false;
 
     let bpt = ERC20.bind(poolAddress);
 
@@ -517,6 +518,6 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 
     if (!assetManager) continue;
 
-    createPoolTokenEntity(pool, tokensAddresses[i], assetManager);
+    createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
   }
 }

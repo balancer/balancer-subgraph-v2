@@ -23,6 +23,7 @@ type Pool @entity {
   swapEnabled: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
+  isPaused: Boolean
 
   totalWeight: BigDecimal
   totalSwapVolume: BigDecimal!
@@ -99,6 +100,7 @@ type Pool @entity {
   epsilon: BigDecimal
 
   # Composable and WeightedV2 Only
+  isInRecoveryMode: Boolean
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
@@ -120,6 +122,7 @@ type PoolToken @entity {
   symbol: String!
   name: String!
   decimals: Int!
+  index: Int # TODO: make mandatory at next full sync
   address: String!
   priceRate: BigDecimal!
   balance: BigDecimal!
