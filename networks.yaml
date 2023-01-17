@@ -1,5 +1,8 @@
 mainnet:
   network: mainnet
+  EventEmitter:
+    address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
+    startBlock: 16419620
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 12272146
@@ -121,13 +124,15 @@ goerli:
     startBlock: 7928618
 polygon:
   network: matic
-  # graft:
-  #   # The fix to the accounting of token.totalBalanceNotional (PR #342) require that we reindex
-  #   # from the start block of the AaveLinearPool with embedded rebalancer
-  #   block: 31996915
-  #   # always make sure the base subgraph has not been pruned
-  #   # it should be possible to run time travel queries on it going back to the vault's startBlock
-  #   base: QmQmZiZwgW7vgjnfYs2BPqeM4ufHeURcFqwFzwh4JLNwb5
+  graft:
+    # One block before we set all pools to recovery mode
+    block: 37742709
+    # always make sure the base subgraph has not been pruned
+    # it should be possible to run time travel queries on it going back to the vault's startBlock
+    base: QmPw3GRthhgc33ArNCMRVM7nHNWcqysftFmCh4AHoD5qEj
+  EventEmitter:
+    address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
+    startBlock: 38152461
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
@@ -202,6 +207,9 @@ arbitrum:
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmVsBgEoAUgwUXDh1LifikMvffxikNzvHyEp2UeS27TspF
+  EventEmitter:
+    address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
+    startBlock: 53475240
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832
