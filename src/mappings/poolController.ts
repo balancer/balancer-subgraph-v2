@@ -317,7 +317,7 @@ export function handleSubscription(event: Subscription): void {
   pool.security = event.params.security;
   pool.currency = event.params.currency;
   pool.orderBook = event.params.orderBook;
-  pool.secondaryOffer = tokenToDecimal(event.params.secondaryOffer, 18);
+  pool.minOrderSize = tokenToDecimal(event.params.minOrderSize, 18);
   
   pool.save();
 }

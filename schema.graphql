@@ -116,7 +116,7 @@ type Pool @entity {
   primarySubscriptions: [PrimaryIssues!] @derivedFrom(field: "pool")
 
   # SecondaryPool only
-  secondaryOffer: BigDecimal
+  minOrderSize: BigDecimal
   orderBook: Bytes
   secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "pool")
   orders: [SecondaryOrders!]@derivedFrom(field: "pool")
