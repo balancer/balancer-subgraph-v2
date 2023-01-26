@@ -264,7 +264,7 @@ export function handleTargetsSet(event: TargetsSet): void {
   pool.currency = event.params.currency;
   pool.cutoffTime = tokenToDecimal(event.params.cutoffTime, 18);
   pool.offeringDocs = event.params.offeringDocs;
-  pool.openingPrice = tokenToDecimal(event.params.openingPrice, 18);
+  pool.minimumOrderSize = tokenToDecimal(event.params.minimumOrderSize, 18);
   pool.securityOffered = tokenToDecimal(event.params.securityOffered, 18);
   pool.save();
 }

@@ -109,7 +109,7 @@ type Pool @entity {
   balancerManager: Bytes
 
   # PrimaryPool only
-  openingPrice: BigDecimal
+  minimumOrderSize: BigDecimal
   securityOffered: BigDecimal
   cutoffTime: BigDecimal
   offeringDocs: String
