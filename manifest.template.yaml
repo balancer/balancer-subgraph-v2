@@ -9,6 +9,28 @@ repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
 dataSources:
+  {{#if EventEmitter}}
+  - kind: ethereum/contract
+    name: EventEmitter
+    network: {{network}}
+    source:
+      address: '{{EventEmitter.address}}'
+      abi: EventEmitter
+      startBlock: {{EventEmitter.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/eventEmitter.ts
+      entities:
+        - Pool
+      abis:
+        - name: EventEmitter
+          file: ./abis/EventEmitter.json
+      eventHandlers:
+        - event: LogArgument(indexed address,indexed bytes32,bytes,uint256)
+          handler: handleLogArgument
+  {{/if}}
   - kind: ethereum/contract
     name: Vault
     network: {{network}}
