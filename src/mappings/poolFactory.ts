@@ -95,6 +95,12 @@ export function handleNewWeightedPoolV2(event: PoolCreated): void {
   WeightedPoolV2Template.create(event.params.pool);
 }
 
+export function handleNewWeightedPoolV3(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Weighted, 3);
+  if (pool == null) return;
+  WeightedPoolV2Template.create(event.params.pool);
+}
+
 export function handleNewWeighted2TokenPool(event: PoolCreated): void {
   createWeightedLikePool(event, PoolType.Weighted);
   WeightedPool2TokensTemplate.create(event.params.pool);
