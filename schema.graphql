@@ -346,3 +346,9 @@ type BalancerSnapshot @entity {
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 }
+
+type ProtocolIdData @entity {
+  id ID!
+  name: String!
+  bool: registered!
+}

@@ -46,6 +46,7 @@ import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
+import { ProtocolIdData } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
@@ -250,8 +251,23 @@ export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
 }
 
-export function handleNewERC4626LinearPool(event: PoolCreated): void {
-  handleNewLinearPool(event, PoolType.ERC4626Linear);
+// TODO: Import Erc4626LinearPoolCreated once abi is addded
+export function handleNewERC4626LinearPool(event: Erc4626LinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 1, event.params.protocolId.toI32());
+}
+
+// TODO: Import Erc4626LinearPoolProtocolIdRegistered once abi is addded
+export function handleNewERC4626ProtocolId(event: Erc4626LinearPoolProtocolIdRegistered): void {
+  handleNewProtocolIds(event.protocolId.toI32(), event.name);
 }
 
 function handleNewLinearPool(
@@ -296,6 +312,18 @@ function handleNewLinearPool(
   handleNewPoolTokens(pool, tokens);
 
   LinearPoolTemplate.create(poolAddress);
+}
+
+function handleNewProtocolIds(protocolId: i32, name: string): void {
+  let existingProtocol = ProtocolIdData.load(protocolId);
+
+  if (existingProtocol != null) {
+    let newProtocol = new ProtocolIdData(protocolId);
+    newProtocol.name = name;
+    newProtocol.registered = true;
+    newProtocol.save();
+  }
+
 }
 
 export function handleNewGyro2Pool(event: PoolCreated): void {
