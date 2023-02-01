@@ -254,6 +254,20 @@ export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
+// TODO: Import the event type for EulerLinearPoolCreated
+export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
+}
+
 function handleNewLinearPool(
   event: PoolCreated,
   poolType: string,
