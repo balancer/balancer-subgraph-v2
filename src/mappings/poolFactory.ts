@@ -20,6 +20,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
+import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -254,7 +255,6 @@ export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
-// TODO: Import the event type for EulerLinearPoolCreated
 export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
   const poolCreatedEvent = new PoolCreated(
     event.address,
