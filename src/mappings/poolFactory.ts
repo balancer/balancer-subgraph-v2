@@ -20,7 +20,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
-import { Balancer, Pool, PoolContract } from '../types/schema';
+import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
 
 // datasource
 import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -520,4 +520,16 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 
     createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
   }
+}
+
+// TODO: Verify functionality once ProtocolId contract is complete
+// TODO: Add the event ProtocolIdRegistered
+function handleNewProtocolIds(event: ProtocolIdRegistered): void {
+  let newProtocol = new ProtocolIdData(event.protocolId);
+
+  newProtocol.name = event.name;
+  newProtocol.registered = true;
+
+  newProtocol.save();
+
 }

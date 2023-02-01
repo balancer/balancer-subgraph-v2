@@ -63,6 +63,9 @@ mainnet:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
+  ProtocolIdRegistry:
+    address: #Todo add address
+    startBlock: #Todo add startBlock
 goerli:
   network: goerli
   EventEmitter:
@@ -122,6 +125,9 @@ goerli:
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
+  ProtocolIdRegistry:
+    address: #Todo add address
+    startBlock: #Todo add startBlock
 polygon:
   network: matic
   graft:
@@ -199,6 +205,9 @@ polygon:
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054793
+  ProtocolIdRegistry:
+    address: #Todo add address
+    startBlock: #Todo add startBlock
 arbitrum:
   network: arbitrum-one
   graft:
@@ -255,6 +264,9 @@ arbitrum:
   AaveLinearPoolV3Factory:
     address: "0xa2D801064652A269D92EE2A59F3261155ec66830"
     startBlock: 44470235
+  ProtocolIdRegistry:
+    address: #Todo add address
+    startBlock: #Todo add startBlock
 bnb:
   network: bsc
   Vault:
@@ -272,6 +284,9 @@ bnb:
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
     startBlock: 22895868
+  ProtocolIdRegistry:
+    address: #Todo add address
+    startBlock: #Todo add startBlock
 gnosis:
   network: gnosis
   Vault:
@@ -295,3 +310,6 @@ gnosis:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 25415236
+  ProtocolIdRegistry:
+    address: #Todo add address
+    startBlock: #Todo add startBlock
