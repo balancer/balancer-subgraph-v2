@@ -251,8 +251,13 @@ export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
 }
 
+
+export function handleNewERC4626LinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ERC4626Linear);
+}
+
 // TODO: Import Erc4626LinearPoolCreated once abi is addded
-export function handleNewERC4626LinearPool(event: Erc4626LinearPoolCreated): void {
+export function handleNewERC4626V3LinearPoolV3(event: Erc4626LinearPoolCreated): void {
   const poolCreatedEvent = new PoolCreated(
     event.address,
     event.logIndex,
@@ -263,11 +268,6 @@ export function handleNewERC4626LinearPool(event: Erc4626LinearPoolCreated): voi
     [event.parameters[0]]
   );
   handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 1, event.params.protocolId.toI32());
-}
-
-// TODO: Import Erc4626LinearPoolProtocolIdRegistered once abi is addded
-export function handleNewERC4626ProtocolId(event: Erc4626LinearPoolProtocolIdRegistered): void {
-  handleNewProtocolIds(event.protocolId.toI32(), event.name);
 }
 
 function handleNewLinearPool(
@@ -312,18 +312,6 @@ function handleNewLinearPool(
   handleNewPoolTokens(pool, tokens);
 
   LinearPoolTemplate.create(poolAddress);
-}
-
-function handleNewProtocolIds(protocolId: i32, name: string): void {
-  let existingProtocol = ProtocolIdData.load(protocolId);
-
-  if (existingProtocol != null) {
-    let newProtocol = new ProtocolIdData(protocolId);
-    newProtocol.name = name;
-    newProtocol.registered = true;
-    newProtocol.save();
-  }
-
 }
 
 export function handleNewGyro2Pool(event: PoolCreated): void {
