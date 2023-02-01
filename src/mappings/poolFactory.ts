@@ -20,6 +20,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
+import { Erc4626LinearPoolCreated } from '../types/ERC4626LinearPoolV3Factory/ERC4626LinearPoolV3Factory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -46,7 +47,6 @@ import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
-import { ProtocolIdData } from '../types/schema';
 import { ERC20 } from '../types/Vault/ERC20';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
@@ -256,8 +256,7 @@ export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
-// TODO: Import Erc4626LinearPoolCreated once abi is addded
-export function handleNewERC4626V3LinearPoolV3(event: Erc4626LinearPoolCreated): void {
+export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): void {
   const poolCreatedEvent = new PoolCreated(
     event.address,
     event.logIndex,
@@ -267,7 +266,7 @@ export function handleNewERC4626V3LinearPoolV3(event: Erc4626LinearPoolCreated):
     event.transaction,
     [event.parameters[0]]
   );
-  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 3, event.params.protocolId.toI32());
 }
 
 function handleNewLinearPool(
