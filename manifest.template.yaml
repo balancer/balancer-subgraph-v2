@@ -710,10 +710,10 @@ dataSources:
           file: ./abis/ERC4626LinearPoolV3Factory.json
         - name: LinearPool
           file: ./abis/LinearPool.json
-        - name: ERC4626LinearPoolV3Pool
-          file: ./abis/ERC4626LinearPoolV3Pool.json
+        - name: ERC4626LinearPoolV3
+          file: ./abis/ERC4626LinearPoolV3.json
       eventHandlers:
-        - event: Erc4626LinearPoolCreated(indexed address, indexed uint256)
+        - event: Erc4626LinearPoolCreated(indexed address,indexed uint256)
           handler: handleNewERC4626LinearPoolV3
   {{/if}}
   {{#if Gyro2PoolFactory}}

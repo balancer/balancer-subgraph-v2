@@ -251,7 +251,6 @@ export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
 }
 
-
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
