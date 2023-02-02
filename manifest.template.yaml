@@ -713,7 +713,7 @@ dataSources:
         - name: EulerLinearPool
           file: ./abis/EulerLinearPool.json
       eventHandlers:
-        - event: EulerLinearPoolCreated(indexed address, indexed uint256)
+        - event: EulerLinearPoolCreated(indexed address,indexed uint256)
           handler: handleNewEulerLinearPool
   {{/if}}
   {{#if Gyro2PoolFactory}}

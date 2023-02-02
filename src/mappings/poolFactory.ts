@@ -265,7 +265,7 @@ export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
     event.transaction,
     [event.parameters[0]]
   );
-  handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
+  handleNewLinearPool(poolCreatedEvent, PoolType.EulerLinear, 1, event.params.protocolId.toI32());
 }
 
 function handleNewLinearPool(

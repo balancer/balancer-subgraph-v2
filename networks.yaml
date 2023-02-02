@@ -62,7 +62,7 @@ mainnet:
     startBlock: 14521506
   EulerLinearPoolFactory:
     address: "0x5F43FBa61f63Fa6bFF101a0A0458cEA917f6B347"
-    startBlock: #Todo: Add startBlock
+    startBlock: 16542557
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
