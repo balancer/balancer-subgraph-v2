@@ -72,6 +72,9 @@ mainnet:
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
+  EulerLinearPoolFactory:
+    address: "0x5F43FBa61f63Fa6bFF101a0A0458cEA917f6B347"
+    startBlock: 16542557
   ERC4626LinearPoolV3Factory:
     address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
     startBlock: 16542240
