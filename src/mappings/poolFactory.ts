@@ -278,7 +278,7 @@ export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): v
     event.transaction,
     [event.parameters[0]]
   );
-  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 3, event.params.protocolId.toI32());
+  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 1, event.params.protocolId.toI32());
 }
 
 export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
