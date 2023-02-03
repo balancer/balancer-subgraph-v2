@@ -263,7 +263,7 @@ arbitrum:
     startBlock: 44470235
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
-    startBlock: 71912978
+    startBlock: 57735268
 bnb:
   network: bsc
   Vault:
