@@ -18,6 +18,7 @@ export namespace PoolType {
   export const HighAmpComposableStable = 'HighAmpComposableStable';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
+  export const GearboxLinear = 'GearboxLinear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
   export const GyroE = 'GyroE';
@@ -42,7 +43,11 @@ export function isComposableStablePool(pool: Pool): boolean {
 }
 
 export function isLinearPool(pool: Pool): boolean {
-  return pool.poolType == PoolType.AaveLinear || pool.poolType == PoolType.ERC4626Linear;
+  return (
+    pool.poolType == PoolType.AaveLinear || 
+    pool.poolType == PoolType.ERC4626Linear || 
+    pool.poolType == PoolType.GearboxLinear
+  );
 }
 
 export function isStableLikePool(pool: Pool): boolean {
