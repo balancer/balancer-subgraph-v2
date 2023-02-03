@@ -65,7 +65,7 @@ mainnet:
     startBlock: 15981805
   ProtocolIdRegistry:
     address: #Todo add address
-    startBlock: #Todo add startBlock
+    startBlock: 16542557
 goerli:
   network: goerli
   EventEmitter:
@@ -127,7 +127,7 @@ goerli:
     startBlock: 7928618
   ProtocolIdRegistry:
     address: #Todo add address
-    startBlock: #Todo add startBlock
+    startBlock: 8428315
 polygon:
   network: matic
   graft:
@@ -207,7 +207,7 @@ polygon:
     startBlock: 32054793
   ProtocolIdRegistry:
     address: #Todo add address
-    startBlock: #Todo add startBlock
+    startBlock: 38871008
 arbitrum:
   network: arbitrum-one
   graft:
@@ -266,7 +266,7 @@ arbitrum:
     startBlock: 44470235
   ProtocolIdRegistry:
     address: #Todo add address
-    startBlock: #Todo add startBlock
+    startBlock: 57749036
 bnb:
   network: bsc
   Vault:
@@ -284,9 +284,6 @@ bnb:
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
     startBlock: 22895868
-  ProtocolIdRegistry:
-    address: #Todo add address
-    startBlock: #Todo add startBlock
 gnosis:
   network: gnosis
   Vault:
@@ -312,4 +309,4 @@ gnosis:
     startBlock: 25415236
   ProtocolIdRegistry:
     address: #Todo add address
-    startBlock: #Todo add startBlock
+    startBlock: 26294431

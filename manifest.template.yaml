@@ -1271,7 +1271,7 @@ templates:
           handler: handleAnswerUpdated
   - kind: ethereum/contract
     name: ProtocolIdRegistry
-    network: {{netowrk}}
+    network: {{network}}
     source:
       address: '{{ProtocolIdRegistry.address}}'
       abi: ProtocolIdRegistry
@@ -1287,6 +1287,6 @@ templates:
         - name: ProtocolIdRegistry
           file: ./abis/ProtocolIdRegistry.json
       eventHandlers:
-        - event: ProtocolIdRegistered(indexed uint256, string)
+        - event: ProtocolIdRegistered(indexed uint256,string)
           handler: handleNewProtocolIds
 

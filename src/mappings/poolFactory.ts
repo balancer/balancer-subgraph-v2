@@ -522,9 +522,7 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   }
 }
 
-// TODO: Verify functionality once ProtocolId contract is complete
-// TODO: Add the event ProtocolIdRegistered
-function handleNewProtocolIds(event: ProtocolIdRegistered): void {
+export function handleNewProtocolIds(event: ProtocolIdRegistered): void {
   let newProtocol = new ProtocolIdData(event.protocolId);
 
   newProtocol.name = event.name;
