@@ -44,7 +44,11 @@ export function isComposableStablePool(pool: Pool): boolean {
 }
 
 export function isLinearPool(pool: Pool): boolean {
-  return pool.poolType == PoolType.AaveLinear || pool.poolType == PoolType.ERC4626Linear || pool.poolType == PoolType.YearnLinear;
+  return (
+    pool.poolType == PoolType.AaveLinear || 
+    pool.poolType == PoolType.ERC4626Linear || 
+    pool.poolType == PoolType.YearnLinear
+  );
 }
 
 export function isStableLikePool(pool: Pool): boolean {

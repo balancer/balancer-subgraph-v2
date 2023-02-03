@@ -51,6 +51,9 @@ mainnet:
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
 goerli:
   network: goerli
   Vault:
@@ -98,6 +101,9 @@ goerli:
   AaveLinearPoolV2Factory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 7421371
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
@@ -163,6 +169,9 @@ polygon:
   GyroEPoolFactory:
     address: "0xD4204551BC5397455f8897745d50Ac4F6beE0EF6"
     startBlock: 35414865
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054794
@@ -207,6 +216,9 @@ arbitrum:
   AaveLinearPoolV2Factory:
     address: "0xe2E901AB09f37884BA31622dF3Ca7FC19AA443Be"
     startBlock: 20509414
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
 bnb:
   network: bsc
   Vault:

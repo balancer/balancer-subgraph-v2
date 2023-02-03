@@ -627,7 +627,7 @@ dataSources:
         - name: YearnLinearPool
           file: ./abis/YearnLinearPool.json
       eventHandlers:
-        - event: PoolCreated(indexed address)
+        - event: YearnLinearPoolCreated(indexed address,indexed uint256)
           handler: handleNewYearnLinearPool
   {{/if}}
   {{#if Gyro2PoolFactory}}
