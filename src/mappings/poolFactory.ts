@@ -20,6 +20,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
+import { ReaperLinearPoolCreated } from '../types/ReaperLinearPoolFactory/ReaperLinearPoolFactory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -252,6 +253,19 @@ export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
 
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
+}
+
+export function handleNewReaperLinearPool(event: ReaperLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.ReaperLinear, 1, event.params.protocolId.toI32());
 }
 
 function handleNewLinearPool(
