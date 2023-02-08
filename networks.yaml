@@ -57,6 +57,9 @@ mainnet:
   AaveLinearPoolV3Factory:
     address: "0x7d833FEF5BB92ddb578DA85fc0c35cD5Cc00Fb3e"
     startBlock: 16136501
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
@@ -119,6 +122,9 @@ goerli:
   AaveLinearPoolV3Factory:
     address: "0x70Bbd023481788e443472e123AB963e5EBF58D06"
     startBlock: 8094401
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
@@ -181,6 +187,9 @@ polygon:
   AaveLinearPoolV3Factory:
     address: "0x35c425234DC42e7402f54cC54573f77842963a56"
     startBlock: 36555199
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolFactoryBeta:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
@@ -255,6 +264,9 @@ arbitrum:
   AaveLinearPoolV3Factory:
     address: "0xa2D801064652A269D92EE2A59F3261155ec66830"
     startBlock: 44470235
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
 bnb:
   network: bsc
   Vault:
@@ -272,6 +284,9 @@ bnb:
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
     startBlock: 22895868
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
 gnosis:
   network: gnosis
   Vault:
@@ -289,6 +304,9 @@ gnosis:
   AaveLinearPoolV3Factory:
     address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
     startBlock: 25415464
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolFactory:
     address: "0x4132f7AcC9dB7A6cF7BE2Dd3A9DC8b30C7E6E6c8"
     startBlock: 25415264

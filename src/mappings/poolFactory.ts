@@ -250,6 +250,19 @@ export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
 }
 
+export function handleNewAaveLinearPoolV4(event: AaveLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 4, event.params.protocolId.toI32());
+}
+
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
