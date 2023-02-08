@@ -265,6 +265,7 @@ export function handleTargetsSet(event: TargetsSet): void {
   pool.cutoffTime = tokenToDecimal(event.params.cutoffTime, 18);
   pool.offeringDocs = event.params.offeringDocs;
   pool.minimumOrderSize = tokenToDecimal(event.params.minimumOrderSize, 18);
+  pool.minimumPrice = tokenToDecimal(event.params.minimumPrice, 18);
   pool.securityOffered = tokenToDecimal(event.params.securityOffered, 18);
   pool.save();
 }
@@ -361,6 +362,7 @@ export function handleTradeReport(event: TradeReport): void {
     let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.security);
     let trades = new SecondaryTrades(providerId);   
     trades.pool = poolId.toHexString(); 
+    trades.orderType = event.params.orderType;
     trades.amount = tokenToDecimal(event.params.amount, 18);
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.currency = event.params.currency.toHexString();
@@ -370,6 +372,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.save();
   } 
   else{
+    trades.orderType = event.params.orderType;
     trades.amount = tokenToDecimal(event.params.amount, 18);
     trades.price = tokenToDecimal(event.params.price, 18);
     trades.currency = event.params.currency.toHexString();

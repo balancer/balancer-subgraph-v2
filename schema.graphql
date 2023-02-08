@@ -110,6 +110,7 @@ type Pool @entity {
 
   # PrimaryPool only
   minimumOrderSize: BigDecimal
+  minimumPrice: BigDecimal
   securityOffered: BigDecimal
   cutoffTime: BigDecimal
   offeringDocs: String
@@ -138,6 +139,7 @@ type SecondaryTrades @entity {
   pool: Pool!
   party: User! 
   counterparty: User! 
+  orderType: Bytes!
   price: BigDecimal!
   currency: Token!
   amount: BigDecimal! 
