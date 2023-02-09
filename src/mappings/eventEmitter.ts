@@ -1,11 +1,18 @@
 import { LogArgument } from '../types/EventEmitter/EventEmitter';
-import { Pool } from '../types/schema';
+import { Pool, Token } from '../types/schema';
+import { BigDecimal } from '@graphprotocol/graph-ts';
 
 export function handleLogArgument(event: LogArgument): void {
   const identifier = event.params.identifier.toHexString();
 
+  // convention: identifier = keccak256(function_name)
+  // keccak256(setSwapEnabled) = 0xe84220e19c54dd2a96deb4cb59ea58e10e36ae2e5c0887f3af0a1ac8e04b0e29
   if (identifier == '0xe84220e19c54dd2a96deb4cb59ea58e10e36ae2e5c0887f3af0a1ac8e04b0e29') {
     setSwapEnabled(event);
+  }
+  // keccak256(setLatestUSDPrice) = 0x205869a4266a1bbcc5e2e5255221a32636b162e29887138cc0a8ba5141d05c62
+  if (identifier == '0x205869a4266a1bbcc5e2e5255221a32636b162e29887138cc0a8ba5141d05c62') {
+    setLatestUSDPrice(event);
   }
 }
 
@@ -20,4 +27,14 @@ function setSwapEnabled(event: LogArgument): void {
     pool.swapEnabled = true;
   }
   pool.save();
+}
+
+function setLatestUSDPrice(event: LogArgument): void {
+  const tokenAddress = event.params.message.toHexString();
+  const token = Token.load(tokenAddress);
+  if (!token) return;
+
+  const base = BigDecimal.fromString('100');
+  token.latestUSDPrice = (event.params.value.toBigDecimal().div(base);
+  token.save();
 }
