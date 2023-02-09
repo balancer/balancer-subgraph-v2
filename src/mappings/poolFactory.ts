@@ -22,6 +22,7 @@ import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
 import { Erc4626LinearPoolCreated } from '../types/ERC4626LinearPoolV3Factory/ERC4626LinearPoolV3Factory';
+import { MidasLinearPoolCreated } from '../types/MidasLinearPoolFactory/MidasLinearPoolFactory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -282,6 +283,19 @@ export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): v
 }
 
 export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.EulerLinear, 1, event.params.protocolId.toI32());
+}
+
+export function handleNewMidasLinearPool(event: MidasLinearPoolCreated): void {
   const poolCreatedEvent = new PoolCreated(
     event.address,
     event.logIndex,

@@ -214,6 +214,9 @@ polygon:
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
     startBlock: 38828779
+  MidasLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   Gyro2PoolFactory:
     address: "0x5d8545a7330245150bE0Ce88F8afB0EDc41dFc34"
     startBlock: 31556084
@@ -314,6 +317,9 @@ bnb:
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
     startBlock: 22895868
+  MidasLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
 gnosis:
   network: gnosis
   Vault:
