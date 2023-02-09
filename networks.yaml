@@ -1,5 +1,11 @@
 mainnet:
   network: mainnet
+  graft:
+    # Jan30 - using this because it's the latest block
+    block: 16521178
+    # always make sure the base subgraph has not been pruned
+    # it should be possible to run time travel queries on it going back to the vault's startBlock
+    base: QmYnU9J6HJ56uGN79F3wo4nG24hVZUNPboSUyje1NvSm68
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -12,6 +18,9 @@ mainnet:
   WeightedPoolV2Factory:
     address: "0xcC508a455F5b0073973107Db6a878DdBDab957bC"
     startBlock: 15497271
+  WeightedPoolV3Factory:
+    address: "0x5Dd94Da3644DDD055fcf6B3E1aa310Bb7801EB8b"
+    startBlock: 16520627
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 12272146
@@ -27,6 +36,9 @@ mainnet:
   ComposableStablePoolV2Factory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 16083775
+  ComposableStablePoolV3Factory:
+    address: "0xdba127fBc23fb20F5929C546af220A991b5C6e01"
+    startBlock: 16520627
   HighAmpComposableStablePoolFactory:
     address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
     startBlock: 15852258
@@ -60,6 +72,12 @@ mainnet:
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
+  EulerLinearPoolFactory:
+    address: "0x5F43FBa61f63Fa6bFF101a0A0458cEA917f6B347"
+    startBlock: 16542557
+  ERC4626LinearPoolV3Factory:
+    address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
+    startBlock: 16542240
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
@@ -125,11 +143,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # One block before we deployed EventEmitter
-    block: 38152460
+    # Jan30 - using this because it's the latest block
+    block: 38712422
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmWfbmFA9ZHUAuhjJCbAagjr87sL31g1RSdCBNEfLKCwec
+    base: QmRpS8GXDmf6Egk4uSmcF4HhwE6UAAqqXMByQgXuvz9jNX
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -142,6 +160,9 @@ polygon:
   WeightedPoolV2Factory:
     address: "0x0e39C3D9b2ec765eFd9c5c70BB290B1fCD8536E3"
     startBlock: 32850162
+  WeightedPoolV3Factory:
+    address: "0x82e4cFaef85b1B6299935340c964C942280327f4"
+    startBlock: 38709460
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 15869090
@@ -157,6 +178,9 @@ polygon:
   ComposableStablePoolV2Factory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 36258226
+  ComposableStablePoolV3Factory:
+    address: "0x7bc6C0E73EDAa66eF3F6E2f27b0EE8661834c6C9"
+    startBlock: 38709460
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 17913016
@@ -187,6 +211,9 @@ polygon:
   ERC4626LinearPoolFactory:
     address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
     startBlock: 26746067
+  ERC4626LinearPoolV3Factory:
+    address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
+    startBlock: 38828779
   Gyro2PoolFactory:
     address: "0x5d8545a7330245150bE0Ce88F8afB0EDc41dFc34"
     startBlock: 31556084
@@ -202,11 +229,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # One block before we deployed EventEmitter
-    block: 53475239
+    # Jan30 - using this because it's the latest block
+    block: 56689183
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYGs1AbebPYzZANhfmjiDHmuC2ogEcF1dwCFMuiSiqTMU
+    base: QmdLSiv1QcE1pdh236KT5hFfEQ3m1hUMihBKbTb344jwSe
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -219,6 +246,9 @@ arbitrum:
   WeightedPoolV2Factory:
     address: "0x8df6EfEc5547e31B0eb7d1291B511FF8a2bf987c"
     startBlock: 23605789
+  WeightedPoolV3Factory:
+    address: "0xf1665E19bc105BE4EDD3739F88315cC699cc5b65"
+    startBlock: 56668142
   WeightedPool2TokenFactory:
     address: "0xCF0a32Bbef8F064969F21f7e02328FB577382018"
     startBlock: 222864
@@ -234,6 +264,9 @@ arbitrum:
   ComposableStablePoolV2Factory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 42468618
+  ComposableStablePoolV3Factory:
+    address: "0x1c99324EDC771c82A0DCCB780CC7DDA0045E50e7"
+    startBlock: 56668142
   MetaStablePoolFactory:
     address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
     startBlock: 222868
@@ -255,6 +288,9 @@ arbitrum:
   AaveLinearPoolV3Factory:
     address: "0xa2D801064652A269D92EE2A59F3261155ec66830"
     startBlock: 44470235
+  ERC4626LinearPoolV3Factory:
+    address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
+    startBlock: 57735268
 bnb:
   network: bsc
   Vault:
@@ -263,9 +299,15 @@ bnb:
   WeightedPoolV2Factory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22895868
+  WeightedPoolV3Factory:
+    address: "0x6e4cF292C5349c79cCd66349c3Ed56357dD11B46"
+    startBlock: 25237933
   ComposableStablePoolFactory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 22895868
+  ComposableStablePoolV3Factory:
+    address: "0xacAaC3e6D6Df918Bf3c809DFC7d42de0e4a72d4C"
+    startBlock: 25237933
   TempLiquidityBootstrappingPoolFactory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 22895868
@@ -280,12 +322,18 @@ gnosis:
   WeightedPoolV2Factory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 25414470
+  WeightedPoolV3Factory:
+    address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
+    startBlock: 26226256
   StablePoolV2Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
     startBlock: 25415344
   ComposableStablePoolV2Factory:
     address: "0x76578ecf9a141296Ec657847fb45B0585bCDa3a6"
     startBlock: 25415385
+  ComposableStablePoolV3Factory:
+    address: "0x239e55F427D44C3cc793f49bFB507ebe76638a2b"
+    startBlock: 26226256
   AaveLinearPoolV3Factory:
     address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
     startBlock: 25415464
