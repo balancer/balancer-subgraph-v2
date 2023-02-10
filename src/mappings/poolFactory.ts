@@ -21,6 +21,13 @@ import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/gra
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { TetuLinearPoolCreated } from '../types/TetuLinearPoolFactory/TetuLinearPoolFactory';
+import { SiloLinearPoolCreated } from '../types/SiloLinearPoolFactory/SiloLinearPoolFactory';
+import { ReaperLinearPoolCreated } from '../types/ReaperLinearPoolFactory/ReaperLinearPoolFactory';
+import { BeefyLinearPoolCreated } from '../types/BeefyLinearPoolFactory/BeefyLinearPoolFactory';
+import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
+import { Erc4626LinearPoolCreated } from '../types/ERC4626LinearPoolV3Factory/ERC4626LinearPoolV3Factory';
+import { MidasLinearPoolCreated } from '../types/MidasLinearPoolFactory/MidasLinearPoolFactory';
+import { GearboxLinearPoolCreated } from '../types/GearboxLinearPoolFactory/GearboxLinearPoolFactory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -92,6 +99,12 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
 export function handleNewWeightedPoolV2(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Weighted, 2);
+  if (pool == null) return;
+  WeightedPoolV2Template.create(event.params.pool);
+}
+
+export function handleNewWeightedPoolV3(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Weighted, 3);
   if (pool == null) return;
   WeightedPoolV2Template.create(event.params.pool);
 }
@@ -180,6 +193,12 @@ export function handleNewComposableStablePoolV2(event: PoolCreated): void {
   StablePhantomPoolV2Template.create(event.params.pool);
 }
 
+export function handleNewComposableStablePoolV3(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.ComposableStable, 3);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
+}
+
 export function handleNewHighAmpComposableStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.HighAmpComposableStable);
   if (pool == null) return;
@@ -251,8 +270,113 @@ export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
   handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
 }
 
+export function handleNewAaveLinearPoolV4(event: AaveLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 4, event.params.protocolId.toI32());
+}
+
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
+}
+
+export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.TetuLinear, 1, event.params.protocolId.toI32());
+}
+
+
+export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.EulerLinear, 1, event.params.protocolId.toI32());
+}
+
+export function handleNewBeefyLinearPool(event: BeefyLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.BeefyLinear, 1, event.params.protocolId.toI32());
+}
+
+export function handleNewGearboxLinearPool(event: GearboxLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.GearboxLinear, 1, event.params.protocolId.toI32());
+}
+
+export function handleNewMidasLinearPool(event: MidasLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.EulerLinear, 1, event.params.protocolId.toI32());
+}
+
+export function handleNewReaperLinearPool(event: ReaperLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.ReaperLinear, 1, event.params.protocolId.toI32());
+}
+
+export function handleNewSiloLinearPool(event: SiloLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.SiloLinear, 1, event.params.protocolId.toI32());
 }
 
 export function handleNewTetuLinearPool(event: TetuLinearPoolCreated): void {
@@ -266,7 +390,9 @@ export function handleNewTetuLinearPool(event: TetuLinearPoolCreated): void {
     [event.parameters[0]]
   );
   handleNewLinearPool(poolCreatedEvent, PoolType.TetuLinear, 1, event.params.protocolId.toI32());
-}
+  }
+
+
 
 function handleNewLinearPool(
   event: PoolCreated,
