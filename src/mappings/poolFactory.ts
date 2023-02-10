@@ -259,11 +259,11 @@ export function handleNewAaveLinearPoolV2(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear, 2);
 }
 
-export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
+export function handleNewAaveLinearPoolV3(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear, 3);
 }
 
-export function handleNewAaveLinearPoolV4(event: AaveLinearPoolCreated): void {
+export function handleNewAaveLinearPoolV4(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear, 4);
 }
 
@@ -271,40 +271,40 @@ export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
 
-export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): void {
-  handleNewLinearPool(event, PoolType.ERC4626Linear, 1);
+export function handleNewERC4626LinearPoolV3(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ERC4626Linear, 3);
 }
 
 
-export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
+export function handleNewEulerLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
-export function handleNewBeefyLinearPool(event: BeefyLinearPoolCreated): void {
+export function handleNewBeefyLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.BeefyLinear, 1);
 }
 
-export function handleNewGearboxLinearPool(event: GearboxLinearPoolCreated): void {
+export function handleNewGearboxLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.GearboxLinear, 1);
 }
 
-export function handleNewMidasLinearPool(event: MidasLinearPoolCreated): void {
+export function handleNewMidasLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
-export function handleNewReaperLinearPool(event: ReaperLinearPoolCreated): void {
+export function handleNewReaperLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ReaperLinear, 1);
 }
 
-export function handleNewSiloLinearPool(event: SiloLinearPoolCreated): void {
+export function handleNewSiloLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.SiloLinear, 1);
 }
 
-export function handleNewTetuLinearPool(event: TetuLinearPoolCreated): void {
+export function handleNewTetuLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.TetuLinear, 1);
 }
 
-export function handleNewYearnLinearPool(event: YearnLinearPoolCreated): void {
+export function handleNewYearnLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.YearnLinear, 1);
 }
 
