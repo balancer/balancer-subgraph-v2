@@ -260,29 +260,11 @@ export function handleNewAaveLinearPoolV2(event: PoolCreated): void {
 }
 
 export function handleNewAaveLinearPoolV3(event: AaveLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 3, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.AaveLinear, 3);
 }
 
 export function handleNewAaveLinearPoolV4(event: AaveLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.AaveLinear, 4, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.AaveLinear, 4);
 }
 
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
@@ -290,130 +272,54 @@ export function handleNewERC4626LinearPool(event: PoolCreated): void {
 }
 
 export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-
-  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.ERC4626Linear, 1);
 }
 
 
 export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.EulerLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
 export function handleNewBeefyLinearPool(event: BeefyLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.BeefyLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.BeefyLinear, 1);
 }
 
 export function handleNewGearboxLinearPool(event: GearboxLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.GearboxLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.GearboxLinear, 1);
 }
 
 export function handleNewMidasLinearPool(event: MidasLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.EulerLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
 export function handleNewReaperLinearPool(event: ReaperLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.ReaperLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.ReaperLinear, 1);
 }
 
 export function handleNewSiloLinearPool(event: SiloLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.SiloLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.SiloLinear, 1);
 }
 
 export function handleNewTetuLinearPool(event: TetuLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.TetuLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.TetuLinear, 1);
 }
 
 export function handleNewYearnLinearPool(event: YearnLinearPoolCreated): void {
-  const poolCreatedEvent = new PoolCreated(
-    event.address,
-    event.logIndex,
-    event.transactionLogIndex,
-    event.logType,
-    event.block,
-    event.transaction,
-    [event.parameters[0]]
-  );
-  handleNewLinearPool(poolCreatedEvent, PoolType.YearnLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(event, PoolType.YearnLinear, 1);
 }
 
-function handleNewLinearPool(
-  event: PoolCreated,
-  poolType: string,
-  poolTypeVersion: i32 = 1,
-  protocolId: i32 = null
-): void {
+export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
+  let poolAddress = event.params.pool;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
+  let pool = Pool.load(poolContract.pool) as Pool;
+  pool.protocolId = event.params.protocolId.toI32();
+  pool.save();
+}
+
+function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
+
   let poolAddress: Address = event.params.pool;
 
   let poolContract = LinearPool.bind(poolAddress);
@@ -428,7 +334,6 @@ function handleNewLinearPool(
 
   pool.poolType = poolType;
   pool.poolTypeVersion = poolTypeVersion;
-  pool.protocolId = protocolId;
 
   let mainIndexCall = poolContract.try_getMainIndex();
   pool.mainIndex = mainIndexCall.value.toI32();
