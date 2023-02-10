@@ -20,6 +20,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
+import { TetuLinearPoolCreated } from '../types/TetuLinearPoolFactory/TetuLinearPoolFactory';
 import { SiloLinearPoolCreated } from '../types/SiloLinearPoolFactory/SiloLinearPoolFactory';
 import { ReaperLinearPoolCreated } from '../types/ReaperLinearPoolFactory/ReaperLinearPoolFactory';
 import { BeefyLinearPoolCreated } from '../types/BeefyLinearPoolFactory/BeefyLinearPoolFactory';
@@ -296,8 +297,9 @@ export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): v
     event.transaction,
     [event.parameters[0]]
   );
-  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 3, event.params.protocolId.toI32());
+  handleNewLinearPool(poolCreatedEvent, PoolType.TetuLinear, 1, event.params.protocolId.toI32());
 }
+
 
 export function handleNewEulerLinearPool(event: EulerLinearPoolCreated): void {
   const poolCreatedEvent = new PoolCreated(
@@ -376,6 +378,20 @@ export function handleNewSiloLinearPool(event: SiloLinearPoolCreated): void {
   );
   handleNewLinearPool(poolCreatedEvent, PoolType.SiloLinear, 1, event.params.protocolId.toI32());
 }
+
+export function handleNewTetuLinearPool(event: TetuLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.TetuLinear, 1, event.params.protocolId.toI32());
+  }
+
 
 
 function handleNewLinearPool(

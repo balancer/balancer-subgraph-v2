@@ -1011,6 +1011,39 @@ dataSources:
         - event: SiloLinearPoolCreated(indexed address,indexed uint256)
           handler: handleNewSiloLinearPool
   {{/if}}
+  {{#if TetuLinearPoolFactory}}
+  - kind: ethereum/contract
+    name: TetuLinearPoolFactory
+    network: {{network}}
+    source:
+      address: '{{TetuLinearPoolFactory.address}}'
+      abi: TetuLinearPoolFactory
+      startBlock: {{TetuLinearPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: TetuLinearPoolFactory
+          file: ./abis/TetuLinearPoolFactoryinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: TetuLinearPool
+          file: ./abis/TetuLinearPoolinearPool.json
+      eventHandlers:
+        - event: TetuLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleNewTetuLinearPool
+  {{/if}}
   {{#if Gyro2PoolFactory}}
   - kind: ethereum/contract
     name: Gyro2PoolFactory
