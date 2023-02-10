@@ -17,12 +17,12 @@ export function handleLogArgument(event: LogArgument): void {
 }
 
 function setSwapEnabled(event: LogArgument): void {
-/**
+  /**
    * Sets a pool's swapEnabled attribute
    *
    * @param message - The pool id (eg. 0x12345abce... - all lowercase)
    * @param value - 0 if swapEnabled is to be set false; any other value sets it to true
-   */// 
+   */ //
   const poolId = event.params.message.toHexString();
   const pool = Pool.load(poolId);
   if (!pool) return;
@@ -36,17 +36,17 @@ function setSwapEnabled(event: LogArgument): void {
 }
 
 function setLatestUSDPrice(event: LogArgument): void {
-/**
+  /**
    * Sets a token's latestUSDPrice attribute
    *
    * @param message - The token address (eg. 0x12345abce... - all lowercase)
    * @param value - token price in cents of USD (ie, a value of 1 represents $0.01)
-   */// 
+   */ //
   const tokenAddress = event.params.message.toHexString();
   const token = Token.load(tokenAddress);
   if (!token) return;
 
   const base = BigDecimal.fromString('100');
-  token.latestUSDPrice = (event.params.value.toBigDecimal().div(base));
+  token.latestUSDPrice = event.params.value.toBigDecimal().div(base);
   token.save();
 }
