@@ -19,6 +19,10 @@ export namespace PoolType {
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
   export const ReaperLinear = 'ReaperLinear';
+  export const BeefyLinear = 'BeefyLinear';
+  export const EulerLinear = 'EulerLinear';
+  export const MidasLinear = 'MidasLinear';
+  export const GearboxLinear = 'GearboxLinear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
   export const GyroE = 'GyroE';
@@ -34,6 +38,10 @@ export function hasVirtualSupply(pool: Pool): boolean {
     pool.poolType == PoolType.AaveLinear ||
     pool.poolType == PoolType.ERC4626Linear ||
     pool.poolType == PoolType.ReaperLinear ||
+    pool.poolType == PoolType.BeefyLinear ||
+    pool.poolType == PoolType.EulerLinear ||
+    pool.poolType == PoolType.MidasLinear ||
+    pool.poolType == PoolType.GearboxLinear ||
     pool.poolType == PoolType.StablePhantom ||
     isComposableStablePool(pool)
   );
@@ -47,7 +55,11 @@ export function isLinearPool(pool: Pool): boolean {
   return ( 
     pool.poolType == PoolType.AaveLinear || 
     pool.poolType == PoolType.ERC4626Linear ||
-    pool.poolType == PoolType.ReaperLinear 
+    pool.poolType == PoolType.ReaperLinear ||
+    pool.poolType == PoolType.EulerLinear ||
+    pool.poolType == PoolType.MidasLinear ||
+    pool.poolType == PoolType.BeefyLinear ||
+    pool.poolType == PoolType.GearboxLinear
     );
 }
 
