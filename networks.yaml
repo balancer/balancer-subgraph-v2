@@ -75,24 +75,18 @@ mainnet:
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
-<<<<<<< HEAD
   GearboxLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
-=======
-<<<<<<< HEAD
   BeefyLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
-=======
   EulerLinearPoolFactory:
     address: "0x5F43FBa61f63Fa6bFF101a0A0458cEA917f6B347"
     startBlock: 16542557
   ERC4626LinearPoolV3Factory:
     address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
     startBlock: 16542240
->>>>>>> linear_pool_update
->>>>>>> linear_pool_update
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
@@ -238,14 +232,16 @@ polygon:
   ERC4626LinearPoolFactory:
     address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
     startBlock: 26746067
-<<<<<<< HEAD
   GearboxLinearPoolFactory:
-=======
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
     startBlock: 38828779
+  MidasLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   BeefyLinearPoolFactory:
->>>>>>> linear_pool_update
     address: #TODO
     startBlock: #TODO
   Gyro2PoolFactory:
@@ -322,11 +318,9 @@ arbitrum:
   AaveLinearPoolV3Factory:
     address: "0xa2D801064652A269D92EE2A59F3261155ec66830"
     startBlock: 44470235
-<<<<<<< HEAD
   GearboxLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
-=======
   BeefyLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
@@ -336,7 +330,6 @@ arbitrum:
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
     startBlock: 57735268
->>>>>>> linear_pool_update
 bnb:
   network: bsc
   Vault:
@@ -360,6 +353,9 @@ bnb:
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
     startBlock: 22895868
+  MidasLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   AaveLinearPoolV4Factory:
     address: #TODO
     startBlock: #TODO

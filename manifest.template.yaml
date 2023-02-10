@@ -912,6 +912,39 @@ dataSources:
         - event: GearboxLinearPoolCreated(indexed address,indexed uint256)
           handler: handleNewGearboxLinearPool
   {{/if}}
+  {{#if MidasLinearPoolFactory}}
+  - kind: ethereum/contract
+    name: MidasLinearPoolFactory
+    network: {{network}}
+    source:
+      address: '{{MidasLinearPoolFactory.address}}'
+      abi: MidasLinearPoolFactory
+      startBlock: {{MidasLinearPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: MidasLinearPoolFactory
+          file: ./abis/MidasLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: MidasLinearPool
+          file: ./abis/MidasLinearPool.json
+      eventHandlers:
+        - event: MidasLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleNewMidasLinearPool
+  {{/if}}
   {{#if Gyro2PoolFactory}}
   - kind: ethereum/contract
     name: Gyro2PoolFactory
