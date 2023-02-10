@@ -75,6 +75,9 @@ mainnet:
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   TetuLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
@@ -155,6 +158,9 @@ goerli:
   AaveLinearPoolV3Factory:
     address: "0x70Bbd023481788e443472e123AB963e5EBF58D06"
     startBlock: 8094401
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   TetuLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
@@ -250,6 +256,9 @@ polygon:
   ERC4626LinearPoolFactory:
     address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
     startBlock: 26746067
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   TetuLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
@@ -345,6 +354,9 @@ arbitrum:
   AaveLinearPoolV3Factory:
     address: "0xa2D801064652A269D92EE2A59F3261155ec66830"
     startBlock: 44470235
+  YearnLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODOs
   SiloLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
