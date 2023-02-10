@@ -18,6 +18,7 @@ export namespace PoolType {
   export const HighAmpComposableStable = 'HighAmpComposableStable';
   export const AaveLinear = 'AaveLinear';
   export const ERC4626Linear = 'ERC4626Linear';
+  export const ReaperLinear = 'ReaperLinear';
   export const BeefyLinear = 'BeefyLinear';
   export const EulerLinear = 'EulerLinear';
   export const MidasLinear = 'MidasLinear';
@@ -36,6 +37,7 @@ export function hasVirtualSupply(pool: Pool): boolean {
   return (
     pool.poolType == PoolType.AaveLinear ||
     pool.poolType == PoolType.ERC4626Linear ||
+    pool.poolType == PoolType.ReaperLinear ||
     pool.poolType == PoolType.BeefyLinear ||
     pool.poolType == PoolType.EulerLinear ||
     pool.poolType == PoolType.MidasLinear ||
@@ -53,11 +55,12 @@ export function isLinearPool(pool: Pool): boolean {
   return ( 
     pool.poolType == PoolType.AaveLinear || 
     pool.poolType == PoolType.ERC4626Linear ||
+    pool.poolType == PoolType.ReaperLinear ||
     pool.poolType == PoolType.EulerLinear ||
     pool.poolType == PoolType.MidasLinear ||
     pool.poolType == PoolType.BeefyLinear ||
     pool.poolType == PoolType.GearboxLinear
-  );
+    );
 }
 
 export function isStableLikePool(pool: Pool): boolean {

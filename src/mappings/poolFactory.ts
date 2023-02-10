@@ -20,6 +20,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
+import { ReaperLinearPoolCreated } from '../types/ReaperLinearPoolFactory/ReaperLinearPoolFactory';
 import { BeefyLinearPoolCreated } from '../types/BeefyLinearPoolFactory/BeefyLinearPoolFactory';
 import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
 import { Erc4626LinearPoolCreated } from '../types/ERC4626LinearPoolV3Factory/ERC4626LinearPoolV3Factory';
@@ -348,6 +349,19 @@ export function handleNewMidasLinearPool(event: MidasLinearPoolCreated): void {
   );
   handleNewLinearPool(poolCreatedEvent, PoolType.EulerLinear, 1, event.params.protocolId.toI32());
 }
+
+export function handleNewReaperLinearPool(event: ReaperLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.ReaperLinear, 1, event.params.protocolId.toI32());
+  }
 
 function handleNewLinearPool(
   event: PoolCreated,
