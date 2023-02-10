@@ -69,9 +69,18 @@ mainnet:
   AaveLinearPoolV3Factory:
     address: "0x7d833FEF5BB92ddb578DA85fc0c35cD5Cc00Fb3e"
     startBlock: 16136501
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
+  GearboxLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+  BeefyLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   EulerLinearPoolFactory:
     address: "0x5F43FBa61f63Fa6bFF101a0A0458cEA917f6B347"
     startBlock: 16542557
@@ -137,6 +146,15 @@ goerli:
   AaveLinearPoolV3Factory:
     address: "0x70Bbd023481788e443472e123AB963e5EBF58D06"
     startBlock: 8094401
+  GearboxLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+  BeefyLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
@@ -205,16 +223,25 @@ polygon:
   AaveLinearPoolV3Factory:
     address: "0x35c425234DC42e7402f54cC54573f77842963a56"
     startBlock: 36555199
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolFactoryBeta:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
   ERC4626LinearPoolFactory:
     address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
     startBlock: 26746067
+  GearboxLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
     startBlock: 38828779
   MidasLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+  BeefyLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
   Gyro2PoolFactory:
@@ -291,6 +318,15 @@ arbitrum:
   AaveLinearPoolV3Factory:
     address: "0xa2D801064652A269D92EE2A59F3261155ec66830"
     startBlock: 44470235
+  GearboxLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+  BeefyLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
     startBlock: 57735268
@@ -320,6 +356,9 @@ bnb:
   MidasLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
 gnosis:
   network: gnosis
   Vault:
@@ -343,6 +382,9 @@ gnosis:
   AaveLinearPoolV3Factory:
     address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
     startBlock: 25415464
+  AaveLinearPoolV4Factory:
+    address: #TODO
+    startBlock: #TODO
   ERC4626LinearPoolFactory:
     address: "0x4132f7AcC9dB7A6cF7BE2Dd3A9DC8b30C7E6E6c8"
     startBlock: 25415264

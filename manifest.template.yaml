@@ -681,6 +681,39 @@ dataSources:
         - event: AaveLinearPoolCreated(indexed address,indexed uint256)
           handler: handleNewAaveLinearPoolV3
   {{/if}}
+  {{#if AaveLinearPoolV4Factory}}
+  - kind: ethereum/contract
+    name: AaveLinearPoolV4Factory
+    network: {{network}}
+    source:
+      address: '{{AaveLinearPoolV4Factory.address}}'
+      abi: AaveLinearPoolV4Factory
+      startBlock: {{AaveLinearPoolV4Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: AaveLinearPoolV4Factory
+          file: ./abis/AaveLinearPoolV4Factory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
+      eventHandlers:
+        - event: AaveLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleNewAaveLinearPoolV4
+  {{/if}}
   {{#if ERC4626LinearPoolFactoryBeta}}
   - kind: ethereum/contract
     name: ERC4626LinearPoolFactoryBeta
@@ -812,6 +845,72 @@ dataSources:
       eventHandlers:
         - event: Erc4626LinearPoolCreated(indexed address,indexed uint256)
           handler: handleNewERC4626LinearPoolV3
+  {{/if}}
+  {{#if BeefyLinearPoolFactory}}
+  - kind: ethereum/contract
+    name: BeefyLinearPoolFactory
+    network: {{network}}
+    source:
+      address: '{{BeefyLinearPoolFactory.address}}'
+      abi: BeefyLinearPoolFactory
+      startBlock: {{BeefyLinearPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: BeefyLinearPoolFactory
+          file: ./abis/BeefyLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: BeefyLinearPool
+          file: ./abis/BeefyLinearPool.json
+      eventHandlers:
+        - event: BeefyLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleNewBeefyLinearPool
+  {{/if}}
+  {{#if GearboxLinearPoolFactory}}
+  - kind: ethereum/contract
+    name: GearboxLinearPoolFactory
+    network: {{network}}
+    source:
+      address: '{{GearboxLinearPoolFactory.address}}'
+      abi: GearboxLinearPoolFactory
+      startBlock: {{GearboxLinearPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: GearboxLinearPoolFactory
+          file: ./abis/GearboxLinearPoolFactory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: GearboxLinearPool
+          file: ./abis/GearboxLinearPool.json
+      eventHandlers:
+        - event: GearboxLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleNewGearboxLinearPool
   {{/if}}
   {{#if MidasLinearPoolFactory}}
   - kind: ethereum/contract
