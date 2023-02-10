@@ -20,18 +20,16 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
-<<<<<<< HEAD
-import { YearnLinearPoolCreated } from '../types/YearnLinearPoolFactory/YearnLinearPoolFactory';
-=======
-import { TetuLinearPoolCreated } from '../types/TetuLinearPoolFactory/TetuLinearPoolFactory';
-import { SiloLinearPoolCreated } from '../types/SiloLinearPoolFactory/SiloLinearPoolFactory';
-import { ReaperLinearPoolCreated } from '../types/ReaperLinearPoolFactory/ReaperLinearPoolFactory';
 import { BeefyLinearPoolCreated } from '../types/BeefyLinearPoolFactory/BeefyLinearPoolFactory';
-import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
 import { Erc4626LinearPoolCreated } from '../types/ERC4626LinearPoolV3Factory/ERC4626LinearPoolV3Factory';
-import { MidasLinearPoolCreated } from '../types/MidasLinearPoolFactory/MidasLinearPoolFactory';
+import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
 import { GearboxLinearPoolCreated } from '../types/GearboxLinearPoolFactory/GearboxLinearPoolFactory';
->>>>>>> linear_pool_update
+import { MidasLinearPoolCreated } from '../types/MidasLinearPoolFactory/MidasLinearPoolFactory';
+import { ReaperLinearPoolCreated } from '../types/ReaperLinearPoolFactory/ReaperLinearPoolFactory';
+import { SiloLinearPoolCreated } from '../types/SiloLinearPoolFactory/SiloLinearPoolFactory';
+import { TetuLinearPoolCreated } from '../types/TetuLinearPoolFactory/TetuLinearPoolFactory';
+import { YearnLinearPoolCreated } from '../types/YearnLinearPoolFactory/YearnLinearPoolFactory';
+
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -302,7 +300,7 @@ export function handleNewERC4626LinearPoolV3(event: Erc4626LinearPoolCreated): v
     [event.parameters[0]]
   );
 
-  handleNewLinearPool(poolCreatedEvent, PoolType.TetuLinear, 1, event.params.protocolId.toI32());
+  handleNewLinearPool(poolCreatedEvent, PoolType.ERC4626Linear, 1, event.params.protocolId.toI32());
 }
 
 
