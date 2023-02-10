@@ -47,6 +47,6 @@ function setLatestUSDPrice(event: LogArgument): void {
   if (!token) return;
 
   const base = BigDecimal.fromString('100');
-  token.latestUSDPrice = (event.params.value.toBigDecimal().div(base);
+  token.latestUSDPrice = (event.params.value.toBigDecimal().div(base));
   token.save();
 }
