@@ -76,6 +76,11 @@ mainnet:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
 <<<<<<< HEAD
+  GearboxLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+=======
+<<<<<<< HEAD
   BeefyLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
@@ -86,6 +91,7 @@ mainnet:
   ERC4626LinearPoolV3Factory:
     address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
     startBlock: 16542240
+>>>>>>> linear_pool_update
 >>>>>>> linear_pool_update
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
@@ -146,6 +152,9 @@ goerli:
   AaveLinearPoolV3Factory:
     address: "0x70Bbd023481788e443472e123AB963e5EBF58D06"
     startBlock: 8094401
+  GearboxLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
   BeefyLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
@@ -229,10 +238,14 @@ polygon:
   ERC4626LinearPoolFactory:
     address: "0x6637dA12881f66dC7E42b8879B0a79faF43C9be2"
     startBlock: 26746067
+<<<<<<< HEAD
+  GearboxLinearPoolFactory:
+=======
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
     startBlock: 38828779
   BeefyLinearPoolFactory:
+>>>>>>> linear_pool_update
     address: #TODO
     startBlock: #TODO
   Gyro2PoolFactory:
@@ -309,6 +322,11 @@ arbitrum:
   AaveLinearPoolV3Factory:
     address: "0xa2D801064652A269D92EE2A59F3261155ec66830"
     startBlock: 44470235
+<<<<<<< HEAD
+  GearboxLinearPoolFactory:
+    address: #TODO
+    startBlock: #TODO
+=======
   BeefyLinearPoolFactory:
     address: #TODO
     startBlock: #TODO
@@ -318,6 +336,7 @@ arbitrum:
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
     startBlock: 57735268
+>>>>>>> linear_pool_update
 bnb:
   network: bsc
   Vault:

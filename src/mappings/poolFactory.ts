@@ -23,6 +23,7 @@ import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLine
 import { BeefyLinearPoolCreated } from '../types/BeefyLinearPoolFactory/BeefyLinearPoolFactory';
 import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
 import { Erc4626LinearPoolCreated } from '../types/ERC4626LinearPoolV3Factory/ERC4626LinearPoolV3Factory';
+import { GearboxLinearPoolCreated } from '../types/GearboxLinearPoolFactory/GearboxLinearPoolFactory';
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -319,6 +320,19 @@ export function handleNewBeefyLinearPool(event: BeefyLinearPoolCreated): void {
     [event.parameters[0]]
   );
   handleNewLinearPool(poolCreatedEvent, PoolType.BeefyLinear, 1, event.params.protocolId.toI32());
+}
+
+export function handleNewGearboxLinearPool(event: GearboxLinearPoolCreated): void {
+  const poolCreatedEvent = new PoolCreated(
+    event.address,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [event.parameters[0]]
+  );
+  handleNewLinearPool(poolCreatedEvent, PoolType.GearboxLinear, 1, event.params.protocolId.toI32());
 }
 
 function handleNewLinearPool(
