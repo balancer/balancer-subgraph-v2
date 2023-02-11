@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Jan30 - using this because it's the latest block
-    block: 16521178
+    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
+    block: 15359085
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYnU9J6HJ56uGN79F3wo4nG24hVZUNPboSUyje1NvSm68
+    base: QmZfJh2WQAEQRnFfsTK2LrE3LdWS9M7j3T6AeWXHNxLhuK
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -158,11 +158,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Jan30 - using this because it's the latest block
-    block: 38712422
+    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
+    block: 36555199
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmRpS8GXDmf6Egk4uSmcF4HhwE6UAAqqXMByQgXuvz9jNX
+    base: QmaNhv72Lbq2rGEz9m7EydH3LiyCeDgmDDGzCMRamM8JWe
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -262,11 +262,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Jan30 - using this because it's the latest block
-    block: 56689183
+    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
+    block: 44470235
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmdLSiv1QcE1pdh236KT5hFfEQ3m1hUMihBKbTb344jwSe
+    base: QmZvXwpwbttRC54f2aAntu7Y97Dg4651k9TZAeJc3DHXoD
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
