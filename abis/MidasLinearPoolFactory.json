@@ -54,9 +54,15 @@
           "internalType": "address",
           "name": "pool",
           "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "protocolId",
+          "type": "uint256"
         }
       ],
-      "name": "PoolCreated",
+      "name": "MidasLinearPoolCreated",
       "type": "event"
     },
     {
@@ -67,15 +73,9 @@
           "internalType": "address",
           "name": "pool",
           "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "protocolId",
-          "type": "uint256"
         }
       ],
-      "name": "SiloLinearPoolCreated",
+      "name": "PoolCreated",
       "type": "event"
     },
     {
@@ -124,7 +124,7 @@
       "name": "create",
       "outputs": [
         {
-          "internalType": "contract SiloLinearPool",
+          "internalType": "contract LinearPool",
           "name": "",
           "type": "address"
         }

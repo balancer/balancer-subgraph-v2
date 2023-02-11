@@ -20,16 +20,6 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
-import { BeefyLinearPoolCreated } from '../types/BeefyLinearPoolFactory/BeefyLinearPoolFactory';
-import { Erc4626LinearPoolCreated } from '../types/ERC4626LinearPoolV3Factory/ERC4626LinearPoolV3Factory';
-import { EulerLinearPoolCreated } from '../types/EulerLinearPoolFactory/EulerLinearPoolFactory';
-import { GearboxLinearPoolCreated } from '../types/GearboxLinearPoolFactory/GearboxLinearPoolFactory';
-import { MidasLinearPoolCreated } from '../types/MidasLinearPoolFactory/MidasLinearPoolFactory';
-import { ReaperLinearPoolCreated } from '../types/ReaperLinearPoolFactory/ReaperLinearPoolFactory';
-import { SiloLinearPoolCreated } from '../types/SiloLinearPoolFactory/SiloLinearPoolFactory';
-import { TetuLinearPoolCreated } from '../types/TetuLinearPoolFactory/TetuLinearPoolFactory';
-import { YearnLinearPoolCreated } from '../types/YearnLinearPoolFactory/YearnLinearPoolFactory';
-
 import { Balancer, Pool, PoolContract } from '../types/schema';
 
 // datasource
@@ -275,7 +265,6 @@ export function handleNewERC4626LinearPoolV3(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear, 3);
 }
 
-
 export function handleNewEulerLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
@@ -319,7 +308,6 @@ export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
 }
 
 function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
-
   let poolAddress: Address = event.params.pool;
 
   let poolContract = LinearPool.bind(poolAddress);
