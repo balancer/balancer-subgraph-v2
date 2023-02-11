@@ -1053,7 +1053,7 @@ dataSources:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
         - name: TetuLinearPoolFactory
-          file: ./abis/TetuLinearPoolFactoryinearPoolFactory.json
+          file: ./abis/TetuLinearPoolFactory.json
         - name: LinearPool
           file: ./abis/LinearPool.json
         - name: TetuLinearPool
