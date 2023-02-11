@@ -678,8 +678,10 @@ dataSources:
         - name: AaveLinearPool
           file: ./abis/AaveLinearPool.json
       eventHandlers:
-        - event: AaveLinearPoolCreated(indexed address,indexed uint256)
+        - event: PoolCreated(indexed address)
           handler: handleNewAaveLinearPoolV3
+        - event: AaveLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleLinearPoolProtocolId
   {{/if}}
   {{#if ERC4626LinearPoolFactoryBeta}}
   - kind: ethereum/contract
@@ -744,8 +746,10 @@ dataSources:
         - name: EulerLinearPool
           file: ./abis/EulerLinearPool.json
       eventHandlers:
-        - event: EulerLinearPoolCreated(indexed address,indexed uint256)
+        - event: PoolCreated(indexed address)
           handler: handleNewEulerLinearPool
+        - event: EulerLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleLinearPoolProtocolId
   {{/if}}
   {{#if ERC4626LinearPoolFactory}}
   - kind: ethereum/contract
@@ -811,8 +815,10 @@ dataSources:
         - name: ERC4626LinearPoolV3
           file: ./abis/ERC4626LinearPoolV3.json
       eventHandlers:
-        - event: Erc4626LinearPoolCreated(indexed address,indexed uint256)
+        - event: PoolCreated(indexed address)
           handler: handleNewERC4626LinearPoolV3
+        - event: Erc4626LinearPoolCreated(indexed address,indexed uint256)
+          handler: handleLinearPoolProtocolId
   {{/if}}
   {{#if Gyro2PoolFactory}}
   - kind: ethereum/contract
