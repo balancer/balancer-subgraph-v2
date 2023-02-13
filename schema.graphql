@@ -350,5 +350,5 @@ type BalancerSnapshot @entity {
 type ProtocolIdData @entity {
   id ID!
   name: String!
-  bool: registered!
+  registered: Boolean!
 }
