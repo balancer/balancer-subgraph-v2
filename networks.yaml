@@ -95,6 +95,9 @@ goerli:
   WeightedPoolV2Factory:
     address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
     startBlock: 7553858
+  WeightedPoolV3Factory:
+    address: "0x26575A44755E0aaa969FDda1E4291Df22C5624Ea"
+    startBlock: 8456831
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 4716924
@@ -104,6 +107,18 @@ goerli:
   StablePoolV2Factory:
     address: "0xD360B8afb3d7463bE823bE1Ec3c33aA173EbE86e"
     startBlock: 7169381
+  ComposableStablePoolFactory:
+    address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
+    startBlock: 7542764
+  ComposableStablePoolV2Factory:
+    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
+    startBlock: 8048814
+  ComposableStablePoolV3Factory:
+    address: "0xbfD9769b061E57e478690299011A028194D66e3C"
+    startBlock: 8456835
+  HighAmpComposableStablePoolFactory:
+    address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
+    startBlock: 7842251
   MetaStablePoolFactory:
     address: "0xA55F73E2281c60206ba43A3590dB07B8955832Be"
     startBlock: 6993057
@@ -119,15 +134,6 @@ goerli:
   StablePhantomPoolFactory:
     address: "0x41E9036AE350baEDCC7107760A020Dca3c0731ec"
     startBlock: 6993896
-  ComposableStablePoolFactory:
-    address: "0xB848f50141F3D4255b37aC288C25C109104F2158"
-    startBlock: 7542764
-  ComposableStablePoolV2Factory:
-    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
-    startBlock: 8048814
-  HighAmpComposableStablePoolFactory:
-    address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
-    startBlock: 7842251
   AaveLinearPoolFactory:
     address: "0x94470C12fc192e071F12Fec1152861608CE01562"
     startBlock: 6993887
@@ -137,6 +143,18 @@ goerli:
   AaveLinearPoolV3Factory:
     address: "0x70Bbd023481788e443472e123AB963e5EBF58D06"
     startBlock: 8094401
+  AaveLinearPoolV4Factory:
+    address: "0x76578ecf9a141296Ec657847fb45B0585bCDa3a6"
+    startBlock: 8469020
+  ERC4626LinearPoolFactory:
+    address: "0xdc15A3C5D16413C1C1F75Db0f75c4ae2a4104650"
+    startBlock: 7169160
+  EulerLinearPoolFactory:
+    address: "0x813EE7a840CE909E7Fea2117A44a90b8063bd4fd"
+    startBlock: 8459393
+  ERC4626LinearPoolV3Factory:
+    address: "0xBa240C856498e2d7a70AF4911AaFae0D6b565a5B"
+    startBlock: 8458088
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
