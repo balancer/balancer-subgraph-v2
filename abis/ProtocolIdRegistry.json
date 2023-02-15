@@ -30,6 +30,25 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "protocolId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "ProtocolIdRenamed",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes4",
@@ -126,6 +145,24 @@
       }
     ],
     "name": "registerProtocolId",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "protocolId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "newName",
+        "type": "string"
+      }
+    ],
+    "name": "renameProtocolId",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

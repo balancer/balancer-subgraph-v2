@@ -20,7 +20,7 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
-import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
+import { ProtocolIdRegistered, ProtocolIdRenamed } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
 import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
 
 // datasource
@@ -572,9 +572,12 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 
 export function handleNewProtocolId(event: ProtocolIdRegistered): void {
   let newProtocol = new ProtocolIdData(event.protocolId);
-
   newProtocol.name = event.name;
-  newProtocol.registered = true;
-
   newProtocol.save();
+}
+
+export function handleUpdatedProtocolId(event: ProtocolIdRenamed): void {
+  let protocol = ProtocolIdData.load(event.protocolId);
+  protocol.name = event.newName;
+  protocol.save();
 }
