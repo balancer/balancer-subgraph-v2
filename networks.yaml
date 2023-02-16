@@ -1,8 +1,8 @@
 mainnet:
   network: mainnet
   graft:
-    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
-    block: 15359085
+    # This is the block before the issue with the wstETH/ETH StablePool
+    block: 16639809
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmZfJh2WQAEQRnFfsTK2LrE3LdWS9M7j3T6AeWXHNxLhuK
