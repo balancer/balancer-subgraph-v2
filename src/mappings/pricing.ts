@@ -214,6 +214,8 @@ export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): 
 }
 
 export function updateLatestPrice(tokenPrice: TokenPrice): void {
+  if (tokenPrice.poolId == '0x851523a36690bf267bbfec389c823072d82921a90002000000000000000001ed') return;
+
   let tokenAddress = Address.fromString(tokenPrice.asset.toHexString());
   let pricingAsset = Address.fromString(tokenPrice.pricingAsset.toHexString());
 
