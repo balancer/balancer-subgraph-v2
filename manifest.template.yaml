@@ -1057,7 +1057,7 @@ dataSources:
         - name: LinearPool
           file: ./abis/LinearPool.json
         - name: TetuLinearPool
-          file: ./abis/TetuLinearPoolinearPool.json
+          file: ./abis/TetuLinearPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewTetuLinearPool
