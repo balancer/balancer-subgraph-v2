@@ -18,7 +18,7 @@ export const SWAP_OUT = 1;
 
 export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
 
-export let MIN_POOL_LIQUIDITY = BigDecimal.fromString('2000');
+export let MIN_POOL_LIQUIDITY = BigDecimal.fromString('10000');
 export let MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
 
 export let FX_AGGREGATOR_ADDRESSES = assets.fxAggregators;

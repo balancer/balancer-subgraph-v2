@@ -2,10 +2,10 @@ mainnet:
   network: mainnet
   graft:
     # Jan30 - using this because it's the latest block
-    block: 16521178
+    block: 16639809
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYnU9J6HJ56uGN79F3wo4nG24hVZUNPboSUyje1NvSm68
+    base: QmZfJh2WQAEQRnFfsTK2LrE3LdWS9M7j3T6AeWXHNxLhuK
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
