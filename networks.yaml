@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
-    block: 15359085
+    # Picking a block from more than a week ago as a quick way to make sure we get all the recently deployed factories
+    block: 16580891
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmZfJh2WQAEQRnFfsTK2LrE3LdWS9M7j3T6AeWXHNxLhuK
+    base: QmRHmtLuJBXZSJcAEZGnXSpMYuTHgTDw4kRyZK5Zyh97ys
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620

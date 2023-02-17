@@ -5,29 +5,29 @@ on:
     branches: master
 
 jobs:
-  deploy-goerli:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets goerli
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.12
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-goerli-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.goerli.yaml"
+  # deploy-goerli:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets goerli
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: gtaschuk/graph-deploy@v0.1.12
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-goerli-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.goerli.yaml"
   deploy-mainnet:
     runs-on: ubuntu-latest
     environment: graph
@@ -51,120 +51,120 @@ jobs:
           graph_subgraph_name: "balancer-v2"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.yaml"
-  deploy-polygon:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets polygon
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.12
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-polygon-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.polygon.yaml"
-  deploy-polygon-pruned:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets polygon-prune
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.12
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-polygon-prune-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.polygon.yaml"
-  deploy-arbitrum:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets arbitrum
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.12
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-arbitrum-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.arbitrum.yaml"
-  deploy-gnosis:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets gnosis
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.12
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-gnosis-chain-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.gnosis.yaml"
-  deploy-bnb:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets bnb
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.12
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-bnbchain-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.bnb.yaml"
+  # deploy-polygon:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets polygon
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: gtaschuk/graph-deploy@v0.1.12
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-polygon-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.polygon.yaml"
+  # deploy-polygon-pruned:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets polygon-prune
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: gtaschuk/graph-deploy@v0.1.12
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-polygon-prune-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.polygon.yaml"
+  # deploy-arbitrum:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets arbitrum
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: gtaschuk/graph-deploy@v0.1.12
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-arbitrum-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.arbitrum.yaml"
+  # deploy-gnosis:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets gnosis
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: gtaschuk/graph-deploy@v0.1.12
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-gnosis-chain-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.gnosis.yaml"
+  # deploy-bnb:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 14
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets bnb
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: gtaschuk/graph-deploy@v0.1.12
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-bnbchain-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.bnb.yaml"
 env:
   CI: true
