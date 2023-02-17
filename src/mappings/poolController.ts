@@ -282,8 +282,8 @@ export function handleSubscription(event: Subscription): void {
     let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.assetIn);
     let subscriptions = new PrimaryIssues(providerId); 
     subscriptions.pool = poolId.toHexString();   
-    subscriptions.amount = tokenToDecimal(event.params.amount, 18);
-    subscriptions.price = tokenToDecimal(event.params.price, 18);
+    subscriptions.cashSwapped = tokenToDecimal(event.params.currencySwapped, 18);
+    subscriptions.securitySwapped = tokenToDecimal(event.params.securitySwapped, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.investor = event.params.investor.toHexString();
     subscriptions.assetIn = event.params.assetIn.toHexString();
@@ -291,8 +291,8 @@ export function handleSubscription(event: Subscription): void {
     subscriptions.save();
   }
   else{
-    subscriptions.amount = tokenToDecimal(event.params.amount, 18);
-    subscriptions.price = tokenToDecimal(event.params.price, 18);
+    subscriptions.cashSwapped = tokenToDecimal(event.params.currencySwapped, 18);
+    subscriptions.securitySwapped = tokenToDecimal(event.params.securitySwapped, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.investor = event.params.investor.toHexString();
     subscriptions.assetIn = event.params.assetIn.toHexString();
@@ -339,6 +339,7 @@ export function handleOrderBook(event: OrderBook): void {
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
     orders.tokenIn = event.params.tokenIn.toHexString();
     orders.tokenOut = event.params.tokenOut.toHexString();
+    orders.orderReference = event.params.orderRef;
     orders.save();
   } 
   else{
@@ -346,6 +347,7 @@ export function handleOrderBook(event: OrderBook): void {
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
     orders.tokenIn = event.params.tokenIn.toHexString();
     orders.tokenOut = event.params.tokenOut.toHexString();
+    orders.orderReference = event.params.orderRef;
     orders.save();
   }
 }

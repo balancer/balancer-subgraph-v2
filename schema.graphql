@@ -128,9 +128,9 @@ type PrimaryIssues @entity {
   pool: Pool!
   assetIn: Token!
   assetOut: Token!
-  amount: BigDecimal!
+  cashSwapped: BigDecimal!
   investor: User!
-  price: BigDecimal!
+  securitySwapped: BigDecimal!
   executionDate: BigInt!
 }
 
@@ -153,6 +153,7 @@ type SecondaryOrders @entity {
   tokenOut: Token!
   amountOffered: BigDecimal!
   priceOffered: BigDecimal!
+  orderReference: Bytes!
 }
 
 type PoolToken @entity {

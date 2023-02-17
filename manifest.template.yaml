@@ -1193,7 +1193,7 @@ templates:
           handler: handleSecondaryOffer
         - event: TradeReport(indexed address,address,address,bytes32,uint256,address,uint256,uint256)
           handler: handleTradeReport
-        - event: OrderBook(address,address,uint256,uint256)
+        - event: OrderBook(address,address,uint256,uint256,bytes32)
           handler: handleOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool
