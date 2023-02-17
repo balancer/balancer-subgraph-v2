@@ -420,36 +420,36 @@ optimism:
   WeightedPoolV2Factory:
     address: "0xad901309d9e9DbC5Df19c84f729f429F0189a633"
     startBlock: 22410483
-  WeightedPoolV3Factory: # ADDED BY US
+  WeightedPoolV3Factory:
     address: "0xA0DAbEBAAd1b243BBb243f933013d560819eB66f"
     startBlock: 72832703
   WeightedPool2TokenFactory:
     address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
     startBlock: 7005518
-  # StablePoolFactory: # NO POOLS CREATED
-  #   address: "0x41B953164995c11C81DA73D212ED8Af25741b7Ac"
-  #   startBlock: 7005646
   StablePoolV2Factory:
     address: "0xeb151668006CD04DAdD098AFd0a82e78F77076c3"
     startBlock: 11088891
   ComposableStablePoolFactory:
     address: "0xf145caFB67081895EE80eB7c04A30Cf87f07b745"
     startBlock: 22182522
-  ComposableStablePoolV3Factory: # ADDED BY US
+  ComposableStablePoolV3Factory:
     address: "0xe2E901AB09f37884BA31622dF3Ca7FC19AA443Be"
     startBlock: 72832821
   MetaStablePoolFactory:
     address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
     startBlock: 7005662
-  # TempLiquidityBootstrappingPoolFactory: # NO POOLS CREATED
-  #   address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
-  #   startBlock: 7005915
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 7005915
   AaveLinearPoolV2Factory:
     address: "0x994086630773dC6cB54D3A5E0Ef0963532789E75"
     startBlock: 20254495
-  AaveLinearPoolV3Factory: # ADDED BY US
+  AaveLinearPoolV3Factory:
     address: "0xAd3CC7852382C09fdCE54784292c6aB7fb9Df917"
     startBlock: 46527984
+  AaveLinearPoolV4Factory:
+    address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
+    startBlock: 73524584
   ERC4626LinearPoolFactory:
     address: "0x4C4287b07d293E361281bCeEe8715c8CDeB64E34"
     startBlock: 13408880
@@ -459,21 +459,12 @@ optimism:
   ReaperLinearPoolFactory:
     address: "0x19968D4b7126904Fd665eD25417599Df9604Df83"
     startBlock: 22842161
-  # ReaperLinearPoolV2Factory: # NO POOLS CREATED
-  #   address: "0x0473136B0732606e826fFeB42f3abC81A7A766d5"
-  #   startBlock: 27971361
   ReaperLinearPoolV3Factory:
     address: "0xe4B88E745Dce9084B9fc2439F85A9a4C5CD6f361"
     startBlock: 29896926
   YearnLinearPoolFactory:
-    address: "0xad4Eb727D219121007762C6f0e6Af8255ec6794E"
-    startBlock: 22842214
-  # YearnLinearPoolV2Factory: # NO POOLS CREATED
-  #   address: "0x9E9c58B4E5478e65EFc81b7b65408834F63d9dc7"
-  #   startBlock: 45543831
-  YearnLinearPoolV3Factory: # RENAME YEARN V1 ON OTHER NETWORKS TO V3?
     address: "0xD8B6b96c88ad626EB6209c4876e3B14f45f8803A"
     startBlock: 74613637
-  # BeefyLinearPoolFactory: # NO POOLS CREATED
-  #   address: "0xE77f03F5007Df49005CAf2a2f1D872c51aE51fD1"
-  #   startBlock: 49164540
+  BeefyLinearPoolFactory: # NO POOLS CREATED
+    address: "0xE77f03F5007Df49005CAf2a2f1D872c51aE51fD1"
+    startBlock: 49164540
