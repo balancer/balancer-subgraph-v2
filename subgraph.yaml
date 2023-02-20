@@ -140,9 +140,9 @@ dataSources:
     name: PrimaryIssuePoolFactory
     network: goerli
     source:
-      address: '0x9Ba98D0240821Dc077A0233c4863a8d04102E917'
+      address: '0x3FF5014615C0FCb3aE417Cf65c8378fB64c86054'
       abi: PrimaryIssuePoolFactory
-      startBlock: 8456755
+      startBlock: 8524534
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -169,9 +169,9 @@ dataSources:
     name: SecondaryIssuePoolFactory
     network: goerli
     source:
-      address: '0x5e5862fE5913346563dc5f96F5bE507b4448815c'
+      address: '0x4368F55174D89CC25c644549Ee911F40812A4959'
       abi: SecondaryIssuePoolFactory
-      startBlock: 8456760
+      startBlock: 8524539
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -962,7 +962,7 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: Offer(indexed address,uint256,address,address)
           handler: handleSecondaryOffer
-        - event: TradeReport(indexed address,address,address,bytes32,uint256,address,uint256,uint256)
+        - event: TradeReport(indexed address,address,address,bytes32,uint256,address,uint256,uint256,bytes32)
           handler: handleTradeReport
         - event: OrderBook(address,address,uint256,uint256,bytes32)
           handler: handleOrderBook

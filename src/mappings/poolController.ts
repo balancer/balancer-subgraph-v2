@@ -371,6 +371,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
     trades.save();
   } 
   else{
@@ -381,6 +382,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
     trades.save();
   }
   
