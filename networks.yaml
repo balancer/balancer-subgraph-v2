@@ -395,8 +395,8 @@ gnosis:
     address: "0x76578ecf9a141296Ec657847fb45B0585bCDa3a6"
     startBlock: 25415385
   ComposableStablePoolV3Factory:
-    address: "0x239e55F427D44C3cc793f49bFB507ebe76638a2b"
-    startBlock: 26226256
+    address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
+    startBlock: 26365805
   AaveLinearPoolV3Factory:
     address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
     startBlock: 25415464
