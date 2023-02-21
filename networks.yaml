@@ -72,11 +72,11 @@ goerli:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 4716924
   PrimaryIssuePoolFactory:
-    address: "0x3FF5014615C0FCb3aE417Cf65c8378fB64c86054"
-    startBlock: 8524534
+    address: "0x07080E3Fd68EA5D487C6D8A828f0bCE886Ca41Bb"
+    startBlock: 8531996
   SecondaryIssuePoolFactory:
-    address: "0x4368F55174D89CC25c644549Ee911F40812A4959"
-    startBlock: 8524539
+    address: "0x14a73bf0b79Ef94D6E004D1f826e12454279e59c"
+    startBlock: 8532102
   StablePoolFactory:
     address: "0x44afeb87c871D8fEA9398a026DeA2BD3A13F5769"
     startBlock: 6992992

@@ -282,8 +282,8 @@ export function handleSubscription(event: Subscription): void {
     let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.assetIn);
     let subscriptions = new PrimaryIssues(providerId); 
     subscriptions.pool = poolId.toHexString();   
-    subscriptions.cashSwapped = tokenToDecimal(event.params.currencySwapped, 18);
-    subscriptions.securitySwapped = tokenToDecimal(event.params.securitySwapped, 18);
+    subscriptions.subscription = tokenToDecimal(event.params.subscription, 18);
+    subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.investor = event.params.investor.toHexString();
     subscriptions.assetIn = event.params.assetIn.toHexString();
@@ -291,8 +291,8 @@ export function handleSubscription(event: Subscription): void {
     subscriptions.save();
   }
   else{
-    subscriptions.cashSwapped = tokenToDecimal(event.params.currencySwapped, 18);
-    subscriptions.securitySwapped = tokenToDecimal(event.params.securitySwapped, 18);
+    subscriptions.subscription = tokenToDecimal(event.params.subscription, 18);
+    subscriptions.price = tokenToDecimal(event.params.price, 18);
     subscriptions.executionDate = event.block.timestamp;
     subscriptions.investor = event.params.investor.toHexString();
     subscriptions.assetIn = event.params.assetIn.toHexString();
@@ -318,7 +318,7 @@ export function handleSubscription(event: Subscription): void {
   pool.security = event.params.security;
   pool.currency = event.params.currency;
   pool.orderBook = event.params.orderBook;
-  pool.minOrderSize = tokenToDecimal(event.params.minOrderSize, 18);
+  pool.minOrderSize = event.params.minOrderSize;
   
   pool.save();
 }
@@ -340,6 +340,7 @@ export function handleOrderBook(event: OrderBook): void {
     orders.tokenIn = event.params.tokenIn.toHexString();
     orders.tokenOut = event.params.tokenOut.toHexString();
     orders.orderReference = event.params.orderRef;
+    orders.timestamp = event.params.timestamp;
     orders.save();
   } 
   else{
@@ -348,6 +349,7 @@ export function handleOrderBook(event: OrderBook): void {
     orders.tokenIn = event.params.tokenIn.toHexString();
     orders.tokenOut = event.params.tokenOut.toHexString();
     orders.orderReference = event.params.orderRef;
+    orders.timestamp = event.params.timestamp;
     orders.save();
   }
 }
