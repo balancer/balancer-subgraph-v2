@@ -49,6 +49,10 @@ export function scaleDown(num: BigInt, decimals: i32): BigDecimal {
   return num.divDecimal(BigInt.fromI32(10).pow(u8(decimals)).toBigDecimal());
 }
 
+export function scaleUp(num: BigDecimal, decimals: i32): BigInt {
+  return BigInt.fromString(num.times(BigInt.fromI32(10).pow(u8(decimals)).toBigDecimal()).toString());
+}
+
 export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {
   return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex());
 }

@@ -105,6 +105,9 @@ type Pool @entity {
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
 
+  # Composable Stable Only
+  lastPostJoinExitInvariant: BigDecimal
+
   # AaveLinearV3 Only
   protocolId: Int
 }
