@@ -144,18 +144,18 @@ type SecondaryTrades @entity {
   currency: Token!
   amount: BigDecimal! 
   executionDate: BigInt!
-  orderReference: Bytes!
 }  
 
 type SecondaryOrders @entity {
   id: ID!
   pool: Pool!
+  creator: User!
   tokenIn: Token!
   tokenOut: Token!
   amountOffered: BigDecimal!
   priceOffered: BigDecimal!
-  orderReference: Bytes!
   timestamp: BigInt
+  orderReference: Bytes!
 }
 
 type PoolToken @entity {

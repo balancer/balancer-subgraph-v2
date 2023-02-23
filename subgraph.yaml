@@ -169,9 +169,9 @@ dataSources:
     name: SecondaryIssuePoolFactory
     network: goerli
     source:
-      address: '0x14a73bf0b79Ef94D6E004D1f826e12454279e59c'
+      address: '0x8099A9C79672BDDD0506364f4B0791A2384a960B'
       abi: SecondaryIssuePoolFactory
-      startBlock: 8532102
+      startBlock: 8539471
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -962,9 +962,9 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: Offer(indexed address,uint256,address,address)
           handler: handleSecondaryOffer
-        - event: TradeReport(indexed address,address,address,bytes32,uint256,address,uint256,uint256,bytes32)
+        - event: TradeReport(indexed address,address,address,bytes32,uint256,address,uint256,uint256)
           handler: handleTradeReport
-        - event: OrderBook(address,address,uint256,uint256,bytes32,uint256)
+        - event: OrderBook(address,address,address,uint256,uint256,uint256,bytes32)
           handler: handleOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool

@@ -335,6 +335,7 @@ export function handleOrderBook(event: OrderBook): void {
     let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.tokenIn);
     let orders = new SecondaryOrders(providerId);   
     orders.pool = poolId.toHexString(); 
+    orders.creator = event.params.creator.toHexString();
     orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
     orders.tokenIn = event.params.tokenIn.toHexString();
@@ -344,6 +345,7 @@ export function handleOrderBook(event: OrderBook): void {
     orders.save();
   } 
   else{
+    orders.creator = event.params.creator.toHexString();
     orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
     orders.tokenIn = event.params.tokenIn.toHexString();
@@ -373,7 +375,6 @@ export function handleTradeReport(event: TradeReport): void {
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();
-    trades.orderReference = event.params.orderRef;
     trades.save();
   } 
   else{
@@ -384,7 +385,6 @@ export function handleTradeReport(event: TradeReport): void {
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();
-    trades.orderReference = event.params.orderRef;
     trades.save();
   }
   
