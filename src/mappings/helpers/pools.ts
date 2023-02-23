@@ -1,4 +1,4 @@
-import { Address, Bytes, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, dataSource, log } from '@graphprotocol/graph-ts';
 import { Pool, PriceRateProvider } from '../../types/schema';
 import { Vault } from '../../types/Vault/Vault';
 import { WeightedPoolV2 } from '../../types/WeightedPoolV2Factory/WeightedPoolV2';
@@ -17,12 +17,20 @@ export namespace PoolType {
   export const ComposableStable = 'ComposableStable';
   export const HighAmpComposableStable = 'HighAmpComposableStable';
   export const AaveLinear = 'AaveLinear';
+  export const BeefyLinear = 'BeefyLinear';
   export const ERC4626Linear = 'ERC4626Linear';
   export const PrimaryIssue = 'PrimaryIssue';
   export const SecondaryIssue = 'SecondaryIssue';
+  export const EulerLinear = 'EulerLinear';
+  export const GearboxLinear = 'GearboxLinear';
+  export const MidasLinear = 'MidasLinear';
+  export const ReaperLinear = 'ReaperLinear';
+  export const SiloLinear = 'SiloLinear';
+  export const TetuLinear = 'TetuLinear';
+  export const YearnLinear = 'YearnLinear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
-  export const GyroCEMM = 'GyroCEMM';
+  export const GyroE = 'GyroE';
   export const FX = 'FX';
 }
 
@@ -33,7 +41,15 @@ export function isVariableWeightPool(pool: Pool): boolean {
 export function hasVirtualSupply(pool: Pool): boolean {
   return (
     pool.poolType == PoolType.AaveLinear ||
+    pool.poolType == PoolType.BeefyLinear ||
     pool.poolType == PoolType.ERC4626Linear ||
+    pool.poolType == PoolType.EulerLinear ||
+    pool.poolType == PoolType.GearboxLinear ||
+    pool.poolType == PoolType.MidasLinear ||
+    pool.poolType == PoolType.ReaperLinear ||
+    pool.poolType == PoolType.SiloLinear ||
+    pool.poolType == PoolType.TetuLinear ||
+    pool.poolType == PoolType.YearnLinear ||
     pool.poolType == PoolType.StablePhantom ||
     isComposableStablePool(pool)
   );
@@ -44,7 +60,18 @@ export function isComposableStablePool(pool: Pool): boolean {
 }
 
 export function isLinearPool(pool: Pool): boolean {
-  return pool.poolType == PoolType.AaveLinear || pool.poolType == PoolType.ERC4626Linear;
+  return (
+    pool.poolType == PoolType.AaveLinear ||
+    pool.poolType == PoolType.BeefyLinear ||
+    pool.poolType == PoolType.ERC4626Linear ||
+    pool.poolType == PoolType.EulerLinear ||
+    pool.poolType == PoolType.GearboxLinear ||
+    pool.poolType == PoolType.MidasLinear ||
+    pool.poolType == PoolType.ReaperLinear ||
+    pool.poolType == PoolType.SiloLinear ||
+    pool.poolType == PoolType.TetuLinear ||
+    pool.poolType == PoolType.YearnLinear
+  );
 }
 
 export function isStableLikePool(pool: Pool): boolean {
@@ -58,6 +85,26 @@ export function isStableLikePool(pool: Pool): boolean {
 
 export function isFXPool(pool: Pool): boolean {
   return pool.poolType == PoolType.FX;
+}
+
+export function isMetaStableDeprecated(blockNumber: i32): boolean {
+  let network = dataSource.network();
+
+  if (network == 'ethereum' && blockNumber > 15008557 && blockNumber < 16380140) {
+    // Between blocks 15008557 and 16380140 metastable was considered deprecated because subject to faulty rate providers.
+    // But due to recent issues with composable stable pools we decided to start creating pools with it again.
+    // This conditional prevents pools created between those blocks from being indexed,
+    // because we know pools with faulty rate providers were created then
+    return true;
+  } else if (network == 'matic' && blockNumber > 35414865 && blockNumber < 37921111) {
+    // Between blocks 35414865 and 37921111 metastable was considered deprecated because subject to faulty rate providers
+    // But due to recent issues with composable stable pools we decided to start creating pools with it again
+    // This conditional prevents pools created between those blocks from being indexed,
+    // because we know pools with faulty rate providers were created then
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export function getPoolAddress(poolId: string): Address {

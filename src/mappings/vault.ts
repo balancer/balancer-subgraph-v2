@@ -5,7 +5,16 @@ import {
   PoolBalanceManaged,
   InternalBalanceChanged,
 } from '../types/Vault/Vault';
-import { Balancer, Pool, Swap, JoinExit, TokenPrice, UserInternalBalance, ManagementOperation } from '../types/schema';
+import {
+  Balancer,
+  Pool,
+  Swap,
+  JoinExit,
+  TokenPrice,
+  UserInternalBalance,
+  ManagementOperation,
+  Token,
+} from '../types/schema';
 import {
   tokenToDecimal,
   getTokenPriceId,
@@ -50,7 +59,6 @@ import {
   isComposableStablePool,
 } from './helpers/pools';
 import { updateAmpFactor } from './helpers/stable';
-import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
 import { USDC_ADDRESS } from './helpers/assets';
 
 /************************************
@@ -110,6 +118,15 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     log.warning('Pool not found in handlePoolJoined: {} {}', [poolId, transactionHash.toHexString()]);
     return;
   }
+
+  // if a pool that was paused is joined, it means it's pause has expired
+  // TODO: fix this for when pool.isPaused is null
+  // TODO: handle the case where the pool's actual swapEnabled is false
+  // if (pool.isPaused) {
+  //   pool.isPaused = false;
+  //   pool.swapEnabled = true;
+  // }
+
   let tokenAddresses = pool.tokensList;
 
   let joinId = transactionHash.toHexString().concat(logIndex.toString());
@@ -289,12 +306,12 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
     return;
   }
 
-  let token: Address = event.params.token;
+  let tokenAddress: Address = event.params.token;
 
   let cashDelta = event.params.cashDelta;
   let managedDelta = event.params.managedDelta;
 
-  let poolToken = loadPoolToken(poolId.toHexString(), token);
+  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
   if (poolToken == null) {
     throw new Error('poolToken not found');
   }
@@ -307,6 +324,18 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   poolToken.cashBalance = poolToken.cashBalance.plus(cashDeltaAmount);
   poolToken.managedBalance = poolToken.managedBalance.plus(managedDeltaAmount);
   poolToken.save();
+
+  let token = getToken(tokenAddress);
+  const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(deltaAmount);
+  const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+  token.totalBalanceNotional = tokenTotalBalanceNotional;
+  token.totalBalanceUSD = tokenTotalBalanceUSD;
+  token.save();
+
+  let tokenSnapshot = getTokenSnapshot(tokenAddress, event);
+  tokenSnapshot.totalBalanceNotional = tokenTotalBalanceNotional;
+  tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
+  tokenSnapshot.save();
 
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
@@ -339,6 +368,14 @@ export function handleSwapEvent(event: SwapEvent): void {
     log.warning('Pool not found in handleSwapEvent: {}', [poolId.toHexString()]);
     return;
   }
+
+  // if a swap happens in a pool that was paused, it means it's pause has expired
+  // TODO: fix this for when pool.isPaused is null
+  // TODO: handle the case where the pool's actual swapEnabled is false
+  // if (pool.isPaused) {
+  //   pool.isPaused = false;
+  //   pool.swapEnabled = true;
+  // }
 
   if (isVariableWeightPool(pool)) {
     // Some pools' weights update over time so we need to update them after each swap
@@ -390,21 +427,16 @@ export function handleSwapEvent(event: SwapEvent): void {
     } else if (isFXPool(pool)) {
       // Custom logic for calculating trading fee for FXPools
       let isTokenInBase = tokenOutAddress == USDC_ADDRESS;
-      let baseAssimilator = isTokenInBase ? poolTokenIn.assimilator : poolTokenOut.assimilator;
-      if (baseAssimilator) {
-        let assimilatorAddress = Address.fromString(baseAssimilator.toHexString());
-        let assimilator = BaseToUsdAssimilator.bind(assimilatorAddress);
-        let rateRes = assimilator.try_getRate();
+      let baseToken = Token.load((isTokenInBase ? tokenInAddress : tokenOutAddress).toHexString());
+      let quoteToken = Token.load((isTokenInBase ? tokenOutAddress : tokenInAddress).toHexString());
+      let baseRate = baseToken != null ? baseToken.latestFXPrice : null;
+      let quoteRate = quoteToken != null ? quoteToken.latestFXPrice : null;
 
-        if (!rateRes.reverted) {
-          let baseRate = scaleDown(rateRes.value, 8);
-          if (isTokenInBase) {
-            // tokenIn = baseToken, fee = (amountIn * rate) - amountOut
-            swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut);
-          } else {
-            // tokenIn = USDC, fee = amountIn - (amountOut * rate)
-            swapFeesUSD = tokenAmountIn.minus(tokenAmountOut.times(baseRate));
-          }
+      if (baseRate && quoteRate) {
+        if (isTokenInBase) {
+          swapFeesUSD = tokenAmountIn.times(baseRate).minus(tokenAmountOut.times(quoteRate));
+        } else {
+          swapFeesUSD = tokenAmountIn.times(quoteRate).minus(tokenAmountOut.times(baseRate));
         }
       }
     }
