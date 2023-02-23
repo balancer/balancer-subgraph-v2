@@ -47,17 +47,20 @@ export function calculateInvariant(amp: BigInt, balances: BigInt[]): BigInt {
 
     prevInvariant = invariant;
 
-    invariant = ampTimesTotal
-      .times(sum)
-      .div(AMP_PRECISION)
-      .plus(D_P.times(BigInt.fromI32(numTokens)).times(invariant));
-    invariant = invariant.div(
-      ampTimesTotal
-        .minus(AMP_PRECISION)
-        .times(invariant)
-        .div(AMP_PRECISION)
-        .plus(BigInt.fromI32(numTokens).plus(ONE).times(D_P))
-    );
+    invariant = invariant
+      .times(
+        ampTimesTotal
+          .times(sum)
+          .div(AMP_PRECISION)
+          .plus(D_P.times(BigInt.fromI32(numTokens)))
+      )
+      .div(
+        ampTimesTotal
+          .minus(AMP_PRECISION)
+          .times(invariant)
+          .div(AMP_PRECISION)
+          .plus(D_P.times(BigInt.fromI32(numTokens).plus(ONE)))
+      );
 
     if (invariant.gt(prevInvariant)) {
       if (invariant.minus(prevInvariant).le(ONE)) {
