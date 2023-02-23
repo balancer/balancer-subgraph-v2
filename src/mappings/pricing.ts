@@ -8,6 +8,8 @@ import {
   ZERO_ADDRESS,
   FX_AGGREGATOR_ADDRESSES,
   FX_TOKEN_ADDRESSES,
+  MAX_POS_PRICE_CHANGE,
+  MAX_NEG_PRICE_CHANGE,
 } from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, PoolType } from './helpers/pools';
 import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken, scaleDown } from './helpers/misc';
@@ -233,10 +235,24 @@ export function updateLatestPrice(tokenPrice: TokenPrice): void {
 
   let token = getToken(tokenAddress);
   const pricingAssetAddress = Address.fromString(tokenPrice.pricingAsset.toHexString());
-  const tokenInUSD = valueInUSD(tokenPrice.price, pricingAssetAddress);
-  token.latestUSDPrice = tokenInUSD;
-  token.latestPrice = latestPrice.id;
-  token.save();
+  const currentUSDPrice = valueInUSD(tokenPrice.price, pricingAssetAddress);
+
+  if (currentUSDPrice == ZERO_BD) return;
+
+  let oldUSDPrice = token.latestUSDPrice;
+  if (!oldUSDPrice) {
+    token.latestUSDPrice = currentUSDPrice;
+    token.latestPrice = latestPrice.id;
+    token.save();
+    return;
+  }
+
+  let change = currentUSDPrice.minus(oldUSDPrice).div(oldUSDPrice);
+  if (change.lt(MAX_POS_PRICE_CHANGE) && change.gt(MAX_NEG_PRICE_CHANGE)) {
+    token.latestUSDPrice = currentUSDPrice;
+    token.latestPrice = latestPrice.id;
+    token.save();
+  }
 }
 
 function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
