@@ -2,7 +2,6 @@ import { Address, BigInt } from '@graphprotocol/graph-ts';
 import { Pool } from '../../types/schema';
 import { StablePool } from '../../types/templates/StablePool/StablePool';
 import { ZERO, ONE } from './constants';
-import { divUp } from './math';
 
 export const AMP_PRECISION = BigInt.fromI32(1000);
 
