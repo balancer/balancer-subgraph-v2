@@ -59,7 +59,7 @@ import {
   isFXPool,
   isComposableStablePool,
 } from './helpers/pools';
-import { calculateInvariant, updateAmpFactor } from './helpers/stable';
+import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
 import { USDC_ADDRESS } from './helpers/assets';
 
 /************************************
@@ -464,11 +464,11 @@ export function handleSwapEvent(event: SwapEvent): void {
         if (poolToken == null) {
           throw new Error('poolToken not found');
         }
-        let balance = scaleUp(poolToken.balance, poolToken.decimals);
+        let balance = scaleUp(poolToken.balance.times(poolToken.priceRate), poolToken.decimals);
         balances.push(balance);
       }
       if (pool.amp) {
-        let amp = scaleUp(pool.amp!.toBigDecimal(), 18);
+        let amp = pool.amp!.times(AMP_PRECISION);
         let invariantInt = calculateInvariant(amp, balances);
         let invariant = scaleDown(invariantInt, 18);
         pool.lastPostJoinExitInvariant = invariant;

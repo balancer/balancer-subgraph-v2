@@ -4,7 +4,7 @@ import { StablePool } from '../../types/templates/StablePool/StablePool';
 import { ZERO, ONE } from './constants';
 import { divUp } from './math';
 
-const AMP_PRECISION = BigInt.fromI32(1000);
+export const AMP_PRECISION = BigInt.fromI32(1000);
 
 export function updateAmpFactor(pool: Pool): void {
   let poolContract = StablePool.bind(changetype<Address>(pool.address));
