@@ -10,6 +10,7 @@ import {
   FX_TOKEN_ADDRESSES,
   MAX_POS_PRICE_CHANGE,
   MAX_NEG_PRICE_CHANGE,
+  MAX_TIME_DIFF_FOR_PRICING,
 } from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, PoolType } from './helpers/pools';
 import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken, scaleDown } from './helpers/misc';
@@ -215,7 +216,7 @@ export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): 
   return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
 }
 
-export function updateLatestPrice(tokenPrice: TokenPrice): void {
+export function updateLatestPrice(tokenPrice: TokenPrice, blockTimestamp: BigInt): void {
   let tokenAddress = Address.fromString(tokenPrice.asset.toHexString());
   let pricingAsset = Address.fromString(tokenPrice.pricingAsset.toHexString());
 
@@ -241,6 +242,7 @@ export function updateLatestPrice(tokenPrice: TokenPrice): void {
 
   let oldUSDPrice = token.latestUSDPrice;
   if (!oldUSDPrice) {
+    token.latestUSDPriceTimestamp = blockTimestamp;
     token.latestUSDPrice = currentUSDPrice;
     token.latestPrice = latestPrice.id;
     token.save();
@@ -248,7 +250,13 @@ export function updateLatestPrice(tokenPrice: TokenPrice): void {
   }
 
   let change = currentUSDPrice.minus(oldUSDPrice).div(oldUSDPrice);
-  if (change.lt(MAX_POS_PRICE_CHANGE) && change.gt(MAX_NEG_PRICE_CHANGE)) {
+  if (
+    !token.latestUSDPriceTimestamp ||
+    (change.lt(MAX_POS_PRICE_CHANGE) && change.gt(MAX_NEG_PRICE_CHANGE)) ||
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    blockTimestamp.minus(token.latestUSDPriceTimestamp!).gt(MAX_TIME_DIFF_FOR_PRICING)
+  ) {
+    token.latestUSDPriceTimestamp = blockTimestamp;
     token.latestUSDPrice = currentUSDPrice;
     token.latestPrice = latestPrice.id;
     token.save();
