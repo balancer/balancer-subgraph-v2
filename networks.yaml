@@ -409,3 +409,14 @@ gnosis:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 25415236
+avalanche:
+  network: avalanche
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 26386141
+  WeightedPoolV3Factory:
+    address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
+    startBlock: 26389236
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
+    startBlock: 26386552
