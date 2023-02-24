@@ -112,7 +112,7 @@ type Pool @entity {
   protocolId: Int
 }
 
-type PoolContract @entity {
+type PoolContract @entity(immutable: true) {
   id: ID!
   pool: Pool!
 }
@@ -173,7 +173,7 @@ type UserInternalBalance @entity {
   balance: BigDecimal!
 }
 
-type GradualWeightUpdate @entity {
+type GradualWeightUpdate @entity(immutable: true) {
   id: ID!
   poolId: Pool!
   scheduledTimestamp: Int!
@@ -183,7 +183,7 @@ type GradualWeightUpdate @entity {
   endWeights: [BigInt!]!
 }
 
-type AmpUpdate @entity {
+type AmpUpdate @entity(immutable: true) {
   id: ID!
   poolId: Pool!
   scheduledTimestamp: Int!
@@ -193,7 +193,7 @@ type AmpUpdate @entity {
   endAmp: BigInt!
 }
 
-type SwapFeeUpdate @entity {
+type SwapFeeUpdate @entity(immutable: true) {
   id: ID!
   pool: Pool!
   scheduledTimestamp: Int!
@@ -203,7 +203,7 @@ type SwapFeeUpdate @entity {
   endSwapFeePercentage: BigDecimal!
 }
 
-type Swap @entity {
+type Swap @entity(immutable: true) {
   id: ID!
   caller: Bytes!
   tokenIn: Bytes!
@@ -224,7 +224,7 @@ enum InvestType {
   Exit
 }
 
-type JoinExit @entity {
+type JoinExit @entity(immutable: true) {
   id: ID!
   type: InvestType!
   sender: Bytes!
@@ -272,7 +272,7 @@ enum OperationType {
   Update
 }
 
-type ManagementOperation @entity {
+type ManagementOperation @entity(immutable: true) {
   id: ID!
   type: OperationType!
   cashDelta: BigDecimal!
