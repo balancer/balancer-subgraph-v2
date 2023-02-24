@@ -573,7 +573,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.save();
 
-    updateLatestPrice(tokenPrice);
+    updateLatestPrice(tokenPrice, event.block.timestamp);
   }
   if (
     isPricingAsset(tokenOutAddress) &&
@@ -601,7 +601,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.save();
 
-    updateLatestPrice(tokenPrice);
+    updateLatestPrice(tokenPrice, event.block.timestamp);
   }
 
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);

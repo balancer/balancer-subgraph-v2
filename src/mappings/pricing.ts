@@ -8,6 +8,9 @@ import {
   ZERO_ADDRESS,
   FX_AGGREGATOR_ADDRESSES,
   FX_TOKEN_ADDRESSES,
+  MAX_POS_PRICE_CHANGE,
+  MAX_NEG_PRICE_CHANGE,
+  MAX_TIME_DIFF_FOR_PRICING,
 } from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, PoolType } from './helpers/pools';
 import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken, scaleDown } from './helpers/misc';
@@ -213,7 +216,7 @@ export function getLatestPriceId(tokenAddress: Address, pricingAsset: Address): 
   return tokenAddress.toHexString().concat('-').concat(pricingAsset.toHexString());
 }
 
-export function updateLatestPrice(tokenPrice: TokenPrice): void {
+export function updateLatestPrice(tokenPrice: TokenPrice, blockTimestamp: BigInt): void {
   let tokenAddress = Address.fromString(tokenPrice.asset.toHexString());
   let pricingAsset = Address.fromString(tokenPrice.pricingAsset.toHexString());
 
@@ -233,10 +236,31 @@ export function updateLatestPrice(tokenPrice: TokenPrice): void {
 
   let token = getToken(tokenAddress);
   const pricingAssetAddress = Address.fromString(tokenPrice.pricingAsset.toHexString());
-  const tokenInUSD = valueInUSD(tokenPrice.price, pricingAssetAddress);
-  token.latestUSDPrice = tokenInUSD;
-  token.latestPrice = latestPrice.id;
-  token.save();
+  const currentUSDPrice = valueInUSD(tokenPrice.price, pricingAssetAddress);
+
+  if (currentUSDPrice == ZERO_BD) return;
+
+  let oldUSDPrice = token.latestUSDPrice;
+  if (!oldUSDPrice) {
+    token.latestUSDPriceTimestamp = blockTimestamp;
+    token.latestUSDPrice = currentUSDPrice;
+    token.latestPrice = latestPrice.id;
+    token.save();
+    return;
+  }
+
+  let change = currentUSDPrice.minus(oldUSDPrice).div(oldUSDPrice);
+  if (
+    !token.latestUSDPriceTimestamp ||
+    (change.lt(MAX_POS_PRICE_CHANGE) && change.gt(MAX_NEG_PRICE_CHANGE)) ||
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    blockTimestamp.minus(token.latestUSDPriceTimestamp!).gt(MAX_TIME_DIFF_FOR_PRICING)
+  ) {
+    token.latestUSDPriceTimestamp = blockTimestamp;
+    token.latestUSDPrice = currentUSDPrice;
+    token.latestPrice = latestPrice.id;
+    token.save();
+  }
 }
 
 function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
