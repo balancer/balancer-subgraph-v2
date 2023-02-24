@@ -468,6 +468,7 @@ export function handleSwapEvent(event: SwapEvent): void {
         balances.push(balance);
       }
       if (pool.amp) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         let amp = pool.amp!.times(AMP_PRECISION);
         let invariantInt = calculateInvariant(amp, balances);
         let invariant = scaleDown(invariantInt, 18);
