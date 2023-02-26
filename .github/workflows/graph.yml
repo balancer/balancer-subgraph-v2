@@ -188,6 +188,6 @@ jobs:
           graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
           graph_subgraph_name: "balancer-avalanche-v2"
           graph_account: "balancer-labs"
-          graph_config_file: "subgraph.bnb.yaml"
+          graph_config_file: "subgraph.avalanche.yaml"
 env:
   CI: true
