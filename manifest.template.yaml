@@ -1243,9 +1243,10 @@ dataSources:
           file: ./abis/ProtocolIdRegistry.json
       eventHandlers:
         - event: ProtocolIdRegistered(indexed uint256,string)
-          handler: handleNewProtocolId
+          handler: handleProtocolIdRegistry
         - event: ProtocolIdRenamed(indexed uint256,string)
-          handler: handleUpdatedProtocolId
+          handler: handleProtocolIdRegistry
+    {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool

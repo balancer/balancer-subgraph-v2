@@ -570,14 +570,14 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   }
 }
 
-export function handleNewProtocolId(event: ProtocolIdRegistered): void {
-  let newProtocol = new ProtocolIdData(event.protocolId);
-  newProtocol.name = event.name;
-  newProtocol.save();
-}
+export function handleProtocolIdRegistry(event: ProtocolIdRegistered): void {
+  let protocol = ProtocolIdData.load(event.params.protocolId.toHexString());
 
-export function handleUpdatedProtocolId(event: ProtocolIdRenamed): void {
-  let protocol = ProtocolIdData.load(event.protocolId);
-  protocol.name = event.newName;
+  if (protocol == null) {
+    protocol = new ProtocolIdData(event.params.protocolId.toHexString());
+    protocol.name = event.params.name;
+  } else {
+    protocol.name = event.params.name;
+  }
   protocol.save();
 }
