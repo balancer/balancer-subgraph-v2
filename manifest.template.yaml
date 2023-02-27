@@ -1053,11 +1053,11 @@ dataSources:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
         - name: TetuLinearPoolFactory
-          file: ./abis/TetuLinearPoolFactoryinearPoolFactory.json
+          file: ./abis/TetuLinearPoolFactory.json
         - name: LinearPool
           file: ./abis/LinearPool.json
         - name: TetuLinearPool
-          file: ./abis/TetuLinearPoolinearPool.json
+          file: ./abis/TetuLinearPool.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewTetuLinearPool
