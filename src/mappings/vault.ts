@@ -451,6 +451,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   poolTokenOut.balance = newOutAmount;
   poolTokenOut.save();
 
+  let swapId = transactionHash.toHexString().concat(logIndex.toString());
+
   if (poolAddress == tokenInAddress || poolAddress == tokenOutAddress) {
     if (isComposableStablePool(pool)) {
       let tokenAddresses = pool.tokensList;
@@ -470,14 +472,13 @@ export function handleSwapEvent(event: SwapEvent): void {
       if (pool.amp) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         let amp = pool.amp!.times(AMP_PRECISION);
-        let invariantInt = calculateInvariant(amp, balances);
+        let invariantInt = calculateInvariant(amp, balances, swapId);
         let invariant = scaleDown(invariantInt, 18);
         pool.lastPostJoinExitInvariant = invariant;
       }
     }
   }
 
-  let swapId = transactionHash.toHexString().concat(logIndex.toString());
   let swap = new Swap(swapId);
   swap.tokenIn = tokenInAddress;
   swap.tokenInSym = poolTokenIn.symbol;
