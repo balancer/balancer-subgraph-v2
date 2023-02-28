@@ -464,7 +464,7 @@ export function handleSwapEvent(event: SwapEvent): void {
         if (poolToken == null) {
           throw new Error('poolToken not found');
         }
-        let balance = scaleUp(poolToken.balance.times(poolToken.priceRate), poolToken.decimals);
+        let balance = scaleUp(poolToken.balance.times(poolToken.priceRate), 18);
         balances.push(balance);
       }
       if (pool.amp) {
