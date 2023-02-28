@@ -363,7 +363,6 @@ arbitrum:
   ProtocolIdRegistry:
     address: "0x5cF4928a3205728bd12830E1840F7DB85c62a4B9"
     startBlock: 65101370
-    startBlock: 61319664
 bnb:
   network: bsc
   Vault:
