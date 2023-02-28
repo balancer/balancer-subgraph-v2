@@ -113,6 +113,7 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
     '-arbitrum',
     '-optimism',
     '-bnbchain',
+    '-avalanche',
     '-goerli'
   ];
   const versions = [
@@ -126,7 +127,13 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
 
   for (let s of subgraphs) {
     for (let n of networks) {
-      if ((s === 'balancer-gauges') && (n === '-polygon-pruned')) {
+      if ((s === 'balancer-gauges') && (n === '-polygon-prune')) {
+        continue;
+      }
+      if ((s === 'balancer-gauges') && (n === '-avalanche')) {
+        continue;
+      }
+      if ((s === 'balancer-gauges') && (n === '-bnbchain')) {
         continue;
       }
       if (s === 'balancer') {
@@ -137,7 +144,10 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
       }
       for (let v of versions) {
         for (let e of entities) {
-          const subgraphName = s + n + v;
+          let subgraphName = s + n + v;
+          if (subgraphName === 'balancer-gauges-gnosis-chain-beta') {
+            subgraphName = 'balancer-gauges-gnosis-chain-b';
+          }
           querySubgraph(e, subgraphName);
         }
       }
