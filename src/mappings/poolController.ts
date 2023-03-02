@@ -359,7 +359,7 @@ export function handleOrderBook(event: OrderBook): void {
     let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.tokenIn);
     let orders = new SecondaryOrders(providerId);   
     orders.pool = poolId.toHexString(); 
-    orders.creator = event.params.creator.toHexString();
+    orders.creator = event.params.creator;
     orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
     orders.tokenIn = event.params.tokenIn.toHexString();
@@ -369,7 +369,7 @@ export function handleOrderBook(event: OrderBook): void {
     orders.save();
   } 
   else{
-    orders.creator = event.params.creator.toHexString();
+    orders.creator = event.params.creator;
     orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
     orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
     orders.tokenIn = event.params.tokenIn.toHexString();
