@@ -1,16 +1,19 @@
 specVersion: 0.0.2
 description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
+#graft:
+#  base: QmaNhv72Lbq2rGEz9m7EydH3LiyCeDgmDDGzCMRamM8JWe
+#  block: 36555199
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: EventEmitter
-    network: goerli
+    network: matic
     source:
-      address: '0x4bcFCEDF1114030ff85a647dD436B7b3dEb45d9E'
+      address: '0xcdcECFa416EE3022030E707dC3EA13a8997D74c8'
       abi: EventEmitter
-      startBlock: 8305794
+      startBlock: 38152461
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -26,11 +29,11 @@ dataSources:
           handler: handleLogArgument
   - kind: ethereum/contract
     name: Vault
-    network: goerli
+    network: matic
     source:
       address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
-      startBlock: 4648099
+      startBlock: 15832990
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -70,126 +73,12 @@ dataSources:
         - event: InternalBalanceChanged(indexed address,indexed address,int256)
           handler: handleInternalBalanceChange
   - kind: ethereum/contract
-    name: WeightedPoolFactory
-    network: goerli
-    source:
-      address: '0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9'
-      abi: WeightedPoolFactory
-      startBlock: 4648101
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPoolFactory
-          file: ./abis/WeightedPoolFactory.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewWeightedPool
-  - kind: ethereum/contract
-    name: WeightedPoolV2Factory
-    network: goerli
-    source:
-      address: '0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227'
-      abi: WeightedPoolFactory
-      startBlock: 7553858
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPoolFactory
-          file: ./abis/WeightedPoolFactory.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: WeightedPoolV2
-          file: ./abis/WeightedPoolV2.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewWeightedPoolV2
-  - kind: ethereum/contract
-    name: WeightedPoolV3Factory
-    network: goerli
-    source:
-      address: '0x26575A44755E0aaa969FDda1E4291Df22C5624Ea'
-      abi: WeightedPoolFactory
-      startBlock: 8456831
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPoolFactory
-          file: ./abis/WeightedPoolFactory.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: WeightedPoolV2
-          file: ./abis/WeightedPoolV2.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewWeightedPoolV3
-  - kind: ethereum/contract
-    name: WeightedPool2TokenFactory
-    network: goerli
-    source:
-      address: '0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0'
-      abi: WeightedPoolFactory
-      startBlock: 4716924
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: WeightedPoolFactory
-          file: ./abis/WeightedPoolFactory.json
-        - name: WeightedPool2Tokens
-          file: ./abis/WeightedPool2Tokens.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewWeighted2TokenPool
-  - kind: ethereum/contract
     name: PrimaryIssuePoolFactory
-    network: goerli
+    network: matic
     source:
-      address: '0x07080E3Fd68EA5D487C6D8A828f0bCE886Ca41Bb'
+      address: '0xDA13BC71FEe08FfD523f10458B0e2c2D8427BBD5'
       abi: PrimaryIssuePoolFactory
-      startBlock: 8531996
+      startBlock: 39620319
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -214,11 +103,11 @@ dataSources:
           handler: handleNewPrimaryPool
   - kind: ethereum/contract
     name: SecondaryIssuePoolFactory
-    network: goerli
+    network: matic
     source:
-      address: '0x8099A9C79672BDDD0506364f4B0791A2384a960B'
+      address: '0xe5459436AE26C4fDC77f51c459e9Aa08b5d32064'
       abi: SecondaryIssuePoolFactory
-      startBlock: 8539471
+      startBlock: 39620416
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -241,595 +130,10 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewSecondaryPool          
-  - kind: ethereum/contract
-    name: StablePoolFactory
-    network: goerli
-    source:
-      address: '0x44afeb87c871D8fEA9398a026DeA2BD3A13F5769'
-      abi: StablePoolFactory
-      startBlock: 6992992
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: StablePoolFactory
-          file: ./abis/StablePoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewStablePool
-  - kind: ethereum/contract
-    name: StablePoolV2Factory
-    network: goerli
-    source:
-      address: '0xD360B8afb3d7463bE823bE1Ec3c33aA173EbE86e'
-      abi: StablePoolFactory
-      startBlock: 7169381
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: StablePoolFactory
-          file: ./abis/StablePoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewStablePoolV2
-  - kind: ethereum/contract
-    name: MetaStablePoolFactory
-    network: goerli
-    source:
-      address: '0xA55F73E2281c60206ba43A3590dB07B8955832Be'
-      abi: MetaStablePoolFactory
-      startBlock: 6993057
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: MetaStablePoolFactory
-          file: ./abis/MetaStablePoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-        - name: MetaStablePool
-          file: ./abis/MetaStablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewMetaStablePool
-  - kind: ethereum/contract
-    name: LiquidityBootstrappingPoolFactory
-    network: goerli
-    source:
-      address: '0xb48Cc42C45d262534e46d5965a9Ac496F1B7a830'
-      abi: LiquidityBootstrappingPoolFactory
-      startBlock: 6993037
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: LiquidityBootstrappingPoolFactory
-          file: ./abis/LiquidityBootstrappingPoolFactory.json
-        - name: LiquidityBootstrappingPool
-          file: ./abis/LiquidityBootstrappingPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewLiquidityBootstrappingPool
-  - kind: ethereum/contract
-    name: TempLiquidityBootstrappingPoolFactory
-    network: goerli
-    source:
-      address: '0xB0C726778C3AE4B3454D85557A48e8fa502bDD6A'
-      abi: LiquidityBootstrappingPoolFactory
-      startBlock: 6993471
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: LiquidityBootstrappingPoolFactory
-          file: ./abis/LiquidityBootstrappingPoolFactory.json
-        - name: LiquidityBootstrappingPool
-          file: ./abis/LiquidityBootstrappingPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewLiquidityBootstrappingPool
-  - kind: ethereum/contract
-    name: InvestmentPoolFactory
-    network: goerli
-    source:
-      address: '0x3C9F788131A26329A689Bd951b5aCb4454669487'
-      abi: InvestmentPoolFactory
-      startBlock: 6993461
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: InvestmentPoolFactory
-          file: ./abis/InvestmentPoolFactory.json
-        - name: InvestmentPool
-          file: ./abis/InvestmentPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewInvestmentPool
-  - kind: ethereum/contract
-    name: StablePhantomPoolFactory
-    network: goerli
-    source:
-      address: '0x41E9036AE350baEDCC7107760A020Dca3c0731ec'
-      abi: StablePhantomPoolFactory
-      startBlock: 6993896
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: StablePhantomPoolFactory
-          file: ./abis/StablePhantomPoolFactory.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-        - name: StablePhantomPool
-          file: ./abis/StablePhantomPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewStablePhantomPool
-  - kind: ethereum/contract
-    name: ComposableStablePoolFactory
-    network: goerli
-    source:
-      address: '0xB848f50141F3D4255b37aC288C25C109104F2158'
-      abi: ComposableStablePoolFactory
-      startBlock: 7542764
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: ComposableStablePoolFactory
-          file: ./abis/ComposableStablePoolFactory.json
-        - name: ComposableStablePool
-          file: ./abis/ComposableStablePool.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewComposableStablePool
-  - kind: ethereum/contract
-    name: ComposableStablePoolV2Factory
-    network: goerli
-    source:
-      address: '0x85a80afee867aDf27B50BdB7b76DA70f1E853062'
-      abi: ComposableStablePoolV2Factory
-      startBlock: 8048814
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: ComposableStablePoolV2Factory
-          file: ./abis/ComposableStablePoolV2Factory.json
-        - name: ComposableStablePool
-          file: ./abis/ComposableStablePool.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewComposableStablePoolV2
-  - kind: ethereum/contract
-    name: ComposableStablePoolV3Factory
-    network: goerli
-    source:
-      address: '0xbfD9769b061E57e478690299011A028194D66e3C'
-      abi: ComposableStablePoolV2Factory
-      startBlock: 8456835
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: ComposableStablePoolV2Factory
-          file: ./abis/ComposableStablePoolV2Factory.json
-        - name: ComposableStablePool
-          file: ./abis/ComposableStablePool.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewComposableStablePoolV3
-  - kind: ethereum/contract
-    name: HighAmpComposableStablePoolFactory
-    network: goerli
-    source:
-      address: '0x35802d6f8fe133215E1804EB70748fe39F10F318'
-      abi: ComposableStablePoolFactory
-      startBlock: 7842251
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: ComposableStablePoolFactory
-          file: ./abis/ComposableStablePoolFactory.json
-        - name: ComposableStablePool
-          file: ./abis/ComposableStablePool.json
-        - name: StablePool
-          file: ./abis/StablePool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewHighAmpComposableStablePool
-  - kind: ethereum/contract
-    name: AaveLinearPoolFactory
-    network: goerli
-    source:
-      address: '0x94470C12fc192e071F12Fec1152861608CE01562'
-      abi: AaveLinearPoolFactory
-      startBlock: 6993887
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: AaveLinearPoolFactory
-          file: ./abis/AaveLinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewAaveLinearPool
-  - kind: ethereum/contract
-    name: AaveLinearPoolV2Factory
-    network: goerli
-    source:
-      address: '0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD'
-      abi: AaveLinearPoolFactory
-      startBlock: 7421371
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: AaveLinearPoolFactory
-          file: ./abis/AaveLinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewAaveLinearPoolV2
-  - kind: ethereum/contract
-    name: AaveLinearPoolV3Factory
-    network: goerli
-    source:
-      address: '0x70Bbd023481788e443472e123AB963e5EBF58D06'
-      abi: AaveLinearPoolV3Factory
-      startBlock: 8094401
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: AaveLinearPoolV3Factory
-          file: ./abis/AaveLinearPoolV3Factory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewAaveLinearPoolV3
-        - event: AaveLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
-  - kind: ethereum/contract
-    name: AaveLinearPoolV4Factory
-    network: goerli
-    source:
-      address: '0x76578ecf9a141296Ec657847fb45B0585bCDa3a6'
-      abi: AaveLinearPoolV4Factory
-      startBlock: 8469020
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: AaveLinearPoolV4Factory
-          file: ./abis/AaveLinearPoolV4Factory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: AaveLinearPool
-          file: ./abis/AaveLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewAaveLinearPoolV4
-        - event: AaveLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
-  - kind: ethereum/contract
-    name: EulerLinearPoolFactory
-    network: goerli
-    source:
-      address: '0x813EE7a840CE909E7Fea2117A44a90b8063bd4fd'
-      abi: EulerLinearPoolFactory
-      startBlock: 8459393
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: EulerLinearPoolFactory
-          file: ./abis/EulerLinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: EulerLinearPool
-          file: ./abis/EulerLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewEulerLinearPool
-        - event: EulerLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
-  - kind: ethereum/contract
-    name: ERC4626LinearPoolFactory
-    network: goerli
-    source:
-      address: '0xdc15A3C5D16413C1C1F75Db0f75c4ae2a4104650'
-      abi: ERC4626LinearPoolFactory
-      startBlock: 7169160
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: ERC4626LinearPoolFactory
-          file: ./abis/ERC4626LinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: ERC4626LinearPool
-          file: ./abis/ERC4626LinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewERC4626LinearPool
-  - kind: ethereum/contract
-    name: ERC4626LinearPoolV3Factory
-    network: goerli
-    source:
-      address: '0xBa240C856498e2d7a70AF4911AaFae0D6b565a5B'
-      abi: ERC4626LinearPoolV3Factory
-      startBlock: 8458088
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: ERC4626LinearPoolV3Factory
-          file: ./abis/ERC4626LinearPoolV3Factory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: ERC4626LinearPoolV3
-          file: ./abis/ERC4626LinearPoolV3.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewERC4626LinearPoolV3
-        - event: Erc4626LinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
-  - kind: ethereum/contract
-    name: GyroEPoolFactory
-    network: goerli
-    source:
-      address: '0x3477fe0444878C168A87459F8167EEF28FCF956c'
-      abi: GyroEPoolFactory
-      startBlock: 7928618
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: GyroEPool
-          file: ./abis/GyroEPool.json
-        - name: GyroEPoolFactory
-          file: ./abis/GyroEPoolFactory.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewGyroEPool
 templates:
   - kind: ethereum/contract
     name: WeightedPool
-    network: goerli
+    network: matic
     source:
       abi: WeightedPool
     mapping:
@@ -854,7 +158,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPoolV2
-    network: goerli
+    network: matic
     source:
       abi: WeightedPoolV2
     mapping:
@@ -883,7 +187,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPool2Tokens
-    network: goerli
+    network: matic
     source:
       abi: WeightedPool2Tokens
     mapping:
@@ -910,7 +214,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
-    network: goerli
+    network: matic
     source:
       abi: StablePool
     mapping:
@@ -939,7 +243,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
-    network: goerli
+    network: matic
     source:
       abi: MetaStablePool
     mapping:
@@ -977,7 +281,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
-    network: goerli
+    network: matic
     source:
       abi: ConvergentCurvePool
     mapping:
@@ -998,7 +302,7 @@ templates:
           handler: handleTransfer
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
-    network: goerli
+    network: matic
     source:
       abi: LiquidityBootstrappingPool
     mapping:
@@ -1028,7 +332,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
-    network: goerli
+    network: matic
     source:
       abi: InvestmentPool
     mapping:
@@ -1060,7 +364,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPool
-    network: goerli
+    network: matic
     source:
       abi: StablePhantomPool
     mapping:
@@ -1096,7 +400,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPoolV2
-    network: goerli
+    network: matic
     source:
       abi: ComposableStablePool
     mapping:
@@ -1136,7 +440,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: LinearPool
-    network: goerli
+    network: matic
     source:
       abi: LinearPool
     mapping:
@@ -1164,7 +468,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: PrimaryIssuePool
-    network: goerli
+    network: matic
     source:
       abi: PrimaryIssuePool
     mapping:
@@ -1193,7 +497,7 @@ templates:
           handler: handleSubscription
   - kind: ethereum/contract
     name: SecondaryIssuePool
-    network: goerli
+    network: matic
     source:
       abi: SecondaryIssuePool
     mapping:
@@ -1224,7 +528,7 @@ templates:
           handler: handleOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool
-    network: goerli
+    network: matic
     source:
       abi: Gyro2Pool
     mapping:
@@ -1252,7 +556,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: Gyro3Pool
-    network: goerli
+    network: matic
     source:
       abi: Gyro3Pool
     mapping:
@@ -1280,7 +584,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: GyroEPool
-    network: goerli
+    network: matic
     source:
       abi: GyroEPool
     mapping:
@@ -1308,7 +612,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: FXPool
-    network: goerli
+    network: matic
     source:
       abi: FXPool
     mapping:
@@ -1332,7 +636,7 @@ templates:
           handler: handleParametersSet
   - kind: ethereum/contract
     name: OffchainAggregator
-    network: goerli
+    network: matic
     source:
       abi: AccessControlledOffchainAggregator
     mapping:
