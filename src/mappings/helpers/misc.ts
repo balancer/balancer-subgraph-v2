@@ -161,6 +161,7 @@ export function createPoolTokenEntity(
   poolToken.cashBalance = ZERO_BD;
   poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
+  poolToken.oldPriceRate = ONE_BD;
   poolToken.token = _token.id;
   poolToken.index = tokenIndex;
 
