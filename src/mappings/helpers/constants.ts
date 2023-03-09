@@ -10,16 +10,22 @@ export namespace ProtocolFeeType {
   export const Aum = 3;
 }
 
-export let ZERO = BigInt.fromI32(0);
-export let ZERO_BD = BigDecimal.fromString('0');
-export let ONE_BD = BigDecimal.fromString('1');
+export const ZERO = BigInt.fromI32(0);
+export const ONE = BigInt.fromI32(1);
+export const ZERO_BD = BigDecimal.fromString('0');
+export const ONE_BD = BigDecimal.fromString('1');
 export const SWAP_IN = 0;
 export const SWAP_OUT = 1;
 
-export let ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
+export const ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
 
-export let MIN_POOL_LIQUIDITY = BigDecimal.fromString('10000');
-export let MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
+export const MAX_TIME_DIFF_FOR_PRICING = BigInt.fromI32(3600); // 1h
+
+export let MAX_POS_PRICE_CHANGE = BigDecimal.fromString('1'); // +100%
+export let MAX_NEG_PRICE_CHANGE = BigDecimal.fromString('-0.5'); // -50%%
+
+export const MIN_POOL_LIQUIDITY = BigDecimal.fromString('2000');
+export const MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
 
 export let FX_AGGREGATOR_ADDRESSES = assets.fxAggregators;
 export let FX_TOKEN_ADDRESSES = assets.fxAssets;
@@ -33,6 +39,7 @@ class AddressByNetwork {
   public polygon: string;
   public arbitrum: string;
   public optimism: string;
+  public avalanche: string;
   public gnosis: string;
   public bnb: string;
   public dev: string;
@@ -46,6 +53,7 @@ let vaultAddressByNetwork: AddressByNetwork = {
   polygon: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   arbitrum: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   optimism: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  avalanche: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   gnosis: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   bnb: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
@@ -62,6 +70,8 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
     return Address.fromString(addressByNetwork.arbitrum);
   } else if (network == 'optimism') {
     return Address.fromString(addressByNetwork.optimism);
+  } else if (network == 'avalanche') {
+    return Address.fromString(addressByNetwork.avalanche);
   } else if (network == 'gnosis') {
     return Address.fromString(addressByNetwork.bnb);
   } else if (network == 'bsc') {
