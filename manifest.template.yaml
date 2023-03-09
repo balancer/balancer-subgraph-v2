@@ -718,41 +718,6 @@ dataSources:
         - event: AaveLinearPoolCreated(indexed address,indexed uint256)
           handler: handleLinearPoolProtocolId
   {{/if}}
-  {{#if BeefyLinearPoolFactory}}
-  - kind: ethereum/contract
-    name: BeefyLinearPoolFactory
-    network: {{network}}
-    source:
-      address: '{{BeefyLinearPoolFactory.address}}'
-      abi: BeefyLinearPoolFactory
-      startBlock: {{BeefyLinearPoolFactory.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: BeefyLinearPoolFactory
-          file: ./abis/BeefyLinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: BeefyLinearPool
-          file: ./abis/BeefyLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewBeefyLinearPool
-        - event: BeefyLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
-  {{/if}}
   {{#if ERC4626LinearPoolFactoryBeta}}
   - kind: ethereum/contract
     name: ERC4626LinearPoolFactoryBeta
@@ -959,41 +924,6 @@ dataSources:
         - event: MidasLinearPoolCreated(indexed address,indexed uint256)
           handler: handleLinearPoolProtocolId
   {{/if}}
-  {{#if ReaperLinearPoolFactory}}
-  - kind: ethereum/contract
-    name: ReaperLinearPoolFactory
-    network: {{network}}
-    source:
-      address: '{{ReaperLinearPoolFactory.address}}'
-      abi: ReaperLinearPoolFactory
-      startBlock: {{ReaperLinearPoolFactory.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: ReaperLinearPoolFactory
-          file: ./abis/ReaperLinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: ReaperLinearPool
-          file: ./abis/ReaperLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewReaperLinearPool
-        - event: ReaperLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
-  {{/if}}
   {{#if SiloLinearPoolFactory}}
   - kind: ethereum/contract
     name: SiloLinearPoolFactory
@@ -1027,41 +957,6 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewSiloLinearPool
         - event: SiloLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
-  {{/if}}
-  {{#if TetuLinearPoolFactory}}
-  - kind: ethereum/contract
-    name: TetuLinearPoolFactory
-    network: {{network}}
-    source:
-      address: '{{TetuLinearPoolFactory.address}}'
-      abi: TetuLinearPoolFactory
-      startBlock: {{TetuLinearPoolFactory.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
-      entities:
-        - Balancer
-        - Pool
-      abis:
-        - name: Vault
-          file: ./abis/Vault.json
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-        - name: TetuLinearPoolFactory
-          file: ./abis/TetuLinearPoolFactory.json
-        - name: LinearPool
-          file: ./abis/LinearPool.json
-        - name: TetuLinearPool
-          file: ./abis/TetuLinearPool.json
-      eventHandlers:
-        - event: PoolCreated(indexed address)
-          handler: handleNewTetuLinearPool
-        - event: TetuLinearPoolCreated(indexed address,indexed uint256)
           handler: handleLinearPoolProtocolId
   {{/if}}
   {{#if YearnLinearPoolFactory}}

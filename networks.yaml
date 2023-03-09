@@ -238,9 +238,6 @@ polygon:
   AaveLinearPoolV4Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
     startBlock: 38828779
-  BeefyLinearPoolFactory:
-    address: "0xE605Dbe1cA85dCdb8F43CEfA427f3B0fC06f6ba6"
-    startBlock: 38828779
   ERC4626LinearPoolFactoryBeta:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
@@ -252,12 +249,6 @@ polygon:
     startBlock: 38828779
   MidasLinearPoolFactory:
     address: "0x6caf662b573F577DE01165d2d38D1910bba41F8A"
-    startBlock: 38828779
-  ReaperLinearPoolFactory:
-    address: "0x1b986138a4F2aA538E79fdEC222dad93F8d66703"
-    startBlock: 38828779
-  TetuLinearPoolFactory:
-    address: "0x7ADbdabaA80F654568421887c12F09E0C7BD9629"
     startBlock: 38828779
   YearnLinearPoolFactory:
     address: "0x7396f99B48e7436b152427bfA3DD6Aa8C7C6d05B"
@@ -339,14 +330,8 @@ arbitrum:
   AaveLinearPoolV4Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
     startBlock: 57735268
-  BeefyLinearPoolFactory:
-    address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
-    startBlock: 57735268
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
-    startBlock: 57735268
-  ReaperLinearPoolFactory:
-    address: "0xC101dcA301a4011C1F925e9622e749e550a1B667"
     startBlock: 57735268
   YearnLinearPoolFactory:
     address: "0xD8B6b96c88ad626EB6209c4876e3B14f45f8803A"
