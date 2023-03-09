@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Picking a block from more than a week ago as a quick way to make sure we get all the recently deployed factories
-    block: 16580891
+    # Feb28 - Block from ~00h UTC
+    block: 16723076
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmRHmtLuJBXZSJcAEZGnXSpMYuTHgTDw4kRyZK5Zyh97ys
+    base: QmceY3gSVLLrLcSndFt8RcTDgozD2bKtkHSKQPpHFUiAMc
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -71,25 +71,25 @@ mainnet:
     startBlock: 16136501
   AaveLinearPoolV4Factory:
     address: "0xb9F8AB3ED3F3aCBa64Bc6cd2DcA74B7F38fD7B88"
-    startBlock: 16542557
+    startBlock: 16600026
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
   EulerLinearPoolFactory:
     address: "0x5F43FBa61f63Fa6bFF101a0A0458cEA917f6B347"
-    startBlock: 16542557
+    startBlock: 16588077
   ERC4626LinearPoolV3Factory:
     address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
     startBlock: 16542240
   GearboxLinearPoolFactory:
     address: "0x2EbE41E1aa44D61c206A94474932dADC7D3FD9E3"
-    startBlock: 16542557
+    startBlock: 16637919
   SiloLinearPoolFactory:
     address: "0xC446BBfeF7D0507cF5203a87F85773aB6C9a9e8E"
-    startBlock: 16542557
+    startBlock: 16542557 # TODO: update with real startBlock
   YearnLinearPoolFactory:
     address: "0x8b7854708c0C54f9D7d1FF351D4F84E6dE0E134C"
-    startBlock: 16542557
+    startBlock: 16638024
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
@@ -173,11 +173,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
-    block: 36555199
+    # Feb28 - Block from ~00h UTC
+    block: 39786379
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmaNhv72Lbq2rGEz9m7EydH3LiyCeDgmDDGzCMRamM8JWe
+    base: QmWiMdV2NFNgAtTEGshsLbwULP7iZUkZBCQaXAyECSiZEN
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -237,7 +237,7 @@ polygon:
     startBlock: 36555199
   AaveLinearPoolV4Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
-    startBlock: 38828779
+    startBlock: 39142839
   ERC4626LinearPoolFactoryBeta:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
@@ -246,13 +246,13 @@ polygon:
     startBlock: 26746067
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
-    startBlock: 38828779
+    startBlock: 39072910
   MidasLinearPoolFactory:
     address: "0x6caf662b573F577DE01165d2d38D1910bba41F8A"
-    startBlock: 38828779
+    startBlock: 38828779 # TODO: update with real startBlock
   YearnLinearPoolFactory:
     address: "0x7396f99B48e7436b152427bfA3DD6Aa8C7C6d05B"
-    startBlock: 38828779
+    startBlock: 39341056
   Gyro2PoolFactory:
     address: "0x5d8545a7330245150bE0Ce88F8afB0EDc41dFc34"
     startBlock: 31556084
@@ -268,11 +268,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
-    block: 44470235
+    # Feb28 - Block from ~00h UTC
+    block: 65246547
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmZvXwpwbttRC54f2aAntu7Y97Dg4651k9TZAeJc3DHXoD
+    base: QmazNHHZt4y34bj6BBo9tjXpxvCyotXJmN7VQeRJTTaP7j
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -329,13 +329,13 @@ arbitrum:
     startBlock: 44470235
   AaveLinearPoolV4Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
-    startBlock: 57735268
+    startBlock: 59763160
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
-    startBlock: 57735268
+    startBlock: 59209879
   YearnLinearPoolFactory:
     address: "0xD8B6b96c88ad626EB6209c4876e3B14f45f8803A"
-    startBlock: 57735268
+    startBlock: 61319664
 bnb:
   network: bsc
   Vault:
@@ -394,3 +394,14 @@ gnosis:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 25415236
+avalanche:
+  network: avalanche
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 26386141
+  WeightedPoolV3Factory:
+    address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
+    startBlock: 26389236
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
+    startBlock: 26386552

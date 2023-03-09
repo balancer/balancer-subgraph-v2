@@ -19,6 +19,7 @@ import {
   tokenToDecimal,
   getTokenPriceId,
   scaleDown,
+  scaleUp,
   createUserEntity,
   getTokenDecimals,
   loadPoolToken,
@@ -58,7 +59,7 @@ import {
   isFXPool,
   isComposableStablePool,
 } from './helpers/pools';
-import { updateAmpFactor } from './helpers/stable';
+import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
 import { USDC_ADDRESS } from './helpers/assets';
 
 /************************************
@@ -442,7 +443,42 @@ export function handleSwapEvent(event: SwapEvent): void {
     }
   }
 
+  let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
+  poolTokenIn.balance = newInAmount;
+  poolTokenIn.save();
+
+  let newOutAmount = poolTokenOut.balance.minus(tokenAmountOut);
+  poolTokenOut.balance = newOutAmount;
+  poolTokenOut.save();
+
   let swapId = transactionHash.toHexString().concat(logIndex.toString());
+
+  if (poolAddress == tokenInAddress || poolAddress == tokenOutAddress) {
+    if (isComposableStablePool(pool)) {
+      let tokenAddresses = pool.tokensList;
+      let balances: BigInt[] = [];
+      for (let i: i32 = 0; i < tokenAddresses.length; i++) {
+        let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
+        if (tokenAddresses[i] == pool.address) {
+          continue;
+        }
+        let poolToken = loadPoolToken(pool.id, tokenAddress);
+        if (poolToken == null) {
+          throw new Error('poolToken not found');
+        }
+        let balance = scaleUp(poolToken.balance.times(poolToken.priceRate), 18);
+        balances.push(balance);
+      }
+      if (pool.amp) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        let amp = pool.amp!.times(AMP_PRECISION);
+        let invariantInt = calculateInvariant(amp, balances, swapId);
+        let invariant = scaleDown(invariantInt, 18);
+        pool.lastPostJoinExitInvariant = invariant;
+      }
+    }
+  }
+
   let swap = new Swap(swapId);
   swap.tokenIn = tokenInAddress;
   swap.tokenInSym = poolTokenIn.symbol;
@@ -482,14 +518,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   vaultSnapshot.totalSwapFee = vault.totalSwapFee;
   vaultSnapshot.totalSwapCount = vault.totalSwapCount;
   vaultSnapshot.save();
-
-  let newInAmount = poolTokenIn.balance.plus(tokenAmountIn);
-  poolTokenIn.balance = newInAmount;
-  poolTokenIn.save();
-
-  let newOutAmount = poolTokenOut.balance.minus(tokenAmountOut);
-  poolTokenOut.balance = newOutAmount;
-  poolTokenOut.save();
 
   // update swap counts for token
   // updates token snapshots as well
@@ -546,7 +574,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.save();
 
-    updateLatestPrice(tokenPrice);
+    updateLatestPrice(tokenPrice, event.block.timestamp);
   }
   if (
     isPricingAsset(tokenOutAddress) &&
@@ -574,7 +602,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
     tokenPrice.save();
 
-    updateLatestPrice(tokenPrice);
+    updateLatestPrice(tokenPrice, event.block.timestamp);
   }
 
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
