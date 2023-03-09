@@ -212,5 +212,6 @@ jobs:
           graph_subgraph_name: "balancer-optimism-v2"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.optimism.yaml"
+
 env:
   CI: true
