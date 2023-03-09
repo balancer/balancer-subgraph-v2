@@ -570,7 +570,7 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   }
 }
 
-export function handleProtocolIdRegistry(event: ProtocolIdRegistered): void {
+export function handleProtocolIdRegistryOrRename(event: ProtocolIdRegistered): void {
   let protocol = ProtocolIdData.load(event.params.protocolId.toHexString());
 
   if (protocol == null) {

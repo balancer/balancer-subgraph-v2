@@ -359,7 +359,7 @@ arbitrum:
     startBlock: 57735268 # TODO: update with real startBlock
   YearnLinearPoolFactory:
     address: "0xD8B6b96c88ad626EB6209c4876e3B14f45f8803A"
-    startBlock: 57735268
+    startBlock: 613196646
   ProtocolIdRegistry:
     address: "0x5cF4928a3205728bd12830E1840F7DB85c62a4B9"
     startBlock: 65101370
