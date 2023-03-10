@@ -468,6 +468,9 @@ optimism:
   BeefyLinearPoolFactory:
     address: "0xE77f03F5007Df49005CAf2a2f1D872c51aE51fD1"
     startBlock: 49164540
+  ProtocolIdRegistry:
+    address: "0x9805dcfD25e6De36bad8fe9D3Fe2c9b44B764102"
+    startBlock: 77557576
 avalanche:
   network: avalanche
   Vault:
