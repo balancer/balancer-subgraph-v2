@@ -369,6 +369,7 @@ export function setPriceRateCache(poolId: string, tokenAddress: Address, rate: B
   // Attach the rate onto the PoolToken entity
   let poolToken = loadPoolToken(poolId, tokenAddress);
   if (poolToken == null) return;
+  poolToken.oldPriceRate = poolToken.priceRate;
   poolToken.priceRate = rateScaled;
   poolToken.save();
 }

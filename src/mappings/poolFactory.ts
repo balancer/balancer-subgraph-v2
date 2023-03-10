@@ -277,6 +277,14 @@ export function handleNewMidasLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
+export function handleNewReaperLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ReaperLinear, 1);
+}
+
+export function handleNewReaperLinearPoolV3(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ReaperLinear, 3);
+}
+
 export function handleNewSiloLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.SiloLinear, 1);
 }
