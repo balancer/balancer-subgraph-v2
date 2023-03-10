@@ -30,7 +30,6 @@ import {
   getTradePairSnapshot,
   getTradePair,
   getBalancerSnapshot,
-  bytesToAddress,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import {
@@ -211,7 +210,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.save();
   }
 
-  updatePoolLiquidity(poolId, event.block.number, blockTimestamp);
+  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -295,7 +294,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
-  updatePoolLiquidity(poolId, event.block.number, blockTimestamp);
+  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
 }
 
 /************************************
@@ -358,7 +357,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   management.timestamp = event.block.timestamp.toI32();
   management.save();
 
-  setWrappedTokenPrice(pool, poolId.toHex(), event.block.number, event.block.timestamp.toI32());
+  setWrappedTokenPrice(pool, poolId.toHex(), event.block.number, event.block.timestamp);
 }
 
 /************************************
@@ -614,5 +613,5 @@ export function handleSwapEvent(event: SwapEvent): void {
     addHistoricalPoolLiquidityRecord(poolId.toHex(), blockNumber, preferentialToken);
   }
 
-  updatePoolLiquidity(poolId.toHex(), blockNumber, blockTimestamp);
+  updatePoolLiquidity(poolId.toHex(), blockNumber, event.block.timestamp);
 }
