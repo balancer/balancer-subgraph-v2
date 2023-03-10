@@ -110,6 +110,7 @@ type Pool @entity {
 
   # AaveLinearV3 Only
   protocolId: Int
+  protocolIdData: ProtocolIdData
 }
 
 type PoolContract @entity(immutable: true) {

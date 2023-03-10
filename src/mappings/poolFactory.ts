@@ -305,6 +305,8 @@ export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.protocolId = event.params.protocolId.toI32();
+  const protocolIdData = ProtocolIdData.load(event.params.protocolId.toHexString());
+  pool.protocolIdData = protocolIdData ? protocolIdData.id : null;
   pool.save();
 }
 
