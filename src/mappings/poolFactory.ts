@@ -269,10 +269,6 @@ export function handleNewEulerLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
-export function handleNewBeefyLinearPool(event: PoolCreated): void {
-  handleNewLinearPool(event, PoolType.BeefyLinear, 1);
-}
-
 export function handleNewGearboxLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.GearboxLinear, 1);
 }
@@ -291,10 +287,6 @@ export function handleNewReaperLinearPoolV3(event: PoolCreated): void {
 
 export function handleNewSiloLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.SiloLinear, 1);
-}
-
-export function handleNewTetuLinearPool(event: PoolCreated): void {
-  handleNewLinearPool(event, PoolType.TetuLinear, 1);
 }
 
 export function handleNewYearnLinearPool(event: PoolCreated): void {
