@@ -38,6 +38,7 @@ class AddressByNetwork {
   public goerli: string;
   public polygon: string;
   public arbitrum: string;
+  public optimism: string;
   public avalanche: string;
   public gnosis: string;
   public bnb: string;
@@ -51,6 +52,7 @@ let vaultAddressByNetwork: AddressByNetwork = {
   goerli: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   polygon: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   arbitrum: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  optimism: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   avalanche: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   gnosis: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   bnb: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
@@ -66,6 +68,8 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
     return Address.fromString(addressByNetwork.polygon);
   } else if (network == 'arbitrum-one') {
     return Address.fromString(addressByNetwork.arbitrum);
+  } else if (network == 'optimism') {
+    return Address.fromString(addressByNetwork.optimism);
   } else if (network == 'avalanche') {
     return Address.fromString(addressByNetwork.avalanche);
   } else if (network == 'gnosis') {
