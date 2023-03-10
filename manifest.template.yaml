@@ -1243,9 +1243,9 @@ dataSources:
           file: ./abis/ProtocolIdRegistry.json
       eventHandlers:
         - event: ProtocolIdRegistered(indexed uint256,string)
-          handler: handleProtocolIdRegistry
+          handler: handleProtocolIdRegistryOrRename
         - event: ProtocolIdRenamed(indexed uint256,string)
-          handler: handleProtocolIdRegistry
+          handler: handleProtocolIdRegistryOrRename
     {{/if}}
 templates:
   - kind: ethereum/contract
