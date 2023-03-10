@@ -301,7 +301,9 @@ export function setWrappedTokenPrice(pool: Pool, poolId: string, block_number: B
       const poolAddress = bytesToAddress(pool.address);
       let poolContract = AaveLinearPool.bind(poolAddress);
       let rateCall = poolContract.try_getWrappedTokenRate();
-      if (!rateCall.reverted) {
+      if (rateCall.reverted) {
+        log.info('getWrappedTokenRate reverted', []);
+      } else {
         const rate = rateCall.value;
         const amount = BigDecimal.fromString('1');
         const asset = bytesToAddress(pool.tokensList[pool.wrappedIndex]);
