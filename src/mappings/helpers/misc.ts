@@ -49,6 +49,15 @@ export function scaleDown(num: BigInt, decimals: i32): BigDecimal {
   return num.divDecimal(BigInt.fromI32(10).pow(u8(decimals)).toBigDecimal());
 }
 
+export function scaleUp(num: BigDecimal, decimals: i32): BigInt {
+  return BigInt.fromString(
+    num
+      .truncate(decimals)
+      .times(BigInt.fromI32(10).pow(u8(decimals)).toBigDecimal())
+      .toString()
+  );
+}
+
 export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {
   return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex());
 }
@@ -100,7 +109,12 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
   return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
 }
 
-export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, assetManagerAddress: Address): void {
+export function createPoolTokenEntity(
+  pool: Pool,
+  tokenAddress: Address,
+  tokenIndex: i32,
+  assetManagerAddress: Address
+): void {
   let poolTokenId = getPoolTokenId(pool.id, tokenAddress);
 
   let token = ERC20.bind(tokenAddress);
@@ -147,7 +161,9 @@ export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, assetMa
   poolToken.cashBalance = ZERO_BD;
   poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
+  poolToken.oldPriceRate = ONE_BD;
   poolToken.token = _token.id;
+  poolToken.index = tokenIndex;
 
   if (isComposableStablePool(pool)) {
     let poolAddress = bytesToAddress(pool.address);

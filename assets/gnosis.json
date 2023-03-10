@@ -1,0 +1,30 @@
+{
+  "stableAssets": [
+    {
+      "address": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+      "symbol": "WXDAI"
+    },
+    {
+      "address": "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",
+      "symbol": "USDC"
+    },
+    {
+      "address": "0x4ecaba5870353805a9f068101a40e0f32ed605c6",
+      "symbol": "USDT"
+    }
+  ],
+  "pricingAssets": [
+    {
+      "address": "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1", 
+      "symbol": "WETH"
+    },
+    {
+      "address": "0x8e5bBbb09Ed1ebdE8674Cda39A0c169401db4252", 
+      "symbol": "WBTC"
+    },
+    {
+      "address": "0x7ef541e2a22058048904fe5744f9c7e4c57af717", 
+      "symbol": "BAL"
+    }
+  ]
+}
