@@ -1186,6 +1186,30 @@ dataSources:
         - event: NewFXPool(indexed address,indexed bytes32,indexed address)
           handler: handleNewFXPool
   {{/if}}
+  {{#if ProtocolIdRegistry}}
+  - kind: ethereum/contract
+    name: ProtocolIdRegistry
+    network: {{network}}
+    source:
+      address: '{{ProtocolIdRegistry.address}}'
+      abi: ProtocolIdRegistry
+      startBlock: {{ProtocolIdRegistry.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - ProtocolIdData
+      abis:
+        - name: ProtocolIdRegistry
+          file: ./abis/ProtocolIdRegistry.json
+      eventHandlers:
+        - event: ProtocolIdRegistered(indexed uint256,string)
+          handler: handleProtocolIdRegistryOrRename
+        - event: ProtocolIdRenamed(indexed uint256,string)
+          handler: handleProtocolIdRegistryOrRename
+    {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -1648,3 +1672,4 @@ templates:
       eventHandlers:
         - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
           handler: handleAnswerUpdated
+

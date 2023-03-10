@@ -93,6 +93,9 @@ mainnet:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
+  ProtocolIdRegistry:
+    address: "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68"
+    startBlock: 16719996
 goerli:
   network: goerli
   EventEmitter:
@@ -170,6 +173,9 @@ goerli:
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
+  ProtocolIdRegistry:
+    address: "0x4fb47126Fa83A8734991E41B942Ac29A3266C968"
+    startBlock: 8566340
 polygon:
   network: matic
   graft:
@@ -265,6 +271,9 @@ polygon:
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054793
+  ProtocolIdRegistry:
+    address: "0xa523f47A933D5020b23629dDf689695AA94612Dc"
+    startBlock: 39769528
 arbitrum:
   network: arbitrum-one
   graft:
@@ -335,7 +344,10 @@ arbitrum:
     startBlock: 59209879
   YearnLinearPoolFactory:
     address: "0xD8B6b96c88ad626EB6209c4876e3B14f45f8803A"
-    startBlock: 61319664
+    startBlock: 613196646
+  ProtocolIdRegistry:
+    address: "0x5cF4928a3205728bd12830E1840F7DB85c62a4B9"
+    startBlock: 65101370
 bnb:
   network: bsc
   Vault:
@@ -394,6 +406,9 @@ gnosis:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 25415236
+  ProtocolIdRegistry:
+    address: "0x6B5dA774890Db7B7b96C6f44e6a4b0F657399E2e"
+    startBlock: 26691522
 optimism:
   network: optimism
   Vault:
@@ -453,6 +468,9 @@ optimism:
   BeefyLinearPoolFactory:
     address: "0xE77f03F5007Df49005CAf2a2f1D872c51aE51fD1"
     startBlock: 49164540
+  ProtocolIdRegistry:
+    address: "0x9805dcfD25e6De36bad8fe9D3Fe2c9b44B764102"
+    startBlock: 77557576
 avalanche:
   network: avalanche
   Vault:
