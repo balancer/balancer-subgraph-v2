@@ -305,7 +305,7 @@ export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.protocolId = event.params.protocolId.toI32();
-  const protocolIdData = ProtocolIdData.load(event.params.protocolId.toHexString());
+  const protocolIdData = ProtocolIdData.load(event.params.protocolId.toString());
   pool.protocolIdData = protocolIdData ? protocolIdData.id : null;
   pool.save();
 }
@@ -573,10 +573,10 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 }
 
 export function handleProtocolIdRegistryOrRename(event: ProtocolIdRegistered): void {
-  let protocol = ProtocolIdData.load(event.params.protocolId.toHexString());
+  let protocol = ProtocolIdData.load(event.params.protocolId.toString());
 
   if (protocol == null) {
-    protocol = new ProtocolIdData(event.params.protocolId.toHexString());
+    protocol = new ProtocolIdData(event.params.protocolId.toString());
     protocol.name = event.params.name;
   } else {
     protocol.name = event.params.name;
