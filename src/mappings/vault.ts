@@ -31,6 +31,7 @@ import {
   getPreferentialPricingAsset,
   updateLatestPrice,
   updatePoolLiquidity,
+  setWrappedTokenPrice,
 } from './pricing';
 import {
   MIN_POOL_LIQUIDITY,
@@ -53,7 +54,6 @@ import {
 import { updateAmpFactor } from './helpers/stable';
 import { BaseToUsdAssimilator } from '../types/Vault/BaseToUsdAssimilator';
 import { USDC_ADDRESS } from './helpers/assets';
-import { AaveLinearPool } from '../types/AaveLinearPoolFactory/AaveLinearPool';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -193,7 +193,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.save();
   }
 
-  updatePoolLiquidity(poolId, blockTimestamp);
+  updatePoolLiquidity(poolId, event.block.number, blockTimestamp);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -277,7 +277,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
-  updatePoolLiquidity(poolId, blockTimestamp);
+  updatePoolLiquidity(poolId, event.block.number, blockTimestamp);
 }
 
 /************************************
@@ -328,35 +328,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   management.timestamp = event.block.timestamp.toI32();
   management.save();
 
-  // The wrapped token in a linear pool is hardly ever traded, meaning we rarely compute its USD price
-  // This creates an exceptional entry for the token price of the wrapped token,
-  // with the main token as the pricing asset even if it's not globally defined as one
-  // TODO: is this the best handler for this?
-  if (pool.poolType == PoolType.AaveLinear) {
-    if (pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY)) {
-      const poolAddress = bytesToAddress(pool.address);
-      let poolContract = AaveLinearPool.bind(poolAddress);
-      let rateCall = poolContract.try_getWrappedTokenRate();
-      if (!rateCall.reverted) {
-        const rate = rateCall.value;
-        const amount = BigDecimal.fromString('1');
-        const asset = bytesToAddress(pool.tokensList[pool.wrappedIndex]);
-        const pricingAsset = bytesToAddress(pool.tokensList[pool.mainIndex]);
-        const price = scaleDown(rate, 18);
-        let tokenPriceId = getTokenPriceId(poolId.toHex(), asset, pricingAsset, event.block.number);
-        let tokenPrice = new TokenPrice(tokenPriceId);
-        tokenPrice.poolId = poolId.toHexString();
-        tokenPrice.block = event.block.number;
-        tokenPrice.timestamp = event.block.timestamp.toI32();
-        tokenPrice.asset = asset;
-        tokenPrice.pricingAsset = pricingAsset;
-        tokenPrice.amount = amount;
-        tokenPrice.price = price;
-        tokenPrice.save();
-        updateLatestPrice(tokenPrice);
-      }
-    }
-  }
+  setWrappedTokenPrice(pool, poolId.toHex(), event.block.number, event.block.timestamp.toI32());
 }
 
 /************************************
@@ -517,7 +489,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // Capture price
   // TODO: refactor these if statements using a helper function
-  let block = event.block.number;
+  let blockNumber = event.block.number;
   let tokenInWeight = poolTokenIn.weight;
   let tokenOutWeight = poolTokenOut.weight;
   if (
@@ -525,11 +497,11 @@ export function handleSwapEvent(event: SwapEvent): void {
     pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY) &&
     swap.valueUSD.gt(MIN_SWAP_VALUE_USD)
   ) {
-    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, block);
+    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, blockNumber);
     let tokenPrice = new TokenPrice(tokenPriceId);
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenOutAddress);
     tokenPrice.poolId = poolId.toHexString();
-    tokenPrice.block = block;
+    tokenPrice.block = blockNumber;
     tokenPrice.timestamp = blockTimestamp;
     tokenPrice.asset = tokenOutAddress;
     tokenPrice.amount = tokenAmountIn;
@@ -553,11 +525,11 @@ export function handleSwapEvent(event: SwapEvent): void {
     pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY) &&
     swap.valueUSD.gt(MIN_SWAP_VALUE_USD)
   ) {
-    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, block);
+    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, blockNumber);
     let tokenPrice = new TokenPrice(tokenPriceId);
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenInAddress);
     tokenPrice.poolId = poolId.toHexString();
-    tokenPrice.block = block;
+    tokenPrice.block = blockNumber;
     tokenPrice.timestamp = blockTimestamp;
     tokenPrice.asset = tokenInAddress;
     tokenPrice.amount = tokenAmountOut;
@@ -579,8 +551,8 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
   if (preferentialToken != ZERO_ADDRESS) {
-    addHistoricalPoolLiquidityRecord(poolId.toHex(), block, preferentialToken);
+    addHistoricalPoolLiquidityRecord(poolId.toHex(), blockNumber, preferentialToken);
   }
 
-  updatePoolLiquidity(poolId.toHex(), blockTimestamp);
+  updatePoolLiquidity(poolId.toHex(), blockNumber, blockTimestamp);
 }

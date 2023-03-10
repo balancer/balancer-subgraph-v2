@@ -1,8 +1,24 @@
 import { Address, Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice } from '../types/schema';
-import { ZERO_BD, PRICING_ASSETS, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS } from './helpers/constants';
-import { hasVirtualSupply, isComposableStablePool, PoolType } from './helpers/pools';
-import { createPoolSnapshot, getBalancerSnapshot, getToken, loadPoolToken } from './helpers/misc';
+import {
+  ZERO_BD,
+  PRICING_ASSETS,
+  USD_STABLE_ASSETS,
+  ONE_BD,
+  ZERO_ADDRESS,
+  MIN_POOL_LIQUIDITY,
+} from './helpers/constants';
+import { hasVirtualSupply, isComposableStablePool, isLinearPool, PoolType } from './helpers/pools';
+import {
+  bytesToAddress,
+  createPoolSnapshot,
+  getBalancerSnapshot,
+  getToken,
+  getTokenPriceId,
+  loadPoolToken,
+  scaleDown,
+} from './helpers/misc';
+import { AaveLinearPool } from '../types/AaveLinearPoolFactory/AaveLinearPool';
 
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
@@ -95,7 +111,7 @@ export function addHistoricalPoolLiquidityRecord(poolId: string, block: BigInt, 
   return true;
 }
 
-export function updatePoolLiquidity(poolId: string, timestamp: i32): boolean {
+export function updatePoolLiquidity(poolId: string, block_number: BigInt, timestamp: i32): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
   let tokensList: Bytes[] = pool.tokensList;
@@ -122,6 +138,12 @@ export function updatePoolLiquidity(poolId: string, timestamp: i32): boolean {
   // Update pool stats
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
+
+  // We want to avoid too frequently calling setWrappedTokenPrice because it makes a call to the rate provider
+  // Doing it here allows us to do it only once, when the MIN_POOL_LIQUIDITY threshold is crossed
+  if (oldPoolLiquidity < MIN_POOL_LIQUIDITY) {
+    setWrappedTokenPrice(pool, poolId, block_number, timestamp);
+  }
 
   // update BPT price
   updateBptPrice(pool);
@@ -239,4 +261,35 @@ export function isUSDStable(asset: Address): boolean {
     if (USD_STABLE_ASSETS[i] == asset) return true;
   }
   return false;
+}
+
+// The wrapped token in a linear pool is hardly ever traded, meaning we rarely compute its USD price
+// This creates an exceptional entry for the token price of the wrapped token,
+// with the main token as the pricing asset even if it's not globally defined as one
+export function setWrappedTokenPrice(pool: Pool, poolId: string, block_number: BigInt, timestamp: i32): void {
+  if (isLinearPool(pool)) {
+    if (pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY)) {
+      const poolAddress = bytesToAddress(pool.address);
+      let poolContract = AaveLinearPool.bind(poolAddress);
+      let rateCall = poolContract.try_getWrappedTokenRate();
+      if (!rateCall.reverted) {
+        const rate = rateCall.value;
+        const amount = BigDecimal.fromString('1');
+        const asset = bytesToAddress(pool.tokensList[pool.wrappedIndex]);
+        const pricingAsset = bytesToAddress(pool.tokensList[pool.mainIndex]);
+        const price = scaleDown(rate, 18);
+        let tokenPriceId = getTokenPriceId(poolId, asset, pricingAsset, block_number);
+        let tokenPrice = new TokenPrice(tokenPriceId);
+        tokenPrice.poolId = poolId;
+        tokenPrice.block = block_number;
+        tokenPrice.timestamp = timestamp;
+        tokenPrice.asset = asset;
+        tokenPrice.pricingAsset = pricingAsset;
+        tokenPrice.amount = amount;
+        tokenPrice.price = price;
+        tokenPrice.save();
+        updateLatestPrice(tokenPrice);
+      }
+    }
+  }
 }
