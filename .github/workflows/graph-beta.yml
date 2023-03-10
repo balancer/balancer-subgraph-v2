@@ -5,29 +5,29 @@ on:
     branches: dev
 
 jobs:
-  # deploy-beta:
-  #   runs-on: ubuntu-latest
-  #   environment: graph
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Install node
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 14
-  #     - name: Install
-  #       run: yarn --frozen-lockfile
-  #     - name: Assets
-  #       run: yarn generate-assets
-  #     - name: Codegen
-  #       run: yarn codegen
-  #     - name: Build
-  #       run: yarn build
-  #     - uses: gtaschuk/graph-deploy@v0.1.12
-  #       with:
-  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-  #         graph_subgraph_name: "balancer-v2-beta"
-  #         graph_account: "balancer-labs"
-  #         graph_config_file: "subgraph.yaml"
+  deploy-beta:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.12
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-v2-beta"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.yaml"
   deploy-goerli-beta:
     runs-on: ubuntu-latest
     environment: graph
@@ -189,5 +189,28 @@ jobs:
           graph_subgraph_name: "balancer-avalanche-v2-beta"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.avalanche.yaml"
+  deploy-optimism-beta:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets optimism
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.12
+        with:
+          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+          graph_subgraph_name: "balancer-optimism-v2-beta"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.optimism.yaml"
 env:
   CI: true

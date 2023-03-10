@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, log } from '@graphprotocol/graph-ts';
 import { Pool } from '../../types/schema';
 import { StablePool } from '../../types/templates/StablePool/StablePool';
 import { ZERO, ONE } from './constants';
@@ -25,7 +25,7 @@ export function getAmp(poolContract: StablePool): BigInt {
   return amp;
 }
 
-export function calculateInvariant(amp: BigInt, balances: BigInt[]): BigInt {
+export function calculateInvariant(amp: BigInt, balances: BigInt[], swapId: string): BigInt {
   let numTokens = balances.length;
   let sum = balances.reduce((a, b) => a.plus(b), ZERO);
 
@@ -70,5 +70,7 @@ export function calculateInvariant(amp: BigInt, balances: BigInt[]): BigInt {
     }
   }
 
-  throw new Error('Errors.STABLE_INVARIANT_DIDNT_CONVERGE');
+  log.error("Invariant didn't converge: {}", [swapId]);
+
+  return invariant;
 }
