@@ -379,6 +379,9 @@ bnb:
     startBlock: 25552340
 gnosis:
   network: gnosis
+  EventEmitter:
+    address: "0xd8bf95b44772213905a8a74881862347acbabc48"
+    startBlock: 26892431
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 24821598
