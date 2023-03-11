@@ -45,6 +45,10 @@
     {
       "address": "0xe7f88d7d4ef2eb18fcf9dd7216ba7da1c46f3dd6", 
       "symbol": "bb-ag-USDC"
+    },
+    {
+      "address": "0xffff76a3280e95dc855696111c2562da09db2ac0", 
+      "symbol": "bb-ag-GNO"
     }
   ]
 }
