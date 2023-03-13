@@ -27,6 +27,7 @@ import {
   getPoolTokenId,
   loadPriceRateProvider,
   getPoolShare,
+  computeCuratedSwapEnabled,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -78,7 +79,14 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = event.params.swapEnabled;
+  let _swapEnabled = event.params.swapEnabled;
+  pool._swapEnabled = _swapEnabled;
+  pool.swapEnabled = computeCuratedSwapEnabled(
+    pool.isInRecoveryMode,
+    pool.isPaused,
+    pool.swapEnabledCurationSignal,
+    _swapEnabled
+  );
   pool.save();
 }
 
@@ -87,8 +95,14 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = !event.params.paused;
-  pool.isPaused = event.params.paused;
+  let isPaused = event.params.paused;
+  pool.isPaused = isPaused;
+  pool.swapEnabled = computeCuratedSwapEnabled(
+    pool.isInRecoveryMode,
+    isPaused,
+    pool.swapEnabledCurationSignal,
+    pool._swapEnabled
+  );
   pool.save();
 }
 
@@ -115,6 +129,7 @@ export function handlePauseGyroPool(event: PausedLocally): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.isPaused = true;
+  pool._swapEnabled = false;
   pool.swapEnabled = false;
   pool.save();
 }
@@ -126,7 +141,13 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.isPaused = false;
-  pool.swapEnabled = true;
+  pool._swapEnabled = true;
+  pool.swapEnabled = computeCuratedSwapEnabled(
+    pool.isInRecoveryMode,
+    pool.isPaused,
+    pool.swapEnabledCurationSignal,
+    true
+  );
   pool.save();
 }
 

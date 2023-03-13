@@ -20,7 +20,16 @@ type Pool @entity {
   oracleEnabled: Boolean!
   symbol: String
   name: String
+  
+  "Indicates if a pool can be swapped against. Combines multiple sources, including offchain curation"
   swapEnabled: Boolean!
+  
+  "The native swapEnabled boolean. internal to the pool. Only applies to Gyro, LBPs and InvestmentPools"
+  _swapEnabled: Boolean
+  
+  "External indication from an offchain permissioned actor"
+  swapEnabledCurationSignal: Boolean
+  
   swapFee: BigDecimal!
   owner: Bytes
   isPaused: Boolean
