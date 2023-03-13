@@ -494,7 +494,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tokenOutSym = poolTokenOut.symbol;
   swap.tokenAmountOut = tokenAmountOut;
 
-  swap.valueUSD = swapValueUSD;
+  swap.valueUSD = valueUSD;
 
   swap.caller = event.transaction.from;
   swap.userAddress = event.transaction.from.toHex();
