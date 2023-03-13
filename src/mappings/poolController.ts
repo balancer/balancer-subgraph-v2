@@ -82,7 +82,6 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   let _swapEnabled = event.params.swapEnabled;
   pool._swapEnabled = _swapEnabled;
   pool.swapEnabled = computeCuratedSwapEnabled(
-    pool.isInRecoveryMode,
     pool.isPaused,
     pool.swapEnabledCurationSignal,
     _swapEnabled
@@ -98,7 +97,6 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   let isPaused = event.params.paused;
   pool.isPaused = isPaused;
   pool.swapEnabled = computeCuratedSwapEnabled(
-    pool.isInRecoveryMode,
     isPaused,
     pool.swapEnabledCurationSignal,
     pool._swapEnabled
@@ -143,7 +141,6 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   pool.isPaused = false;
   pool._swapEnabled = true;
   pool.swapEnabled = computeCuratedSwapEnabled(
-    pool.isInRecoveryMode,
     pool.isPaused,
     pool.swapEnabledCurationSignal,
     true

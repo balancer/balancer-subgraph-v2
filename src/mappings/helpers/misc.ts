@@ -414,12 +414,10 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
 }
 
 export function computeCuratedSwapEnabled(
-  isInRecoveryMode: boolean,
   isPaused: boolean,
   swapEnabledCurationSignal: boolean,
   internalSwapEnabled: boolean
 ): boolean {
-  if (isInRecoveryMode) return false;
   if (isPaused) return false;
   return swapEnabledCurationSignal && internalSwapEnabled;
 }
