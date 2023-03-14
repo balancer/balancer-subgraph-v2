@@ -65,6 +65,8 @@ dataSources:
           file: ./abis/StablePool.json
         - name: WeightedPoolFactory
           file: ./abis/WeightedPoolFactory.json
+        - name: AaveLinearPool
+          file: ./abis/AaveLinearPool.json
         - name: FXPool
           file: ./abis/FXPool.json
       eventHandlers:
