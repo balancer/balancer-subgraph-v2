@@ -23,8 +23,36 @@
       "symbol": "WBTC"
     },
     {
-      "address": "0x7ef541e2a22058048904fe5744f9c7e4c57af717", 
-      "symbol": "BAL"
+      "address": "0x9c58bacc331c9aa871afd802db6379a98e80cedb", 
+      "symbol": "GNO"
+    },
+    {
+      "address": "0xd4015683b8153666190e0b2bec352580ebc4caca", 
+      "symbol": "bb-ag-WBTC"
+    },
+    {
+      "address": "0xbb9cd48d33033f5effbedec9dd700c7d7e1dcf50", 
+      "symbol": "bb-ag-WETH"
+    },
+    {
+      "address": "0xfedb19ec000d38d92af4b21436870f115db22725", 
+      "symbol": "bb-ag-USD"
+    },
+    {
+      "address": "0x41211bba6d37f5a74b22e667533f080c7c7f3f13", 
+      "symbol": "bb-ag-WXDAI"
+    },
+    {
+      "address": "0xd16f72b02da5f51231fde542a8b9e2777a478c88", 
+      "symbol": "bb-ag-USDT"
+    },
+    {
+      "address": "0xe7f88d7d4ef2eb18fcf9dd7216ba7da1c46f3dd6", 
+      "symbol": "bb-ag-USDC"
+    },
+    {
+      "address": "0xffff76a3280e95dc855696111c2562da09db2ac0", 
+      "symbol": "bb-ag-GNO"
     }
   ]
 }

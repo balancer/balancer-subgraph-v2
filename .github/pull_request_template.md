@@ -26,8 +26,8 @@ Please provide instructions so we can test. Please also list any relevant detail
 - [ ] I have commented my code where relevant, particularly in hard-to-understand areas
 
 ### `dev` -> `master`
-- [ ] I have checked that all beta deployments have synced
-- [ ] I have checked that the earliest block in the polygon pruned deployment is <insert block number>, <insert block date/time>
+- [ ] I have [checked](https://balancer.github.io/balancer-subgraph-v2/status.html) that all beta deployments have synced
+- [ ] I have [checked](https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-polygon-prune-v2-beta/graphql?query=%0A%7B%0A++balancers%28block%3A%7Bnumber%3A1%7D%29%7B%0A++++id%0A++%7D%0A%7D) that the earliest block in the polygon pruned deployment is [block, date/time](https://polygonscan.com/block/block)
   - [ ] The earliest block is more than 24 hours old
 - [ ] I have checked that core metrics are the same in the beta and production deployments
 

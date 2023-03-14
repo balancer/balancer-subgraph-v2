@@ -423,8 +423,14 @@ export function handleSwapEvent(event: SwapEvent): void {
   let swapValueUSD = ZERO_BD;
   let swapFeesUSD = ZERO_BD;
 
+  // Swap events are emitted when joining/exitting from pools with preminted BPT.
+  // Since we want this type of swap to register tokens prices but not counting as volume
+  // we defined two variables: 1. valueUSD - the value in USD of the transaction;
+  // 2. swapValueUSD - equal to valueUSD if trade, zero otherwise, and used to update metrics.
+  const valueUSD = swapValueInUSD(tokenInAddress, tokenAmountIn, tokenOutAddress, tokenAmountOut);
+
   if (poolAddress != tokenInAddress && poolAddress != tokenOutAddress) {
-    swapValueUSD = swapValueInUSD(tokenInAddress, tokenAmountIn, tokenOutAddress, tokenAmountOut);
+    swapValueUSD = valueUSD;
     if (!isLinearPool(pool) && !isFXPool(pool)) {
       let swapFee = pool.swapFee;
       swapFeesUSD = swapValueUSD.times(swapFee);
@@ -491,7 +497,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tokenOutSym = poolTokenOut.symbol;
   swap.tokenAmountOut = tokenAmountOut;
 
-  swap.valueUSD = swapValueUSD;
+  swap.valueUSD = valueUSD;
 
   swap.caller = event.transaction.from;
   swap.userAddress = event.transaction.from.toHex();
@@ -551,12 +557,8 @@ export function handleSwapEvent(event: SwapEvent): void {
   let blockNumber = event.block.number;
   let tokenInWeight = poolTokenIn.weight;
   let tokenOutWeight = poolTokenOut.weight;
-  if (
-    isPricingAsset(tokenInAddress) &&
-    pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY) &&
-    swap.valueUSD.gt(MIN_SWAP_VALUE_USD)
-  ) {
-    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, blockNumber);
+  if (isPricingAsset(tokenInAddress) && pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY) && valueUSD.gt(MIN_SWAP_VALUE_USD)) {
+    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, block);
     let tokenPrice = new TokenPrice(tokenPriceId);
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenOutAddress);
     tokenPrice.poolId = poolId.toHexString();
@@ -582,7 +584,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (
     isPricingAsset(tokenOutAddress) &&
     pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY) &&
-    swap.valueUSD.gt(MIN_SWAP_VALUE_USD)
+    valueUSD.gt(MIN_SWAP_VALUE_USD)
   ) {
     let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, blockNumber);
     let tokenPrice = new TokenPrice(tokenPriceId);
