@@ -259,7 +259,7 @@ export function updateLatestPrice(tokenPrice: TokenPrice, blockTimestamp: BigInt
   if (currentUSDPrice == ZERO_BD) return;
 
   let oldUSDPrice = token.latestUSDPrice;
-  if (!oldUSDPrice) {
+  if (!oldUSDPrice || oldUSDPrice.equals(ZERO_BD)) {
     token.latestUSDPriceTimestamp = blockTimestamp;
     token.latestUSDPrice = currentUSDPrice;
     token.latestPrice = latestPrice.id;
