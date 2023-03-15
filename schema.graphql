@@ -110,6 +110,7 @@ type Pool @entity {
 
   # AaveLinearV3 Only
   protocolId: Int
+  protocolIdData: ProtocolIdData
 }
 
 type PoolContract @entity(immutable: true) {
@@ -127,6 +128,7 @@ type PoolToken @entity {
   decimals: Int!
   index: Int # TODO: make mandatory at next full sync
   address: String!
+  oldPriceRate: BigDecimal!
   priceRate: BigDecimal!
   balance: BigDecimal!
   cashBalance: BigDecimal!
@@ -349,4 +351,9 @@ type BalancerSnapshot @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+}
+
+type ProtocolIdData @entity {
+  id: ID!
+  name: String!
 }
