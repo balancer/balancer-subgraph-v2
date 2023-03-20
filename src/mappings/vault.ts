@@ -156,6 +156,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.valueUSD = valueUSD;
   join.save();
 
+  let balances: BigInt[] = [];
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -164,11 +165,15 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     if (poolToken == null) {
       throw new Error('poolToken not found');
     }
+
     let amountIn = amounts[i].minus(protocolFeeAmounts[i]);
     let tokenAmountIn = tokenToDecimal(amountIn, poolToken.decimals);
     let newBalance = poolToken.balance.plus(tokenAmountIn);
     poolToken.balance = newBalance;
     poolToken.save();
+
+    let balance = scaleUp(newBalance.times(poolToken.priceRate), 18);
+    balances.push(balance);
 
     let token = getToken(tokenAddress);
     const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
@@ -208,6 +213,16 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
     pool.totalShares = pool.totalShares.minus(preMintedBpt);
     pool.save();
+  }
+
+  if (isStableLikePool(pool)) {
+    if (pool.amp) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      let amp = pool.amp!.times(AMP_PRECISION);
+      let invariantInt = calculateInvariant(amp, balances, joinId);
+      let invariant = scaleDown(invariantInt, 18);
+      pool.lastPostJoinExitInvariant = invariant;
+    }
   }
 
   updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
@@ -255,6 +270,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.valueUSD = valueUSD;
   exit.save();
 
+  let balances: BigInt[] = [];
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -263,11 +279,15 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     if (poolToken == null) {
       throw new Error('poolToken not found');
     }
+
     let amountOut = amounts[i].minus(protocolFeeAmounts[i]).neg();
     let tokenAmountOut = tokenToDecimal(amountOut, poolToken.decimals);
     let newBalance = poolToken.balance.minus(tokenAmountOut);
     poolToken.balance = newBalance;
     poolToken.save();
+
+    let balance = scaleUp(newBalance.times(poolToken.priceRate), 18);
+    balances.push(balance);
 
     let token = getToken(tokenAddress);
     const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
@@ -291,6 +311,16 @@ function handlePoolExited(event: PoolBalanceChanged): void {
       if (success) {
         break;
       }
+    }
+  }
+
+  if (isStableLikePool(pool)) {
+    if (pool.amp) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      let amp = pool.amp!.times(AMP_PRECISION);
+      let invariantInt = calculateInvariant(amp, balances, exitId);
+      let invariant = scaleDown(invariantInt, 18);
+      pool.lastPostJoinExitInvariant = invariant;
     }
   }
 

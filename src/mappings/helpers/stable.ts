@@ -25,7 +25,7 @@ export function getAmp(poolContract: StablePool): BigInt {
   return amp;
 }
 
-export function calculateInvariant(amp: BigInt, balances: BigInt[], swapId: string): BigInt {
+export function calculateInvariant(amp: BigInt, balances: BigInt[], txnId: string): BigInt {
   let numTokens = balances.length;
   let sum = balances.reduce((a, b) => a.plus(b), ZERO);
 
@@ -70,7 +70,7 @@ export function calculateInvariant(amp: BigInt, balances: BigInt[], swapId: stri
     }
   }
 
-  log.error("Invariant didn't converge: {}", [swapId]);
+  log.error("Invariant didn't converge: {}", [txnId]);
 
   return invariant;
 }
