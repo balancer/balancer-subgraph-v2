@@ -49,6 +49,15 @@ export function scaleDown(num: BigInt, decimals: i32): BigDecimal {
   return num.divDecimal(BigInt.fromI32(10).pow(u8(decimals)).toBigDecimal());
 }
 
+export function scaleUp(num: BigDecimal, decimals: i32): BigInt {
+  return BigInt.fromString(
+    num
+      .truncate(decimals)
+      .times(BigInt.fromI32(10).pow(u8(decimals)).toBigDecimal())
+      .toString()
+  );
+}
+
 export function getPoolShareId(poolControllerAddress: Address, lpAddress: Address): string {
   return poolControllerAddress.toHex().concat('-').concat(lpAddress.toHex());
 }
@@ -152,6 +161,7 @@ export function createPoolTokenEntity(
   poolToken.cashBalance = ZERO_BD;
   poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
+  poolToken.oldPriceRate = ONE_BD;
   poolToken.token = _token.id;
   poolToken.index = tokenIndex;
 

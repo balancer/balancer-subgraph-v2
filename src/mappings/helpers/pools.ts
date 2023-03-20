@@ -17,14 +17,12 @@ export namespace PoolType {
   export const ComposableStable = 'ComposableStable';
   export const HighAmpComposableStable = 'HighAmpComposableStable';
   export const AaveLinear = 'AaveLinear';
-  export const BeefyLinear = 'BeefyLinear';
   export const ERC4626Linear = 'ERC4626Linear';
   export const EulerLinear = 'EulerLinear';
   export const GearboxLinear = 'GearboxLinear';
   export const MidasLinear = 'MidasLinear';
   export const ReaperLinear = 'ReaperLinear';
   export const SiloLinear = 'SiloLinear';
-  export const TetuLinear = 'TetuLinear';
   export const YearnLinear = 'YearnLinear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
@@ -39,14 +37,12 @@ export function isVariableWeightPool(pool: Pool): boolean {
 export function hasVirtualSupply(pool: Pool): boolean {
   return (
     pool.poolType == PoolType.AaveLinear ||
-    pool.poolType == PoolType.BeefyLinear ||
     pool.poolType == PoolType.ERC4626Linear ||
     pool.poolType == PoolType.EulerLinear ||
     pool.poolType == PoolType.GearboxLinear ||
     pool.poolType == PoolType.MidasLinear ||
     pool.poolType == PoolType.ReaperLinear ||
     pool.poolType == PoolType.SiloLinear ||
-    pool.poolType == PoolType.TetuLinear ||
     pool.poolType == PoolType.YearnLinear ||
     pool.poolType == PoolType.StablePhantom ||
     isComposableStablePool(pool)
@@ -60,14 +56,12 @@ export function isComposableStablePool(pool: Pool): boolean {
 export function isLinearPool(pool: Pool): boolean {
   return (
     pool.poolType == PoolType.AaveLinear ||
-    pool.poolType == PoolType.BeefyLinear ||
     pool.poolType == PoolType.ERC4626Linear ||
     pool.poolType == PoolType.EulerLinear ||
     pool.poolType == PoolType.GearboxLinear ||
     pool.poolType == PoolType.MidasLinear ||
     pool.poolType == PoolType.ReaperLinear ||
     pool.poolType == PoolType.SiloLinear ||
-    pool.poolType == PoolType.TetuLinear ||
     pool.poolType == PoolType.YearnLinear
   );
 }

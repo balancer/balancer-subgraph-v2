@@ -105,11 +105,15 @@ type Pool @entity {
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
 
+  # Composable Stable Only
+  lastPostJoinExitInvariant: BigDecimal
+
   # AaveLinearV3 Only
   protocolId: Int
+  protocolIdData: ProtocolIdData
 }
 
-type PoolContract @entity {
+type PoolContract @entity(immutable: true) {
   id: ID!
   pool: Pool!
 }
@@ -124,6 +128,7 @@ type PoolToken @entity {
   decimals: Int!
   index: Int # TODO: make mandatory at next full sync
   address: String!
+  oldPriceRate: BigDecimal!
   priceRate: BigDecimal!
   balance: BigDecimal!
   cashBalance: BigDecimal!
@@ -170,7 +175,7 @@ type UserInternalBalance @entity {
   balance: BigDecimal!
 }
 
-type GradualWeightUpdate @entity {
+type GradualWeightUpdate @entity(immutable: true) {
   id: ID!
   poolId: Pool!
   scheduledTimestamp: Int!
@@ -180,7 +185,7 @@ type GradualWeightUpdate @entity {
   endWeights: [BigInt!]!
 }
 
-type AmpUpdate @entity {
+type AmpUpdate @entity(immutable: true) {
   id: ID!
   poolId: Pool!
   scheduledTimestamp: Int!
@@ -190,7 +195,7 @@ type AmpUpdate @entity {
   endAmp: BigInt!
 }
 
-type SwapFeeUpdate @entity {
+type SwapFeeUpdate @entity(immutable: true) {
   id: ID!
   pool: Pool!
   scheduledTimestamp: Int!
@@ -200,7 +205,7 @@ type SwapFeeUpdate @entity {
   endSwapFeePercentage: BigDecimal!
 }
 
-type Swap @entity {
+type Swap @entity(immutable: true) {
   id: ID!
   caller: Bytes!
   tokenIn: Bytes!
@@ -221,7 +226,7 @@ enum InvestType {
   Exit
 }
 
-type JoinExit @entity {
+type JoinExit @entity(immutable: true) {
   id: ID!
   type: InvestType!
   sender: Bytes!
@@ -269,7 +274,7 @@ enum OperationType {
   Update
 }
 
-type ManagementOperation @entity {
+type ManagementOperation @entity(immutable: true) {
   id: ID!
   type: OperationType!
   cashDelta: BigDecimal!
@@ -304,6 +309,7 @@ type Token @entity {
   totalSwapCount: BigInt!
   latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
   latestUSDPrice: BigDecimal # latest price of token in USD, updated when pool liquidity changes
+  latestUSDPriceTimestamp: BigInt # timestamp at which the latestUSDPrice was updated
   latestFXPrice: BigDecimal # latest "off-chain" price of token in USD, only available if token has an offchain price aggregator
   pool: Pool # pool entity associated with the token, if it is a Balancer pool
 }
@@ -345,4 +351,9 @@ type BalancerSnapshot @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+}
+
+type ProtocolIdData @entity {
+  id: ID!
+  name: String!
 }

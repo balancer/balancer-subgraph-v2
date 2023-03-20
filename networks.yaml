@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Picking a block from more than a week ago as a quick way to make sure we get all the recently deployed factories
-    block: 16580891
+    # Mar 15 - Block from ~00h UTC
+    block: 16829700
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmRHmtLuJBXZSJcAEZGnXSpMYuTHgTDw4kRyZK5Zyh97ys
+    base: QmceY3gSVLLrLcSndFt8RcTDgozD2bKtkHSKQPpHFUiAMc
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -71,28 +71,31 @@ mainnet:
     startBlock: 16136501
   AaveLinearPoolV4Factory:
     address: "0xb9F8AB3ED3F3aCBa64Bc6cd2DcA74B7F38fD7B88"
-    startBlock: 16542557
+    startBlock: 16600026
   ERC4626LinearPoolFactory:
     address: "0xE061bF85648e9FA7b59394668CfEef980aEc4c66"
     startBlock: 14521506
   EulerLinearPoolFactory:
     address: "0x5F43FBa61f63Fa6bFF101a0A0458cEA917f6B347"
-    startBlock: 16542557
+    startBlock: 16588077
   ERC4626LinearPoolV3Factory:
     address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
     startBlock: 16542240
   GearboxLinearPoolFactory:
     address: "0x2EbE41E1aa44D61c206A94474932dADC7D3FD9E3"
-    startBlock: 16542557
+    startBlock: 16637919
   SiloLinearPoolFactory:
     address: "0xfd1c0e6f02f71842b6ffF7CdC7A017eE1Fd3CdAC"
     startBlock: 16869467
   YearnLinearPoolFactory:
     address: "0x8b7854708c0C54f9D7d1FF351D4F84E6dE0E134C"
-    startBlock: 16542557
+    startBlock: 16638024
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
+  ProtocolIdRegistry:
+    address: "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68"
+    startBlock: 16719996
 goerli:
   network: goerli
   EventEmitter:
@@ -170,14 +173,17 @@ goerli:
   GyroEPoolFactory:
     address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
     startBlock: 7928618
+  ProtocolIdRegistry:
+    address: "0x4fb47126Fa83A8734991E41B942Ac29A3266C968"
+    startBlock: 8566340
 polygon:
   network: matic
   graft:
-    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
-    block: 36555199
+    # Mar 15 - Block from ~00h UTC
+    block: 40354000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmaNhv72Lbq2rGEz9m7EydH3LiyCeDgmDDGzCMRamM8JWe
+    base: QmeGhiedyvVbCQD77iVZyro22EuYLjw7wHqx8Pf3CKR3az
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -237,10 +243,7 @@ polygon:
     startBlock: 36555199
   AaveLinearPoolV4Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
-    startBlock: 38828779
-  BeefyLinearPoolFactory:
-    address: "0xE605Dbe1cA85dCdb8F43CEfA427f3B0fC06f6ba6"
-    startBlock: 38828779
+    startBlock: 39142839
   ERC4626LinearPoolFactoryBeta:
     address: "0xC6bD2497332d24094eC16a7261eec5C412B5a2C1"
     startBlock: 25772863
@@ -249,19 +252,13 @@ polygon:
     startBlock: 26746067
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
-    startBlock: 38828779
+    startBlock: 39072910
   MidasLinearPoolFactory:
     address: "0x6caf662b573F577DE01165d2d38D1910bba41F8A"
-    startBlock: 38828779
-  ReaperLinearPoolFactory:
-    address: "0x1b986138a4F2aA538E79fdEC222dad93F8d66703"
-    startBlock: 38828779
-  TetuLinearPoolFactory:
-    address: "0x7ADbdabaA80F654568421887c12F09E0C7BD9629"
-    startBlock: 38828779
+    startBlock: 38828779 # TODO: update with real startBlock
   YearnLinearPoolFactory:
     address: "0x7396f99B48e7436b152427bfA3DD6Aa8C7C6d05B"
-    startBlock: 38828779
+    startBlock: 39341056
   Gyro2PoolFactory:
     address: "0x5d8545a7330245150bE0Ce88F8afB0EDc41dFc34"
     startBlock: 31556084
@@ -274,14 +271,17 @@ polygon:
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054793
+  ProtocolIdRegistry:
+    address: "0xa523f47A933D5020b23629dDf689695AA94612Dc"
+    startBlock: 39769528
 arbitrum:
   network: arbitrum-one
   graft:
-    # Feb11 - Using Aave V3's block since the BPT supply fix goes back to that factory
-    block: 44470235
+    # Mar 15 - Block from ~00h UTC
+    block: 69897409
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmZvXwpwbttRC54f2aAntu7Y97Dg4651k9TZAeJc3DHXoD
+    base: Qmb5TEgVPgMoCJWuEyBXS3knYriZW3otBrcgbHj7ma3L1U
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -338,19 +338,16 @@ arbitrum:
     startBlock: 44470235
   AaveLinearPoolV4Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
-    startBlock: 57735268
-  BeefyLinearPoolFactory:
-    address: "0x67A25ca2350Ebf4a0C475cA74C257C94a373b828"
-    startBlock: 57735268
+    startBlock: 59763160
   ERC4626LinearPoolV3Factory:
     address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
-    startBlock: 57735268
-  ReaperLinearPoolFactory:
-    address: "0xC101dcA301a4011C1F925e9622e749e550a1B667"
-    startBlock: 57735268
+    startBlock: 59209879
   YearnLinearPoolFactory:
     address: "0xD8B6b96c88ad626EB6209c4876e3B14f45f8803A"
-    startBlock: 57735268
+    startBlock: 613196646
+  ProtocolIdRegistry:
+    address: "0x5cF4928a3205728bd12830E1840F7DB85c62a4B9"
+    startBlock: 65101370
 bnb:
   network: bsc
   Vault:
@@ -412,3 +409,79 @@ gnosis:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 25415236
+  ProtocolIdRegistry:
+    address: "0x6B5dA774890Db7B7b96C6f44e6a4b0F657399E2e"
+    startBlock: 26691522
+optimism:
+  network: optimism
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 7003431
+  WeightedPoolFactory:
+    address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
+    startBlock: 7005512
+  WeightedPoolV2Factory:
+    address: "0xad901309d9e9DbC5Df19c84f729f429F0189a633"
+    startBlock: 22410483
+  WeightedPoolV3Factory:
+    address: "0xA0DAbEBAAd1b243BBb243f933013d560819eB66f"
+    startBlock: 72832703
+  WeightedPool2TokenFactory:
+    address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
+    startBlock: 7005518
+  StablePoolV2Factory:
+    address: "0xeb151668006CD04DAdD098AFd0a82e78F77076c3"
+    startBlock: 11088891
+  ComposableStablePoolFactory:
+    address: "0xf145caFB67081895EE80eB7c04A30Cf87f07b745"
+    startBlock: 22182522
+  ComposableStablePoolV3Factory:
+    address: "0xe2E901AB09f37884BA31622dF3Ca7FC19AA443Be"
+    startBlock: 72832821
+  MetaStablePoolFactory:
+    address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
+    startBlock: 7005662
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
+    startBlock: 7005915
+  AaveLinearPoolV2Factory:
+    address: "0x994086630773dC6cB54D3A5E0Ef0963532789E75"
+    startBlock: 20254495
+  AaveLinearPoolV3Factory:
+    address: "0xAd3CC7852382C09fdCE54784292c6aB7fb9Df917"
+    startBlock: 46527984
+  AaveLinearPoolV4Factory:
+    address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
+    startBlock: 73524584
+  ERC4626LinearPoolFactory:
+    address: "0x4C4287b07d293E361281bCeEe8715c8CDeB64E34"
+    startBlock: 13408880
+  ERC4626LinearPoolV3Factory:
+    address: "0xa3B9515A9c557455BC53F7a535A85219b59e8B2E"
+    startBlock: 73010766
+  ReaperLinearPoolFactory:
+    address: "0x19968D4b7126904Fd665eD25417599Df9604Df83"
+    startBlock: 22842161
+  ReaperLinearPoolV3Factory:
+    address: "0xe4B88E745Dce9084B9fc2439F85A9a4C5CD6f361"
+    startBlock: 29896926
+  YearnLinearPoolFactory:
+    address: "0xD8B6b96c88ad626EB6209c4876e3B14f45f8803A"
+    startBlock: 74613637
+  BeefyLinearPoolFactory:
+    address: "0xE77f03F5007Df49005CAf2a2f1D872c51aE51fD1"
+    startBlock: 49164540
+  ProtocolIdRegistry:
+    address: "0x9805dcfD25e6De36bad8fe9D3Fe2c9b44B764102"
+    startBlock: 77557576
+avalanche:
+  network: avalanche
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 26386141
+  WeightedPoolV3Factory:
+    address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
+    startBlock: 26389236
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
+    startBlock: 26386552
