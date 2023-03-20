@@ -59,8 +59,10 @@ import {
   isLinearPool,
   isFXPool,
   isComposableStablePool,
+  isWeightedLikePool,
 } from './helpers/pools';
-import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
+import { calculateInvariant as calculateStableInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
+import { calculateInvariant as calculateWeightedInvariant } from './helpers/weighted';
 import { USDC_ADDRESS } from './helpers/assets';
 
 /************************************
@@ -157,6 +159,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.save();
 
   let balances: BigInt[] = [];
+  let weights: BigInt[] = [];
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -174,6 +177,12 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
 
     let balance = scaleUp(newBalance.times(poolToken.priceRate), 18);
     balances.push(balance);
+
+    if (isWeightedLikePool(pool)) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      let weight = scaleUp(poolToken.weight!, 18);
+      weights.push(weight);
+    }
 
     let token = getToken(tokenAddress);
     const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
@@ -212,18 +221,25 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       }
     }
     pool.totalShares = pool.totalShares.minus(preMintedBpt);
-    pool.save();
   }
 
   if (isStableLikePool(pool)) {
     if (pool.amp) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       let amp = pool.amp!.times(AMP_PRECISION);
-      let invariantInt = calculateInvariant(amp, balances, joinId);
+      let invariantInt = calculateStableInvariant(amp, balances, joinId);
       let invariant = scaleDown(invariantInt, 18);
       pool.lastPostJoinExitInvariant = invariant;
     }
   }
+
+  if (isWeightedLikePool(pool)) {
+    let invariantInt = calculateWeightedInvariant(balances, weights, joinId);
+    let invariant = scaleDown(invariantInt, 18);
+    pool.lastPostJoinExitInvariant = invariant;
+  }
+
+  pool.save();
 
   updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
 }
@@ -242,8 +258,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     return;
   }
   let tokenAddresses = pool.tokensList;
-
-  pool.save();
 
   let exitId = transactionHash.toHexString().concat(logIndex.toString());
   let exit = new JoinExit(exitId);
@@ -271,6 +285,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.save();
 
   let balances: BigInt[] = [];
+  let weights: BigInt[] = [];
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -288,6 +303,12 @@ function handlePoolExited(event: PoolBalanceChanged): void {
 
     let balance = scaleUp(newBalance.times(poolToken.priceRate), 18);
     balances.push(balance);
+
+    if (isWeightedLikePool(pool)) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      let weight = scaleUp(poolToken.weight!, 18);
+      weights.push(weight);
+    }
 
     let token = getToken(tokenAddress);
     const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
@@ -318,11 +339,19 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     if (pool.amp) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       let amp = pool.amp!.times(AMP_PRECISION);
-      let invariantInt = calculateInvariant(amp, balances, exitId);
+      let invariantInt = calculateStableInvariant(amp, balances, exitId);
       let invariant = scaleDown(invariantInt, 18);
       pool.lastPostJoinExitInvariant = invariant;
     }
   }
+
+  if (isWeightedLikePool(pool)) {
+    let invariantInt = calculateWeightedInvariant(balances, weights, exitId);
+    let invariant = scaleDown(invariantInt, 18);
+    pool.lastPostJoinExitInvariant = invariant;
+  }
+
+  pool.save();
 
   updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
 }
@@ -511,7 +540,7 @@ export function handleSwapEvent(event: SwapEvent): void {
       if (pool.amp) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         let amp = pool.amp!.times(AMP_PRECISION);
-        let invariantInt = calculateInvariant(amp, balances, swapId);
+        let invariantInt = calculateStableInvariant(amp, balances, swapId);
         let invariant = scaleDown(invariantInt, 18);
         pool.lastPostJoinExitInvariant = invariant;
       }
