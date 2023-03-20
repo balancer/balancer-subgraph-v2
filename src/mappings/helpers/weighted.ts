@@ -1,9 +1,9 @@
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, BigInt, log } from '@graphprotocol/graph-ts';
 
 import { Pool } from '../../types/schema';
 import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
 
-import { ZERO_BD } from './constants';
+import { ONE, ZERO, ZERO_BD } from './constants';
 import { scaleDown, loadPoolToken } from './misc';
 
 export function updatePoolWeights(poolId: string): void {
@@ -38,4 +38,19 @@ export function updatePoolWeights(poolId: string): void {
   }
 
   pool.save();
+}
+
+export function calculateInvariant(balances: BigInt[], normalizedWeights: BigInt[], txnId: string): BigInt {
+  let numTokens = balances.length;
+
+  let invariant = ONE;
+  for (let i = 0; i < numTokens; i++) {
+    invariant = invariant.times(balances[i].pow(normalizedWeights[i]));
+  }
+
+  if (invariant.equals(ZERO)) {
+    log.error('Zero invariant: {}', [txnId]);
+  }
+
+  return invariant;
 }

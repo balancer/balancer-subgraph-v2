@@ -66,6 +66,14 @@ export function isLinearPool(pool: Pool): boolean {
   );
 }
 
+export function isWeightedLikePool(pool: Pool): boolean {
+  return (
+    pool.poolType == PoolType.Weighted ||
+    pool.poolType == PoolType.Investment ||
+    pool.poolType == PoolType.LiquidityBootstrapping
+  );
+}
+
 export function isStableLikePool(pool: Pool): boolean {
   return (
     pool.poolType == PoolType.Stable ||
