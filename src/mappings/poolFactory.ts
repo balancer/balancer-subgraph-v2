@@ -20,7 +20,8 @@ import { updatePoolWeights } from './helpers/weighted';
 import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
-import { Balancer, Pool, PoolContract } from '../types/schema';
+import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
+import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
 
 // datasource
 import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -269,10 +270,6 @@ export function handleNewEulerLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
-export function handleNewBeefyLinearPool(event: PoolCreated): void {
-  handleNewLinearPool(event, PoolType.BeefyLinear, 1);
-}
-
 export function handleNewGearboxLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.GearboxLinear, 1);
 }
@@ -285,12 +282,12 @@ export function handleNewReaperLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ReaperLinear, 1);
 }
 
-export function handleNewSiloLinearPool(event: PoolCreated): void {
-  handleNewLinearPool(event, PoolType.SiloLinear, 1);
+export function handleNewReaperLinearPoolV3(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ReaperLinear, 3);
 }
 
-export function handleNewTetuLinearPool(event: PoolCreated): void {
-  handleNewLinearPool(event, PoolType.TetuLinear, 1);
+export function handleNewSiloLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.SiloLinear, 1);
 }
 
 export function handleNewYearnLinearPool(event: PoolCreated): void {
@@ -304,6 +301,8 @@ export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.protocolId = event.params.protocolId.toI32();
+  const protocolIdData = ProtocolIdData.load(event.params.protocolId.toString());
+  pool.protocolIdData = protocolIdData ? protocolIdData.id : null;
   pool.save();
 }
 
@@ -567,4 +566,16 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 
     createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
   }
+}
+
+export function handleProtocolIdRegistryOrRename(event: ProtocolIdRegistered): void {
+  let protocol = ProtocolIdData.load(event.params.protocolId.toString());
+
+  if (protocol == null) {
+    protocol = new ProtocolIdData(event.params.protocolId.toString());
+    protocol.name = event.params.name;
+  } else {
+    protocol.name = event.params.name;
+  }
+  protocol.save();
 }
