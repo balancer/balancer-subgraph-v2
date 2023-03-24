@@ -124,6 +124,7 @@ type Pool @entity {
   # SecondaryPool only
   minOrderSize: BigInt
   orderBook: Bytes
+  issueManager: Bytes
   secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "pool")
   orders: [SecondaryOrders!]@derivedFrom(field: "pool")
 }
@@ -149,6 +150,7 @@ type SecondaryTrades @entity {
   currency: Token!
   amount: BigDecimal! 
   executionDate: BigInt!
+  orderReference: Bytes!
 }  
 
 type SecondaryOrders @entity {

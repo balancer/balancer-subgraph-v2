@@ -343,6 +343,7 @@ export function handleSubscription(event: Subscription): void {
   pool.currency = event.params.currency;
   pool.orderBook = event.params.orderBook;
   pool.minOrderSize = event.params.minOrderSize;
+  pool.issueManager = event.params.issueManager;
   
   pool.save();
 }
@@ -399,6 +400,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
     trades.save();
   } 
   else{
@@ -409,6 +411,7 @@ export function handleTradeReport(event: TradeReport): void {
     trades.executionDate = event.params.executionDate;
     trades.party = event.params.party.toHexString();
     trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
     trades.save();
   }
   

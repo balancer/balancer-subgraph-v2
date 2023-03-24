@@ -1675,9 +1675,9 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: Offer(indexed address,uint256,address,address)
+        - event: Offer(indexed address,uint256,address,address,address)
           handler: handleSecondaryOffer
-        - event: TradeReport(indexed address,address,address,bytes32,uint256,address,uint256,uint256)
+        - event: TradeReport(indexed address,bytes32,address,address,bytes32,uint256,address,uint256,uint256)
           handler: handleTradeReport
         - event: OrderBook(address,address,address,uint256,uint256,uint256,bytes32)
           handler: handleOrderBook
