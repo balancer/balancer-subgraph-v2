@@ -191,11 +191,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Mar 15 - Block from ~00h UTC
-    block: 40354000
+    # Mar 21 - Block from ~8 pm UTC
+    block: 40611103
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmeGhiedyvVbCQD77iVZyro22EuYLjw7wHqx8Pf3CKR3az
+    base: QmW2Q8vLCbVFJUjofrCJje9xeV8cRVmaqpLvuY1gFbKWTU
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -296,10 +296,10 @@ arbitrum:
   network: arbitrum-one
   graft:
     # Mar 15 - Block from ~00h UTC
-    block: 69897409
+    # block: 69897409
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: Qmb5TEgVPgMoCJWuEyBXS3knYriZW3otBrcgbHj7ma3L1U
+    # base: Qmb5TEgVPgMoCJWuEyBXS3knYriZW3otBrcgbHj7ma3L1U
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
