@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
+description: The Verified Vault manages wallet balances in liquidity pools for security tokens.
 {{#if graft}}
 graft:
   base: {{graft.base}}
