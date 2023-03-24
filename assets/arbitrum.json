@@ -29,6 +29,10 @@
     {
       "address": "0xa0b862F60edEf4452F25B4160F177db44DeB6Cf1", 
       "symbol": "GNO"
+    },
+    {
+      "address": "0x32dF62dc3aEd2cD6224193052Ce665DC18165841",
+      "symbol": "B-80RDNT-20WETH"
     }
   ]
 }
