@@ -1,0 +1,183 @@
+<html>
+
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    const base_api = 'https://api.thegraph.com/subgraphs/name/balancer-labs/';
+    function buildQuery() {
+      const baseQuery = `{
+  pools(where:{
+    poolType_contains:"Linear"
+    upperTarget_gt:0
+    tokens_:{
+      assetManager_not:"0x0000000000000000000000000000000000000000"
+    }
+  }) {
+    id
+    symbol
+    swapFee
+    lowerTarget
+    upperTarget
+    mainIndex
+    tokensList
+    tokens(where:{
+      assetManager_not:"0x0000000000000000000000000000000000000000"
+    }) {
+      address
+      balance
+      assetManager
+    }
+  }
+}`;
+      return baseQuery;
+    }
+
+    const explorers = {
+        'mainnet': 'https://etherscan.io/',
+        'polygon': 'https://polygonscan.com/',
+        'gnosis': 'https://gnosisscan.io/',
+        'arbitrum': 'https://arbiscan.io/',
+        'optimism': 'https://optimistic.etherscan.io/',
+        'goerli': 'https://goerli.etherscan.io/'
+      };
+
+      function rebalanceURL(network, address) {
+      return explorers[network] + 'address/' + address + '#writeContract#F1';
+    };
+
+    function appPoolURL(network, id) {
+      return 'https://app.balancer.fi/#/'+ network + (network=='gnosis'?'-chain':'') + '/pool/' + id;
+    };
+
+
+    function querySubgraph(network, subgraph = 'balancer-v2') {
+      const query = buildQuery();
+      axios.post(base_api + subgraph, { query: query })
+        .then(response => {
+          const data = response.data.data;
+          if (data) {
+            for (let pool of data.pools) {
+              let upperTarget = parseFloat(pool.upperTarget);
+              let lowerTarget = parseFloat(pool.lowerTarget);
+              let swapFee = parseFloat(pool.swapFee);
+              let mainToken = pool.tokensList[pool.mainIndex];
+              for (let token of pool.tokens) {
+                if (token.address == mainToken) {
+                  let balance = parseFloat(token.balance);
+                  if (balance > upperTarget || balance < lowerTarget) {
+                    let value = 0;
+                    if (balance > upperTarget) {
+                      value = (balance - upperTarget) * swapFee;
+                    } else if (balance < lowerTarget) {
+                      value = (lowerTarget - balance) * swapFee;                     
+                    }
+                    $('#subgraph-table tbody').append(`
+                      <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${network}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">
+                          <a href=${appPoolURL(network, pool.id)} target='_blank'>
+                            ${pool.symbol}
+                          </a>
+                        </td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${pool.lowerTarget}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${pool.upperTarget}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${token.balance}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${value}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">
+                          <a href=${rebalanceURL(network, token.assetManager)} target='_blank'>
+                            ${token.assetManager}
+                          </a>
+                        </td>
+                      </tr>
+                    `);
+                  }
+                }
+              }
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    $(document).ready(() => {
+
+      $("th").click(function () {
+        var table = $(this).parents("table").eq(0)
+        var rows = table.find("tr:gt(0)").toArray().sort(comparer($(this).index()))
+        this.asc = !this.asc
+        if (!this.asc) { rows = rows.reverse() }
+        for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+      })
+      function comparer(index) {
+        return function (a, b) {
+          var valA = $(a).children("td").eq(index).text().toUpperCase()
+          var valB = $(b).children("td").eq(index).text().toUpperCase()
+          return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB)
+        }
+      }
+
+
+
+      const subgraphs = [
+        'balancer'
+      ];
+      const networks = {
+        'mainnet': '',
+        'polygon': '-polygon-prune',
+        'gnosis': '-gnosis-chain',
+        'arbitrum': '-arbitrum',
+        'optimism': '-optimism',
+        'goerli': '-goerli'
+      };
+
+      for (let s of subgraphs) {
+        for (let network in networks) {
+          let n = networks[network]
+          if ((s === 'balancer-gauges') && (n === '-polygon-prune')) {
+            continue;
+          }
+          if ((s === 'balancer-gauges') && (n === '-avalanche')) {
+            continue;
+          }
+          if ((s === 'balancer-gauges') && (n === '-bnbchain')) {
+            continue;
+          }
+          if (s === 'balancer') {
+            if (n === '-optimism') {
+              continue;
+            }
+            n += '-v2';
+          }
+          let subgraphName = s + n;
+          if (subgraphName === 'balancer-gauges-gnosis-chain-beta') {
+            subgraphName = 'balancer-gauges-gnosis-chain-b';
+          }
+          querySubgraph(network, subgraphName);
+        }
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <table id="subgraph-table" style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr style="background-color: #f2f2f2;">
+        <th style="padding: 8px; border: 1px solid #ddd;">Network</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Pool</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Lower</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Upper</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Balance</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Value</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Rebalancer</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+</body>
+
+</html>
