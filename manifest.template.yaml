@@ -1,10 +1,10 @@
 specVersion: 0.0.2
 description: The Verified Vault manages wallet balances in liquidity pools for security tokens.
-{{#if graft}}
-graft:
-  base: {{graft.base}}
-  block: {{graft.block}}
-{{/if}}
+#{{#if graft}}
+#graft:
+#  base: {{graft.base}}
+#  block: {{graft.block}}
+#{{/if}}
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
