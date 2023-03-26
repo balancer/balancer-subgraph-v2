@@ -1,0 +1,36 @@
+name: Deploy Graph Studio Beta
+
+on:
+  push:
+    branches: dev
+
+jobs:
+# temp deploying dev to base-testnet prod just so we start syncing there before the merge to master
+  deploy-studio-base:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.12
+        with:
+          graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
+          graph_version_label: ${GITHUB_SHA::8}
+          graph_subgraph_name: "balancer-base-testnet-v2"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.basegoerli.yaml"
+          graph_deploy_studio: true
+
+env:
+  CI: true
