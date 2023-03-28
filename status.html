@@ -43,6 +43,7 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
       const data = response.data.data;
       const subgraphData = Object.values(data)[0];
       let status = '';
+      let lag = 0;
       let link = null;
       if (subgraphData) {
         status += subgraphData.subgraph.substring(0, 5) + '...' + subgraphData.subgraph.substring(subgraphData.subgraph.length - 5);
@@ -51,8 +52,10 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
         status += '<br>';
         if (subgraphData.synced) {
           if (subgraphData.chains[0].latestBlock) {
-            const lag = parseInt(subgraphData.chains[0].chainHeadBlock.number) - parseInt(subgraphData.chains[0].latestBlock.number);
+            lag = parseInt(subgraphData.chains[0].chainHeadBlock.number) - parseInt(subgraphData.chains[0].latestBlock.number);
             status += `${lag} blocks behind head`;
+            status += '<br>';
+            status += `(latestBlock: ${subgraphData.chains[0].latestBlock.number})`;
           }
         } else {
           if (subgraphData.chains[0].latestBlock) {
@@ -70,9 +73,18 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
         $('#subgraph-table tbody').append(`
          
         <tr>
-          <td style="padding: 8px; border: 1px solid #ddd;">${subgraph}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">
+            <a target=blank href=https://thegraph.com/hosted-service/subgraph/balancer-labs/${subgraph}>
+              ${subgraph}
+            </a><br>
+            ${subgraphData.subgraph}<br>
+            <a target=blank href=https://okgraph.xyz/?q=balancer-labs%2F${subgraph}>
+              okgraph?
+            </a>
+          </td>
           <td style="padding: 8px; border: 1px solid #ddd;">${entity.includes('Current') ? 'current' : 'pending'}</td>
-                <td style="padding: 8px; border: 1px solid #ddd;">${status}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${status}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${lag}</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">${subgraphData.health}</td>
               </tr>
             `);
@@ -163,6 +175,7 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
         <th style="padding: 8px; border: 1px solid #ddd;">Subgraph</th>
         <th style="padding: 8px; border: 1px solid #ddd;">Version</th>
         <th style="padding: 8px; border: 1px solid #ddd;">Status</th>
+        <th style="padding: 8px; border: 1px solid #ddd;">Lag</th>
         <th style="padding: 8px; border: 1px solid #ddd;">Health</th>
       </tr>
     </thead>
