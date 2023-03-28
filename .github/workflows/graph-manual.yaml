@@ -1,0 +1,41 @@
+name: Manually Deploy Full Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: 'Network to build for'
+        required: true
+        default: 'mainnet'
+        type: choice
+        options:
+        - mainnet
+        - arbitrum
+        - polygon
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: graph
+    env:
+      NETWORK: ${{ inputs.network }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets $NETWORK
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.12
+        with:
+          graph_access_token: ${{ secrets.GRAPH_ACCESS_TOKEN }}
+          graph_subgraph_name: "balancer-${{ inputs.network }}-v2-full"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.${{ inputs.network }}.full.yaml"
