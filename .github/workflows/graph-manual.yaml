@@ -38,6 +38,6 @@ jobs:
       - uses: gtaschuk/graph-deploy@v0.1.12
         with:
           graph_access_token: ${{ secrets.GRAPH_ACCESS_TOKEN }}
-          graph_subgraph_name: $SUBGRAPH_NAME
+          graph_subgraph_name: ${{ SUBGRAPH_NAME }}
           graph_account: "balancer-labs"
-          graph_config_file: $CONFIG
+          graph_config_file: ${{ CONFIG }}
