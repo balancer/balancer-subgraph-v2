@@ -16,6 +16,12 @@ const generateManifests = async (): Promise<void> => {
       `subgraph${network === 'mainnet' ? '' : `.${network}`}.yaml`,
       Handlebars.compile(template)(config)
     );
+    // remove the graft info from the config
+    delete config.graft;
+    fs.writeFileSync(
+      `subgraph.${network}.full.yaml`,
+      Handlebars.compile(template)(config)
+    );    
   });
 
   // eslint-disable-next-line no-console
