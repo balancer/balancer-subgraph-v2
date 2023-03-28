@@ -19,7 +19,7 @@ const generateManifests = async (): Promise<void> => {
     // remove the graft info from the config
     delete config.graft;
     fs.writeFileSync(
-      `subgraph${network === 'mainnet' ? '' : `.${network}`}.full.yaml`,
+      `subgraph.${network}.full.yaml`,
       Handlebars.compile(template)(config)
     );    
   });
