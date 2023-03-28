@@ -21,6 +21,9 @@ mainnet:
   WeightedPoolV3Factory:
     address: "0x5Dd94Da3644DDD055fcf6B3E1aa310Bb7801EB8b"
     startBlock: 16520627
+  WeightedPoolV4Factory:
+    address: "0x897888115Ada5773E02aA29F775430BFB5F34c51"
+    startBlock: 16878323
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 12272146
@@ -39,6 +42,9 @@ mainnet:
   ComposableStablePoolV3Factory:
     address: "0xdba127fBc23fb20F5929C546af220A991b5C6e01"
     startBlock: 16520627
+  ComposableStablePoolV4Factory:
+    address: "0xfADa0f4547AB2de89D1304A668C39B3E09Aa7c76"
+    startBlock: 16878679
   HighAmpComposableStablePoolFactory:
     address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
     startBlock: 15852258
@@ -113,6 +119,9 @@ goerli:
   WeightedPoolV3Factory:
     address: "0x26575A44755E0aaa969FDda1E4291Df22C5624Ea"
     startBlock: 8456831
+  WeightedPoolV4Factory:
+    address: "0x230a59F4d9ADc147480f03B0D3fFfeCd56c3289a"
+    startBlock: 8694778
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 4716924
@@ -131,6 +140,9 @@ goerli:
   ComposableStablePoolV3Factory:
     address: "0xbfD9769b061E57e478690299011A028194D66e3C"
     startBlock: 8456835
+  ComposableStablePoolV4Factory:
+    address: "0x1802953277FD955f9a254B80Aa0582f193cF1d77"
+    startBlock: 8695012
   HighAmpComposableStablePoolFactory:
     address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
     startBlock: 7842251
@@ -179,11 +191,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Mar 15 - Block from ~00h UTC
-    block: 40354000
+    # Mar 21 - Block from ~8 pm UTC
+    block: 40611103
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmeGhiedyvVbCQD77iVZyro22EuYLjw7wHqx8Pf3CKR3az
+    base: QmW2Q8vLCbVFJUjofrCJje9xeV8cRVmaqpLvuY1gFbKWTU
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -199,6 +211,9 @@ polygon:
   WeightedPoolV3Factory:
     address: "0x82e4cFaef85b1B6299935340c964C942280327f4"
     startBlock: 38709460
+  WeightedPoolV4Factory:
+    address: "0xFc8a407Bba312ac761D8BFe04CE1201904842B76"
+    startBlock: 40611103
   WeightedPool2TokenFactory:
     address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
     startBlock: 15869090
@@ -217,6 +232,9 @@ polygon:
   ComposableStablePoolV3Factory:
     address: "0x7bc6C0E73EDAa66eF3F6E2f27b0EE8661834c6C9"
     startBlock: 38709460
+  ComposableStablePoolV4Factory:
+    address: "0x6Ab5549bBd766A43aFb687776ad8466F8b42f777"
+    startBlock: 40613553
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 17913016
@@ -277,11 +295,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Mar 15 - Block from ~00h UTC
-    block: 69897409
+    # Mar 27 - Block of Weighted V4 factory
+    block: 72222060
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: Qmb5TEgVPgMoCJWuEyBXS3knYriZW3otBrcgbHj7ma3L1U
+    base: QmQrxaoANeUAqPTo3t9yHyZE5aucks8gP6wEqMrjQ8vuqA
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -297,6 +315,9 @@ arbitrum:
   WeightedPoolV3Factory:
     address: "0xf1665E19bc105BE4EDD3739F88315cC699cc5b65"
     startBlock: 56668142
+  WeightedPoolV4Factory:
+    address: "0xc7E5ED1054A24Ef31D827E6F86caA58B3Bc168d7"
+    startBlock: 72222060
   WeightedPool2TokenFactory:
     address: "0xCF0a32Bbef8F064969F21f7e02328FB577382018"
     startBlock: 222864
@@ -315,6 +336,9 @@ arbitrum:
   ComposableStablePoolV3Factory:
     address: "0x1c99324EDC771c82A0DCCB780CC7DDA0045E50e7"
     startBlock: 56668142
+  ComposableStablePoolV4Factory:
+    address: "0x2498A2B0d6462d2260EAC50aE1C3e03F4829BA95"
+    startBlock: 72235860
   MetaStablePoolFactory:
     address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
     startBlock: 222868
@@ -359,12 +383,18 @@ bnb:
   WeightedPoolV3Factory:
     address: "0x6e4cF292C5349c79cCd66349c3Ed56357dD11B46"
     startBlock: 25237933
+  WeightedPoolV4Factory:
+    address: "0x230a59F4d9ADc147480f03B0D3fFfeCd56c3289a"
+    startBlock: 26665331
   ComposableStablePoolFactory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 22895868
   ComposableStablePoolV3Factory:
     address: "0xacAaC3e6D6Df918Bf3c809DFC7d42de0e4a72d4C"
     startBlock: 25237933
+  ComposableStablePoolV4Factory:
+    address: "0x1802953277FD955f9a254B80Aa0582f193cF1d77"
+    startBlock: 26666380
   TempLiquidityBootstrappingPoolFactory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 22895868
@@ -388,6 +418,9 @@ gnosis:
   WeightedPoolV3Factory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 26226256
+  WeightedPoolV4Factory:
+    address: "0x6CaD2ea22BFA7F4C14Aae92E47F510Cd5C509bc7"
+    startBlock: 27055829
   StablePoolV2Factory:
     address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
     startBlock: 25415344
@@ -397,6 +430,9 @@ gnosis:
   ComposableStablePoolV3Factory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 26365805
+  ComposableStablePoolV4Factory:
+    address: "0xD87F44Df0159DC78029AB9CA7D7e57E7249F5ACD"
+    startBlock: 27056416
   AaveLinearPoolV3Factory:
     address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
     startBlock: 25415464
@@ -426,6 +462,9 @@ optimism:
   WeightedPoolV3Factory:
     address: "0xA0DAbEBAAd1b243BBb243f933013d560819eB66f"
     startBlock: 72832703
+  WeightedPoolV4Factory:
+    address: "0x230a59F4d9ADc147480f03B0D3fFfeCd56c3289a"
+    startBlock: 82737545
   WeightedPool2TokenFactory:
     address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
     startBlock: 7005518
@@ -438,6 +477,9 @@ optimism:
   ComposableStablePoolV3Factory:
     address: "0xe2E901AB09f37884BA31622dF3Ca7FC19AA443Be"
     startBlock: 72832821
+  ComposableStablePoolV4Factory:
+    address: "0x1802953277FD955f9a254B80Aa0582f193cF1d77"
+    startBlock: 82748180
   MetaStablePoolFactory:
     address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
     startBlock: 7005662
@@ -482,6 +524,20 @@ avalanche:
   WeightedPoolV3Factory:
     address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
     startBlock: 26389236
+  WeightedPoolV4Factory:
+    address: "0x230a59F4d9ADc147480f03B0D3fFfeCd56c3289a"
+    startBlock: 27739006
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
     startBlock: 26386552
+basegoerli:
+  network: base-testnet
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 2204979
+  WeightedPoolV3Factory:
+    address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
+    startBlock: 26389236
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0xE8c7cE6Ee9Fc75196bC5317883bD73A0F4ac7Bc0"
+    startBlock: 2206960

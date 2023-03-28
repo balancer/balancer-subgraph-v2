@@ -1,4 +1,4 @@
-name: Deploy Graph
+name: Deploy Hosted Service Betas
 
 on:
   push:

@@ -209,23 +209,31 @@ export function swapValueInUSD(
   if (isUSDStable(tokenOutAddress)) {
     // if one of the tokens is a stable, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+    return swapValueUSD;
   } else if (isUSDStable(tokenInAddress)) {
     // if one of the tokens is a stable, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-  } else if (isPricingAsset(tokenInAddress) && !isPricingAsset(tokenOutAddress)) {
+    return swapValueUSD;
+  }
+
+  if (isPricingAsset(tokenInAddress) && !isPricingAsset(tokenOutAddress)) {
     // if only one of the tokens is a pricing asset, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-  } else if (isPricingAsset(tokenOutAddress) && !isPricingAsset(tokenInAddress)) {
+    if (swapValueUSD.gt(ZERO_BD)) return swapValueUSD;
+  }
+
+  if (isPricingAsset(tokenOutAddress) && !isPricingAsset(tokenInAddress)) {
     // if only one of the tokens is a pricing asset, it takes precedence
     swapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-  } else {
-    // if none or both tokens are pricing assets, take the average of the known prices
-    let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
-    let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
-    let divisor =
-      tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD) ? BigDecimal.fromString('2') : ONE_BD;
-    swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(divisor);
+    if (swapValueUSD.gt(ZERO_BD)) return swapValueUSD;
   }
+
+  // if none or both tokens are pricing assets, take the average of the known prices
+  let tokenInSwapValueUSD = valueInUSD(tokenAmountIn, tokenInAddress);
+  let tokenOutSwapValueUSD = valueInUSD(tokenAmountOut, tokenOutAddress);
+  let divisor =
+    tokenInSwapValueUSD.gt(ZERO_BD) && tokenOutSwapValueUSD.gt(ZERO_BD) ? BigDecimal.fromString('2') : ONE_BD;
+  swapValueUSD = tokenInSwapValueUSD.plus(tokenOutSwapValueUSD).div(divisor);
 
   return swapValueUSD;
 }
