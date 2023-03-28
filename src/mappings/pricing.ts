@@ -43,7 +43,12 @@ export function getPreferentialPricingAsset(assets: Address[]): Address {
   return ZERO_ADDRESS;
 }
 
-export function addHistoricalPoolLiquidityRecord(poolId: string, block: BigInt, pricingAsset: Address): boolean {
+export function addHistoricalPoolLiquidityRecord(
+  poolId: string,
+  block: BigInt,
+  pricingAsset: Address,
+  logIndex: BigInt
+): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
 
@@ -106,7 +111,7 @@ export function addHistoricalPoolLiquidityRecord(poolId: string, block: BigInt, 
   }
 
   // Take snapshot of pool state
-  let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block);
+  let phlId = getPoolHistoricalLiquidityId(poolId, pricingAsset, block, logIndex);
   let phl = new PoolHistoricalLiquidity(phlId);
   phl.poolId = poolId;
   phl.pricingAsset = pricingAsset;
@@ -119,7 +124,12 @@ export function addHistoricalPoolLiquidityRecord(poolId: string, block: BigInt, 
   return true;
 }
 
-export function updatePoolLiquidity(poolId: string, block_number: BigInt, timestamp: BigInt): boolean {
+export function updatePoolLiquidity(
+  poolId: string,
+  block_number: BigInt,
+  timestamp: BigInt,
+  logIndex: BigInt
+): boolean {
   let pool = Pool.load(poolId);
   if (pool == null) return false;
   let tokensList: Bytes[] = pool.tokensList;
@@ -150,7 +160,7 @@ export function updatePoolLiquidity(poolId: string, block_number: BigInt, timest
   // We want to avoid too frequently calling setWrappedTokenPrice because it makes a call to the rate provider
   // Doing it here allows us to do it only once, when the MIN_POOL_LIQUIDITY threshold is crossed
   if (oldPoolLiquidity < MIN_POOL_LIQUIDITY) {
-    setWrappedTokenPrice(pool, poolId, block_number, timestamp);
+    setWrappedTokenPrice(pool, poolId, block_number, timestamp, logIndex);
   }
 
   // update BPT price
@@ -289,8 +299,14 @@ export function updateLatestPrice(tokenPrice: TokenPrice, blockTimestamp: BigInt
   }
 }
 
-function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt): string {
-  return poolId.concat('-').concat(tokenAddress.toHexString()).concat('-').concat(block.toString());
+function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, block: BigInt, logIndex: BigInt): string {
+  return poolId
+    .concat('-')
+    .concat(tokenAddress.toHexString())
+    .concat('-')
+    .concat(block.toString())
+    .concat('-')
+    .concat(logIndex.toString());
 }
 
 export function isUSDStable(asset: Address): boolean {
@@ -303,7 +319,13 @@ export function isUSDStable(asset: Address): boolean {
 // The wrapped token in a linear pool is hardly ever traded, meaning we rarely compute its USD price
 // This creates an exceptional entry for the token price of the wrapped token,
 // with the main token as the pricing asset even if it's not globally defined as one
-export function setWrappedTokenPrice(pool: Pool, poolId: string, block_number: BigInt, timestamp: BigInt): void {
+export function setWrappedTokenPrice(
+  pool: Pool,
+  poolId: string,
+  block_number: BigInt,
+  timestamp: BigInt,
+  logIndex: BigInt
+): void {
   if (isLinearPool(pool)) {
     if (pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY)) {
       const poolAddress = bytesToAddress(pool.address);
@@ -317,7 +339,7 @@ export function setWrappedTokenPrice(pool: Pool, poolId: string, block_number: B
         const asset = bytesToAddress(pool.tokensList[pool.wrappedIndex]);
         const pricingAsset = bytesToAddress(pool.tokensList[pool.mainIndex]);
         const price = scaleDown(rate, 18);
-        let tokenPriceId = getTokenPriceId(poolId, asset, pricingAsset, block_number);
+        let tokenPriceId = getTokenPriceId(poolId, asset, pricingAsset, block_number, logIndex);
         let tokenPrice = new TokenPrice(tokenPriceId);
         tokenPrice.poolId = poolId;
         tokenPrice.block = block_number;

@@ -23,7 +23,7 @@ type Pool @entity {
   swapEnabled: Boolean!
   swapFee: BigDecimal!
   owner: Bytes
-  isPaused: Boolean
+  isPaused: Boolean!
 
   totalWeight: BigDecimal
   totalSwapVolume: BigDecimal!
@@ -109,7 +109,7 @@ type Pool @entity {
   lastPostJoinExitInvariant: BigDecimal
 
   # AaveLinearV3 Only
-  protocolId: Int
+  protocolId: BigInt
   protocolIdData: ProtocolIdData
 }
 
@@ -126,9 +126,9 @@ type PoolToken @entity {
   symbol: String!
   name: String!
   decimals: Int!
-  index: Int # TODO: make mandatory at next full sync
+  index: Int!
   address: String!
-  oldPriceRate: BigDecimal # TODO: make mandatory at next full sync
+  oldPriceRate: BigDecimal!
   priceRate: BigDecimal!
   balance: BigDecimal!
   cashBalance: BigDecimal!
@@ -247,7 +247,7 @@ type LatestPrice @entity {
   block: BigInt! # last block that prices were updated
 }
 
-type PoolHistoricalLiquidity @entity {
+type PoolHistoricalLiquidity @entity(immutable: true) {
   id: ID!
   poolId: Pool!
   poolTotalShares: BigDecimal!
@@ -257,8 +257,8 @@ type PoolHistoricalLiquidity @entity {
   block: BigInt!
 }
 
-type TokenPrice @entity {
-  id: ID! # address of token + address of stablecoin-poolId
+type TokenPrice @entity(immutable: true) {
+  id: ID! 
   poolId: Pool!
   asset: Bytes!
   amount: BigDecimal!

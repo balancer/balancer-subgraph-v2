@@ -186,7 +186,8 @@ export function getTokenPriceId(
   poolId: string,
   tokenAddress: Address,
   stableTokenAddress: Address,
-  block: BigInt
+  block: BigInt,
+  logIndex: BigInt
 ): string {
   return poolId
     .concat('-')
@@ -194,9 +195,10 @@ export function getTokenPriceId(
     .concat('-')
     .concat(stableTokenAddress.toHexString())
     .concat('-')
-    .concat(block.toString());
+    .concat(block.toString())
+    .concat('-')
+    .concat(logIndex.toString());
 }
-
 export function createPoolSnapshot(pool: Pool, timestamp: i32): void {
   let dayTimestamp = timestamp - (timestamp % DAY); // Todays Timestamp
 

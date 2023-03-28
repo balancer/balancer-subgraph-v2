@@ -186,7 +186,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress);
+      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress, event.logIndex);
       // Some pricing assets may not have a route back to USD yet
       // so we keep trying until we find one
       if (success) {
@@ -210,7 +210,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.save();
   }
 
-  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
+  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp, event.logIndex);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -285,7 +285,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
-      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress);
+      let success = addHistoricalPoolLiquidityRecord(poolId, event.block.number, tokenAddress, event.logIndex);
       // Some pricing assets may not have a route back to USD yet
       // so we keep trying until we find one
       if (success) {
@@ -294,7 +294,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     }
   }
 
-  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
+  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp, event.logIndex);
 }
 
 /************************************
@@ -357,7 +357,7 @@ export function handleBalanceManage(event: PoolBalanceManaged): void {
   management.timestamp = event.block.timestamp.toI32();
   management.save();
 
-  setWrappedTokenPrice(pool, poolId.toHex(), event.block.number, event.block.timestamp);
+  setWrappedTokenPrice(pool, poolId.toHex(), event.block.number, event.block.timestamp, event.logIndex);
 }
 
 /************************************
@@ -558,7 +558,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   let tokenInWeight = poolTokenIn.weight;
   let tokenOutWeight = poolTokenOut.weight;
   if (isPricingAsset(tokenInAddress) && pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY) && valueUSD.gt(MIN_SWAP_VALUE_USD)) {
-    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, blockNumber);
+    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenOutAddress, tokenInAddress, blockNumber, logIndex);
     let tokenPrice = new TokenPrice(tokenPriceId);
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenOutAddress);
     tokenPrice.poolId = poolId.toHexString();
@@ -586,7 +586,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     pool.totalLiquidity.gt(MIN_POOL_LIQUIDITY) &&
     valueUSD.gt(MIN_SWAP_VALUE_USD)
   ) {
-    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, blockNumber);
+    let tokenPriceId = getTokenPriceId(poolId.toHex(), tokenInAddress, tokenOutAddress, blockNumber, logIndex);
     let tokenPrice = new TokenPrice(tokenPriceId);
     //tokenPrice.poolTokenId = getPoolTokenId(poolId, tokenInAddress);
     tokenPrice.poolId = poolId.toHexString();
@@ -612,8 +612,8 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   const preferentialToken = getPreferentialPricingAsset([tokenInAddress, tokenOutAddress]);
   if (preferentialToken != ZERO_ADDRESS) {
-    addHistoricalPoolLiquidityRecord(poolId.toHex(), blockNumber, preferentialToken);
+    addHistoricalPoolLiquidityRecord(poolId.toHex(), blockNumber, preferentialToken, event.logIndex);
   }
 
-  updatePoolLiquidity(poolId.toHex(), blockNumber, event.block.timestamp);
+  updatePoolLiquidity(poolId.toHex(), blockNumber, event.block.timestamp, event.logIndex);
 }
