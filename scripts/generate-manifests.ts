@@ -18,10 +18,7 @@ const generateManifests = async (): Promise<void> => {
     );
     // remove the graft info from the config
     delete config.graft;
-    fs.writeFileSync(
-      `subgraph.${network}.full.yaml`,
-      Handlebars.compile(template)(config)
-    );    
+    fs.writeFileSync(`subgraph.${network}.full.yaml`, Handlebars.compile(template)(config));
   });
 
   // eslint-disable-next-line no-console
