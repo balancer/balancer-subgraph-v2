@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Mar 15 - Block from ~00h UTC
-    # block: 16829700
+    # Mar 30
+    # block: 16938731
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    # base: QmceY3gSVLLrLcSndFt8RcTDgozD2bKtkHSKQPpHFUiAMc
+    # base: QmQnxRrmWbFUTfLFeHv8qi6Tf7ZMfrUVqoK7tvbF1tapbM
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -191,11 +191,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Mar 21 - Block from ~8 pm UTC
-    block: 40611103
+    # Mar 30
+    block: 40931242
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmW2Q8vLCbVFJUjofrCJje9xeV8cRVmaqpLvuY1gFbKWTU
+    base: QmZGXcx1Vn4ZhnhSeg3MxT7sTST1y1aeD1WYcqKU61EftL
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -295,11 +295,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Mar 27 - Block of Weighted V4 factory
-    block: 72222060
+    # Mar 30
+    block: 75183422
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmQrxaoANeUAqPTo3t9yHyZE5aucks8gP6wEqMrjQ8vuqA
+    base: QmWuND9LUmmeUyvWFBSGXH1NZvHYzsqKgCZU2qFsj8J9oJ
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240

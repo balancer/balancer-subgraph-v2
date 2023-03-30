@@ -19,7 +19,7 @@ export const SWAP_OUT = 1;
 
 export const ZERO_ADDRESS = Address.fromString('0x0000000000000000000000000000000000000000');
 
-export const MAX_TIME_DIFF_FOR_PRICING = BigInt.fromI32(3600); // 1h
+export const MAX_TIME_DIFF_FOR_PRICING = BigInt.fromI32(600); // 10min
 
 export let MAX_POS_PRICE_CHANGE = BigDecimal.fromString('1'); // +100%
 export let MAX_NEG_PRICE_CHANGE = BigDecimal.fromString('-0.5'); // -50%%
