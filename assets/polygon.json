@@ -37,14 +37,6 @@
     {
       "address": "0x48e6b98ef6329f8f0a30ebb8c7c960330d648085",
       "symbol": "bb-am-USD"
-    },
-    {
-      "address": "0x6f7C932e7684666C9fd1d44527765433e01fF61d", 
-      "symbol": "MKR"
-    },
-    {
-      "address": "0x5FFD62D3C3eE2E81C00A7b9079FB248e7dF024A8", 
-      "symbol": "GNO"
     }
   ],
   "fxAssets": [
