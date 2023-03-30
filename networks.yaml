@@ -1,8 +1,8 @@
 mainnet:
   network: mainnet
   graft:
-    # Block of Composable V4 factory
-    block: 16878679
+    # Mar 30
+    block: 16938731
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmQnxRrmWbFUTfLFeHv8qi6Tf7ZMfrUVqoK7tvbF1tapbM
@@ -191,8 +191,8 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Block of Composable V4
-    block: 40613553
+    # Mar 30
+    block: 40931242
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmZGXcx1Vn4ZhnhSeg3MxT7sTST1y1aeD1WYcqKU61EftL
@@ -295,8 +295,8 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Block of Composable V4 factory
-    block: 72235860
+    # Mar 30
+    block: 75183422
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmWuND9LUmmeUyvWFBSGXH1NZvHYzsqKgCZU2qFsj8J9oJ
