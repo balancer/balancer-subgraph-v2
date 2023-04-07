@@ -21,6 +21,7 @@ export namespace PoolType {
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';
   export const GyroE = 'GyroE';
+  export const GyroEV2 = 'GyroEV2';
   export const FX = 'FX';
 }
 
