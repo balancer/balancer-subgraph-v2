@@ -33,7 +33,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.12
+      - uses: balancer-labs/graph-deploy@v0.0.1
         with:
           graph_access_token: ${{ secrets.GRAPH_ACCESS_TOKEN }}
           graph_subgraph_name: "balancer-${{ inputs.network }}-v2-full"
