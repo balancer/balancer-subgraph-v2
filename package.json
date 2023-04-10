@@ -54,6 +54,9 @@
     "global": "^4.4.0",
     "node-fetch": "^2.6.7"
   },
+  "resolutions": {
+    "@graphprotocol/graph-cli/ipfs-http-client/concat-stream": "github:mihirgupta0900/concat-stream#master"
+  },
   "jest": {
     "globals": {
       "ts-jest": {
