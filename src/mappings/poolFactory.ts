@@ -482,7 +482,8 @@ export function handleNewFXPool(event: ethereum.Event): void {
     event.logType,
     event.block,
     event.transaction,
-    [event.parameters[2]] // PoolCreated expects parameters[0] to be the pool address
+    [event.parameters[2]], // PoolCreated expects parameters[0] to be the pool address
+    event.receipt
   );
 
   let pool = handleNewPool(poolCreatedEvent, poolId, swapFee);
