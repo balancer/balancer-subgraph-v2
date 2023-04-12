@@ -5,7 +5,7 @@ on:
     branches: dev
 
 jobs:
-# temp deploying dev to base-testnet prod just so we start syncing there before the merge to master
+  # temp deploying dev to base-testnet prod just so we start syncing there before the merge to master
   deploy-studio-base:
     runs-on: ubuntu-latest
     environment: graph
@@ -14,7 +14,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: Install
         run: yarn --frozen-lockfile
       - name: Assets
