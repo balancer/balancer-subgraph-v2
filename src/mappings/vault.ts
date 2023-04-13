@@ -71,19 +71,21 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
   createUserEntity(event.params.user);
 
   let userAddress = event.params.user.toHexString();
-  let token = event.params.token;
-  let balanceId = userAddress.concat(token.toHexString());
+  const tokenAddress = event.params.token;
+  const token = getToken(tokenAddress);
+  let balanceId = userAddress.concat(token.id);
 
   let userBalance = UserInternalBalance.load(balanceId);
   if (userBalance == null) {
     userBalance = new UserInternalBalance(balanceId);
 
     userBalance.userAddress = userAddress;
-    userBalance.token = token;
+    userBalance.tokenInfo = token.id;
+    userBalance.token = tokenAddress;
     userBalance.balance = ZERO_BD;
   }
 
-  let transferAmount = tokenToDecimal(event.params.delta, getTokenDecimals(token));
+  let transferAmount = tokenToDecimal(event.params.delta, getTokenDecimals(tokenAddress));
   userBalance.balance = userBalance.balance.plus(transferAmount);
 
   userBalance.save();
