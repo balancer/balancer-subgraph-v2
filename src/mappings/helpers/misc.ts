@@ -15,6 +15,7 @@ import {
   PrimaryIssues,
   SecondaryTrades,
   SecondaryOrders,
+  MarginOrders,
 } from '../../types/schema';
 import { PrimaryIssuePool } from '../../types/templates';
 import { SecondaryIssuePool } from '../../types/templates';
@@ -187,6 +188,10 @@ export function loadSecondaryTrades(poolId: string, tokenAddress: Address): Seco
 
 export function loadSecondaryOrders(poolId: string, tokenAddress: Address): SecondaryOrders | null {
   return SecondaryOrders.load(getPoolTokenId(poolId, tokenAddress));
+}
+
+export function loadMarginOrders(poolId: string, tokenAddress: Address): MarginOrders | null {
+  return MarginOrders.load(getPoolTokenId(poolId, tokenAddress));
 }
 
 export function getTokenPriceId(

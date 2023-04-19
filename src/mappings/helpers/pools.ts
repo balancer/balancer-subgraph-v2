@@ -21,6 +21,8 @@ export namespace PoolType {
   export const ERC4626Linear = 'ERC4626Linear';
   export const PrimaryIssue = 'PrimaryIssue';
   export const SecondaryIssue = 'SecondaryIssue';
+  export const OffchainSecondaryIssue = 'OffchainSecondaryIssue';
+  export const MarginIssue = 'MarginIssue';
   export const EulerLinear = 'EulerLinear';
   export const GearboxLinear = 'GearboxLinear';
   export const MidasLinear = 'MidasLinear';

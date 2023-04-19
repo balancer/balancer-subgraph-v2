@@ -36,6 +36,8 @@ import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { PrimaryIssuePool as PrimaryPoolTemplate } from '../types/templates';
 import { SecondaryIssuePool as SecondaryPoolTemplate } from '../types/templates';
+import { MarginTradingPool as MarginTradingPoolTemplate } from '../types/templates';
+import { OffchainSecondariesPool as OffchainSecondaryIssuePoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 import { GyroEPool as GyroEPoolTemplate } from '../types/templates';
@@ -47,6 +49,8 @@ import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/Conv
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { PrimaryIssuePool } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
 import { SecondaryIssuePool } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
+import { MarginTradingPool } from '../types/templates/MarginTradingPool/MarginTradingPool';
+import { OffchainSecondariesPool } from '../types/templates/OffchainSecondariesPool/OffchainSecondariesPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
@@ -323,6 +327,98 @@ export function handleNewSecondaryPool(event: PoolCreated): void {
   handleNewPoolTokens(pool, tokens);
 
   SecondaryPoolTemplate.create(poolAddress);
+}
+
+export function handleNewMarginPool(event: PoolCreated): void {
+  let poolAddress: Address = event.params.pool;
+
+  let poolContract = MarginTradingPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let securityCall = poolContract.try_getSecurity();
+  let security = securityCall.value;
+
+  let marginCall = poolContract.try_getMargin();
+  let margin = marginCall.value;
+
+  let collateralCall = poolContract.try_getCollateral();
+  let collateral = collateralCall.value;
+
+  let currencyCall = poolContract.try_getCurrency();
+  let currency = currencyCall.value;
+
+  let ownerCall = poolContract.try_getOwner();
+  let balancerManager = ownerCall.value;
+
+  let orderBookCall = poolContract.try__orderbook();
+  let orderBook = orderBookCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+  pool.poolType = PoolType.MarginIssue;
+  pool.factory = event.address;
+  pool.owner = balancerManager;
+  pool.principalToken = security;
+  pool.margin = margin;
+  pool.collateral = collateral;
+  pool.baseToken = currency;
+  pool.orderBook = orderBook;
+
+  let tokens = getPoolTokens(poolId);
+  if (tokens == null) return;
+  pool.tokensList = tokens;
+
+  pool.save();
+
+  handleNewPoolTokens(pool, tokens);
+
+  MarginTradingPoolTemplate.create(poolAddress);
+}
+
+export function handleNewOffchainSecondaryPool(event: PoolCreated): void {
+  let poolAddress: Address = event.params.pool;
+
+  let poolContract = OffchainSecondariesPool.bind(poolAddress);
+
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let swapFeeCall = poolContract.try_getSwapFeePercentage();
+  let swapFee = swapFeeCall.value;
+
+  let securityCall = poolContract.try_getSecurity();
+  let security = securityCall.value;
+
+  let currencyCall = poolContract.try_getCurrency();
+  let currency = currencyCall.value;
+
+  let ownerCall = poolContract.try_getOwner();
+  let balancerManager = ownerCall.value;
+
+  let orderBookCall = poolContract.try__orderbook();
+  let orderBook = orderBookCall.value;
+
+  let pool = handleNewPool(event, poolId, swapFee);
+  pool.poolType = PoolType.OffchainSecondaryIssue;
+  pool.factory = event.address;
+  pool.owner = balancerManager;
+  pool.principalToken = security;
+  pool.baseToken = currency;
+  pool.orderBook = orderBook;
+
+  let tokens = getPoolTokens(poolId);
+  if (tokens == null) return;
+  pool.tokensList = tokens;
+
+  pool.save();
+
+  handleNewPoolTokens(pool, tokens);
+
+  OffchainSecondaryIssuePoolTemplate.create(poolAddress);
 }
 
 export function handleNewAaveLinearPool(event: PoolCreated): void {

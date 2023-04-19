@@ -121,12 +121,18 @@ type Pool @entity {
   offeringDocs: String
   primarySubscriptions: [PrimaryIssues!] @derivedFrom(field: "pool")
 
-  # SecondaryPool only
+  # SecondaryPool and OffchainSecondariesPool only
   minOrderSize: BigInt
   orderBook: Bytes
   issueManager: Bytes
   secondaryTrades: [SecondaryTrades!] @derivedFrom(field: "pool")
   orders: [SecondaryOrders!]@derivedFrom(field: "pool")
+
+  # MarginTradingPool only
+  securityType: Bytes
+  margin: BigInt
+  collateral: BigInt
+  cficode: Bytes
 }
 
 type PrimaryIssues @entity {
@@ -163,6 +169,19 @@ type SecondaryOrders @entity {
   priceOffered: BigDecimal!
   timestamp: BigInt
   orderReference: Bytes!  
+}
+
+type MarginOrders @entity {
+  id: ID!
+  pool: Pool!
+  creator: Bytes
+  tokenIn: Token!
+  tokenOut: Token!
+  amountOffered: BigDecimal!
+  priceOffered: BigDecimal!
+  stoplossPrice: BigDecimal!
+  timestamp: BigInt
+  orderReference: Bytes!
 }
 
 type PoolContract @entity {

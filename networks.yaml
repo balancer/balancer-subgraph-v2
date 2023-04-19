@@ -117,8 +117,14 @@ goerli:
     address: "0x4823be69546f9e1Ab8a87f315108c19dDC8E48b4"
     startBlock: 8586768
   SecondaryIssuePoolFactory:
-    address: "0x1c67b4Abc2CA25E191ecdACb6F0Ca14C3b716abb"
-    startBlock: 8751968
+    address: "0x490684B006824bC57F307216ceE69051B7b3D859"
+    startBlock: 8852808
+  OffchainSecondariesPoolFactory:
+    address: "0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852"
+    startBlock: 8853132
+  MarginTradingPoolFactory:
+    address: "0x2E98aa5C69ef93dAc5305dFAd3dDFba5e29d8387"
+    startBlock: 8853121
 #  StablePoolFactory:
 #    address: "0x44afeb87c871D8fEA9398a026DeA2BD3A13F5769"
 #    startBlock: 6992992
@@ -208,6 +214,12 @@ polygon:
   SecondaryIssuePoolFactory:
     address: "0xe5459436AE26C4fDC77f51c459e9Aa08b5d32064"
     startBlock: 39620416
+  OffchainSecondariesPoolFactory:
+    address: "0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852"
+    startBlock: 8853132
+  MarginTradingPoolFactory:
+    address: "0x2E98aa5C69ef93dAc5305dFAd3dDFba5e29d8387"
+    startBlock: 8853121
 #  StablePoolFactory:
 #    address: "0xc66Ba2B6595D3613CCab350C886aCE23866EDe24"
 #    startBlock: 16138679

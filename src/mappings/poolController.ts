@@ -15,12 +15,14 @@ import {
 } from '../types/templates/MetaStablePool/MetaStablePool';
 import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
 import { SecondaryIssuePool, Offer, TradeReport, OrderBook } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
+//import { MarginTradingPool, MarginOffer, MarginTradeReport, MarginOrderBook } from '../types/templates/MarginTradingPool/MarginTradingPool';
+//import { OffchainSecondariesPool, OffchainOffer, OffchainTradeReport, OffchainOrderBook } from '../types/templates/OffchainSecondariesPool/OffchainSecondariesPool';
 import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PoolContract, PrimaryIssues, SecondaryTrades, SecondaryOrders } from '../types/schema';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PoolContract, PrimaryIssues, SecondaryTrades, SecondaryOrders, MarginOrders } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -32,6 +34,7 @@ import {
   loadPrimarySubscriptions,
   loadSecondaryTrades,
   loadSecondaryOrders,
+  loadMarginOrders
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -416,6 +419,194 @@ export function handleTradeReport(event: TradeReport): void {
   }
   
 }
+
+/************************************
+ *******OFFCHAIN SECONDARY***********
+ ************************************/
+
+ /*export function handleOffchainSecondaryOffer(event: Offer): void {
+  let poolAddress = event.address;
+
+  let poolContract = OffchainSecondariesPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  
+  pool.security = event.params.security;
+  pool.currency = event.params.currency;
+  pool.orderBook = event.params.orderBook;
+  pool.minOrderSize = event.params.minOrderSize;
+  pool.issueManager = event.params.issueManager;
+  
+  pool.save();
+}
+
+export function handleOffchainOrderBook(event: OrderBook): void {
+  let poolAddress = event.address;
+
+  let poolContract = OffchainSecondariesPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let orders  = loadSecondaryOrders(event.transaction.hash.toHexString(), event.params.tokenIn);
+  if (orders == null) {
+    let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.tokenIn);
+    let orders = new SecondaryOrders(providerId);   
+    orders.pool = poolId.toHexString(); 
+    orders.creator = event.params.creator;
+    orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
+    orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
+    orders.tokenIn = event.params.tokenIn.toHexString();
+    orders.tokenOut = event.params.tokenOut.toHexString();
+    orders.orderReference = event.params.orderRef;
+    orders.timestamp = event.params.timestamp;
+    orders.save();
+  } 
+  else{
+    orders.creator = event.params.creator;
+    orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
+    orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
+    orders.tokenIn = event.params.tokenIn.toHexString();
+    orders.tokenOut = event.params.tokenOut.toHexString();
+    orders.orderReference = event.params.orderRef;
+    orders.timestamp = event.params.timestamp;
+    orders.save();
+  }
+}
+
+export function handleOffchainTradeReport(event: TradeReport): void {
+  let poolAddress = event.address;
+
+  let poolContract = OffchainSecondariesPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let trades  = loadSecondaryTrades(event.transaction.hash.toHexString(), event.params.security);
+  if (trades == null) {
+    let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.security);
+    let trades = new SecondaryTrades(providerId);   
+    trades.pool = poolId.toHexString(); 
+    trades.orderType = event.params.orderType;
+    trades.amount = tokenToDecimal(event.params.amount, 18);
+    trades.price = tokenToDecimal(event.params.price, 18);
+    trades.currency = event.params.currency.toHexString();
+    trades.executionDate = event.params.executionDate;
+    trades.party = event.params.party.toHexString();
+    trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
+    trades.save();
+  } 
+  else{
+    trades.orderType = event.params.orderType;
+    trades.amount = tokenToDecimal(event.params.amount, 18);
+    trades.price = tokenToDecimal(event.params.price, 18);
+    trades.currency = event.params.currency.toHexString();
+    trades.executionDate = event.params.executionDate;
+    trades.party = event.params.party.toHexString();
+    trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
+    trades.save();
+  }
+  
+}*/
+
+/************************************
+ *************MARGIN POOL************
+ ************************************/
+
+ /*export function handleMarginOffer(event: Offer): void {
+  let poolAddress = event.address;
+
+  let poolContract = MarginTradingPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  
+  pool.security = event.params.security;
+  pool.currency = event.params.currency;
+  pool.securityType = event.params.securityType;
+  pool.margin = event.params.margin;
+  pool.collateral = event.params.collateral;
+  pool.cficode = event.params.cficode;
+  pool.orderBook = event.params.orderBook;
+  pool.minOrderSize = event.params.minOrderSize;
+  pool.issueManager = event.params.issueManager;
+  
+  pool.save();
+}
+
+export function handleMarginOrderBook(event: OrderBook): void {
+  let poolAddress = event.address;
+
+  let poolContract = MarginTradingPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let orders  = loadMarginOrders(event.transaction.hash.toHexString(), event.params.tokenIn);
+  if (orders == null) {
+    let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.tokenIn);
+    let orders = new MarginOrders(providerId);   
+    orders.pool = poolId.toHexString(); 
+    orders.creator = event.params.creator;
+    orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
+    orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
+    orders.stoplossPrice = tokenToDecimal(event.params.stoplossPrice, 18);
+    orders.tokenIn = event.params.tokenIn.toHexString();
+    orders.tokenOut = event.params.tokenOut.toHexString();
+    orders.orderReference = event.params.orderRef;
+    orders.timestamp = event.params.timestamp;
+    orders.save();
+  } 
+  else{
+    orders.creator = event.params.creator;
+    orders.amountOffered = tokenToDecimal(event.params.amountOffered, 18);
+    orders.priceOffered = tokenToDecimal(event.params.priceOffered, 18);
+    orders.stoplossPrice = tokenToDecimal(event.params.stoplossPrice, 18);
+    orders.tokenIn = event.params.tokenIn.toHexString();
+    orders.tokenOut = event.params.tokenOut.toHexString();
+    orders.orderReference = event.params.orderRef;
+    orders.timestamp = event.params.timestamp;
+    orders.save();
+  }
+}
+
+export function handleMarginTradeReport(event: TradeReport): void {
+  let poolAddress = event.address;
+
+  let poolContract = MarginTradingPool.bind(poolAddress);
+  let poolIdCall = poolContract.try_getPoolId();
+  let poolId = poolIdCall.value;
+
+  let trades  = loadSecondaryTrades(event.transaction.hash.toHexString(), event.params.security);
+  if (trades == null) {
+    let providerId = getPoolTokenId(event.transaction.hash.toHexString(), event.params.security);
+    let trades = new SecondaryTrades(providerId);   
+    trades.pool = poolId.toHexString(); 
+    trades.orderType = event.params.orderType;
+    trades.amount = tokenToDecimal(event.params.amount, 18);
+    trades.price = tokenToDecimal(event.params.price, 18);
+    trades.currency = event.params.currency.toHexString();
+    trades.executionDate = event.params.executionDate;
+    trades.party = event.params.party.toHexString();
+    trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
+    trades.save();
+  } 
+  else{
+    trades.orderType = event.params.orderType;
+    trades.amount = tokenToDecimal(event.params.amount, 18);
+    trades.price = tokenToDecimal(event.params.price, 18);
+    trades.currency = event.params.currency.toHexString();
+    trades.executionDate = event.params.executionDate;
+    trades.party = event.params.party.toHexString();
+    trades.counterparty = event.params.counterparty.toHexString();
+    trades.orderReference = event.params.orderRef;
+    trades.save();
+  }
+  
+}*/
 
 /************************************
  ******** PRICE RATE UPDATE *********

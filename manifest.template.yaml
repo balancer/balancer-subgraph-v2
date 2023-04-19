@@ -260,6 +260,68 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewSecondaryPool          
   {{/if}}
+  {{#if OffchainSecondariesPoolFactory}}
+  - kind: ethereum/contract
+    name: OffchainSecondariesPoolFactory
+    network: {{network}}
+    source:
+      address: '{{OffchainSecondariesPoolFactory.address}}'
+      abi: OffchainSecondariesPoolFactory
+      startBlock: {{OffchainSecondariesPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: OffchainSecondariesPoolFactory
+          file: ./abis/OffchainSecondariesPoolFactory.json
+        - name: OffchainSecondariesPool
+          file: ./abis/OffchainSecondariesPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewOffchainSecondaryPool          
+  {{/if}}
+  {{#if MarginTradingPoolFactory}}
+  - kind: ethereum/contract
+    name: MarginTradingPoolFactory
+    network: {{network}}
+    source:
+      address: '{{MarginTradingPoolFactory.address}}'
+      abi: MarginTradingPoolFactory
+      startBlock: {{MarginTradingPoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: MarginTradingPoolFactory
+          file: ./abis/MarginTradingPoolFactory.json
+        - name: MarginTradingPool
+          file: ./abis/MarginTradingPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewMarginPool          
+  {{/if}}
   {{#if StablePoolFactory}}
   - kind: ethereum/contract
     name: StablePoolFactory
@@ -1681,6 +1743,68 @@ templates:
           handler: handleTradeReport
         - event: OrderBook(address,address,address,uint256,uint256,uint256,bytes32)
           handler: handleOrderBook
+  - kind: ethereum/contract
+    name: OffchainSecondariesPool
+    network: {{network}}
+    source:
+      abi: OffchainSecondariesPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: OffchainSecondariesPool
+          file: ./abis/OffchainSecondariesPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: Offer(indexed address,uint256,address,address,address)
+          handler: handleOffchainSecondaryOffer
+        - event: TradeReport(indexed address,bytes32,address,address,bytes32,uint256,address,uint256,uint256)
+          handler: handleOffchainTradeReport
+        - event: OrderBook(address,address,address,uint256,uint256,uint256,bytes32)
+          handler: handleOffchainOrderBook
+  - kind: ethereum/contract
+    name: MarginTradingPool
+    network: {{network}}
+    source:
+      abi: MarginTradingPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: MarginTradingPool
+          file: ./abis/MarginTradingPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
+        - event: Offer(indexed address,bytes32,uint256,address,uint256,uint256,bytes32,address,address)
+          handler: handleMarginOffer
+        - event: TradeReport(indexed address,bytes32,address,address,bytes32,uint256,address,uint256,uint256)
+          handler: handleMarginTradeReport
+        - event: OrderBook(address,address,address,uint256,uint256,uint256,uint256,bytes32)
+          handler: handleMarginOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool
     network: {{network}}
