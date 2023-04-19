@@ -16,7 +16,7 @@ import {
 import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
 import { SecondaryIssuePool, Offer, TradeReport, OrderBook } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
 //import { MarginTradingPool, MarginOffer, MarginTradeReport, MarginOrderBook } from '../types/templates/MarginTradingPool/MarginTradingPool';
-//import { OffchainSecondariesPool, OffchainOffer, OffchainTradeReport, OffchainOrderBook } from '../types/templates/OffchainSecondariesPool/OffchainSecondariesPool';
+import { OffchainSecondariesPool } from '../types/templates/OffchainSecondariesPool/OffchainSecondariesPool';
 import {
   TokenRateCacheUpdated,
   TokenRateProviderSet,
@@ -424,7 +424,7 @@ export function handleTradeReport(event: TradeReport): void {
  *******OFFCHAIN SECONDARY***********
  ************************************/
 
- /*export function handleOffchainSecondaryOffer(event: Offer): void {
+ export function handleOffchainSecondaryOffer(event: Offer): void {
   let poolAddress = event.address;
 
   let poolContract = OffchainSecondariesPool.bind(poolAddress);
@@ -509,7 +509,7 @@ export function handleOffchainTradeReport(event: TradeReport): void {
     trades.save();
   }
   
-}*/
+}
 
 /************************************
  *************MARGIN POOL************
