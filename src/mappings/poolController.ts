@@ -15,7 +15,7 @@ import {
 } from '../types/templates/MetaStablePool/MetaStablePool';
 import { PrimaryIssuePool, OpenIssue, Subscription } from '../types/templates/PrimaryIssuePool/PrimaryIssuePool';
 import { SecondaryIssuePool, Offer, TradeReport, OrderBook } from '../types/templates/SecondaryIssuePool/SecondaryIssuePool';
-//import { MarginTradingPool, MarginOffer, MarginTradeReport, MarginOrderBook } from '../types/templates/MarginTradingPool/MarginTradingPool';
+import { MarginTradingPool, MarginOffer, MarginTradeReport, MarginOrderBook } from '../types/templates/MarginTradingPool/MarginTradingPool';
 import { OffchainSecondariesPool } from '../types/templates/OffchainSecondariesPool/OffchainSecondariesPool';
 import {
   TokenRateCacheUpdated,
@@ -515,7 +515,7 @@ export function handleOffchainTradeReport(event: TradeReport): void {
  *************MARGIN POOL************
  ************************************/
 
- /*export function handleMarginOffer(event: Offer): void {
+ export function handleMarginOffer(event: MarginOffer): void {
   let poolAddress = event.address;
 
   let poolContract = MarginTradingPool.bind(poolAddress);
@@ -529,7 +529,7 @@ export function handleOffchainTradeReport(event: TradeReport): void {
   pool.securityType = event.params.securityType;
   pool.margin = event.params.margin;
   pool.collateral = event.params.collateral;
-  pool.cficode = event.params.cficode;
+  pool.cficode = event.params.CfiCode;
   pool.orderBook = event.params.orderBook;
   pool.minOrderSize = event.params.minOrderSize;
   pool.issueManager = event.params.issueManager;
@@ -537,7 +537,7 @@ export function handleOffchainTradeReport(event: TradeReport): void {
   pool.save();
 }
 
-export function handleMarginOrderBook(event: OrderBook): void {
+export function handleMarginOrderBook(event: MarginOrderBook): void {
   let poolAddress = event.address;
 
   let poolContract = MarginTradingPool.bind(poolAddress);
@@ -572,7 +572,7 @@ export function handleMarginOrderBook(event: OrderBook): void {
   }
 }
 
-export function handleMarginTradeReport(event: TradeReport): void {
+export function handleMarginTradeReport(event: MarginTradeReport): void {
   let poolAddress = event.address;
 
   let poolContract = MarginTradingPool.bind(poolAddress);
@@ -606,7 +606,7 @@ export function handleMarginTradeReport(event: TradeReport): void {
     trades.save();
   }
   
-}*/
+}
 
 /************************************
  ******** PRICE RATE UPDATE *********

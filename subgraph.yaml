@@ -638,11 +638,11 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: Offer(indexed address,bytes32,uint256,address,uint256,uint256,bytes32,address,address)
+        - event: MarginOffer(indexed address,bytes32,uint256,address,uint256,uint256,bytes32,address,address)
           handler: handleMarginOffer
-        - event: TradeReport(indexed address,bytes32,address,address,bytes32,uint256,address,uint256,uint256)
+        - event: MarginTradeReport(indexed address,bytes32,address,address,bytes32,uint256,address,uint256,uint256)
           handler: handleMarginTradeReport
-        - event: OrderBook(address,address,address,uint256,uint256,uint256,uint256,bytes32)
+        - event: MarginOrderBook(address,address,address,uint256,uint256,uint256,uint256,bytes32)
           handler: handleMarginOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool

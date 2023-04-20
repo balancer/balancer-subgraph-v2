@@ -215,11 +215,11 @@ polygon:
     address: "0xe5459436AE26C4fDC77f51c459e9Aa08b5d32064"
     startBlock: 39620416
   OffchainSecondariesPoolFactory:
-    address: "0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852"
-    startBlock: 8853132
+    address: "0x392c44F0F49580163217a4c2E5B13AA68F9C4Ec5"
+    startBlock: 8858276
   MarginTradingPoolFactory:
-    address: "0x2E98aa5C69ef93dAc5305dFAd3dDFba5e29d8387"
-    startBlock: 8853121
+    address: "0x94cA92a85e6B90c210Cf71Ab39BD08e2902f7219"
+    startBlock: 8858632
 #  StablePoolFactory:
 #    address: "0xc66Ba2B6595D3613CCab350C886aCE23866EDe24"
 #    startBlock: 16138679
