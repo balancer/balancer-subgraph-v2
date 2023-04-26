@@ -1728,32 +1728,6 @@ templates:
         - event: UnpausedLocally()
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
-    name: GyroEV2Pool
-    network: {{network}}
-    source:
-      abi: GyroEV2Pool
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/poolController.ts
-      entities:
-        - Pool
-        - PoolShare
-        - Swap
-        - PoolToken
-        - GradualWeightUpdate
-      abis:
-        - name: GyroEV2Pool
-          file: ./abis/GyroEV2Pool.json
-        - name: WeightedPool
-          file: ./abis/WeightedPool.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-        - event: SwapFeePercentageChanged(uint256)
-          handler: handleSwapFeePercentageChange
-  - kind: ethereum/contract
     name: FXPool
     network: {{network}}
     source:
