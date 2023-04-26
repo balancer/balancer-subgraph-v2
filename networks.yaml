@@ -117,8 +117,8 @@ goerli:
     address: "0x4823be69546f9e1Ab8a87f315108c19dDC8E48b4"
     startBlock: 8586768
   SecondaryIssuePoolFactory:
-    address: "0x490684B006824bC57F307216ceE69051B7b3D859"
-    startBlock: 8852808
+    address: "0xa34629170524A60b3e83b06497BeBe4A8D1BECd6"
+    startBlock: 8891913
   OffchainSecondariesPoolFactory:
     address: "0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852"
     startBlock: 8853132
