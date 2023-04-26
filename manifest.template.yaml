@@ -1140,7 +1140,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      file: ./src/mappings/poolFactories/Gyro.ts
       entities:
         - Balancer
         - Pool
@@ -1171,7 +1171,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      file: ./src/mappings/poolFactories/Gyro.ts
       entities:
         - Balancer
         - Pool
@@ -1202,7 +1202,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      file: ./src/mappings/poolFactories/Gyro.ts
       entities:
         - Balancer
         - Pool
@@ -1233,7 +1233,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/poolFactory.ts
+      file: ./src/mappings/poolFactories/Gyro.ts
       entities:
         - Balancer
         - Pool
