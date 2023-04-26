@@ -191,11 +191,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Mar 21 - Block from ~8 pm UTC
-    # block: 40611103
+    # Apr 26 - block before the first relevant GyroEV2 pool was deployed
+    block: 41733857
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    # base: QmW2Q8vLCbVFJUjofrCJje9xeV8cRVmaqpLvuY1gFbKWTU
+    base: QmVeg4MUkXJv5FcpGTiFmhnxjjvdn6XDwWF9G7CxdUhiTx
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
