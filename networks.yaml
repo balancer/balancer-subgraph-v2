@@ -298,11 +298,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Mar 27 - Block of Weighted V4 factory
-    # block: 72222060
+    # Apr 26
+    block: 84333335
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    # base: QmQrxaoANeUAqPTo3t9yHyZE5aucks8gP6wEqMrjQ8vuqA
+    base: QmWfJF9MiBLmonWYyYfUoEJYqT6B6vGY1UXQrifvK4HAdu
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
