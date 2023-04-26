@@ -1221,6 +1221,37 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewGyroEPool
   {{/if}}
+  {{#if GyroEV2PoolFactory}}
+  - kind: ethereum/contract
+    name: GyroEV2PoolFactory
+    network: {{network}}
+    source:
+      address: '{{GyroEV2PoolFactory.address}}'
+      abi: GyroEV2PoolFactory
+      startBlock: {{GyroEV2PoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: GyroEV2Pool
+          file: ./abis/GyroEV2Pool.json
+        - name: GyroEV2PoolFactory
+          file: ./abis/GyroEV2PoolFactory.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewGyroEV2Pool
+  {{/if}}
   {{#if FXPoolFactory}}
   - kind: ethereum/contract
     name: FXPoolFactory
@@ -1696,6 +1727,32 @@ templates:
           handler: handlePauseGyroPool
         - event: UnpausedLocally()
           handler: handleUnpauseGyroPool
+  - kind: ethereum/contract
+    name: GyroEV2Pool
+    network: {{network}}
+    source:
+      abi: GyroEV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: GyroEV2Pool
+          file: ./abis/GyroEV2Pool.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapFeePercentageChanged(uint256)
+          handler: handleSwapFeePercentageChange
   - kind: ethereum/contract
     name: FXPool
     network: {{network}}
