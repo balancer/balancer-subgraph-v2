@@ -1,6 +1,8 @@
 specVersion: 0.0.2
 description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
 {{#if graft}}
+features:
+  - grafting
 graft:
   base: {{graft.base}}
   block: {{graft.block}}
