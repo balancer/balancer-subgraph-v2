@@ -1,6 +1,7 @@
 import { LogArgument } from '../types/EventEmitter/EventEmitter';
-import { Pool, Token } from '../types/schema';
+import { Balancer, Pool, Token } from '../types/schema';
 import { BigDecimal } from '@graphprotocol/graph-ts';
+import { ONE } from './helpers/constants';
 
 export function handleLogArgument(event: LogArgument): void {
   const identifier = event.params.identifier.toHexString();
@@ -13,6 +14,10 @@ export function handleLogArgument(event: LogArgument): void {
   // keccak256(setLatestUSDPrice) = 0x205869a4266a1bbcc5e2e5255221a32636b162e29887138cc0a8ba5141d05c62
   if (identifier == '0x205869a4266a1bbcc5e2e5255221a32636b162e29887138cc0a8ba5141d05c62') {
     setLatestUSDPrice(event);
+  }
+  // keccak256(setPricingAsset) = TBD
+  if (identifier == 'TBD') {
+    setPricingAsset(event);
   }
 }
 
@@ -49,4 +54,22 @@ function setLatestUSDPrice(event: LogArgument): void {
   const base = BigDecimal.fromString('100');
   token.latestUSDPrice = event.params.value.toBigDecimal().div(base);
   token.save();
+}
+
+function setPricingAsset(event: LogArgument): void {
+  /**
+   * Set given token as pricing and/or stable asset
+   *
+   * @param message - token address (eg. 0x12345abce... - all lowercase)
+   * @param value - 1 if token is usd stable asset; any other value will only set it as pricing asset
+   */ //
+  const vault = Balancer.load('2');
+  if (!vault) return;
+
+  const tokenAddress = event.params.message;
+  vault.pricingAssets = vault.pricingAssets.concat(tokenAddress);
+  if (event.params.value == ONE) {
+    vault.stableAssets = vault.stableAssets.concat(tokenAddress);
+  }
+  vault.save();
 }
