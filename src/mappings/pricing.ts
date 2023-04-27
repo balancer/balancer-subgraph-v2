@@ -1,13 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
-import {
-  ZERO_BD,
-  PRICING_ASSETS,
-  USD_STABLE_ASSETS,
-  ONE_BD,
-  ZERO_ADDRESS,
-  MIN_POOL_LIQUIDITY,
-} from './helpers/constants';
+import { ZERO_BD, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS, MIN_POOL_LIQUIDITY } from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, isLinearPool, PoolType } from './helpers/pools';
 import {
   bytesToAddress,
@@ -29,17 +22,23 @@ import {
 import { AnswerUpdated } from '../types/templates/OffchainAggregator/AccessControlledOffchainAggregator';
 
 export function isPricingAsset(asset: Address): boolean {
-  for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
-    if (PRICING_ASSETS[i] == asset) return true;
+  let vault = Balancer.load('2') as Balancer;
+
+  for (let i: i32 = 0; i < vault.pricingAssets.length; i++) {
+    if (vault.pricingAssets[i] == asset) return true;
   }
+
   return false;
 }
 
 export function getPreferentialPricingAsset(assets: Address[]): Address {
-  // Assumes PRICING_ASSETS are sorted by order of preference
-  for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
-    if (assets.includes(PRICING_ASSETS[i])) return PRICING_ASSETS[i];
+  let vault = Balancer.load('2') as Balancer;
+
+  // Assumes pricing assets are sorted by order of preference
+  for (let i: i32 = 0; i < vault.pricingAssets.length; i++) {
+    if (assets.includes(vault.pricingAssets[i])) return vault.pricingAssets[i];
   }
+
   return ZERO_ADDRESS;
 }
 
@@ -294,9 +293,12 @@ function getPoolHistoricalLiquidityId(poolId: string, tokenAddress: Address, blo
 }
 
 export function isUSDStable(asset: Address): boolean {
-  for (let i: i32 = 0; i < USD_STABLE_ASSETS.length; i++) {
-    if (USD_STABLE_ASSETS[i] == asset) return true;
+  let vault = Balancer.load('2') as Balancer;
+
+  for (let i: i32 = 0; i < vault.stableAssets.length; i++) {
+    if (vault.stableAssets[i] == asset) return true;
   }
+
   return false;
 }
 
