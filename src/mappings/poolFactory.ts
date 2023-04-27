@@ -1,4 +1,4 @@
-import { ZERO_BD, ZERO, FX_AGGREGATOR_ADDRESSES } from './helpers/constants';
+import { ZERO_BD, ZERO, FX_AGGREGATOR_ADDRESSES, PRICING_ASSETS, USD_STABLE_ASSETS } from './helpers/constants';
 import {
   getPoolTokenManager,
   getPoolTokens,
@@ -526,6 +526,9 @@ function findOrInitializeVault(): Balancer {
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
   vault.totalSwapCount = ZERO;
+  vault.pricingAssets = PRICING_ASSETS;
+  vault.stableAssets = USD_STABLE_ASSETS;
+
   return vault;
 }
 
