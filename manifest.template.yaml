@@ -1244,10 +1244,10 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: GyroEV2Pool
-          file: ./abis/GyroEV2Pool.json
-        - name: GyroEV2PoolFactory
-          file: ./abis/GyroEV2PoolFactory.json
+        - name: GyroEPool
+          file: ./abis/GyroEPool.json
+        - name: GyroEPoolFactory
+          file: ./abis/GyroEPoolFactory.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewGyroEV2Pool
