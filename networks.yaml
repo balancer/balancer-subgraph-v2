@@ -524,6 +524,9 @@ avalanche:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 26386141
+  ComposableStablePoolV4Factory:
+    address: "0x3B1eb8EB7b43882b385aB30533D9A2BeF9052a98"
+    startBlock: 29221425
   WeightedPoolV3Factory:
     address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
     startBlock: 26389236
