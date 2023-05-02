@@ -1235,7 +1235,7 @@ dataSources:
   {{/if}}
   {{#if YearnLinearPoolV2Factory}}
   - kind: ethereum/contract
-    name: YearnLinearPoolFactory
+    name: YearnLinearPoolV2Factory
     network: {{network}}
     source:
       address: '{{YearnLinearPoolV2Factory.address}}'
