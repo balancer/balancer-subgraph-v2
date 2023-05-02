@@ -289,9 +289,6 @@ polygon:
   ERC4626LinearPoolV4Factory:
     address: "0x5C5fCf8fBd4cd563cED27e7D066b88ee20E1867A"
     startBlock: 41502981
-  MidasLinearPoolFactory:
-    address: "0x6caf662b573F577DE01165d2d38D1910bba41F8A"
-    startBlock: 38828779 # TODO: update with real startBlock
   YearnLinearPoolFactory:
     address: "0x7396f99B48e7436b152427bfA3DD6Aa8C7C6d05B"
     startBlock: 39341056
