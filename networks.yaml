@@ -96,18 +96,18 @@ mainnet:
   GearboxLinearPoolFactory:
     address: "0x2EbE41E1aa44D61c206A94474932dADC7D3FD9E3"
     startBlock: 16637919
-  GearboxLinearPoolFactory:
-    address: ""
-    startBlock:
+  GearboxLinearPoolV2Factory:
+    address: "0x39A79EB449Fc05C92c39aA6f0e9BfaC03BE8dE5B"
+    startBlock: 17052583
   SiloLinearPoolFactory:
-    address: ""
-    startBlock: 
+    address: "0x4E11AEec21baF1660b1a46472963cB3DA7811C89"
+    startBlock: 17052627
   YearnLinearPoolFactory:
     address: "0x8b7854708c0C54f9D7d1FF351D4F84E6dE0E134C"
     startBlock: 16638024
   YearnLinearPoolV2Factory:
-    address: ""
-    startBlock: 
+    address: "0x5F5222Ffa40F2AEd6380D022184D6ea67C776eE0"
+    startBlock: 17052602
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
