@@ -572,6 +572,12 @@ avalanche:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
     startBlock: 26386552
+  AaveLinearPoolV5Factory:
+    address: "0x6caf662b573F577DE01165d2d38D1910bba41F8A"
+    startBlock: 29512658
+  ERC4626LinearPoolV4Factory:
+    address: "0x4507d91Cd2C0D51D9B4F30Bf0B93AFC938A70BA5"
+    startBlock: 29513456
 basegoerli:
   network: base-testnet
   Vault:
