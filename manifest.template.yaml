@@ -1,6 +1,8 @@
 specVersion: 0.0.2
 description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
 {{#if graft}}
+features:
+  - grafting
 graft:
   base: {{graft.base}}
   block: {{graft.block}}
@@ -1220,6 +1222,37 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewGyroEPool
+  {{/if}}
+  {{#if GyroEV2PoolFactory}}
+  - kind: ethereum/contract
+    name: GyroEV2PoolFactory
+    network: {{network}}
+    source:
+      address: '{{GyroEV2PoolFactory.address}}'
+      abi: GyroEV2PoolFactory
+      startBlock: {{GyroEV2PoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: GyroEPool
+          file: ./abis/GyroEPool.json
+        - name: GyroEV2PoolFactory
+          file: ./abis/GyroEV2PoolFactory.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewGyroEV2Pool
   {{/if}}
   {{#if FXPoolFactory}}
   - kind: ethereum/contract

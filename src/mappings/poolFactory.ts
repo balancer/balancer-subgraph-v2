@@ -416,7 +416,7 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
   Gyro3PoolTemplate.create(event.params.pool);
 }
 
-export function handleNewGyroEPool(event: PoolCreated): void {
+function createGyroEPool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
   let poolContract = GyroEPool.bind(poolAddress);
 
@@ -429,6 +429,7 @@ export function handleNewGyroEPool(event: PoolCreated): void {
   let pool = handleNewPool(event, poolId, swapFee);
 
   pool.poolType = PoolType.GyroE;
+  pool.poolTypeVersion = poolTypeVersion;
   let eParamsCall = poolContract.try_getECLPParams();
 
   if (!eParamsCall.reverted) {
@@ -463,6 +464,14 @@ export function handleNewGyroEPool(event: PoolCreated): void {
   GyroEPoolTemplate.create(event.params.pool);
 }
 
+export function handleNewGyroEPool(event: PoolCreated): void {
+  createGyroEPool(event);
+}
+
+export function handleNewGyroEV2Pool(event: PoolCreated): void {
+  createGyroEPool(event, 2);
+}
+
 export function handleNewFXPool(event: ethereum.Event): void {
   /**
    * FXPoolFactory emits a custom NewFXPool event with the following params:
@@ -482,7 +491,8 @@ export function handleNewFXPool(event: ethereum.Event): void {
     event.logType,
     event.block,
     event.transaction,
-    [event.parameters[2]] // PoolCreated expects parameters[0] to be the pool address
+    [event.parameters[2]], // PoolCreated expects parameters[0] to be the pool address
+    event.receipt
   );
 
   let pool = handleNewPool(poolCreatedEvent, poolId, swapFee);

@@ -13,7 +13,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: Install
         run: yarn --frozen-lockfile
       - name: Assets
@@ -38,7 +38,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: Install
         run: yarn --frozen-lockfile
       - name: Assets

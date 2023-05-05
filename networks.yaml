@@ -191,11 +191,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Mar 30
-    block: 40931242
+    # Apr 26 - block before the first relevant GyroEV2 pool was deployed
+    block: 41733857
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmZGXcx1Vn4ZhnhSeg3MxT7sTST1y1aeD1WYcqKU61EftL
+    base: QmVeg4MUkXJv5FcpGTiFmhnxjjvdn6XDwWF9G7CxdUhiTx
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -286,6 +286,9 @@ polygon:
   GyroEPoolFactory:
     address: "0xD4204551BC5397455f8897745d50Ac4F6beE0EF6"
     startBlock: 35414865
+  GyroEV2PoolFactory:
+    address: "0x1a79A24Db0F73e9087205287761fC9C5C305926b"
+    startBlock: 41209677
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054793
@@ -295,11 +298,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Mar 30
-    block: 75183422
+    # Apr 26
+    block: 84333335
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmWuND9LUmmeUyvWFBSGXH1NZvHYzsqKgCZU2qFsj8J9oJ
+    base: QmWfJF9MiBLmonWYyYfUoEJYqT6B6vGY1UXQrifvK4HAdu
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -521,6 +524,9 @@ avalanche:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 26386141
+  ComposableStablePoolV4Factory:
+    address: "0x3B1eb8EB7b43882b385aB30533D9A2BeF9052a98"
+    startBlock: 29221425
   WeightedPoolV3Factory:
     address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
     startBlock: 26389236
