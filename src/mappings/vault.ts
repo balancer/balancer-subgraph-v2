@@ -1,4 +1,4 @@
-import { BigInt, BigDecimal, Address, log } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, Address, log, ethereum } from '@graphprotocol/graph-ts';
 import {
   Swap as SwapEvent,
   PoolBalanceChanged,
@@ -30,6 +30,7 @@ import {
   getTradePairSnapshot,
   getTradePair,
   getBalancerSnapshot,
+  bytesToAddress,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import {
@@ -47,6 +48,7 @@ import {
   MIN_SWAP_VALUE_USD,
   SWAP_IN,
   SWAP_OUT,
+  VAULT_ADDRESS,
   ZERO,
   ZERO_ADDRESS,
   ZERO_BD,
@@ -62,6 +64,8 @@ import {
 } from './helpers/pools';
 import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
 import { USDC_ADDRESS } from './helpers/assets';
+import { handleTransfer } from './poolController';
+import { Transfer } from '../types/Vault/ERC20';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -200,13 +204,34 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
   // and therefore must be subtracted from totalShares
   if (pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool)) {
-    let preMintedBpt = ZERO_BD;
+    let preMintedBpt = ZERO;
+    let scaledPreMintedBpt = ZERO_BD;
     for (let i: i32 = 0; i < tokenAddresses.length; i++) {
       if (tokenAddresses[i] == pool.address) {
-        preMintedBpt = scaleDown(amounts[i], 18);
+        preMintedBpt = amounts[i];
+        scaledPreMintedBpt = scaleDown(preMintedBpt, 18);
       }
     }
-    pool.totalShares = pool.totalShares.minus(preMintedBpt);
+    pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
+    // This amount will also be transferred to the vault,
+    // causing the vault's 'user shares' to incorrectly increase,
+    // so we need to negate it. We do so by processing a mock transfer event
+    // from the vault to the zero address
+    const mockEvent = new Transfer(
+      bytesToAddress(pool.address),
+      event.logIndex,
+      event.transactionLogIndex,
+      event.logType,
+      event.block,
+      event.transaction,
+      [
+        new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
+        new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
+        new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt)),
+      ],
+      event.receipt
+    );
+    handleTransfer(mockEvent);
     pool.save();
   }
 
