@@ -1,4 +1,4 @@
-import { BigInt, BigDecimal, Address, log } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, Address, log, ethereum } from '@graphprotocol/graph-ts';
 import {
   Swap as SwapEvent,
   PoolBalanceChanged,
@@ -87,8 +87,9 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
     userBalance.balance = ZERO_BD;
   }
 
-  let transferAmount = tokenToDecimal(event.params.delta, getTokenDecimals(token));
-  userBalance.balance = userBalance.balance.plus(transferAmount);
+  let transferAmount = event.params.delta;
+  let scaledTransferAmount = tokenToDecimal(transferAmount, getTokenDecimals(token));
+  userBalance.balance = userBalance.balance.plus(scaledTransferAmount);
 
   userBalance.save();
 
@@ -98,7 +99,7 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
   let mockFrom = VAULT_ADDRESS;
   let mockTo = event.params.user;
   let mockAmount = transferAmount;
-  if (transferAmount.lt(ZERO_BD)) {
+  if (transferAmount.lt(ZERO)) {
     mockFrom = event.params.user;
     mockTo = VAULT_ADDRESS;
     mockAmount = transferAmount.neg();
@@ -111,10 +112,10 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
     event.block,
     event.transaction,
     [
-      mockFrom,
-      mockTo,
-      mockAmount
-    ]
+      new ethereum.EventParam('from', ethereum.Value.fromAddress(mockFrom)),
+      new ethereum.EventParam('to', ethereum.Value.fromAddress(mockTo)),
+      new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(mockAmount)),
+    ],
     event.receipt
   );
   handleTransfer(mockEvent);
