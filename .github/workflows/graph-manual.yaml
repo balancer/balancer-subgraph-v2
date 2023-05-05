@@ -12,6 +12,7 @@ on:
           - mainnet
           - arbitrum
           - polygon
+          - goerli
 
 jobs:
   deploy:
