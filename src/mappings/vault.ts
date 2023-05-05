@@ -1,4 +1,4 @@
-import { BigInt, BigDecimal, Address, log } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, Address, log, ethereum } from '@graphprotocol/graph-ts';
 import {
   Swap as SwapEvent,
   PoolBalanceChanged,
@@ -204,13 +204,15 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
   // and therefore must be subtracted from totalShares
   if (pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool)) {
-    let preMintedBpt = ZERO_BD;
+    let preMintedBpt = ZERO;
+    let scaledPreMintedBpt = ZERO_BD;
     for (let i: i32 = 0; i < tokenAddresses.length; i++) {
       if (tokenAddresses[i] == pool.address) {
-        preMintedBpt = scaleDown(amounts[i], 18);
+        preMintedBpt = amounts[i];
+        scaledPreMintedBpt = scaleDown(preMintedBpt, 18);
       }
     }
-    pool.totalShares = pool.totalShares.minus(preMintedBpt);
+    pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
     // This amount will also be transferred to the vault, 
     // causing the vault's 'user shares' to incorrectly increase,
     // so we need to negate it. We do so by processing a mock transfer event
@@ -223,10 +225,10 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       event.block,
       event.transaction,
       [
-        VAULT_ADDRESS,
-        ZERO_ADDRESS,
-        amounts[i]
-      ]
+        new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
+        new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
+        new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt))
+      ],
       event.receipt
     );
     handleTransfer(mockEvent);

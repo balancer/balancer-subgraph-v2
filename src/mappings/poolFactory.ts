@@ -358,7 +358,8 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   // causing the vault's 'user shares' to incorrectly increase,
   // so we need to negate it. We do so by processing a mock transfer event
   // from the vault to the zero address
-  const mockEvent = new Transfer(
+  
+  let mockEvent = new Transfer(
     bytesToAddress(pool.address),
     event.logIndex,
     event.transactionLogIndex,
@@ -366,10 +367,10 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
     event.block,
     event.transaction,
     [
-      VAULT_ADDRESS,
-      ZERO_ADDRESS,
-      preMintedBpt
-    ]
+      new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
+      new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
+      new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt))
+    ],
     event.receipt
   );
   handleTransfer(mockEvent);
