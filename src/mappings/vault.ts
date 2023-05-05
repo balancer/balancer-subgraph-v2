@@ -14,6 +14,7 @@ import {
   UserInternalBalance,
   ManagementOperation,
   Token,
+  PoolContract,
 } from '../types/schema';
 import {
   tokenToDecimal,
@@ -47,6 +48,7 @@ import {
   MIN_SWAP_VALUE_USD,
   SWAP_IN,
   SWAP_OUT,
+  VAULT_ADDRESS,
   ZERO,
   ZERO_ADDRESS,
   ZERO_BD,
@@ -62,6 +64,8 @@ import {
 } from './helpers/pools';
 import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
 import { USDC_ADDRESS } from './helpers/assets';
+import { Transfer } from '../types/Vault/ERC20';
+import { handleTransfer } from './poolController';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -87,6 +91,33 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
   userBalance.balance = userBalance.balance.plus(transferAmount);
 
   userBalance.save();
+
+  // if the token is a pool's BPT, update the user's total shares
+  let poolContract = PoolContract.load(token.toHexString());
+  if (poolContract == null) return;
+  let mockFrom = VAULT_ADDRESS;
+  let mockTo = event.params.user;
+  let mockAmount = transferAmount;
+  if (transferAmount.lt(ZERO_BD)) {
+    mockFrom = event.params.user;
+    mockTo = VAULT_ADDRESS;
+    mockAmount = transferAmount.neg();
+  }
+  const mockEvent = new Transfer(
+    token,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [
+      mockFrom,
+      mockTo,
+      mockAmount
+    ]
+    event.receipt
+  );
+  handleTransfer(mockEvent);
 }
 
 /************************************
