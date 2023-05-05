@@ -1643,8 +1643,6 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: TargetsSet(indexed address,uint256,uint256)
           handler: handleTargetsSet
-        - event: RecoveryModeStateChanged(bool)
-          handler: handleRecoveryModeStateChanged
         - event: PausedStateChanged(bool)
           handler: handlePausedStateChanged
   - kind: ethereum/contract
