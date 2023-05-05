@@ -213,7 +213,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       }
     }
     pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
-    // This amount will also be transferred to the vault, 
+    // This amount will also be transferred to the vault,
     // causing the vault's 'user shares' to incorrectly increase,
     // so we need to negate it. We do so by processing a mock transfer event
     // from the vault to the zero address
@@ -227,7 +227,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       [
         new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
         new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
-        new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt))
+        new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt)),
       ],
       event.receipt
     );

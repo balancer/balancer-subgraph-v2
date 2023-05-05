@@ -18,7 +18,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
@@ -354,11 +354,11 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   let preMintedBpt = BigInt.fromString('5192296858534827628530496329220095');
   let scaledPreMintedBpt = scaleDown(preMintedBpt, 18);
   pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
-  // This amount will also be transferred to the vault, 
+  // This amount will also be transferred to the vault,
   // causing the vault's 'user shares' to incorrectly increase,
   // so we need to negate it. We do so by processing a mock transfer event
   // from the vault to the zero address
-  
+
   let mockEvent = new Transfer(
     bytesToAddress(pool.address),
     event.logIndex,
@@ -369,7 +369,7 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
     [
       new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
       new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
-      new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt))
+      new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt)),
     ],
     event.receipt
   );
