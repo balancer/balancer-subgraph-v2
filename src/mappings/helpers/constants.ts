@@ -34,54 +34,26 @@ export let USD_STABLE_ASSETS = assets.stableAssets;
 export let PRICING_ASSETS = assets.stableAssets.concat(assets.pricingAssets);
 
 class AddressByNetwork {
-  public mainnet: string;
-  public goerli: string;
-  public polygon: string;
-  public arbitrum: string;
-  public optimism: string;
-  public avalanche: string;
-  public sepolia: string;
-  public gnosis: string;
-  public bnb: string;
-  public dev: string;
+  public default: string;
+  public custom: string;
 }
 
 let network: string = dataSource.network();
 
+// this list should be updated only if vault is deployed on a new chain
+// with an address different than the standard vanity address
+// in that case, AddressByNetwork and forNetwork must be updated accordingly
+// with a new entry for the new network - folowwing subgraph slugs
 let vaultAddressByNetwork: AddressByNetwork = {
-  mainnet: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  goerli: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  polygon: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  arbitrum: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  optimism: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  avalanche: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  sepolia: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  gnosis: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  bnb: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-  dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
+  default: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  custom: '0x0000000000000000000000000000000000000000',
 };
 
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
-  if (network == 'mainnet') {
-    return Address.fromString(addressByNetwork.mainnet);
-  } else if (network == 'goerli') {
-    return Address.fromString(addressByNetwork.goerli);
-  } else if (network == 'matic') {
-    return Address.fromString(addressByNetwork.polygon);
-  } else if (network == 'arbitrum-one') {
-    return Address.fromString(addressByNetwork.arbitrum);
-  } else if (network == 'optimism') {
-    return Address.fromString(addressByNetwork.optimism);
-  } else if (network == 'avalanche') {
-    return Address.fromString(addressByNetwork.avalanche);
-  } else if (network == 'sepolia') {
-    return Address.fromString(addressByNetwork.sepolia);
-  } else if (network == 'gnosis') {
-    return Address.fromString(addressByNetwork.gnosis);
-  } else if (network == 'bsc') {
-    return Address.fromString(addressByNetwork.bnb);
+  if (network == 'custom') {
+    return Address.fromString(addressByNetwork.custom);
   } else {
-    return Address.fromString(addressByNetwork.dev);
+    return Address.fromString(addressByNetwork.default);
   }
 }
 
