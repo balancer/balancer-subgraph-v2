@@ -75,9 +75,9 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
   } else if (network == 'avalanche') {
     return Address.fromString(addressByNetwork.avalanche);
   } else if (network == 'sepolia') {
-    return Address.fromString(addressByNetwork.bnb);
+    return Address.fromString(addressByNetwork.sepolia);
   } else if (network == 'gnosis') {
-    return Address.fromString(addressByNetwork.bnb);
+    return Address.fromString(addressByNetwork.gnosis);
   } else if (network == 'bsc') {
     return Address.fromString(addressByNetwork.bnb);
   } else {
