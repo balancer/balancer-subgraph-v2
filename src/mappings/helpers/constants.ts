@@ -40,6 +40,7 @@ class AddressByNetwork {
   public arbitrum: string;
   public optimism: string;
   public avalanche: string;
+  public sepolia: string;
   public gnosis: string;
   public bnb: string;
   public dev: string;
@@ -54,6 +55,7 @@ let vaultAddressByNetwork: AddressByNetwork = {
   arbitrum: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   optimism: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   avalanche: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  sepolia: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   gnosis: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   bnb: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   dev: '0xa0B05b20e511B1612E908dFCeE0E407E22B76028',
@@ -72,6 +74,8 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
     return Address.fromString(addressByNetwork.optimism);
   } else if (network == 'avalanche') {
     return Address.fromString(addressByNetwork.avalanche);
+  } else if (network == 'sepolia') {
+    return Address.fromString(addressByNetwork.bnb);
   } else if (network == 'gnosis') {
     return Address.fromString(addressByNetwork.bnb);
   } else if (network == 'bsc') {
