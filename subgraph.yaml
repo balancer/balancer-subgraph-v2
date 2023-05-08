@@ -6,32 +6,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: EventEmitter
-    network: goerli
-    source:
-      address: '0x4bcFCEDF1114030ff85a647dD436B7b3dEb45d9E'
-      abi: EventEmitter
-      startBlock: 8305794
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/eventEmitter.ts
-      entities:
-        - Pool
-      abis:
-        - name: EventEmitter
-          file: ./abis/EventEmitter.json
-      eventHandlers:
-        - event: LogArgument(indexed address,indexed bytes32,bytes,uint256)
-          handler: handleLogArgument
-  - kind: ethereum/contract
     name: Vault
-    network: goerli
+    network: gnosis
     source:
       address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
-      startBlock: 4648099
+      startBlock: 24821598
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -72,11 +52,11 @@ dataSources:
           handler: handleInternalBalanceChange
   - kind: ethereum/contract
     name: PrimaryIssuePoolFactory
-    network: goerli
+    network: gnosis
     source:
-      address: '0x4823be69546f9e1Ab8a87f315108c19dDC8E48b4'
+      address: '0xe5459436AE26C4fDC77f51c459e9Aa08b5d32064'
       abi: PrimaryIssuePoolFactory
-      startBlock: 8586768
+      startBlock: 27841697
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -101,11 +81,11 @@ dataSources:
           handler: handleNewPrimaryPool
   - kind: ethereum/contract
     name: SecondaryIssuePoolFactory
-    network: goerli
+    network: gnosis
     source:
-      address: '0xa34629170524A60b3e83b06497BeBe4A8D1BECd6'
+      address: '0xB1ae3Fc5B16d3736bf0db20606fB9a10b435392c'
       abi: SecondaryIssuePoolFactory
-      startBlock: 8891913
+      startBlock: 27841770
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -130,11 +110,11 @@ dataSources:
           handler: handleNewSecondaryPool          
   - kind: ethereum/contract
     name: OffchainSecondariesPoolFactory
-    network: goerli
+    network: gnosis
     source:
-      address: '0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852'
+      address: '0x678779cf93Fd8DD07A061477304ddbE4F607e8e7'
       abi: OffchainSecondariesPoolFactory
-      startBlock: 8853132
+      startBlock: 27841844
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -159,11 +139,11 @@ dataSources:
           handler: handleNewOffchainSecondaryPool          
   - kind: ethereum/contract
     name: MarginTradingPoolFactory
-    network: goerli
+    network: gnosis
     source:
-      address: '0x2E98aa5C69ef93dAc5305dFAd3dDFba5e29d8387'
+      address: '0xa59606ADBB5cD6009a00c47cc844fA4683819017'
       abi: MarginTradingPoolFactory
-      startBlock: 8853121
+      startBlock: 27841867
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -189,7 +169,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: WeightedPool
-    network: goerli
+    network: gnosis
     source:
       abi: WeightedPool
     mapping:
@@ -214,7 +194,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPoolV2
-    network: goerli
+    network: gnosis
     source:
       abi: WeightedPoolV2
     mapping:
@@ -243,7 +223,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPool2Tokens
-    network: goerli
+    network: gnosis
     source:
       abi: WeightedPool2Tokens
     mapping:
@@ -270,7 +250,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
-    network: goerli
+    network: gnosis
     source:
       abi: StablePool
     mapping:
@@ -299,7 +279,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
-    network: goerli
+    network: gnosis
     source:
       abi: MetaStablePool
     mapping:
@@ -337,7 +317,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
-    network: goerli
+    network: gnosis
     source:
       abi: ConvergentCurvePool
     mapping:
@@ -358,7 +338,7 @@ templates:
           handler: handleTransfer
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
-    network: goerli
+    network: gnosis
     source:
       abi: LiquidityBootstrappingPool
     mapping:
@@ -388,7 +368,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
-    network: goerli
+    network: gnosis
     source:
       abi: InvestmentPool
     mapping:
@@ -420,7 +400,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPool
-    network: goerli
+    network: gnosis
     source:
       abi: StablePhantomPool
     mapping:
@@ -456,7 +436,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPoolV2
-    network: goerli
+    network: gnosis
     source:
       abi: ComposableStablePool
     mapping:
@@ -496,7 +476,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: LinearPool
-    network: goerli
+    network: gnosis
     source:
       abi: LinearPool
     mapping:
@@ -524,7 +504,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: PrimaryIssuePool
-    network: goerli
+    network: gnosis
     source:
       abi: PrimaryIssuePool
     mapping:
@@ -553,7 +533,7 @@ templates:
           handler: handleSubscription
   - kind: ethereum/contract
     name: SecondaryIssuePool
-    network: goerli
+    network: gnosis
     source:
       abi: SecondaryIssuePool
     mapping:
@@ -584,7 +564,7 @@ templates:
           handler: handleOrderBook
   - kind: ethereum/contract
     name: OffchainSecondariesPool
-    network: goerli
+    network: gnosis
     source:
       abi: OffchainSecondariesPool
     mapping:
@@ -615,7 +595,7 @@ templates:
           handler: handleOffchainOrderBook
   - kind: ethereum/contract
     name: MarginTradingPool
-    network: goerli
+    network: gnosis
     source:
       abi: MarginTradingPool
     mapping:
@@ -646,7 +626,7 @@ templates:
           handler: handleMarginOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool
-    network: goerli
+    network: gnosis
     source:
       abi: Gyro2Pool
     mapping:
@@ -674,7 +654,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: Gyro3Pool
-    network: goerli
+    network: gnosis
     source:
       abi: Gyro3Pool
     mapping:
@@ -702,7 +682,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: GyroEPool
-    network: goerli
+    network: gnosis
     source:
       abi: GyroEPool
     mapping:
@@ -730,7 +710,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: FXPool
-    network: goerli
+    network: gnosis
     source:
       abi: FXPool
     mapping:
@@ -754,7 +734,7 @@ templates:
           handler: handleParametersSet
   - kind: ethereum/contract
     name: OffchainAggregator
-    network: goerli
+    network: gnosis
     source:
       abi: AccessControlledOffchainAggregator
     mapping:

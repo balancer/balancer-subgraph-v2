@@ -117,8 +117,8 @@ goerli:
     address: "0x4823be69546f9e1Ab8a87f315108c19dDC8E48b4"
     startBlock: 8586768
   SecondaryIssuePoolFactory:
-    address: "0xa34629170524A60b3e83b06497BeBe4A8D1BECd6"
-    startBlock: 8891913
+    address: "0xA7806F0c9b2e7A0aD54651972d78654A546d7e10"
+    startBlock: 8903267
   OffchainSecondariesPoolFactory:
     address: "0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852"
     startBlock: 8853132
@@ -378,8 +378,8 @@ polygon:
 #bnb:
 #  network: bsc
 #  Vault:
-#    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-#    startBlock: 22895868
+#      address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+#      startBlock: 22895868
 #  WeightedPoolV2Factory:
 #    address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
 #    startBlock: 22895868
@@ -401,11 +401,23 @@ polygon:
 #  AaveLinearPoolV4Factory:
 #    address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
 #    startBlock: 25552340
-#gnosis:
-#  network: gnosis
-#  Vault:
-#    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
-#    startBlock: 24821598
+#  PrimaryIssuePoolFactory:
+#    address: "0xDA13BC71FEe08FfD523f10458B0e2c2D8427BBD5"
+#    startBlock: 39620319
+#  SecondaryIssuePoolFactory:
+#    address: "0xe5459436AE26C4fDC77f51c459e9Aa08b5d32064"
+#    startBlock: 39620416
+#  OffchainSecondariesPoolFactory:
+#    address: "0x392c44F0F49580163217a4c2E5B13AA68F9C4Ec5"
+#    startBlock: 8858276
+#  MarginTradingPoolFactory:
+#    address: "0x94cA92a85e6B90c210Cf71Ab39BD08e2902f7219"
+#    startBlock: 8858632
+gnosis:
+  network: gnosis
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 24821598
 #  WeightedPoolV2Factory:
 #    address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
 #    startBlock: 25414470
@@ -433,3 +445,15 @@ polygon:
 #  TempLiquidityBootstrappingPoolFactory:
 #    address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
 #    startBlock: 25415236
+  PrimaryIssuePoolFactory:
+    address: "0xe5459436AE26C4fDC77f51c459e9Aa08b5d32064"
+    startBlock: 27841697
+  SecondaryIssuePoolFactory:
+    address: "0xB1ae3Fc5B16d3736bf0db20606fB9a10b435392c"
+    startBlock: 27841770
+  OffchainSecondariesPoolFactory:
+    address: "0x678779cf93Fd8DD07A061477304ddbE4F607e8e7"
+    startBlock: 27841844
+  MarginTradingPoolFactory:
+    address: "0xa59606ADBB5cD6009a00c47cc844fA4683819017"
+    startBlock: 27841867
