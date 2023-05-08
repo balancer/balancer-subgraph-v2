@@ -448,7 +448,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   // We need to update the pool's totalShares and add/subtract from the vault's share of that pool, to negate the corresponding transfer event of the BPT
   if (hasVirtualSupply(pool)) {
     if (event.params.tokenIn == pool.address) {
-      const scaledAmount = tokenToDecimal(event.params.amountIn, 18)
+      const scaledAmount = tokenToDecimal(event.params.amountIn, 18);
       pool.totalShares = pool.totalShares.minus(scaledAmount);
       let vaultPoolShare = getPoolShare(poolId.toHexString(), VAULT_ADDRESS);
       let vaultPoolShareBalance = vaultPoolShare == null ? ZERO_BD : vaultPoolShare.balance;
@@ -457,7 +457,7 @@ export function handleSwapEvent(event: SwapEvent): void {
       vaultPoolShare.save();
     }
     if (event.params.tokenOut == pool.address) {
-      const scaledAmount = tokenToDecimal(event.params.amountOut, 18)
+      const scaledAmount = tokenToDecimal(event.params.amountOut, 18);
       pool.totalShares = pool.totalShares.plus(scaledAmount);
       let vaultPoolShare = getPoolShare(poolId.toHexString(), VAULT_ADDRESS);
       let vaultPoolShareBalance = vaultPoolShare == null ? ZERO_BD : vaultPoolShare.balance;
