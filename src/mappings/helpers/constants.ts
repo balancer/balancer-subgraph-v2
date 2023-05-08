@@ -34,7 +34,7 @@ export let USD_STABLE_ASSETS = assets.stableAssets;
 export let PRICING_ASSETS = assets.stableAssets.concat(assets.pricingAssets);
 
 class AddressByNetwork {
-  public default: string;
+  public canonical: string;
   public custom: string;
 }
 
@@ -45,7 +45,7 @@ let network: string = dataSource.network();
 // in that case, AddressByNetwork and forNetwork must be updated accordingly
 // with a new entry for the new network - folowwing subgraph slugs
 let vaultAddressByNetwork: AddressByNetwork = {
-  default: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  canonical: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   custom: '0x0000000000000000000000000000000000000000',
 };
 
@@ -53,7 +53,7 @@ function forNetwork(addressByNetwork: AddressByNetwork, network: string): Addres
   if (network == 'custom') {
     return Address.fromString(addressByNetwork.custom);
   } else {
-    return Address.fromString(addressByNetwork.default);
+    return Address.fromString(addressByNetwork.canonical);
   }
 }
 
