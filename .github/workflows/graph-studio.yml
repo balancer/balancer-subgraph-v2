@@ -55,7 +55,7 @@ jobs:
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.basegoerli.yaml"
           graph_deploy_studio: true
-  deploy-sepolia:
+  deploy-studio-sepolia:
     runs-on: ubuntu-latest
     environment: graph
     steps:
