@@ -314,6 +314,10 @@ export function handleNewSiloLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.SiloLinear, 1);
 }
 
+export function handleNewSiloLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.SiloLinear, 2);
+}
+
 export function handleNewYearnLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.YearnLinear, 1);
 }
@@ -516,7 +520,7 @@ export function handleNewFXPool(event: ethereum.Event): void {
   FXPoolTemplate.create(poolAddress);
 
   // Create templates for every Offchain Aggregator
-  for (let i: i32 = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
+  for (let i: i32 = 0;i < FX_AGGREGATOR_ADDRESSES.length;i++) {
     OffchainAggregator.create(FX_AGGREGATOR_ADDRESSES[i]);
   }
 }
@@ -586,7 +590,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
 function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   let tokensAddresses = changetype<Address[]>(tokens);
 
-  for (let i: i32 = 0; i < tokens.length; i++) {
+  for (let i: i32 = 0;i < tokens.length;i++) {
     let poolId = stringToBytes(pool.id);
     let assetManager = getPoolTokenManager(poolId, tokens[i]);
 

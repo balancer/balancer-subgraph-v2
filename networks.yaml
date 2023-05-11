@@ -100,6 +100,9 @@ mainnet:
     address: "0x39A79EB449Fc05C92c39aA6f0e9BfaC03BE8dE5B"
     startBlock: 17052583
   SiloLinearPoolFactory:
+    address: "0xfd1c0e6f02f71842b6ffF7CdC7A017eE1Fd3CdAC"
+    startBlock: 16869467
+  SiloLinearPoolV2Factory:
     address: "0x4E11AEec21baF1660b1a46472963cB3DA7811C89"
     startBlock: 17052627
   YearnLinearPoolFactory:

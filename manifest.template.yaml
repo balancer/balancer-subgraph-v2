@@ -1198,6 +1198,41 @@ dataSources:
         - event: SiloLinearPoolCreated(indexed address,indexed uint256)
           handler: handleLinearPoolProtocolId
   {{/if}}
+  {{#if SiloLinearPoolV2Factory}}
+  - kind: ethereum/contract
+    name: SiloLinearPoolV2Factory
+    network: {{network}}
+    source:
+      address: '{{SiloLinearPoolV2Factory.address}}'
+      abi: SiloLinearPoolV2Factory
+      startBlock: {{SiloLinearPoolV2Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: SiloLinearPoolV2Factory
+          file: ./abis/SiloLinearPoolV2Factory.json
+        - name: LinearPool
+          file: ./abis/LinearPool.json
+        - name: SiloLinearPool
+          file: ./abis/SiloLinearPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewSiloLinearPoolV2
+        - event: SiloLinearPoolCreated(indexed address,indexed uint256)
+          handler: handleLinearPoolProtocolId
+  {{/if}}
   {{#if YearnLinearPoolFactory}}
   - kind: ethereum/contract
     name: YearnLinearPoolFactory
