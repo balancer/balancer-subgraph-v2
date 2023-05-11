@@ -21,6 +21,10 @@
     {
       "address": "0xb19382073c7A0aDdbb56Ac6AF1808Fa49e377B75",
       "symbol": "BAL"
+    },
+    {
+      "address": "0x650c15c9cfc6063e5046813f079774f56946df21",
+      "symbol": "B-80BAL-20WETH"
     }
   ]
 }
