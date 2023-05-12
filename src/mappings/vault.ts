@@ -98,7 +98,7 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
   userBalance.save();
 
   // if the token is a pool's BPT, update the user's total shares
-  let poolContract = PoolContract.load(token.toHexString());
+  let poolContract = PoolContract.load(tokenAddress.toHexString());
   if (poolContract == null) return;
   let mockFrom = VAULT_ADDRESS;
   let mockTo = event.params.user;
@@ -109,7 +109,7 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
     mockAmount = transferAmount.neg();
   }
   const mockEvent = new Transfer(
-    token,
+    tokenAddress,
     event.logIndex,
     event.transactionLogIndex,
     event.logType,
