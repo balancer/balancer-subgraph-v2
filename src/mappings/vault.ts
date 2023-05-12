@@ -77,26 +77,28 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
   createUserEntity(event.params.user);
 
   let userAddress = event.params.user.toHexString();
-  let token = event.params.token;
-  let balanceId = userAddress.concat(token.toHexString());
+  const tokenAddress = event.params.token;
+  const token = getToken(tokenAddress);
+  let balanceId = userAddress.concat(token.id);
 
   let userBalance = UserInternalBalance.load(balanceId);
   if (userBalance == null) {
     userBalance = new UserInternalBalance(balanceId);
 
     userBalance.userAddress = userAddress;
-    userBalance.token = token;
+    userBalance.tokenInfo = token.id;
+    userBalance.token = tokenAddress;
     userBalance.balance = ZERO_BD;
   }
 
   let transferAmount = event.params.delta;
-  let scaledTransferAmount = tokenToDecimal(transferAmount, getTokenDecimals(token));
+  let scaledTransferAmount = tokenToDecimal(transferAmount, getTokenDecimals(tokenAddress));
   userBalance.balance = userBalance.balance.plus(scaledTransferAmount);
 
   userBalance.save();
 
   // if the token is a pool's BPT, update the user's total shares
-  let poolContract = PoolContract.load(token.toHexString());
+  let poolContract = PoolContract.load(tokenAddress.toHexString());
   if (poolContract == null) return;
   let mockFrom = VAULT_ADDRESS;
   let mockTo = event.params.user;
@@ -107,7 +109,7 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
     mockAmount = transferAmount.neg();
   }
   const mockEvent = new Transfer(
-    token,
+    tokenAddress,
     event.logIndex,
     event.transactionLogIndex,
     event.logType,
