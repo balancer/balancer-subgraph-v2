@@ -172,7 +172,7 @@ type UserInternalBalance @entity {
   id: ID!
   userAddress: User
   token: Bytes!
-  tokenInfo: Token!
+  tokenInfo: Token
   balance: BigDecimal!
 }
 
