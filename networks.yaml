@@ -547,3 +547,35 @@ basegoerli:
   TempLiquidityBootstrappingPoolFactory:
     address: "0xE8c7cE6Ee9Fc75196bC5317883bD73A0F4ac7Bc0"
     startBlock: 2206960
+sepolia:
+  network: sepolia
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 3418831
+  WeightedPoolV4Factory:
+    address: "0x7920BFa1b2041911b354747CA7A6cDD2dfC50Cfd"
+    startBlock: 3424893
+  ComposableStablePoolV4Factory:
+    address: "0xA3fd20E29358c056B727657E83DFd139abBC9924"
+    startBlock: 3425277
+  AaveLinearPoolV5Factory:
+    address: "0xDF9B5B00Ef9bca66e9902Bd813dB14e4343Be025"
+    startBlock: 3421724
+  ERC4626LinearPoolV4Factory:
+    address: "0x59562f93c447656F6E4799fC1FC7c3d977C3324F"
+    startBlock: 3421683
+  GearboxLinearPoolV2Factory:
+    address: "0x8df317a729fcaA260306d7de28888932cb579b88"
+    startBlock: 3421697
+  SiloLinearPoolV2Factory:
+    address: "0x8eA89804145c007e7D226001A96955ad53836087"
+    startBlock: 3421752
+  YearnLinearPoolV2Factory:
+    address: "0xAcf05BE5134d64d150d153818F8C67EE36996650"
+    startBlock: 3421713
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x45fFd460cC6642B8D8Fb12373DFd77Ceb0f4932B"
+    startBlock: 3419649
+  ManagedPoolV2Factory:
+    address: "0x63e179C5b6d54B2c2e36b9cE4085EF5A8C86D50c"
+    startBlock: 3425305
