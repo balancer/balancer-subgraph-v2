@@ -1,4 +1,4 @@
-import { ZERO_BD, ZERO, FX_AGGREGATOR_ADDRESSES } from './helpers/constants';
+import { ZERO_BD, ZERO, FX_AGGREGATOR_ADDRESSES, VAULT_ADDRESS, ZERO_ADDRESS } from './helpers/constants';
 import {
   getPoolTokenManager,
   getPoolTokens,
@@ -14,10 +14,11 @@ import {
   getBalancerSnapshot,
   tokenToDecimal,
   stringToBytes,
+  bytesToAddress,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
@@ -47,7 +48,8 @@ import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
-import { ERC20 } from '../types/Vault/ERC20';
+import { ERC20, Transfer } from '../types/Vault/ERC20';
+import { handleTransfer } from './poolController';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
@@ -270,6 +272,10 @@ export function handleNewAaveLinearPoolV4(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear, 4);
 }
 
+export function handleNewAaveLinearPoolV5(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear, 5);
+}
+
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
 }
@@ -278,12 +284,20 @@ export function handleNewERC4626LinearPoolV3(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear, 3);
 }
 
+export function handleNewERC4626LinearPoolV4(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ERC4626Linear, 4);
+}
+
 export function handleNewEulerLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.EulerLinear, 1);
 }
 
 export function handleNewGearboxLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.GearboxLinear, 1);
+}
+
+export function handleNewGearboxLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.GearboxLinear, 2);
 }
 
 export function handleNewMidasLinearPool(event: PoolCreated): void {
@@ -302,8 +316,16 @@ export function handleNewSiloLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.SiloLinear, 1);
 }
 
+export function handleNewSiloLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.SiloLinear, 2);
+}
+
 export function handleNewYearnLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.YearnLinear, 1);
+}
+
+export function handleNewYearnLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.YearnLinear, 2);
 }
 
 export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
@@ -347,8 +369,31 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   if (tokens == null) return;
   pool.tokensList = tokens;
 
-  let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
-  pool.totalShares = pool.totalShares.minus(maxTokenBalance);
+  // Linear pools premint a large amount of BPTs on creation. This value will be added to totalShares
+  // on the handleTransfer handler, so we need to subtract it here
+  let preMintedBpt = BigInt.fromString('5192296858534827628530496329220095');
+  let scaledPreMintedBpt = scaleDown(preMintedBpt, 18);
+  pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
+  // This amount will also be transferred to the vault,
+  // causing the vault's 'user shares' to incorrectly increase,
+  // so we need to negate it. We do so by processing a mock transfer event
+  // from the vault to the zero address
+
+  let mockEvent = new Transfer(
+    bytesToAddress(pool.address),
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [
+      new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
+      new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
+      new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt)),
+    ],
+    event.receipt
+  );
+  handleTransfer(mockEvent);
   pool.save();
 
   handleNewPoolTokens(pool, tokens);
