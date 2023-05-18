@@ -101,7 +101,7 @@ jobs:
         with:
           graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
           graph_version_label: ${GITHUB_SHA::8}
-          graph_subgraph_name: "balancer-polygon-zkevm-v2"
+          graph_subgraph_name: "balancer-polygon-zk-v2"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.polygon-zkevm.yaml"
           graph_deploy_studio: true
