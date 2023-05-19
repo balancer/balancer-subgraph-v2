@@ -1,4 +1,4 @@
-import { BigInt, BigDecimal, Address, log } from '@graphprotocol/graph-ts';
+import { BigInt, BigDecimal, Address, log, ethereum } from '@graphprotocol/graph-ts';
 import {
   Swap as SwapEvent,
   PoolBalanceChanged,
@@ -14,6 +14,7 @@ import {
   UserInternalBalance,
   ManagementOperation,
   Token,
+  PoolContract,
 } from '../types/schema';
 import {
   tokenToDecimal,
@@ -30,6 +31,8 @@ import {
   getTradePairSnapshot,
   getTradePair,
   getBalancerSnapshot,
+  bytesToAddress,
+  getPoolShare,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import {
@@ -47,6 +50,7 @@ import {
   MIN_SWAP_VALUE_USD,
   SWAP_IN,
   SWAP_OUT,
+  VAULT_ADDRESS,
   ZERO,
   ZERO_ADDRESS,
   ZERO_BD,
@@ -62,6 +66,8 @@ import {
 } from './helpers/pools';
 import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
 import { USDC_ADDRESS } from './helpers/assets';
+import { Transfer } from '../types/Vault/ERC20';
+import { handleTransfer } from './poolController';
 
 /************************************
  ******** INTERNAL BALANCES *********
@@ -71,22 +77,52 @@ export function handleInternalBalanceChange(event: InternalBalanceChanged): void
   createUserEntity(event.params.user);
 
   let userAddress = event.params.user.toHexString();
-  let token = event.params.token;
-  let balanceId = userAddress.concat(token.toHexString());
+  const tokenAddress = event.params.token;
+  const token = getToken(tokenAddress);
+  let balanceId = userAddress.concat(token.id);
 
   let userBalance = UserInternalBalance.load(balanceId);
   if (userBalance == null) {
     userBalance = new UserInternalBalance(balanceId);
 
     userBalance.userAddress = userAddress;
-    userBalance.token = token;
+    userBalance.tokenInfo = token.id;
+    userBalance.token = tokenAddress;
     userBalance.balance = ZERO_BD;
   }
 
-  let transferAmount = tokenToDecimal(event.params.delta, getTokenDecimals(token));
-  userBalance.balance = userBalance.balance.plus(transferAmount);
+  let transferAmount = event.params.delta;
+  let scaledTransferAmount = tokenToDecimal(transferAmount, getTokenDecimals(tokenAddress));
+  userBalance.balance = userBalance.balance.plus(scaledTransferAmount);
 
   userBalance.save();
+
+  // if the token is a pool's BPT, update the user's total shares
+  let poolContract = PoolContract.load(tokenAddress.toHexString());
+  if (poolContract == null) return;
+  let mockFrom = VAULT_ADDRESS;
+  let mockTo = event.params.user;
+  let mockAmount = transferAmount;
+  if (transferAmount.lt(ZERO)) {
+    mockFrom = event.params.user;
+    mockTo = VAULT_ADDRESS;
+    mockAmount = transferAmount.neg();
+  }
+  const mockEvent = new Transfer(
+    tokenAddress,
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [
+      new ethereum.EventParam('from', ethereum.Value.fromAddress(mockFrom)),
+      new ethereum.EventParam('to', ethereum.Value.fromAddress(mockTo)),
+      new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(mockAmount)),
+    ],
+    event.receipt
+  );
+  handleTransfer(mockEvent);
 }
 
 /************************************
@@ -200,13 +236,34 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
   // and therefore must be subtracted from totalShares
   if (pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool)) {
-    let preMintedBpt = ZERO_BD;
+    let preMintedBpt = ZERO;
+    let scaledPreMintedBpt = ZERO_BD;
     for (let i: i32 = 0; i < tokenAddresses.length; i++) {
       if (tokenAddresses[i] == pool.address) {
-        preMintedBpt = scaleDown(amounts[i], 18);
+        preMintedBpt = amounts[i];
+        scaledPreMintedBpt = scaleDown(preMintedBpt, 18);
       }
     }
-    pool.totalShares = pool.totalShares.minus(preMintedBpt);
+    pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
+    // This amount will also be transferred to the vault,
+    // causing the vault's 'user shares' to incorrectly increase,
+    // so we need to negate it. We do so by processing a mock transfer event
+    // from the vault to the zero address
+    const mockEvent = new Transfer(
+      bytesToAddress(pool.address),
+      event.logIndex,
+      event.transactionLogIndex,
+      event.logType,
+      event.block,
+      event.transaction,
+      [
+        new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
+        new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
+        new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt)),
+      ],
+      event.receipt
+    );
+    handleTransfer(mockEvent);
     pool.save();
   }
 
@@ -389,13 +446,26 @@ export function handleSwapEvent(event: SwapEvent): void {
     updateAmpFactor(pool);
   }
 
-  // Update virtual supply
+  // If swapping on a pool with preminted BPT and the BPT itself is being swapped then this is equivalent to a mint/burn in a regular pool
+  // We need to update the pool's totalShares and add/subtract from the vault's share of that pool, to negate the corresponding transfer event of the BPT
   if (hasVirtualSupply(pool)) {
     if (event.params.tokenIn == pool.address) {
-      pool.totalShares = pool.totalShares.minus(tokenToDecimal(event.params.amountIn, 18));
+      const scaledAmount = tokenToDecimal(event.params.amountIn, 18);
+      pool.totalShares = pool.totalShares.minus(scaledAmount);
+      let vaultPoolShare = getPoolShare(poolId.toHexString(), VAULT_ADDRESS);
+      let vaultPoolShareBalance = vaultPoolShare == null ? ZERO_BD : vaultPoolShare.balance;
+      vaultPoolShareBalance = vaultPoolShareBalance.minus(scaledAmount);
+      vaultPoolShare.balance = vaultPoolShareBalance;
+      vaultPoolShare.save();
     }
     if (event.params.tokenOut == pool.address) {
-      pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.amountOut, 18));
+      const scaledAmount = tokenToDecimal(event.params.amountOut, 18);
+      pool.totalShares = pool.totalShares.plus(scaledAmount);
+      let vaultPoolShare = getPoolShare(poolId.toHexString(), VAULT_ADDRESS);
+      let vaultPoolShareBalance = vaultPoolShare == null ? ZERO_BD : vaultPoolShare.balance;
+      vaultPoolShareBalance = vaultPoolShareBalance.plus(scaledAmount);
+      vaultPoolShare.balance = vaultPoolShareBalance;
+      vaultPoolShare.save();
     }
   }
 

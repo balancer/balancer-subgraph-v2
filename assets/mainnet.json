@@ -47,6 +47,22 @@
       "symbol": "bb-a-USDT-V2"
     },
     {
+      "address": "0x6667c6fa9f2b3Fc1Cc8D85320b62703d938E4385",
+      "symbol": "bb-a-DAI-V3"
+    },
+    {
+      "address": "0xcbFA4532D8B2ade2C261D3DD5ef2A2284f792692",
+      "symbol": "bb-a-USDC-V3"
+    },
+    {
+      "address": "0xA1697F9Af0875B63DdC472d6EeBADa8C1fAB8568",
+      "symbol": "bb-a-USDT-V3"
+    },
+    {
+      "address": "0xfeBb0bbf162E64fb9D0dfe186E517d84C395f016", 
+      "symbol": "bb-a-USD-V3"
+    },
+    {
       "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599", 
       "symbol": "WBTC"
     },
@@ -73,6 +89,10 @@
     {
       "address": "0xA13a9247ea42D743238089903570127DdA72fE44", 
       "symbol": "bb-a-USD"
+    },
+    {
+      "address": "0x60D604890feaa0b5460B28A424407c24fe89374a",
+      "symbol": "bb-a-WETH-V3"
     }
   ],
   "fxAssets": [
