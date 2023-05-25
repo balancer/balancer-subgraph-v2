@@ -16,8 +16,8 @@ import {
 import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
-import { getPoolAddress, isComposableStablePool } from './pools';
+import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_ADDRESS, ZERO_BD } from './constants';
+import { PoolType, getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
 import { valueInUSD } from '../pricing';
 
@@ -172,6 +172,16 @@ export function createPoolTokenEntity(
 
     if (!isTokenExemptCall.reverted) {
       poolToken.isExemptFromYieldProtocolFee = isTokenExemptCall.value;
+    }
+  } else if (pool.poolType == PoolType.Weighted && pool.poolTypeVersion == 4) {
+    let poolAddress = bytesToAddress(pool.address);
+    // ComposableStable ABI has the same getRateProviders function as WeightedV4
+    let poolContract = ComposableStablePool.bind(poolAddress);
+    let rateProvidersCall = poolContract.try_getRateProviders();
+
+    // check array length to avoid out of bounds error if call doesn't revert but returns empty array
+    if (!rateProvidersCall.reverted && rateProvidersCall.value.length > tokenIndex) {
+      poolToken.isExemptFromYieldProtocolFee = rateProvidersCall.value[tokenIndex] == ZERO_ADDRESS;
     }
   }
 
