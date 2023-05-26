@@ -107,10 +107,14 @@ export function handleTokenAdded(event: TokenAdded): void {
   pool.tokensList = tokens;
   pool.save();
 
-  let assetManager = getPoolTokenManager(poolIdBytes, event.params.token);
+  let tokenAdded = event.params.token;
+
+  let assetManager = getPoolTokenManager(poolIdBytes, tokenAdded);
   if (!assetManager) return;
 
-  createPoolTokenEntity(pool, event.params.token, assetManager);
+  let tokenAddedId = tokens.indexOf(tokenAdded);
+
+  createPoolTokenEntity(pool, tokenAdded, tokenAddedId, assetManager);
 }
 
 export function handleTokenRemoved(event: TokenRemoved): void {
@@ -125,6 +129,8 @@ export function handleTokenRemoved(event: TokenRemoved): void {
   if (tokens == null) return;
   pool.tokensList = tokens;
   pool.save();
+
+  // TODO: fix remaining pool tokens indexes
 
   let id = getPoolTokenId(poolContract.pool, event.params.token);
   store.remove('PoolToken', id);
