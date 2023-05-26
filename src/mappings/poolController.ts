@@ -18,7 +18,16 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PoolContract } from '../types/schema';
+import {
+  Pool,
+  PriceRateProvider,
+  GradualWeightUpdate,
+  AmpUpdate,
+  SwapFeeUpdate,
+  PoolContract,
+  Balancer,
+  PoolToken,
+} from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -402,6 +411,15 @@ export function handleTransfer(event: Transfer): void {
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
     pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+
+    // mint of BPT to the fee collector means the pool is paying protocol fees
+    let vault = Balancer.load('2') as Balancer;
+    let protocolFeeCollector = vault.protocolFeesCollector;
+    if (poolShareTo.userAddress == protocolFeeCollector) {
+      let poolToken = loadPoolToken(poolId, poolAddress) as PoolToken;
+      poolToken.paidProtocolFees = poolToken.paidProtocolFees.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+      poolToken.save();
+    }
   } else if (isBurn) {
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareFrom.save();
