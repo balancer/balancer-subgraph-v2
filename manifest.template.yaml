@@ -1768,6 +1768,10 @@ templates:
           file: ./abis/WeightedPool.json
         - name: ManagedPool
           file: ./abis/ManagedPoolV2.json
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
