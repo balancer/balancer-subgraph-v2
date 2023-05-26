@@ -1,5 +1,11 @@
-import { ZERO_BD, ZERO } from './helpers/constants';
-import { getPoolTokenManager, getPoolTokens, PoolType, setPriceRateProviders } from './helpers/pools';
+import { ZERO_BD, ZERO, FX_AGGREGATOR_ADDRESSES, VAULT_ADDRESS, ZERO_ADDRESS } from './helpers/constants';
+import {
+  getPoolTokenManager,
+  getPoolTokens,
+  isMetaStableDeprecated,
+  PoolType,
+  setPriceRateProviders,
+} from './helpers/pools';
 
 import {
   newPoolEntity,
@@ -8,15 +14,18 @@ import {
   getBalancerSnapshot,
   tokenToDecimal,
   stringToBytes,
+  bytesToAddress,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, BigDecimal, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
-import { Balancer, Pool } from '../types/schema';
+import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
+import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
+import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
 
 // datasource
-import { WeightedPool as WeightedPoolTemplate } from '../types/templates';
+import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
 import { WeightedPoolV2 as WeightedPoolV2Template } from '../types/templates';
 import { WeightedPool2Tokens as WeightedPool2TokensTemplate } from '../types/templates';
 import { StablePool as StablePoolTemplate } from '../types/templates';
@@ -30,7 +39,7 @@ import { ManagedPool as ManagedPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
-import { GyroCEMMPool as GyroCEMMPoolTemplate } from '../types/templates';
+import { GyroEPool as GyroEPoolTemplate } from '../types/templates';
 import { FXPool as FXPoolTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
@@ -39,8 +48,9 @@ import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/Conv
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
-import { GyroCEMMPool } from '../types/templates/GyroCEMMPool/GyroCEMMPool';
-import { ERC20 } from '../types/Vault/ERC20';
+import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
+import { ERC20, Transfer } from '../types/Vault/ERC20';
+import { handleTransfer } from './poolController';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
@@ -85,6 +95,18 @@ export function handleNewWeightedPool(event: PoolCreated): void {
 
 export function handleNewWeightedPoolV2(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Weighted, 2);
+  if (pool == null) return;
+  WeightedPoolV2Template.create(event.params.pool);
+}
+
+export function handleNewWeightedPoolV3(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Weighted, 3);
+  if (pool == null) return;
+  WeightedPoolV2Template.create(event.params.pool);
+}
+
+export function handleNewWeightedPoolV4(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Weighted, 4);
   if (pool == null) return;
   WeightedPoolV2Template.create(event.params.pool);
 }
@@ -154,6 +176,8 @@ export function handleNewStablePoolV2(event: PoolCreated): void {
 }
 
 export function handleNewMetaStablePool(event: PoolCreated): void {
+  if (isMetaStableDeprecated(event.block.number.toI32())) return;
+
   const pool = createStableLikePool(event, PoolType.MetaStable);
   if (pool == null) return;
   MetaStablePoolTemplate.create(event.params.pool);
@@ -167,6 +191,24 @@ export function handleNewStablePhantomPool(event: PoolCreated): void {
 
 export function handleNewComposableStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.ComposableStable);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
+}
+
+export function handleNewComposableStablePoolV2(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.ComposableStable, 2);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
+}
+
+export function handleNewComposableStablePoolV3(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.ComposableStable, 3);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
+}
+
+export function handleNewComposableStablePoolV4(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.ComposableStable, 4);
   if (pool == null) return;
   StablePhantomPoolV2Template.create(event.params.pool);
 }
@@ -229,8 +271,80 @@ export function handleNewAaveLinearPoolV2(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.AaveLinear, 2);
 }
 
+export function handleNewAaveLinearPoolV3(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear, 3);
+}
+
+export function handleNewAaveLinearPoolV4(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear, 4);
+}
+
+export function handleNewAaveLinearPoolV5(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.AaveLinear, 5);
+}
+
 export function handleNewERC4626LinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ERC4626Linear);
+}
+
+export function handleNewERC4626LinearPoolV3(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ERC4626Linear, 3);
+}
+
+export function handleNewERC4626LinearPoolV4(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ERC4626Linear, 4);
+}
+
+export function handleNewEulerLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.EulerLinear, 1);
+}
+
+export function handleNewGearboxLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.GearboxLinear, 1);
+}
+
+export function handleNewGearboxLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.GearboxLinear, 2);
+}
+
+export function handleNewMidasLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.EulerLinear, 1);
+}
+
+export function handleNewReaperLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ReaperLinear, 1);
+}
+
+export function handleNewReaperLinearPoolV3(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ReaperLinear, 3);
+}
+
+export function handleNewSiloLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.SiloLinear, 1);
+}
+
+export function handleNewSiloLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.SiloLinear, 2);
+}
+
+export function handleNewYearnLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.YearnLinear, 1);
+}
+
+export function handleNewYearnLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.YearnLinear, 2);
+}
+
+export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
+  let poolAddress = event.params.pool;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
+  let pool = Pool.load(poolContract.pool) as Pool;
+  pool.protocolId = event.params.protocolId.toI32();
+  const protocolIdData = ProtocolIdData.load(event.params.protocolId.toString());
+  pool.protocolIdData = protocolIdData ? protocolIdData.id : null;
+  pool.save();
 }
 
 function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): void {
@@ -262,8 +376,31 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   if (tokens == null) return;
   pool.tokensList = tokens;
 
-  let maxTokenBalance = BigDecimal.fromString('5192296858534827.628530496329220095');
-  pool.totalShares = pool.totalShares.minus(maxTokenBalance);
+  // Linear pools premint a large amount of BPTs on creation. This value will be added to totalShares
+  // on the handleTransfer handler, so we need to subtract it here
+  let preMintedBpt = BigInt.fromString('5192296858534827628530496329220095');
+  let scaledPreMintedBpt = scaleDown(preMintedBpt, 18);
+  pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
+  // This amount will also be transferred to the vault,
+  // causing the vault's 'user shares' to incorrectly increase,
+  // so we need to negate it. We do so by processing a mock transfer event
+  // from the vault to the zero address
+
+  let mockEvent = new Transfer(
+    bytesToAddress(pool.address),
+    event.logIndex,
+    event.transactionLogIndex,
+    event.logType,
+    event.block,
+    event.transaction,
+    [
+      new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
+      new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
+      new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt)),
+    ],
+    event.receipt
+  );
+  handleTransfer(mockEvent);
   pool.save();
 
   handleNewPoolTokens(pool, tokens);
@@ -331,9 +468,9 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
   Gyro3PoolTemplate.create(event.params.pool);
 }
 
-export function handleNewGyroCEMMPool(event: PoolCreated): void {
+function createGyroEPool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
-  let poolContract = GyroCEMMPool.bind(poolAddress);
+  let poolContract = GyroEPool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -343,19 +480,20 @@ export function handleNewGyroCEMMPool(event: PoolCreated): void {
 
   let pool = handleNewPool(event, poolId, swapFee);
 
-  pool.poolType = PoolType.GyroCEMM;
-  let cemmParamsCall = poolContract.try_getCEMMParams();
+  pool.poolType = PoolType.GyroE;
+  pool.poolTypeVersion = poolTypeVersion;
+  let eParamsCall = poolContract.try_getECLPParams();
 
-  if (!cemmParamsCall.reverted) {
-    const params = cemmParamsCall.value.value0;
-    // terms in the 'derived' object are stored in extra precision (38 decimals) with final decimal rounded down
-    const derived = cemmParamsCall.value.value1;
+  if (!eParamsCall.reverted) {
+    const params = eParamsCall.value.value0;
+    const derived = eParamsCall.value.value1;
     pool.alpha = scaleDown(params.alpha, 18);
     pool.beta = scaleDown(params.beta, 18);
     pool.c = scaleDown(params.c, 18);
     pool.s = scaleDown(params.s, 18);
     pool.lambda = scaleDown(params.lambda, 18);
 
+    // terms in the 'derived' object are stored in extra precision (38 decimals) with final decimal rounded down
     pool.tauAlphaX = scaleDown(derived.tauAlpha.x, 38);
     pool.tauAlphaY = scaleDown(derived.tauAlpha.y, 38);
     pool.tauBetaX = scaleDown(derived.tauBeta.x, 38);
@@ -375,7 +513,15 @@ export function handleNewGyroCEMMPool(event: PoolCreated): void {
 
   handleNewPoolTokens(pool, tokens);
 
-  GyroCEMMPoolTemplate.create(event.params.pool);
+  GyroEPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewGyroEPool(event: PoolCreated): void {
+  createGyroEPool(event);
+}
+
+export function handleNewGyroEV2Pool(event: PoolCreated): void {
+  createGyroEPool(event, 2);
 }
 
 export function handleNewFXPool(event: ethereum.Event): void {
@@ -397,7 +543,8 @@ export function handleNewFXPool(event: ethereum.Event): void {
     event.logType,
     event.block,
     event.transaction,
-    [event.parameters[2]] // PoolCreated expects parameters[0] to be the pool address
+    [event.parameters[2]], // PoolCreated expects parameters[0] to be the pool address
+    event.receipt
   );
 
   let pool = handleNewPool(poolCreatedEvent, poolId, swapFee);
@@ -413,6 +560,11 @@ export function handleNewFXPool(event: ethereum.Event): void {
   handleNewPoolTokens(pool, tokens);
 
   FXPoolTemplate.create(poolAddress);
+
+  // Create templates for every Offchain Aggregator
+  for (let i: i32 = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
+    OffchainAggregator.create(FX_AGGREGATOR_ADDRESSES[i]);
+  }
 }
 
 function findOrInitializeVault(): Balancer {
@@ -443,6 +595,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
     pool.swapEnabled = true;
+    pool.isPaused = false;
 
     let bpt = ERC20.bind(poolAddress);
 
@@ -466,6 +619,13 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     vaultSnapshot.save();
   }
 
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) {
+    poolContract = new PoolContract(poolAddress.toHexString());
+    poolContract.pool = poolId.toHexString();
+    poolContract.save();
+  }
+
   return pool;
 }
 
@@ -478,6 +638,18 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 
     if (!assetManager) continue;
 
-    createPoolTokenEntity(pool, tokensAddresses[i], assetManager);
+    createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
   }
+}
+
+export function handleProtocolIdRegistryOrRename(event: ProtocolIdRegistered): void {
+  let protocol = ProtocolIdData.load(event.params.protocolId.toString());
+
+  if (protocol == null) {
+    protocol = new ProtocolIdData(event.params.protocolId.toString());
+    protocol.name = event.params.name;
+  } else {
+    protocol.name = event.params.name;
+  }
+  protocol.save();
 }

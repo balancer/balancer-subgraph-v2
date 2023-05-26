@@ -1,11 +1,11 @@
-name: Deploy Graph
+name: Deploy Graph Studio Prod
 
 on:
   push:
     branches: master
 
 jobs:
-  deploy-studio:
+  deploy-studio-mainnet:
     runs-on: ubuntu-latest
     environment: graph
     steps:
@@ -13,7 +13,7 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: Install
         run: yarn --frozen-lockfile
       - name: Assets
@@ -29,6 +29,56 @@ jobs:
           graph_subgraph_name: "balancer-v2"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.yaml"
+          graph_deploy_studio: true
+  deploy-studio-base:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.11
+        with:
+          graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
+          graph_version_label: ${GITHUB_SHA::8}
+          graph_subgraph_name: "balancer-base-testnet-v2"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.basegoerli.yaml"
+          graph_deploy_studio: true
+  deploy-studio-sepolia:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets sepolia
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.11
+        with:
+          graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
+          graph_version_label: ${GITHUB_SHA::8}
+          graph_subgraph_name: "balancer-sepolia-v2"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.sepolia.yaml"
           graph_deploy_studio: true
 
 env:

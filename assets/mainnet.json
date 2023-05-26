@@ -19,6 +19,10 @@
       "symbol": "WETH"
     },
     {
+      "address": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0", 
+      "symbol": "wstETH"
+    },
+    {
       "address": "0x804CdB9116a10bB78768D3252355a1b18067bF8f", 
       "symbol": "bb-a-DAI-V1"
     },
@@ -41,6 +45,22 @@
     {
       "address": "0x2F4eb100552ef93840d5aDC30560E5513DFfFACb",
       "symbol": "bb-a-USDT-V2"
+    },
+    {
+      "address": "0x6667c6fa9f2b3Fc1Cc8D85320b62703d938E4385",
+      "symbol": "bb-a-DAI-V3"
+    },
+    {
+      "address": "0xcbFA4532D8B2ade2C261D3DD5ef2A2284f792692",
+      "symbol": "bb-a-USDC-V3"
+    },
+    {
+      "address": "0xA1697F9Af0875B63DdC472d6EeBADa8C1fAB8568",
+      "symbol": "bb-a-USDT-V3"
+    },
+    {
+      "address": "0xfeBb0bbf162E64fb9D0dfe186E517d84C395f016", 
+      "symbol": "bb-a-USD-V3"
     },
     {
       "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599", 
@@ -69,6 +89,46 @@
     {
       "address": "0xA13a9247ea42D743238089903570127DdA72fE44", 
       "symbol": "bb-a-USD"
+    },
+    {
+      "address": "0x60D604890feaa0b5460B28A424407c24fe89374a",
+      "symbol": "bb-a-WETH-V3"
+    }
+  ],
+  "fxAssets": [
+    {
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "symbol": "USDC"
+    },
+    {
+      "address": "0x70e8dE73cE538DA2bEEd35d14187F6959a8ecA96",
+      "symbol": "XSGD"
+    },
+    {
+      "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "symbol": "DAI"
+    },
+    {
+      "address": "0xdB25f211AB05b1c97D595516F45794528a807ad8",
+      "symbol":  "EURS"
+    }
+  ],
+  "fxAggregators": [
+    {
+      "address": "0x789190466E21a8b78b8027866CBBDc151542A26C",
+      "symbol": "USDC-USD"
+    },
+    {
+      "address": "0xc96129C796F03bb21AC947EfC5329CD1F560305B",
+      "symbol": "XSGD-USD"
+    },
+    {
+      "address": "0xDEc0a100eaD1fAa37407f0Edc76033426CF90b82",
+      "symbol": "DAI-USD"
+    },
+    {
+      "address": "0x02F878A94a1AE1B15705aCD65b5519A46fe3517e",
+      "symbol": "EURS-USD"
     }
   ]
 }

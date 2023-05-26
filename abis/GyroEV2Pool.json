@@ -88,8 +88,8 @@
                 "type": "int256"
               }
             ],
-            "internalType": "struct GyroCEMMMath.Params",
-            "name": "cemmParams",
+            "internalType": "struct GyroECLPMath.Params",
+            "name": "eclpParams",
             "type": "tuple"
           },
           {
@@ -107,7 +107,7 @@
                     "type": "int256"
                   }
                 ],
-                "internalType": "struct GyroCEMMMath.Vector2",
+                "internalType": "struct GyroECLPMath.Vector2",
                 "name": "tauAlpha",
                 "type": "tuple"
               },
@@ -124,7 +124,7 @@
                     "type": "int256"
                   }
                 ],
-                "internalType": "struct GyroCEMMMath.Vector2",
+                "internalType": "struct GyroECLPMath.Vector2",
                 "name": "tauBeta",
                 "type": "tuple"
               },
@@ -154,12 +154,54 @@
                 "type": "int256"
               }
             ],
-            "internalType": "struct GyroCEMMMath.DerivedParams",
-            "name": "derivedCemmParams",
+            "internalType": "struct GyroECLPMath.DerivedParams",
+            "name": "derivedEclpParams",
             "type": "tuple"
+          },
+          {
+            "internalType": "address",
+            "name": "rateProvider0",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "rateProvider1",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "capManager",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bool",
+                "name": "capEnabled",
+                "type": "bool"
+              },
+              {
+                "internalType": "uint120",
+                "name": "perAddressCap",
+                "type": "uint120"
+              },
+              {
+                "internalType": "uint128",
+                "name": "globalCap",
+                "type": "uint128"
+              }
+            ],
+            "internalType": "struct ICappedLiquidity.CapParams",
+            "name": "capParams",
+            "type": "tuple"
+          },
+          {
+            "internalType": "address",
+            "name": "pauseManager",
+            "type": "address"
           }
         ],
-        "internalType": "struct GyroCEMMPool.GyroParams",
+        "internalType": "struct GyroECLPPool.GyroParams",
         "name": "params",
         "type": "tuple"
       },
@@ -202,12 +244,55 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "capManager",
+        "type": "address"
+      }
+    ],
+    "name": "CapManagerUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "capEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint120",
+            "name": "perAddressCap",
+            "type": "uint120"
+          },
+          {
+            "internalType": "uint128",
+            "name": "globalCap",
+            "type": "uint128"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ICappedLiquidity.CapParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "CapParamsUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "bool",
         "name": "derivedParamsValidated",
         "type": "bool"
       }
     ],
-    "name": "CEMMDerivedParamsValidated",
+    "name": "ECLPDerivedParamsValidated",
     "type": "event"
   },
   {
@@ -220,7 +305,7 @@
         "type": "bool"
       }
     ],
-    "name": "CEMMParamsValidated",
+    "name": "ECLPParamsValidated",
     "type": "event"
   },
   {
@@ -286,6 +371,31 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "oldPauseManager",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newPauseManager",
+        "type": "address"
+      }
+    ],
+    "name": "PauseManagerChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PausedLocally",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "bool",
         "name": "paused",
         "type": "bool"
@@ -330,7 +440,7 @@
           }
         ],
         "indexed": false,
-        "internalType": "struct GyroCEMMMath.Vector2",
+        "internalType": "struct GyroECLPMath.Vector2",
         "name": "invariant",
         "type": "tuple"
       },
@@ -367,6 +477,12 @@
       }
     ],
     "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "UnpausedLocally",
     "type": "event"
   },
   {
@@ -633,6 +749,62 @@
   },
   {
     "inputs": [],
+    "name": "capManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "capParams",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "capEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint120",
+            "name": "perAddressCap",
+            "type": "uint120"
+          },
+          {
+            "internalType": "uint128",
+            "name": "globalCap",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct ICappedLiquidity.CapParams",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_pauseManager",
+        "type": "address"
+      }
+    ],
+    "name": "changePauseManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "decimals",
     "outputs": [
       {
@@ -727,7 +899,7 @@
   },
   {
     "inputs": [],
-    "name": "getCEMMParams",
+    "name": "getECLPParams",
     "outputs": [
       {
         "components": [
@@ -757,7 +929,7 @@
             "type": "int256"
           }
         ],
-        "internalType": "struct GyroCEMMMath.Params",
+        "internalType": "struct GyroECLPMath.Params",
         "name": "params",
         "type": "tuple"
       },
@@ -776,7 +948,7 @@
                 "type": "int256"
               }
             ],
-            "internalType": "struct GyroCEMMMath.Vector2",
+            "internalType": "struct GyroECLPMath.Vector2",
             "name": "tauAlpha",
             "type": "tuple"
           },
@@ -793,7 +965,7 @@
                 "type": "int256"
               }
             ],
-            "internalType": "struct GyroCEMMMath.Vector2",
+            "internalType": "struct GyroECLPMath.Vector2",
             "name": "tauBeta",
             "type": "tuple"
           },
@@ -823,7 +995,7 @@
             "type": "int256"
           }
         ],
-        "internalType": "struct GyroCEMMMath.DerivedParams",
+        "internalType": "struct GyroECLPMath.DerivedParams",
         "name": "d",
         "type": "tuple"
       }
@@ -1022,6 +1194,19 @@
   },
   {
     "inputs": [],
+    "name": "getPrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "spotPrice",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getRate",
     "outputs": [
       {
@@ -1126,6 +1311,24 @@
         "internalType": "uint256[]",
         "name": "results",
         "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTokenRates",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "rate0",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rate1",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -1411,6 +1614,26 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pauseManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1562,6 +1785,75 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "rateProvider0",
+    "outputs": [
+      {
+        "internalType": "contract IRateProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rateProvider1",
+    "outputs": [
+      {
+        "internalType": "contract IRateProvider",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_capManager",
+        "type": "address"
+      }
+    ],
+    "name": "setCapManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "capEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint120",
+            "name": "perAddressCap",
+            "type": "uint120"
+          },
+          {
+            "internalType": "uint128",
+            "name": "globalCap",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct ICappedLiquidity.CapParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "setCapParams",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bool",
@@ -1663,6 +1955,13 @@
         "type": "bool"
       }
     ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   }
