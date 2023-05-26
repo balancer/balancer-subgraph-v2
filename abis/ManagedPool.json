@@ -14,6 +14,60 @@
               "type": "string"
             },
             {
+              "internalType": "address[]",
+              "name": "assetManagers",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct ManagedPool.ManagedPoolParams",
+          "name": "params",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "contract IVault",
+              "name": "vault",
+              "type": "address"
+            },
+            {
+              "internalType": "contract IProtocolFeePercentagesProvider",
+              "name": "protocolFeeProvider",
+              "type": "address"
+            },
+            {
+              "internalType": "contract IExternalWeightedMath",
+              "name": "weightedMath",
+              "type": "address"
+            },
+            {
+              "internalType": "contract IRecoveryModeHelper",
+              "name": "recoveryModeHelper",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "pauseWindowDuration",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "bufferPeriodDuration",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "version",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct ManagedPool.ManagedPoolConfigParams",
+          "name": "configParams",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
               "internalType": "contract IERC20[]",
               "name": "tokens",
               "type": "address[]"
@@ -22,11 +76,6 @@
               "internalType": "uint256[]",
               "name": "normalizedWeights",
               "type": "uint256[]"
-            },
-            {
-              "internalType": "address[]",
-              "name": "assetManagers",
-              "type": "address[]"
             },
             {
               "internalType": "uint256",
@@ -54,39 +103,14 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct ManagedPoolSettings.NewPoolParams",
-          "name": "params",
+          "internalType": "struct ManagedPoolSettings.ManagedPoolSettingsParams",
+          "name": "settingsParams",
           "type": "tuple"
-        },
-        {
-          "internalType": "contract IVault",
-          "name": "vault",
-          "type": "address"
-        },
-        {
-          "internalType": "contract IProtocolFeePercentagesProvider",
-          "name": "protocolFeeProvider",
-          "type": "address"
-        },
-        {
-          "internalType": "contract IExternalWeightedMath",
-          "name": "weightedMath",
-          "type": "address"
         },
         {
           "internalType": "address",
           "name": "owner",
           "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "pauseWindowDuration",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "bufferPeriodDuration",
-          "type": "uint256"
         }
       ],
       "stateMutability": "nonpayable",
@@ -241,6 +265,19 @@
       "inputs": [
         {
           "indexed": false,
+          "internalType": "bool",
+          "name": "joinExitEnabled",
+          "type": "bool"
+        }
+      ],
+      "name": "JoinExitEnabledSet",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
           "internalType": "uint256",
           "name": "bptAmount",
           "type": "uint256"
@@ -385,7 +422,9 @@
       "type": "event"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "DOMAIN_SEPARATOR",
       "outputs": [
         {
@@ -406,7 +445,9 @@
         }
       ],
       "name": "addAllowedAddress",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -439,7 +480,9 @@
         }
       ],
       "name": "addToken",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -511,7 +554,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "collectAumManagementFees",
       "outputs": [
         {
@@ -524,7 +569,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "decimals",
       "outputs": [
         {
@@ -561,16 +608,24 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "disableRecoveryMode",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "enableRecoveryMode",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -594,7 +649,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getActualSupply",
       "outputs": [
         {
@@ -607,7 +664,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getAuthorizer",
       "outputs": [
         {
@@ -664,7 +723,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getDomainSeparator",
       "outputs": [
         {
@@ -677,7 +738,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getGradualSwapFeeUpdateParams",
       "outputs": [
         {
@@ -705,7 +768,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getGradualWeightUpdateParams",
       "outputs": [
         {
@@ -733,7 +798,24 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
+      "name": "getJoinExitEnabled",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        
+      ],
       "name": "getManagementAumFeeParams",
       "outputs": [
         {
@@ -751,7 +833,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getMustAllowlistLPs",
       "outputs": [
         {
@@ -783,7 +867,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getNormalizedWeights",
       "outputs": [
         {
@@ -796,7 +882,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getOwner",
       "outputs": [
         {
@@ -809,7 +897,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getPausedState",
       "outputs": [
         {
@@ -832,7 +922,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getPoolId",
       "outputs": [
         {
@@ -864,7 +956,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getProtocolFeesCollector",
       "outputs": [
         {
@@ -896,7 +990,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getScalingFactors",
       "outputs": [
         {
@@ -909,7 +1005,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getSwapEnabled",
       "outputs": [
         {
@@ -922,7 +1020,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getSwapFeePercentage",
       "outputs": [
         {
@@ -935,7 +1035,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "getVault",
       "outputs": [
         {
@@ -948,7 +1050,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "inRecoveryMode",
       "outputs": [
         {
@@ -1004,7 +1108,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "name",
       "outputs": [
         {
@@ -1301,9 +1407,13 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "pause",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1346,7 +1456,9 @@
         }
       ],
       "name": "permit",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1467,7 +1579,9 @@
         }
       ],
       "name": "removeAllowedAddress",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1490,7 +1604,9 @@
         }
       ],
       "name": "removeToken",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1518,7 +1634,24 @@
         }
       ],
       "name": "setCircuitBreakers",
-      "outputs": [],
+      "outputs": [
+        
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "joinExitEnabled",
+          "type": "bool"
+        }
+      ],
+      "name": "setJoinExitEnabled",
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1550,7 +1683,9 @@
         }
       ],
       "name": "setMustAllowlistLPs",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1563,12 +1698,16 @@
         }
       ],
       "name": "setSwapEnabled",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "symbol",
       "outputs": [
         {
@@ -1581,7 +1720,9 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "totalSupply",
       "outputs": [
         {
@@ -1647,16 +1788,24 @@
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "unpause",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "inputs": [],
+      "inputs": [
+        
+      ],
       "name": "updateProtocolFeePercentageCache",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1684,7 +1833,9 @@
         }
       ],
       "name": "updateSwapFeeGradually",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
       "type": "function"
     },
@@ -1712,8 +1863,25 @@
         }
       ],
       "name": "updateWeightsGradually",
-      "outputs": [],
+      "outputs": [
+        
+      ],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        
+      ],
+      "name": "version",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     }
   ]
