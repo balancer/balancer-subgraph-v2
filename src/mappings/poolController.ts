@@ -14,6 +14,7 @@ import {
   ProtocolFeePercentageCacheUpdated as EncodedProtocolFeePercentageCacheUpdated,
   TokenAdded,
   TokenRemoved,
+  JoinExitEnabledSet,
 } from '../types/templates/ManagedPool/ManagedPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
@@ -69,6 +70,16 @@ export function handleMustAllowlistLPsSet(event: MustAllowlistLPsSet): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.mustAllowlistLPs = event.params.mustAllowlistLPs;
+  pool.save();
+}
+
+export function handleJoinExitEnabledSet(event: JoinExitEnabledSet): void {
+  let poolAddress = event.address;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
+  let pool = Pool.load(poolContract.pool) as Pool;
+  pool.joinExitEnabled = event.params.joinExitEnabled;
   pool.save();
 }
 

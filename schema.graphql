@@ -65,6 +65,7 @@ type Pool @entity {
   managementFee: BigDecimal
 
   # ManagedPool Only
+  joinExitEnabled: Boolean
   mustAllowlistLPs: Boolean
   managementAumFee: BigDecimal
   totalAumFeeCollectedInBPT: BigDecimal
