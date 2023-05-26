@@ -15,6 +15,7 @@ import {
   TokenAdded,
   TokenRemoved,
   JoinExitEnabledSet,
+  ManagementAumFeeCollected,
 } from '../types/templates/ManagedPool/ManagedPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
@@ -80,6 +81,18 @@ export function handleJoinExitEnabledSet(event: JoinExitEnabledSet): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.joinExitEnabled = event.params.joinExitEnabled;
+  pool.save();
+}
+
+export function handleManagementAumFeeCollected(event: ManagementAumFeeCollected): void {
+  let poolAddress = event.address;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
+
+  let pool = Pool.load(poolContract.pool) as Pool;
+  let bptCollected = scaleDown(event.params.bptAmount, 18);
+  let totalCollected = pool.totalAumFeeCollectedInBPT ? pool.totalAumFeeCollectedInBPT : ZERO_BD;
+  pool.totalAumFeeCollectedInBPT = totalCollected.plus(bptCollected);
   pool.save();
 }
 

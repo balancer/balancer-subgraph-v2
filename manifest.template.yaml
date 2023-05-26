@@ -1783,6 +1783,8 @@ templates:
           handler: handleTokenAdded
         - event: TokenRemoved(indexed address)
           handler: handleTokenRemoved
+        - event: ManagementAumFeeCollected(uint256)
+          handler: handleManagementAumFeeCollected
         - event: GradualSwapFeeUpdateScheduled(uint256,uint256,uint256,uint256)
           handler: handleGradualSwapFeeUpdateScheduled
         - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
