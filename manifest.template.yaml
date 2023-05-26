@@ -421,14 +421,14 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewInvestmentPool
   {{/if}}
-  {{#if ManagedPoolFactory}}
+  {{#if ManagedPoolV2Factory}}
   - kind: ethereum/contract
-    name: ManagedPoolFactory
+    name: ManagedPoolV2Factory
     network: {{network}}
     source:
-      address: '{{ManagedPoolFactory.address}}'
-      abi: ManagedPoolFactory
-      startBlock: {{ManagedPoolFactory.startBlock}}
+      address: '{{ManagedPoolV2Factory.address}}'
+      abi: ManagedPoolV2Factory
+      startBlock: {{ManagedPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -444,10 +444,10 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: ManagedPoolFactory
-          file: ./abis/ManagedPoolFactory.json
+        - name: ManagedPoolV2Factory
+          file: ./abis/ManagedPoolV2Factory.json
         - name: ManagedPool
-          file: ./abis/ManagedPool.json
+          file: ./abis/ManagedPoolV2.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewManagedPool
@@ -1767,7 +1767,7 @@ templates:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
         - name: ManagedPool
-          file: ./abis/ManagedPool.json
+          file: ./abis/ManagedPoolV2.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1777,6 +1777,10 @@ templates:
           handler: handlePausedStateChanged
         - event: JoinExitEnabledSet(bool)
           handler: handleJoinExitEnabledSet
+        - event: MustAllowlistLPsSet(bool)
+          handler: handleMustAllowlistLPsSet
+        - event: RecoveryModeStateChanged(bool)
+          handler: handleRecoveryModeStateChanged
         - event: CircuitBreakerSet(indexed address,uint256,uint256,uint256)
           handler: handleCircuitBreakerSet
         - event: TokenAdded(indexed address,uint256)
