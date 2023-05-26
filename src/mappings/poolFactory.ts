@@ -22,7 +22,7 @@ import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
-import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
+import { Balancer, Pool, PoolContract, ProtocolFeesCollector, ProtocolIdData } from '../types/schema';
 
 // datasource
 import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -50,6 +50,7 @@ import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
 import { ERC20, Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
+import { Vault } from '../types/Vault/Vault';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
@@ -571,6 +572,18 @@ function findOrInitializeVault(): Balancer {
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
   vault.totalSwapCount = ZERO;
+
+  // set up protocol fees collector
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let feesCollectorCall = vaultContract.try_getProtocolFeesCollector();
+  if (!feesCollectorCall.reverted) {
+    let feesCollector = new ProtocolFeesCollector(feesCollectorCall.value.toHex());
+    feesCollector.address = feesCollectorCall.value;
+    feesCollector.save();
+
+    vault.protocolFeesCollector = feesCollector.id;
+  }
+
   return vault;
 }
 

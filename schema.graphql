@@ -8,6 +8,13 @@ type Balancer @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+
+  protocolFeesCollector: ProtocolFeesCollector
+}
+
+type ProtocolFeesCollector @entity {
+  id: ID!
+  address: Bytes!
 }
 
 type Pool @entity {
