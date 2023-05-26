@@ -49,6 +49,7 @@ import {
   getPoolShare,
   createPoolTokenEntity,
   hexToBigDecimal,
+  bytesToAddress,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -155,10 +156,15 @@ export function handleTokenRemoved(event: TokenRemoved): void {
   pool.tokensList = tokens;
   pool.save();
 
-  // TODO: fix remaining pool tokens indexes
+  for (let i: i32 = 0; i < pool.tokensList.length; i++) {
+    let tokenAdress = bytesToAddress(pool.tokensList[i]);
+    let poolToken = loadPoolToken(pool.id, tokenAdress) as PoolToken;
+    poolToken.index = i;
+    poolToken.save();
+  }
 
-  let id = getPoolTokenId(poolContract.pool, event.params.token);
-  store.remove('PoolToken', id);
+  let poolTokenRemovedId = getPoolTokenId(poolContract.pool, event.params.token);
+  store.remove('PoolToken', poolTokenRemovedId);
 }
 
 /************************************
