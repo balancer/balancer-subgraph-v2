@@ -91,7 +91,8 @@ export function handleManagementAumFeeCollected(event: ManagementAumFeeCollected
 
   let pool = Pool.load(poolContract.pool) as Pool;
   let bptCollected = scaleDown(event.params.bptAmount, 18);
-  let totalCollected = pool.totalAumFeeCollectedInBPT ? pool.totalAumFeeCollectedInBPT : ZERO_BD;
+  let totalCollected = pool.totalAumFeeCollectedInBPT;
+  if (totalCollected == null) return;
   pool.totalAumFeeCollectedInBPT = totalCollected.plus(bptCollected);
   pool.save();
 }
