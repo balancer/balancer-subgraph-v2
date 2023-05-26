@@ -74,6 +74,10 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   if (tokens == null) return null;
   pool.tokensList = tokens;
 
+  if (poolType == PoolType.Managed) {
+    pool.totalAumFeeCollectedInBPT = ZERO_BD;
+  }
+
   pool.save();
 
   handleNewPoolTokens(pool, tokens);
