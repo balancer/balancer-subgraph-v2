@@ -128,8 +128,8 @@ export function handleNewInvestmentPool(event: PoolCreated): void {
   InvestmentPoolTemplate.create(event.params.pool);
 }
 
-export function handleNewManagedPool(event: PoolCreated): void {
-  const pool = createWeightedLikePool(event, PoolType.Managed);
+export function handleNewManagedPoolV2(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Managed, 2);
   if (pool == null) return;
   ManagedPoolTemplate.create(event.params.pool);
 }

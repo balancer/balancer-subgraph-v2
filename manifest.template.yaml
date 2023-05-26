@@ -450,7 +450,7 @@ dataSources:
           file: ./abis/ManagedPoolV2.json
       eventHandlers:
         - event: PoolCreated(indexed address)
-          handler: handleNewManagedPool
+          handler: handleNewManagedPoolV2
   {{/if}}
   {{#if ConvergentPoolFactory}}
   - kind: ethereum/contract
