@@ -1,5 +1,4 @@
-import { Address, BigDecimal, BigInt, log, store } from '@graphprotocol/graph-ts';
-import { Transfer } from '../types/templates/WeightedPool/BalancerPoolToken';
+import { Address, BigDecimal, BigInt, Bytes, log, store } from '@graphprotocol/graph-ts';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { PausedStateChanged, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
@@ -36,6 +35,7 @@ import {
   SwapFeeUpdate,
   PoolToken,
   PoolContract,
+  CircuitBreaker,
 } from '../types/schema';
 
 import {
@@ -56,6 +56,7 @@ import {
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Transfer } from '../types/Vault/ERC20';
 
 /************************************
  ********** MANAGED POOLS ***********
@@ -63,27 +64,23 @@ import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyr
 
 export function handleMustAllowlistLPsSet(event: MustAllowlistLPsSet): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
   pool.mustAllowlistLPs = event.params.mustAllowlistLPs;
   pool.save();
 }
 
 export function handleCircuitBreakerSet(event: CircuitBreakerSet): void {
-  let poolContract = WeightedPool.bind(event.address);
-  let poolIdCall = poolContract.try_getPoolId();
-  if (poolIdCall.reverted) return;
-
-  let poolId = poolIdCall.value.toHexString();
+  let poolAddress = event.address;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
   // ID for PoolToken and CircuitBreaker is built in the same way
-  let id = getPoolTokenId(poolId, event.params.token);
+  let id = getPoolTokenId(poolContract.pool, event.params.token);
   let circuitBreaker = new CircuitBreaker(id);
-  circuitBreaker.pool = poolId;
+  circuitBreaker.pool = poolContract.pool;
   circuitBreaker.token = id;
   circuitBreaker.bptPrice = scaleDown(event.params.bptPrice, 18);
   circuitBreaker.lowerBoundPercentage = scaleDown(event.params.lowerBoundPercentage, 18);
@@ -99,19 +96,18 @@ export function handleCircuitBreakerSet(event: CircuitBreakerSet): void {
 
 export function handleTokenAdded(event: TokenAdded): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  let tokens = getPoolTokens(poolId);
+  let poolIdBytes = Bytes.fromHexString(poolContract.pool);
+  let tokens = getPoolTokens(poolIdBytes);
   if (tokens == null) return;
   pool.tokensList = tokens;
   pool.save();
 
-  let assetManager = getPoolTokenManager(poolId, event.params.token);
+  let assetManager = getPoolTokenManager(poolIdBytes, event.params.token);
   if (!assetManager) return;
 
   createPoolTokenEntity(pool, event.params.token, assetManager);
@@ -119,19 +115,18 @@ export function handleTokenAdded(event: TokenAdded): void {
 
 export function handleTokenRemoved(event: TokenRemoved): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
-  let pool = Pool.load(poolId.toHexString()) as Pool;
-
-  let tokens = getPoolTokens(poolId);
+  let poolIdBytes = Bytes.fromHexString(poolContract.pool);
+  let tokens = getPoolTokens(poolIdBytes);
   if (tokens == null) return;
   pool.tokensList = tokens;
   pool.save();
 
-  let id = getPoolTokenId(poolId.toHexString(), event.params.token);
+  let id = getPoolTokenId(poolContract.pool, event.params.token);
   store.remove('PoolToken', id);
 }
 
@@ -166,12 +161,10 @@ export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercen
 // [MSB                                                       LSB]
 export function handleEncodedProtocolFeePercentageCacheUpdated(event: EncodedProtocolFeePercentageCacheUpdated): void {
   let poolAddress = event.address;
-  let poolContract = WeightedPool.bind(poolAddress);
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   // Convert to hex and remove the 0x prefix
   const feeCache = event.params.feeCache.toHex().slice(2);
@@ -355,13 +348,10 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
 
 export function handleGradualSwapFeeUpdateScheduled(event: GradualSwapFeeUpdateScheduled): void {
   let poolAddress = event.address;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   const startSwapFee = scaleDown(event.params.startSwapFeePercentage, 18);
   const endSwapFee = scaleDown(event.params.endSwapFeePercentage, 18);
@@ -413,13 +403,10 @@ export function handleManagementFeePercentageChanged(event: ManagementFeePercent
 
 export function handleManagementAumFeePercentageChanged(event: ManagementAumFeePercentageChanged): void {
   let poolAddress = event.address;
+  let poolContract = PoolContract.load(poolAddress.toHexString());
+  if (poolContract == null) return;
 
-  // TODO - refactor so pool -> poolId doesn't require call
-  let poolContract = WeightedPool.bind(poolAddress);
-  let poolIdCall = poolContract.try_getPoolId();
-  let poolId = poolIdCall.value;
-
-  let pool = Pool.load(poolId.toHexString()) as Pool;
+  let pool = Pool.load(poolContract.pool) as Pool;
 
   pool.managementAumFee = scaleDown(event.params.managementAumFeePercentage, 18);
   pool.save();
