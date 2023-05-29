@@ -138,7 +138,7 @@ type PoolToken @entity {
   oldPriceRate: BigDecimal # TODO: make mandatory at next full sync
   priceRate: BigDecimal!
   balance: BigDecimal!
-  paidProtocolFees: BigDecimal!
+  paidProtocolFees: BigDecimal # TODO: make mandatory at next full sync
   cashBalance: BigDecimal!
   managedBalance: BigDecimal!
   managements: [ManagementOperation!] @derivedFrom(field: "poolTokenId")
