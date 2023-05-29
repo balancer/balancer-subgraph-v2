@@ -206,11 +206,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # May 12 update - block of ERC4626LinearPoolV4Factory
-    block: 41502981
+    # May 29
+    block: 43270029
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmT7pieLoaRTQ4U72YJJ2g9dBj3Un2GUhnG6PuY6RR1t8g
+    base: QmSwtb6McP7w5p4U4SZFm87b11mvD64x6MBjfyWY9j6RxG
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -320,10 +320,10 @@ arbitrum:
   network: arbitrum-one
   graft:
     # May 12 update - block of ERC4626LinearPoolV4Factory
-    block: 80182932
+    # block: 80182932
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmUxdtSM4wedHye2PNz2LLhenoCbPJegWE9SYuHvatBUaD
+    # base: QmUxdtSM4wedHye2PNz2LLhenoCbPJegWE9SYuHvatBUaD
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
