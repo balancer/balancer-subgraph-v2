@@ -416,7 +416,7 @@ export function handleTransfer(event: Transfer): void {
     // mint of BPT to the fee collector means the pool is paying protocol fees
     let vault = Balancer.load('2') as Balancer;
     let protocolFeeCollector = vault.protocolFeesCollector;
-    if (protocolFeeCollector == null) {
+    if (!protocolFeeCollector) {
       protocolFeeCollector = getProtocolFeeCollector();
       vault.protocolFeesCollector = protocolFeeCollector;
       vault.save();
@@ -425,7 +425,7 @@ export function handleTransfer(event: Transfer): void {
     if (poolShareTo.userAddress == protocolFeeCollector.toHex()) {
       let poolToken = loadPoolToken(poolId, poolAddress) as PoolToken;
       let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
-      poolToken.paidProtocolFees = paidProtocolFees.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+      poolToken.paidProtocolFees = paidProtocolFees!.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
       poolToken.save();
     }
   } else if (isBurn) {

@@ -205,7 +205,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let newBalance = poolToken.balance.plus(tokenAmountIn);
     let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
     let protocolFeeAmount = tokenToDecimal(protocolFeeAmounts[i], poolToken.decimals);
-    poolToken.paidProtocolFees = paidProtocolFees.plus(protocolFeeAmount);
+    poolToken.paidProtocolFees = paidProtocolFees!.plus(protocolFeeAmount);
     poolToken.balance = newBalance;
     poolToken.save();
 
@@ -328,7 +328,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let newBalance = poolToken.balance.minus(tokenAmountOut);
     let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
     let protocolFeeAmount = tokenToDecimal(protocolFeeAmounts[i], poolToken.decimals);
-    poolToken.paidProtocolFees = paidProtocolFees.plus(protocolFeeAmount);
+    poolToken.paidProtocolFees = paidProtocolFees!.plus(protocolFeeAmount);
     poolToken.balance = newBalance;
     poolToken.save();
 
