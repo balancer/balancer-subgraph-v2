@@ -9,12 +9,7 @@ type Balancer @entity {
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
 
-  protocolFeesCollector: ProtocolFeesCollector
-}
-
-type ProtocolFeesCollector @entity {
-  id: ID!
-  address: Bytes!
+  protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
 
 type Pool @entity {
