@@ -36,6 +36,7 @@ import {
   getPoolTokenId,
   loadPriceRateProvider,
   getPoolShare,
+  getProtocolFeeCollector,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -415,9 +416,16 @@ export function handleTransfer(event: Transfer): void {
     // mint of BPT to the fee collector means the pool is paying protocol fees
     let vault = Balancer.load('2') as Balancer;
     let protocolFeeCollector = vault.protocolFeesCollector;
-    if (poolShareTo.userAddress == protocolFeeCollector) {
+    if (protocolFeeCollector == null) {
+      protocolFeeCollector = getProtocolFeeCollector();
+      vault.protocolFeesCollector = protocolFeeCollector;
+      vault.save();
+    }
+
+    if (poolShareTo.userAddress == protocolFeeCollector.toHex()) {
       let poolToken = loadPoolToken(poolId, poolAddress) as PoolToken;
-      poolToken.paidProtocolFees = poolToken.paidProtocolFees.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+      let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
+      poolToken.paidProtocolFees = paidProtocolFees.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
       poolToken.save();
     }
   } else if (isBurn) {

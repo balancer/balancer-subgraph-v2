@@ -15,8 +15,8 @@ import {
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
-import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
+import { Swap as SwapEvent, Vault } from '../../types/Vault/Vault';
+import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_BD } from './constants';
 import { getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
 import { valueInUSD } from '../pricing';
@@ -412,4 +412,10 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   }
 
   return snapshot;
+}
+
+export function getProtocolFeeCollector(): Address {
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let feesCollector = vaultContract.getProtocolFeesCollector();
+  return feesCollector;
 }

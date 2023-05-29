@@ -15,6 +15,7 @@ import {
   tokenToDecimal,
   stringToBytes,
   bytesToAddress,
+  getProtocolFeeCollector,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
@@ -574,15 +575,7 @@ function findOrInitializeVault(): Balancer {
   vault.totalSwapCount = ZERO;
 
   // set up protocol fees collector
-  let vaultContract = Vault.bind(VAULT_ADDRESS);
-  let feesCollectorCall = vaultContract.try_getProtocolFeesCollector();
-  if (!feesCollectorCall.reverted) {
-    let feesCollector = new ProtocolFeesCollector(feesCollectorCall.value.toHex());
-    feesCollector.address = feesCollectorCall.value;
-    feesCollector.save();
-
-    vault.protocolFeesCollector = feesCollector.id;
-  }
+  vault.protocolFeesCollector = getProtocolFeeCollector();
 
   return vault;
 }
