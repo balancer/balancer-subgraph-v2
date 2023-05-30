@@ -92,9 +92,9 @@ export function handleManagementAumFeeCollected(event: ManagementAumFeeCollected
 
   let pool = Pool.load(poolContract.pool) as Pool;
   let bptCollected = scaleDown(event.params.bptAmount, 18);
-  let totalCollected = pool.totalAumFeeCollectedInBPT;
-  if (!totalCollected) return; // this should never happen for MPs
-  pool.totalAumFeeCollectedInBPT = totalCollected.plus(bptCollected);
+  let totalCollected = pool.totalAumFeeCollectedInBPT ? pool.totalAumFeeCollectedInBPT : ZERO_BD;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  pool.totalAumFeeCollectedInBPT = totalCollected!.plus(bptCollected);
   pool.save();
 }
 
