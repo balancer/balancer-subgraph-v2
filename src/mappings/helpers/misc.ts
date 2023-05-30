@@ -15,8 +15,8 @@ import {
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
-import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_ADDRESS, ZERO_BD } from './constants';
+import { Swap as SwapEvent, Vault } from '../../types/Vault/Vault';
+import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_ADDRESS, ZERO_BD } from './constants';
 import { PoolType, getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
 import { valueInUSD } from '../pricing';
@@ -158,6 +158,7 @@ export function createPoolTokenEntity(
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
   poolToken.balance = ZERO_BD;
+  poolToken.paidProtocolFees = ZERO_BD;
   poolToken.cashBalance = ZERO_BD;
   poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
@@ -421,4 +422,12 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   }
 
   return snapshot;
+}
+
+export function getProtocolFeeCollector(): Address | null {
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let feesCollector = vaultContract.try_getProtocolFeesCollector();
+  if (feesCollector.reverted) return null;
+
+  return feesCollector.value;
 }
