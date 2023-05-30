@@ -422,7 +422,7 @@ export function handleTransfer(event: Transfer): void {
       vault.save();
     }
 
-    if (poolShareTo.userAddress == protocolFeeCollector.toHex()) {
+    if (protocolFeeCollector && poolShareTo.userAddress == protocolFeeCollector.toHex()) {
       let poolToken = loadPoolToken(poolId, poolAddress) as PoolToken;
       let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

@@ -414,8 +414,10 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   return snapshot;
 }
 
-export function getProtocolFeeCollector(): Address {
+export function getProtocolFeeCollector(): Address | null {
   let vaultContract = Vault.bind(VAULT_ADDRESS);
-  let feesCollector = vaultContract.getProtocolFeesCollector();
-  return feesCollector;
+  let feesCollector = vaultContract.try_getProtocolFeesCollector();
+  if (feesCollector.reverted) return null;
+
+  return feesCollector.value;
 }
