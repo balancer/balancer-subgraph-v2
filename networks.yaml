@@ -206,8 +206,8 @@ goerli:
 polygon:
   network: matic
   graft:
-    # May 29
-    block: 43270029
+    # Mar 21 - PR 459 requires that we reindex since weighted v4 factory deployment
+    block: 40611103
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmSwtb6McP7w5p4U4SZFm87b11mvD64x6MBjfyWY9j6RxG
@@ -319,11 +319,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # May 12 update - block of ERC4626LinearPoolV4Factory
-    # block: 80182932
+    # Mar 21 - PR 459 requires that we reindex since weighted v4 factory deployment
+    block: 72222060
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    # base: QmUxdtSM4wedHye2PNz2LLhenoCbPJegWE9SYuHvatBUaD
+    base: QmWFcJLknzemK7xa2Sb9bvKEbvW4K9M2dQNNkTVgKU5nQL
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
