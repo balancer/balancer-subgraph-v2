@@ -35,9 +35,10 @@ import {
   GradualWeightUpdate,
   AmpUpdate,
   SwapFeeUpdate,
-  PoolToken,
-  PoolContract,
   CircuitBreaker,
+  PoolContract,
+  Balancer,
+  PoolToken,
 } from '../types/schema';
 
 import {
@@ -50,6 +51,7 @@ import {
   createPoolTokenEntity,
   hexToBigDecimal,
   bytesToAddress,
+  getProtocolFeeCollector,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -600,6 +602,23 @@ export function handleTransfer(event: Transfer): void {
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
     pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+
+    // mint of BPT to the fee collector means the pool is paying protocol fees
+    let vault = Balancer.load('2') as Balancer;
+    let protocolFeeCollector = vault.protocolFeesCollector;
+    if (!protocolFeeCollector) {
+      protocolFeeCollector = getProtocolFeeCollector();
+      vault.protocolFeesCollector = protocolFeeCollector;
+      vault.save();
+    }
+
+    if (protocolFeeCollector && poolShareTo.userAddress == protocolFeeCollector.toHex()) {
+      let poolToken = loadPoolToken(poolId, poolAddress) as PoolToken;
+      let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      poolToken.paidProtocolFees = paidProtocolFees!.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+      poolToken.save();
+    }
   } else if (isBurn) {
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareFrom.save();

@@ -1534,6 +1534,8 @@ templates:
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1559,6 +1561,8 @@ templates:
       abis:
         - name: WeightedPoolV2
           file: ./abis/WeightedPoolV2.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1588,6 +1592,8 @@ templates:
       abis:
         - name: WeightedPool2Tokens
           file: ./abis/WeightedPool2Tokens.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1615,6 +1621,8 @@ templates:
       abis:
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1647,6 +1655,8 @@ templates:
           file: ./abis/MetaStablePool.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1682,6 +1692,8 @@ templates:
       abis:
         - name: ConvergentCurvePool
           file: ./abis/ConvergentCurvePool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1704,6 +1716,8 @@ templates:
       abis:
         - name: LiquidityBootstrappingPool
           file: ./abis/LiquidityBootstrappingPool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1734,6 +1748,8 @@ templates:
       abis:
         - name: InvestmentPool
           file: ./abis/InvestmentPool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1822,6 +1838,8 @@ templates:
           file: ./abis/StablePhantomPool.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1858,6 +1876,8 @@ templates:
           file: ./abis/ComposableStablePool.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1896,6 +1916,8 @@ templates:
       abis:
         - name: LinearPool
           file: ./abis/LinearPool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1926,6 +1948,8 @@ templates:
       abis:
         - name: Gyro2Pool
           file: ./abis/Gyro2Pool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1954,6 +1978,8 @@ templates:
       abis:
         - name: Gyro3Pool
           file: ./abis/Gyro3Pool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -1982,6 +2008,8 @@ templates:
       abis:
         - name: GyroEPool
           file: ./abis/GyroEPool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
@@ -2010,6 +2038,8 @@ templates:
       abis:
         - name: FXPool
           file: ./abis/FXPool.json
+        - name: Vault
+          file: ./abis/Vault.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

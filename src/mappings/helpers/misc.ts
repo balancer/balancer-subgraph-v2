@@ -15,9 +15,9 @@ import {
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
-import { Swap as SwapEvent } from '../../types/Vault/Vault';
-import { ONE_BD, SWAP_IN, SWAP_OUT, ZERO, ZERO_BD } from './constants';
-import { getPoolAddress, isComposableStablePool } from './pools';
+import { Swap as SwapEvent, Vault } from '../../types/Vault/Vault';
+import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_ADDRESS, ZERO_BD } from './constants';
+import { PoolType, getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
 import { valueInUSD } from '../pricing';
 
@@ -162,6 +162,7 @@ export function createPoolTokenEntity(
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
   poolToken.balance = ZERO_BD;
+  poolToken.paidProtocolFees = ZERO_BD;
   poolToken.cashBalance = ZERO_BD;
   poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
@@ -176,6 +177,16 @@ export function createPoolTokenEntity(
 
     if (!isTokenExemptCall.reverted) {
       poolToken.isExemptFromYieldProtocolFee = isTokenExemptCall.value;
+    }
+  } else if (pool.poolType == PoolType.Weighted && pool.poolTypeVersion == 4) {
+    let poolAddress = bytesToAddress(pool.address);
+    // ComposableStable ABI has the same getRateProviders function as WeightedV4
+    let poolContract = ComposableStablePool.bind(poolAddress);
+    let rateProvidersCall = poolContract.try_getRateProviders();
+
+    // check array length to avoid out of bounds error if call doesn't revert but returns empty array
+    if (!rateProvidersCall.reverted && rateProvidersCall.value.length > tokenIndex) {
+      poolToken.isExemptFromYieldProtocolFee = rateProvidersCall.value[tokenIndex] == ZERO_ADDRESS;
     }
   }
 
@@ -415,4 +426,12 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   }
 
   return snapshot;
+}
+
+export function getProtocolFeeCollector(): Address | null {
+  let vaultContract = Vault.bind(VAULT_ADDRESS);
+  let feesCollector = vaultContract.try_getProtocolFeesCollector();
+  if (feesCollector.reverted) return null;
+
+  return feesCollector.value;
 }
