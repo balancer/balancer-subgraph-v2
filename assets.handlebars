@@ -9,6 +9,7 @@ class Assets {
   public pricingAssets: Address[];
   public fxAssets: Address[];
   public fxAggregators: Address[];
+  public fxOracles: Address[];
 }
 
 {{#each stableAssets}}
@@ -33,6 +34,11 @@ export const assets: Assets = {
   ],
   fxAggregators: [
     {{#each fxAggregators}}
+    Address.fromString('{{address}}'), // {{symbol}}
+    {{/each}}
+  ],
+  fxOracles: [
+    {{#each fxOracles}}
     Address.fromString('{{address}}'), // {{symbol}}
     {{/each}}
   ],

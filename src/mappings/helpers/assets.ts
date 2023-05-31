@@ -9,6 +9,7 @@ class Assets {
   public pricingAssets: Address[];
   public fxAssets: Address[];
   public fxAggregators: Address[];
+  public fxOracles: Address[];
 }
 
 export const USDC_ADDRESS = Address.fromString('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48');
@@ -49,5 +50,11 @@ export const assets: Assets = {
     Address.fromString('0xc96129C796F03bb21AC947EfC5329CD1F560305B'), // XSGD-USD
     Address.fromString('0xDEc0a100eaD1fAa37407f0Edc76033426CF90b82'), // DAI-USD
     Address.fromString('0x02F878A94a1AE1B15705aCD65b5519A46fe3517e'), // EURS-USD
+  ],
+  fxOracles: [
+    Address.fromString('0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6'), // USDC-USD
+    Address.fromString('0xe25277fF4bbF9081C75Ab0EB13B4A13a721f3E13'), // SGD-USD
+    Address.fromString('0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9'), // DAI-USD
+    Address.fromString('0xb49f677943BC038e9857d61E7d053CaA2C1734C1'), // EUR-USD
   ],
 };

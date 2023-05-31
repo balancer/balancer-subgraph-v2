@@ -29,6 +29,7 @@ export const MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
 
 export let FX_AGGREGATOR_ADDRESSES = assets.fxAggregators;
 export let FX_TOKEN_ADDRESSES = assets.fxAssets;
+export let FX_ORACLE_ADDRESSES = assets.fxOracles;
 
 export let USD_STABLE_ASSETS = assets.stableAssets;
 export let PRICING_ASSETS = assets.stableAssets.concat(assets.pricingAssets);

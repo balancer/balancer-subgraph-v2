@@ -316,6 +316,7 @@ type Token @entity {
   latestUSDPriceTimestamp: BigInt # timestamp at which the latestUSDPrice was updated
   latestFXPrice: BigDecimal # latest "off-chain" price of token in USD, only available if token has an offchain price aggregator
   pool: Pool # pool entity associated with the token, if it is a Balancer pool
+  fxOracleDecimals: Int # only available if token has an FX oracle
 }
 
 type TokenSnapshot @entity {
