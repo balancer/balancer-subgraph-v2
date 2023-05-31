@@ -101,11 +101,12 @@ type Pool @entity {
   delta: BigDecimal
   epsilon: BigDecimal
 
-  # Composable and WeightedV2 Only
+  # Composable and WeightedV2+ Only
   isInRecoveryMode: Boolean
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
+  totalProtocolFeePaidInBPT: BigDecimal
 
   # Composable Stable Only
   lastPostJoinExitInvariant: BigDecimal
