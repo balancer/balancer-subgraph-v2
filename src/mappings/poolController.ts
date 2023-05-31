@@ -26,7 +26,6 @@ import {
   SwapFeeUpdate,
   PoolContract,
   Balancer,
-  PoolToken,
 } from '../types/schema';
 
 import {
