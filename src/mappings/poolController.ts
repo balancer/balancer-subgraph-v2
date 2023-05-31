@@ -423,11 +423,9 @@ export function handleTransfer(event: Transfer): void {
     }
 
     if (protocolFeeCollector && poolShareTo.userAddress == protocolFeeCollector.toHex()) {
-      let poolToken = loadPoolToken(poolId, poolAddress) as PoolToken;
-      let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
+      let protocolFeePaid = pool.totalProtocolFeePaidInBPT ? pool.totalProtocolFeePaidInBPT : ZERO_BD;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      poolToken.paidProtocolFees = paidProtocolFees!.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
-      poolToken.save();
+      pool.totalProtocolFeePaidInBPT = protocolFeePaid!.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     }
   } else if (isBurn) {
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
