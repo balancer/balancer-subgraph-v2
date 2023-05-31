@@ -353,7 +353,7 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
     return;
   }
 
-  let rate = scaleDown(event.params.current, 8);
+  let rate = scaleDown(event.params.current, token.fxOracleDecimals);
   token.latestFXPrice = rate;
   token.save();
 }
