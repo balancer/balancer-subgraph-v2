@@ -8,6 +8,7 @@ type Balancer @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+  totalProtocolFee: BigDecimal
 
   protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
@@ -32,6 +33,7 @@ type Pool @entity {
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
   totalShares: BigDecimal!
+  totalProtocolFee: BigDecimal
 
   createTime: Int!
   swapsCount: BigInt!
@@ -294,6 +296,7 @@ type PoolSnapshot @entity {
   amounts: [BigDecimal!]!
   totalShares: BigDecimal!
   swapVolume: BigDecimal!
+  protocolFee: BigDecimal
   swapFees: BigDecimal!
   liquidity: BigDecimal!
   swapsCount: BigInt!
@@ -356,6 +359,7 @@ type BalancerSnapshot @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+  totalProtocolFee: BigDecimal
 }
 
 type ProtocolIdData @entity {
