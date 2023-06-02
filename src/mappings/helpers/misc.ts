@@ -285,11 +285,12 @@ export function createToken(tokenAddress: Address): Token {
     token.pool = poolId.toHexString();
   }
 
+  // attempt to retrieve oracle decimals for FX tokens
   let tokenIndex = FX_TOKEN_ADDRESSES.indexOf(tokenAddress);
   if (tokenIndex >= 0) {
     let fxOracle = ERC20.bind(FX_ORACLE_ADDRESSES[tokenIndex]);
     let maybeFXOracleDecimals = fxOracle.try_decimals();
-    token.fxOracleDecimals = !maybeFXOracleDecimals.reverted ? maybeFXOracleDecimals.value : 0;
+    token.fxOracleDecimals = !maybeFXOracleDecimals.reverted ? maybeFXOracleDecimals.value : 8;
   }
 
   token.name = name;
