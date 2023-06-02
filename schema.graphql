@@ -8,6 +8,8 @@ type Balancer @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+
+  protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
 
 type Pool @entity {
@@ -99,11 +101,12 @@ type Pool @entity {
   delta: BigDecimal
   epsilon: BigDecimal
 
-  # Composable and WeightedV2 Only
+  # Composable and WeightedV2+ Only
   isInRecoveryMode: Boolean
   protocolSwapFeeCache: BigDecimal
   protocolYieldFeeCache: BigDecimal
   protocolAumFeeCache: BigDecimal
+  totalProtocolFeePaidInBPT: BigDecimal
 
   # Composable Stable Only
   lastPostJoinExitInvariant: BigDecimal
@@ -131,6 +134,7 @@ type PoolToken @entity {
   oldPriceRate: BigDecimal # TODO: make mandatory at next full sync
   priceRate: BigDecimal!
   balance: BigDecimal!
+  paidProtocolFees: BigDecimal # TODO: make mandatory at next full sync
   cashBalance: BigDecimal!
   managedBalance: BigDecimal!
   managements: [ManagementOperation!] @derivedFrom(field: "poolTokenId")

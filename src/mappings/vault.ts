@@ -203,6 +203,10 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     let amountIn = amounts[i].minus(protocolFeeAmounts[i]);
     let tokenAmountIn = tokenToDecimal(amountIn, poolToken.decimals);
     let newBalance = poolToken.balance.plus(tokenAmountIn);
+    let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
+    let protocolFeeAmount = tokenToDecimal(protocolFeeAmounts[i], poolToken.decimals);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    poolToken.paidProtocolFees = paidProtocolFees!.plus(protocolFeeAmount);
     poolToken.balance = newBalance;
     poolToken.save();
 
@@ -323,6 +327,10 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     let amountOut = amounts[i].minus(protocolFeeAmounts[i]).neg();
     let tokenAmountOut = tokenToDecimal(amountOut, poolToken.decimals);
     let newBalance = poolToken.balance.minus(tokenAmountOut);
+    let paidProtocolFees = poolToken.paidProtocolFees ? poolToken.paidProtocolFees : ZERO_BD;
+    let protocolFeeAmount = tokenToDecimal(protocolFeeAmounts[i], poolToken.decimals);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    poolToken.paidProtocolFees = paidProtocolFees!.plus(protocolFeeAmount);
     poolToken.balance = newBalance;
     poolToken.save();
 
