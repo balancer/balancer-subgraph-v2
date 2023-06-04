@@ -114,11 +114,11 @@ goerli:
 #    address: "0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0"
 #    startBlock: 4716924
   PrimaryIssuePoolFactory:
-    address: "0x4823be69546f9e1Ab8a87f315108c19dDC8E48b4"
-    startBlock: 8586768
+    address: "0x588b63ca44F637C1Ffa9C70c512363C7BE6A1072"
+    startBlock: 9121129
   SecondaryIssuePoolFactory:
-    address: "0xB4740c3f0d99B3DccE566eE4aE6FfAF0d938F2EA"
-    startBlock: 8972539
+    address: "0xe3e79e4106327e6eAeFBD03C1fD3A4A531c59b10"
+    startBlock: 9012992
   OffchainSecondariesPoolFactory:
     address: "0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852"
     startBlock: 8853132

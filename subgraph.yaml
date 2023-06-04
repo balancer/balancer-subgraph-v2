@@ -1,21 +1,17 @@
 specVersion: 0.0.2
 description: The Verified Vault manages wallet balances in liquidity pools for security tokens.
 #
-#graft:
-#  base: QmaNhv72Lbq2rGEz9m7EydH3LiyCeDgmDDGzCMRamM8JWe
-#  block: 36555199
-#
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: EventEmitter
-    network: matic
+    network: goerli
     source:
-      address: '0xcdcECFa416EE3022030E707dC3EA13a8997D74c8'
+      address: '0x4bcFCEDF1114030ff85a647dD436B7b3dEb45d9E'
       abi: EventEmitter
-      startBlock: 38152461
+      startBlock: 8305794
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -31,11 +27,11 @@ dataSources:
           handler: handleLogArgument
   - kind: ethereum/contract
     name: Vault
-    network: matic
+    network: goerli
     source:
       address: '0xBA12222222228d8Ba445958a75a0704d566BF2C8'
       abi: Vault
-      startBlock: 15832990
+      startBlock: 4648099
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -76,11 +72,11 @@ dataSources:
           handler: handleInternalBalanceChange
   - kind: ethereum/contract
     name: PrimaryIssuePoolFactory
-    network: matic
+    network: goerli
     source:
-      address: '0xDA13BC71FEe08FfD523f10458B0e2c2D8427BBD5'
+      address: '0x588b63ca44F637C1Ffa9C70c512363C7BE6A1072'
       abi: PrimaryIssuePoolFactory
-      startBlock: 39620319
+      startBlock: 9121129
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -105,11 +101,11 @@ dataSources:
           handler: handleNewPrimaryPool
   - kind: ethereum/contract
     name: SecondaryIssuePoolFactory
-    network: matic
+    network: goerli
     source:
-      address: '0xbe7a3D193d91D1F735d14ec8807F20FF2058f342'
+      address: '0xe3e79e4106327e6eAeFBD03C1fD3A4A531c59b10'
       abi: SecondaryIssuePoolFactory
-      startBlock: 42569294
+      startBlock: 9012992
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -132,10 +128,68 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewSecondaryPool          
+  - kind: ethereum/contract
+    name: OffchainSecondariesPoolFactory
+    network: goerli
+    source:
+      address: '0xCFE47c774245Ef9EE6Ed0d7C58219fFd7BB60852'
+      abi: OffchainSecondariesPoolFactory
+      startBlock: 8853132
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: OffchainSecondariesPoolFactory
+          file: ./abis/OffchainSecondariesPoolFactory.json
+        - name: OffchainSecondariesPool
+          file: ./abis/OffchainSecondariesPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewOffchainSecondaryPool          
+  - kind: ethereum/contract
+    name: MarginTradingPoolFactory
+    network: goerli
+    source:
+      address: '0x2E98aa5C69ef93dAc5305dFAd3dDFba5e29d8387'
+      abi: MarginTradingPoolFactory
+      startBlock: 8853121
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: MarginTradingPoolFactory
+          file: ./abis/MarginTradingPoolFactory.json
+        - name: MarginTradingPool
+          file: ./abis/MarginTradingPool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewMarginPool          
 templates:
   - kind: ethereum/contract
     name: WeightedPool
-    network: matic
+    network: goerli
     source:
       abi: WeightedPool
     mapping:
@@ -160,7 +214,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPoolV2
-    network: matic
+    network: goerli
     source:
       abi: WeightedPoolV2
     mapping:
@@ -189,7 +243,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: WeightedPool2Tokens
-    network: matic
+    network: goerli
     source:
       abi: WeightedPool2Tokens
     mapping:
@@ -216,7 +270,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePool
-    network: matic
+    network: goerli
     source:
       abi: StablePool
     mapping:
@@ -245,7 +299,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: MetaStablePool
-    network: matic
+    network: goerli
     source:
       abi: MetaStablePool
     mapping:
@@ -283,7 +337,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: ConvergentCurvePool
-    network: matic
+    network: goerli
     source:
       abi: ConvergentCurvePool
     mapping:
@@ -304,7 +358,7 @@ templates:
           handler: handleTransfer
   - kind: ethereum/contract
     name: LiquidityBootstrappingPool
-    network: matic
+    network: goerli
     source:
       abi: LiquidityBootstrappingPool
     mapping:
@@ -334,7 +388,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: InvestmentPool
-    network: matic
+    network: goerli
     source:
       abi: InvestmentPool
     mapping:
@@ -366,7 +420,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPool
-    network: matic
+    network: goerli
     source:
       abi: StablePhantomPool
     mapping:
@@ -402,7 +456,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: StablePhantomPoolV2
-    network: matic
+    network: goerli
     source:
       abi: ComposableStablePool
     mapping:
@@ -442,7 +496,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: LinearPool
-    network: matic
+    network: goerli
     source:
       abi: LinearPool
     mapping:
@@ -470,7 +524,7 @@ templates:
           handler: handlePausedStateChanged
   - kind: ethereum/contract
     name: PrimaryIssuePool
-    network: matic
+    network: goerli
     source:
       abi: PrimaryIssuePool
     mapping:
@@ -493,13 +547,13 @@ templates:
           handler: handleTransfer
         - event: SwapFeePercentageChanged(uint256)
           handler: handleSwapFeePercentageChange
-        - event: OpenIssue(indexed address,uint256,uint256,address,uint256,uint256,string)
+        - event: OpenIssue(indexed address,uint256,uint256,address,uint256,uint256,string,address)
           handler: handleOpenIssue
         - event: Subscription(indexed address,address,uint256,address,uint256,uint256)
           handler: handleSubscription
   - kind: ethereum/contract
     name: SecondaryIssuePool
-    network: matic
+    network: goerli
     source:
       abi: SecondaryIssuePool
     mapping:
@@ -530,7 +584,7 @@ templates:
           handler: handleOrderBook
   - kind: ethereum/contract
     name: OffchainSecondariesPool
-    network: matic
+    network: goerli
     source:
       abi: OffchainSecondariesPool
     mapping:
@@ -561,7 +615,7 @@ templates:
           handler: handleOffchainOrderBook
   - kind: ethereum/contract
     name: MarginTradingPool
-    network: matic
+    network: goerli
     source:
       abi: MarginTradingPool
     mapping:
@@ -592,7 +646,7 @@ templates:
           handler: handleMarginOrderBook
   - kind: ethereum/contract
     name: Gyro2Pool
-    network: matic
+    network: goerli
     source:
       abi: Gyro2Pool
     mapping:
@@ -620,7 +674,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: Gyro3Pool
-    network: matic
+    network: goerli
     source:
       abi: Gyro3Pool
     mapping:
@@ -648,7 +702,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: GyroEPool
-    network: matic
+    network: goerli
     source:
       abi: GyroEPool
     mapping:
@@ -676,7 +730,7 @@ templates:
           handler: handleUnpauseGyroPool
   - kind: ethereum/contract
     name: FXPool
-    network: matic
+    network: goerli
     source:
       abi: FXPool
     mapping:
@@ -700,7 +754,7 @@ templates:
           handler: handleParametersSet
   - kind: ethereum/contract
     name: OffchainAggregator
-    network: matic
+    network: goerli
     source:
       abi: AccessControlledOffchainAggregator
     mapping:
