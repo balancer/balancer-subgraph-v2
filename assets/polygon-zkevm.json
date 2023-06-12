@@ -23,6 +23,22 @@
       "symbol": "WETH"
     },
     {
+      "address": "0x16C9a4D841E88E52b51936106010F27085a529EC",
+      "symbol": "bb-o-USDC"
+    },
+    {
+      "address": "0x4B718E0E2fEA1dA68b763CD50C446FbA03CEB2Ea",
+      "symbol": "bb-o-USDT"
+    },
+    {
+      "address": "0xe274c9deb6ed34cfe4130F8D0A8a948deA5bB286",
+      "symbol": "bb-o-USD"
+    },
+    {
+      "address": "0xe1F2c039a68A216dE6DD427Be6c60dEcf405762A",
+      "symbol": "B-wstETH-STABLE"
+    },
+    {
       "address": "0xEA034fb02eB1808C2cc3adbC15f447B93CbE08e1",
       "symbol": "WBTC"
     },
