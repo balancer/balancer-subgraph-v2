@@ -632,6 +632,9 @@ sepolia:
     startBlock: 3425305
 polygon-zkevm:
   network: polygon-zkevm
+  EventEmitter:
+    address: "0x16e29e62cC00fCBa1234C7ad89BD731427c8D9aF"
+    startBlock: 281361
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 203079
