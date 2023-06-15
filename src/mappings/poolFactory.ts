@@ -572,7 +572,6 @@ function findOrInitializeVault(): Balancer {
   vault.totalSwapVolume = ZERO_BD;
   vault.totalSwapFee = ZERO_BD;
   vault.totalSwapCount = ZERO;
-  vault.totalProtocolFee = ZERO_BD;
 
   // set up protocol fees collector
   vault.protocolFeesCollector = getProtocolFeeCollector();
