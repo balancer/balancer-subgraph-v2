@@ -38,6 +38,7 @@ import {
   CircuitBreaker,
   PoolContract,
   Balancer,
+  PoolToken,
 } from '../types/schema';
 
 import {
