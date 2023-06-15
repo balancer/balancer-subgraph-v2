@@ -48,6 +48,7 @@ import {
 import {
   MIN_POOL_LIQUIDITY,
   MIN_SWAP_VALUE_USD,
+  ONE_BD,
   SWAP_IN,
   SWAP_OUT,
   VAULT_ADDRESS,
@@ -192,6 +193,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.valueUSD = valueUSD;
   join.save();
 
+  let protocolFeeUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -210,9 +212,13 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     poolToken.balance = newBalance;
     poolToken.save();
 
+    let tokenPriceUSD = valueInUSD(ONE_BD, tokenAddress);
+    let protocolFeeAmountUSD = protocolFeeAmount.times(tokenPriceUSD);
+    protocolFeeUSD = protocolFeeUSD.plus(protocolFeeAmountUSD);
+
     let token = getToken(tokenAddress);
     const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
-    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
+    const tokenTotalBalanceUSD = tokenTotalBalanceNotional.times(tokenPriceUSD);
     token.totalBalanceNotional = tokenTotalBalanceNotional;
     token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
@@ -222,6 +228,10 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
   }
+
+  let totalProtocolFee = pool.totalProtocolFee ? pool.totalProtocolFee : ZERO_BD;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  pool.totalProtocolFee = totalProtocolFee!.plus(protocolFeeUSD);
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
@@ -268,8 +278,9 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       event.receipt
     );
     handleTransfer(mockEvent);
-    pool.save();
   }
+
+  pool.save();
 
   updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
 }
@@ -288,8 +299,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     return;
   }
   let tokenAddresses = pool.tokensList;
-
-  pool.save();
 
   let exitId = transactionHash.toHexString().concat(logIndex.toString());
   let exit = new JoinExit(exitId);
@@ -316,6 +325,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.valueUSD = valueUSD;
   exit.save();
 
+  let protocolFeeUSD = ZERO_BD;
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     let poolToken = loadPoolToken(poolId, tokenAddress);
@@ -334,6 +344,10 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     poolToken.balance = newBalance;
     poolToken.save();
 
+    let tokenPriceUSD = valueInUSD(ONE_BD, tokenAddress);
+    let protocolFeeAmountUSD = protocolFeeAmount.times(tokenPriceUSD);
+    protocolFeeUSD = protocolFeeUSD.plus(protocolFeeAmountUSD);
+
     let token = getToken(tokenAddress);
     const tokenTotalBalanceNotional = token.totalBalanceNotional.minus(tokenAmountOut);
     const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
@@ -346,6 +360,11 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     tokenSnapshot.totalBalanceUSD = tokenTotalBalanceUSD;
     tokenSnapshot.save();
   }
+
+  let totalProtocolFee = pool.totalProtocolFee ? pool.totalProtocolFee : ZERO_BD;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  pool.totalProtocolFee = totalProtocolFee!.plus(protocolFeeUSD);
+  pool.save();
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
