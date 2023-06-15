@@ -31,8 +31,26 @@ export function stringToBytes(str: string): Bytes {
   return Bytes.fromByteArray(Bytes.fromHexString(str));
 }
 
-export function hexToBigDecimal(str: string): BigDecimal {
-  return BigDecimal.fromString(Bytes.fromHexString(str).toI32().toString());
+export function hexToBigInt(hex: string): BigInt {
+  let hexUpper = hex.toUpperCase();
+  let bigInt = BigInt.fromI32(0);
+  let power = BigInt.fromI32(1);
+
+  for (let i = hex.length - 1; i >= 0; i--) {
+    let char = hexUpper.charCodeAt(i);
+    let value = 0;
+
+    if (char >= 48 && char <= 57) {
+      value = char - 48;
+    } else if (char >= 65 && char <= 70) {
+      value = char - 55;
+    }
+
+    bigInt = bigInt.plus(BigInt.fromI32(value).times(power));
+    power = power.times(BigInt.fromI32(16));
+  }
+
+  return bigInt;
 }
 
 export function getTokenDecimals(tokenAddress: Address): i32 {

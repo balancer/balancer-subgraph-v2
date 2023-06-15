@@ -49,9 +49,9 @@ import {
   loadPriceRateProvider,
   getPoolShare,
   createPoolTokenEntity,
-  hexToBigDecimal,
   bytesToAddress,
   getProtocolFeeCollector,
+  hexToBigInt,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -212,11 +212,11 @@ export function handleEncodedProtocolFeePercentageCacheUpdated(event: EncodedPro
   // Thus each fee is represented by 16 chars
   let encodedAumFee = feeCache.slice(16, 32);
   let encodedYieldFee = feeCache.slice(32, 48);
-  let encodedSwapFee = feeCache.slice(48, 64);
+  let encodedSwapFee = feeCache.slice(48, 65);
 
-  pool.protocolAumFeeCache = hexToBigDecimal(encodedAumFee);
-  pool.protocolYieldFeeCache = hexToBigDecimal(encodedYieldFee);
-  pool.protocolSwapFeeCache = hexToBigDecimal(encodedSwapFee);
+  pool.protocolAumFeeCache = scaleDown(hexToBigInt(encodedAumFee), 18);
+  pool.protocolYieldFeeCache = scaleDown(hexToBigInt(encodedYieldFee), 18);
+  pool.protocolSwapFeeCache = scaleDown(hexToBigInt(encodedSwapFee), 18);
 
   pool.save();
 }
