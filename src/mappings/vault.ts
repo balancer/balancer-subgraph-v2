@@ -48,7 +48,6 @@ import {
 import {
   MIN_POOL_LIQUIDITY,
   MIN_SWAP_VALUE_USD,
-  ONE_BD,
   SWAP_IN,
   SWAP_OUT,
   VAULT_ADDRESS,
