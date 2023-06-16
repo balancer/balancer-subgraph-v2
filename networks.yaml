@@ -60,6 +60,9 @@ mainnet:
   InvestmentPoolFactory:
     address: "0x48767F9F868a4A7b86A90736632F6E44C2df7fa9"
     startBlock: 13279079
+  ManagedPoolV2Factory:
+    address: "0xBF904F9F340745B4f0c4702c7B6Ab1e808eA6b93"
+    startBlock: 17046230
   ConvergentPoolFactory:
     address: "0xb7561f547F3207eDb42A6AfA42170Cd47ADD17BD"
     startBlock: 12686198
@@ -173,6 +176,9 @@ goerli:
   InvestmentPoolFactory:
     address: "0x3C9F788131A26329A689Bd951b5aCb4454669487"
     startBlock: 6993461
+  ManagedPoolV2Factory:
+    address: "0x03F3Fb107e74F2EAC9358862E91ad3c692712054"
+    startBlock: 8825563
   StablePhantomPoolFactory:
     address: "0x41E9036AE350baEDCC7107760A020Dca3c0731ec"
     startBlock: 6993896
@@ -262,6 +268,9 @@ polygon:
   InvestmentPoolFactory:
     address: "0x0f7bb7ce7b6ed9366F9b6B910AdeFE72dC538193"
     startBlock: 19404118
+  ManagedPoolV2Factory:
+    address: "0xB8Dfa4fd0F083de2B7EDc0D5eeD5E684e54bA45D"
+    startBlock: 41501253
   StablePhantomPoolFactory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22288478
@@ -375,6 +384,9 @@ arbitrum:
   InvestmentPoolFactory:
     address: "0xaCd615B3705B9c880E4E7293f1030B34e57B4c1c"
     startBlock: 1488052
+  ManagedPoolV2Factory:
+    address: "0x8eA89804145c007e7D226001A96955ad53836087"
+    startBlock: 80173649
   ERC4626LinearPoolFactory:
     address: "0x2794953110874981a0d301286c986992022A62a1"
     startBlock: 9311471
@@ -431,6 +443,9 @@ bnb:
   TempLiquidityBootstrappingPoolFactory:
     address: "0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD"
     startBlock: 22895868
+  ManagedPoolV2Factory:
+    address: "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4"
+    startBlock: 27325252
   AaveLinearPoolV2Factory:
     address: "0x2E96068b3D5B5BAE3D7515da4A1D2E52d08A2647"
     startBlock: 22895868
@@ -484,6 +499,9 @@ gnosis:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x85a80afee867aDf27B50BdB7b76DA70f1E853062"
     startBlock: 25415236
+  ManagedPoolV2Factory:
+    address: "0xDF9B5B00Ef9bca66e9902Bd813dB14e4343Be025"
+    startBlock: 27434722
   ProtocolIdRegistry:
     address: "0x6B5dA774890Db7B7b96C6f44e6a4b0F657399E2e"
     startBlock: 26691522
@@ -525,6 +543,9 @@ optimism:
   TempLiquidityBootstrappingPoolFactory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 7005915
+  ManagedPoolV2Factory:
+    address: "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4"
+    startBlock: 90348540
   AaveLinearPoolV2Factory:
     address: "0x994086630773dC6cB54D3A5E0Ef0963532789E75"
     startBlock: 20254495
@@ -581,6 +602,9 @@ avalanche:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e"
     startBlock: 26386552
+  ManagedPoolV2Factory:
+    address: "0x03F3Fb107e74F2EAC9358862E91ad3c692712054"
+    startBlock: 29221742
   AaveLinearPoolV5Factory:
     address: "0x6caf662b573F577DE01165d2d38D1910bba41F8A"
     startBlock: 29512658
