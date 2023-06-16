@@ -115,6 +115,7 @@ export function newPoolEntity(poolId: string): Pool {
   pool.totalWeight = ZERO_BD;
   pool.totalSwapVolume = ZERO_BD;
   pool.totalSwapFee = ZERO_BD;
+  pool.totalProtocolFee = ZERO_BD;
   pool.totalLiquidity = ZERO_BD;
   pool.totalShares = ZERO_BD;
   pool.swapsCount = BigInt.fromI32(0);
@@ -260,6 +261,7 @@ export function createPoolSnapshot(pool: Pool, timestamp: i32): void {
   snapshot.swapVolume = pool.totalSwapVolume;
   snapshot.swapFees = pool.totalSwapFee;
   snapshot.liquidity = pool.totalLiquidity;
+  snapshot.protocolFee = pool.totalProtocolFee;
   snapshot.swapsCount = pool.swapsCount;
   snapshot.holdersCount = pool.holdersCount;
   snapshot.timestamp = dayTimestamp;

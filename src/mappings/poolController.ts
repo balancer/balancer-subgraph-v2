@@ -51,6 +51,7 @@ import {
   createPoolTokenEntity,
   bytesToAddress,
   getProtocolFeeCollector,
+  createPoolSnapshot,
   hexToBigInt,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
@@ -62,6 +63,7 @@ import {
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Transfer } from '../types/Vault/ERC20';
+import { valueInUSD } from './pricing';
 
 /************************************
  ********** MANAGED POOLS ***********
@@ -616,6 +618,9 @@ export function handleTransfer(event: Transfer): void {
       let protocolFeePaid = pool.totalProtocolFeePaidInBPT ? pool.totalProtocolFeePaidInBPT : ZERO_BD;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       pool.totalProtocolFeePaidInBPT = protocolFeePaid!.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      pool.totalProtocolFee = valueInUSD(pool.totalProtocolFeePaidInBPT!, poolAddress);
+      createPoolSnapshot(pool, event.block.timestamp.toI32());
     }
   } else if (isBurn) {
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));

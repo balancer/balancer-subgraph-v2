@@ -16,6 +16,7 @@ import {
   stringToBytes,
   bytesToAddress,
   getProtocolFeeCollector,
+  getToken,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
@@ -50,7 +51,7 @@ import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
-import { ERC20, Transfer } from '../types/Vault/ERC20';
+import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
@@ -608,17 +609,11 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.swapEnabled = true;
     pool.isPaused = false;
 
-    let bpt = ERC20.bind(poolAddress);
+    let bpt = getToken(poolAddress);
 
-    let nameCall = bpt.try_name();
-    if (!nameCall.reverted) {
-      pool.name = nameCall.value;
-    }
+    pool.name = bpt.name;
+    pool.symbol = bpt.symbol;
 
-    let symbolCall = bpt.try_symbol();
-    if (!symbolCall.reverted) {
-      pool.symbol = symbolCall.value;
-    }
     pool.save();
 
     let vault = findOrInitializeVault();
