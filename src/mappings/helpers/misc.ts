@@ -31,6 +31,28 @@ export function stringToBytes(str: string): Bytes {
   return Bytes.fromByteArray(Bytes.fromHexString(str));
 }
 
+export function hexToBigInt(hex: string): BigInt {
+  let hexUpper = hex.toUpperCase();
+  let bigInt = BigInt.fromI32(0);
+  let power = BigInt.fromI32(1);
+
+  for (let i = hex.length - 1; i >= 0; i--) {
+    let char = hexUpper.charCodeAt(i);
+    let value = 0;
+
+    if (char >= 48 && char <= 57) {
+      value = char - 48;
+    } else if (char >= 65 && char <= 70) {
+      value = char - 55;
+    }
+
+    bigInt = bigInt.plus(BigInt.fromI32(value).times(power));
+    power = power.times(BigInt.fromI32(16));
+  }
+
+  return bigInt;
+}
+
 export function getTokenDecimals(tokenAddress: Address): i32 {
   let token = ERC20.bind(tokenAddress);
   let result = token.try_decimals();
@@ -93,6 +115,7 @@ export function newPoolEntity(poolId: string): Pool {
   pool.totalWeight = ZERO_BD;
   pool.totalSwapVolume = ZERO_BD;
   pool.totalSwapFee = ZERO_BD;
+  pool.totalProtocolFee = ZERO_BD;
   pool.totalLiquidity = ZERO_BD;
   pool.totalShares = ZERO_BD;
   pool.swapsCount = BigInt.fromI32(0);
@@ -238,6 +261,7 @@ export function createPoolSnapshot(pool: Pool, timestamp: i32): void {
   snapshot.swapVolume = pool.totalSwapVolume;
   snapshot.swapFees = pool.totalSwapFee;
   snapshot.liquidity = pool.totalLiquidity;
+  snapshot.protocolFee = pool.totalProtocolFee;
   snapshot.swapsCount = pool.swapsCount;
   snapshot.holdersCount = pool.holdersCount;
   snapshot.timestamp = dayTimestamp;

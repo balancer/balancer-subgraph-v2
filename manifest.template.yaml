@@ -423,6 +423,37 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewInvestmentPool
   {{/if}}
+  {{#if ManagedPoolV2Factory}}
+  - kind: ethereum/contract
+    name: ManagedPoolV2Factory
+    network: {{network}}
+    source:
+      address: '{{ManagedPoolV2Factory.address}}'
+      abi: ManagedPoolV2Factory
+      startBlock: {{ManagedPoolV2Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: ManagedPoolV2Factory
+          file: ./abis/ManagedPoolV2Factory.json
+        - name: ManagedPool
+          file: ./abis/ManagedPoolV2.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewManagedPoolV2
+  {{/if}}
   {{#if ConvergentPoolFactory}}
   - kind: ethereum/contract
     name: ConvergentPoolFactory
@@ -1734,6 +1765,60 @@ templates:
           handler: handleManagementFeePercentageChanged
         - event: PausedStateChanged(bool)
           handler: handlePausedStateChanged
+  - kind: ethereum/contract
+    name: ManagedPool
+    network: {{network}}
+    source:
+      abi: ManagedPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - Pool
+        - PoolShare
+        - Swap
+        - PoolToken
+        - GradualWeightUpdate
+      abis:
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: ManagedPool
+          file: ./abis/ManagedPoolV2.json
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: SwapEnabledSet(bool)
+          handler: handleSwapEnabledSet
+        - event: PausedStateChanged(bool)
+          handler: handlePausedStateChanged
+        - event: JoinExitEnabledSet(bool)
+          handler: handleJoinExitEnabledSet
+        - event: MustAllowlistLPsSet(bool)
+          handler: handleMustAllowlistLPsSet
+        - event: RecoveryModeStateChanged(bool)
+          handler: handleRecoveryModeStateChanged
+        - event: CircuitBreakerSet(indexed address,uint256,uint256,uint256)
+          handler: handleCircuitBreakerSet
+        - event: TokenAdded(indexed address,uint256)
+          handler: handleTokenAdded
+        - event: TokenRemoved(indexed address)
+          handler: handleTokenRemoved
+        - event: ManagementAumFeeCollected(uint256)
+          handler: handleManagementAumFeeCollected
+        - event: GradualSwapFeeUpdateScheduled(uint256,uint256,uint256,uint256)
+          handler: handleGradualSwapFeeUpdateScheduled
+        - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
+          handler: handleGradualWeightUpdateScheduled
+        - event: ManagementAumFeePercentageChanged(uint256)
+          handler: handleManagementAumFeePercentageChanged
+        - event: ProtocolFeePercentageCacheUpdated(bytes32)
+          handler: handleEncodedProtocolFeePercentageCacheUpdated
   - kind: ethereum/contract
     name: StablePhantomPool
     network: {{network}}

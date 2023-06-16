@@ -32,7 +32,7 @@ type Pool @entity {
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
   totalShares: BigDecimal!
-
+  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
   createTime: Int!
   swapsCount: BigInt!
   holdersCount: BigInt!
@@ -65,6 +65,13 @@ type Pool @entity {
 
   # InvestmentPool Only
   managementFee: BigDecimal
+
+  # ManagedPool Only
+  joinExitEnabled: Boolean
+  mustAllowlistLPs: Boolean
+  managementAumFee: BigDecimal
+  totalAumFeeCollectedInBPT: BigDecimal
+  circuitBreakers: [CircuitBreaker!] @derivedFrom(field: "pool")
 
   # LinearPool Only
   mainIndex: Int
@@ -144,6 +151,9 @@ type PoolToken @entity {
 
   # ComposableStablePool Only
   isExemptFromYieldProtocolFee: Boolean
+
+  # ManagedPool Only
+  circuitBreaker: CircuitBreaker
 }
 
 type PriceRateProvider @entity {
@@ -155,6 +165,15 @@ type PriceRateProvider @entity {
   lastCached: Int
   cacheDuration: Int
   cacheExpiry: Int
+}
+
+type CircuitBreaker @entity {
+  id: ID!
+  pool: Pool!
+  token: PoolToken!
+  bptPrice: BigDecimal!
+  lowerBoundPercentage: BigDecimal!
+  upperBoundPercentage: BigDecimal!
 }
 
 type PoolShare @entity {
@@ -294,6 +313,7 @@ type PoolSnapshot @entity {
   amounts: [BigDecimal!]!
   totalShares: BigDecimal!
   swapVolume: BigDecimal!
+  protocolFee: BigDecimal # TODO: make mandatory at next full sync
   swapFees: BigDecimal!
   liquidity: BigDecimal!
   swapsCount: BigInt!
