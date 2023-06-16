@@ -154,9 +154,6 @@ type PoolToken @entity {
 
   # ManagedPool Only
   circuitBreaker: CircuitBreaker
-
-  # FXPool Only
-  assimilator: Bytes
 }
 
 type PriceRateProvider @entity {
