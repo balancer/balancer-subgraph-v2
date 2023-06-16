@@ -212,7 +212,7 @@ export function handleEncodedProtocolFeePercentageCacheUpdated(event: EncodedPro
   // Thus each fee is represented by 16 chars
   let encodedAumFee = feeCache.slice(16, 32);
   let encodedYieldFee = feeCache.slice(32, 48);
-  let encodedSwapFee = feeCache.slice(48, 65);
+  let encodedSwapFee = feeCache.slice(48, 64);
 
   pool.protocolAumFeeCache = scaleDown(hexToBigInt(encodedAumFee), 18);
   pool.protocolYieldFeeCache = scaleDown(hexToBigInt(encodedYieldFee), 18);
