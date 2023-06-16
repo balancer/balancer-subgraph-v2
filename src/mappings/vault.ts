@@ -212,13 +212,12 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     poolToken.balance = newBalance;
     poolToken.save();
 
-    let tokenPriceUSD = valueInUSD(ONE_BD, tokenAddress);
-    let protocolFeeAmountUSD = protocolFeeAmount.times(tokenPriceUSD);
+    let protocolFeeAmountUSD = valueInUSD(protocolFeeAmount, tokenAddress);
     protocolFeeUSD = protocolFeeUSD.plus(protocolFeeAmountUSD);
 
     let token = getToken(tokenAddress);
     const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(tokenAmountIn);
-    const tokenTotalBalanceUSD = tokenTotalBalanceNotional.times(tokenPriceUSD);
+    const tokenTotalBalanceUSD = valueInUSD(tokenTotalBalanceNotional, tokenAddress);
     token.totalBalanceNotional = tokenTotalBalanceNotional;
     token.totalBalanceUSD = tokenTotalBalanceUSD;
     token.save();
@@ -344,8 +343,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     poolToken.balance = newBalance;
     poolToken.save();
 
-    let tokenPriceUSD = valueInUSD(ONE_BD, tokenAddress);
-    let protocolFeeAmountUSD = protocolFeeAmount.times(tokenPriceUSD);
+    let protocolFeeAmountUSD = valueInUSD(protocolFeeAmount, tokenAddress);
     protocolFeeUSD = protocolFeeUSD.plus(protocolFeeAmountUSD);
 
     let token = getToken(tokenAddress);
