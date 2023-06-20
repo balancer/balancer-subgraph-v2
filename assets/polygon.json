@@ -78,23 +78,5 @@
       "address": "0x310990E8091b5cF083fA55F500F140CFBb959016",
       "symbol": "EURS-USD"
     }
-  ],
-  "fxOracles": [
-    {
-      "address": "0xfE4A8cc5b5B2366C1B58Bea3858e81843581b2F7",
-      "symbol": "USDC-USD"
-    },
-    {
-      "address": "0x8CE3cAc0E6635ce04783709ca3CC4F5fc5304299",
-      "symbol": "SGD-USD"
-    },
-    {
-      "address": "0x4746DeC9e833A82EC7C2C1356372CcF2cfcD2F3D",
-      "symbol": "DAI-USD"
-    },
-    {
-      "address": "0x73366Fe0AA0Ded304479862808e02506FE556a98",
-      "symbol": "EUR-USD"
-    }
   ]
 }
