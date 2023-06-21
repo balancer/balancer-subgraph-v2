@@ -1,6 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
-import { ZERO_BD, USD_STABLE_ASSETS, ONE_BD, ZERO_ADDRESS, MIN_POOL_LIQUIDITY } from './helpers/constants';
+import { ZERO_BD, ONE_BD, ZERO_ADDRESS, MIN_POOL_LIQUIDITY } from './helpers/constants';
 import { hasVirtualSupply, isComposableStablePool, isLinearPool, PoolType } from './helpers/pools';
 import {
   bytesToAddress,
