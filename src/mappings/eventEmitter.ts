@@ -1,7 +1,6 @@
 import { LogArgument } from '../types/EventEmitter/EventEmitter';
 import { Balancer, Pool, Token } from '../types/schema';
 import { BigDecimal } from '@graphprotocol/graph-ts';
-import { ONE } from './helpers/constants';
 
 export function handleLogArgument(event: LogArgument): void {
   const identifier = event.params.identifier.toHexString();
@@ -15,8 +14,8 @@ export function handleLogArgument(event: LogArgument): void {
   if (identifier == '0x205869a4266a1bbcc5e2e5255221a32636b162e29887138cc0a8ba5141d05c62') {
     setLatestUSDPrice(event);
   }
-  // keccak256(setPricingAsset) = TBD
-  if (identifier == 'TBD') {
+  // keccak256(setPricingAsset) = 0x4ea49680c1cdd907804ee836691e5985fb50729a35ec2943d1ba5878a961e64f
+  if (identifier == '0x4ea49680c1cdd907804ee836691e5985fb50729a35ec2943d1ba5878a961e64f') {
     setPricingAsset(event);
   }
 }
@@ -68,7 +67,7 @@ function setPricingAsset(event: LogArgument): void {
 
   const tokenAddress = event.params.message;
   vault.pricingAssets = vault.pricingAssets.concat(tokenAddress);
-  if (event.params.value == ONE) {
+  if (event.params.value.toI32() == 1) {
     vault.stableAssets = vault.stableAssets.concat(tokenAddress);
   }
   vault.save();
