@@ -16,6 +16,7 @@ import {
   stringToBytes,
   bytesToAddress,
   getProtocolFeeCollector,
+  getToken,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
@@ -36,6 +37,7 @@ import { StablePhantomPoolV2 as StablePhantomPoolV2Template } from '../types/tem
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
+import { ManagedPool as ManagedPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
@@ -49,7 +51,7 @@ import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
-import { ERC20, Transfer } from '../types/Vault/ERC20';
+import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
@@ -74,6 +76,10 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   if (tokens == null) return null;
   pool.tokensList = tokens;
 
+  if (poolType == PoolType.Managed) {
+    pool.totalAumFeeCollectedInBPT = ZERO_BD;
+  }
+
   pool.save();
 
   handleNewPoolTokens(pool, tokens);
@@ -82,7 +88,9 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   updatePoolWeights(poolId.toHexString());
 
   // Create PriceRateProvider entities for WeightedPoolV2
-  if (poolTypeVersion == 2) setPriceRateProviders(poolId.toHex(), poolAddress, tokens);
+  if (poolType == PoolType.Weighted && poolTypeVersion == 2) {
+    setPriceRateProviders(poolId.toHex(), poolAddress, tokens);
+  }
 
   return poolId.toHexString();
 }
@@ -126,6 +134,12 @@ export function handleNewInvestmentPool(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Investment);
   if (pool == null) return;
   InvestmentPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewManagedPoolV2(event: PoolCreated): void {
+  const pool = createWeightedLikePool(event, PoolType.Managed, 2);
+  if (pool == null) return;
+  ManagedPoolTemplate.create(event.params.pool);
 }
 
 function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
@@ -595,17 +609,11 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.swapEnabled = true;
     pool.isPaused = false;
 
-    let bpt = ERC20.bind(poolAddress);
+    let bpt = getToken(poolAddress);
 
-    let nameCall = bpt.try_name();
-    if (!nameCall.reverted) {
-      pool.name = nameCall.value;
-    }
+    pool.name = bpt.name;
+    pool.symbol = bpt.symbol;
 
-    let symbolCall = bpt.try_symbol();
-    if (!symbolCall.reverted) {
-      pool.symbol = symbolCall.value;
-    }
     pool.save();
 
     let vault = findOrInitializeVault();
