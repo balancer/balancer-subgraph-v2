@@ -53,6 +53,7 @@ import {
   getProtocolFeeCollector,
   createPoolSnapshot,
   hexToBigInt,
+  getBalancerSnapshot,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -615,12 +616,25 @@ export function handleTransfer(event: Transfer): void {
     }
 
     if (protocolFeeCollector && poolShareTo.userAddress == protocolFeeCollector.toHex()) {
-      let protocolFeePaid = pool.totalProtocolFeePaidInBPT ? pool.totalProtocolFeePaidInBPT : ZERO_BD;
+      let protocolFeePaid = tokenToDecimal(event.params.value, BPT_DECIMALS);
+      let totalProtocolFee = pool.totalProtocolFeePaidInBPT ? pool.totalProtocolFeePaidInBPT : ZERO_BD;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      pool.totalProtocolFeePaidInBPT = protocolFeePaid!.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+      pool.totalProtocolFeePaidInBPT = totalProtocolFee!.plus(protocolFeePaid);
+
+      let protocolFeeUSD = valueInUSD(protocolFeePaid, poolAddress);
+      let totalProtocolFeeUSD = pool.totalProtocolFee ? pool.totalProtocolFee : ZERO_BD;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      pool.totalProtocolFee = valueInUSD(pool.totalProtocolFeePaidInBPT!, poolAddress);
+      pool.totalProtocolFee = totalProtocolFeeUSD!.plus(protocolFeeUSD);
+
+      // create or update pool's snapshot
       createPoolSnapshot(pool, event.block.timestamp.toI32());
+
+      let vault = Balancer.load('2') as Balancer;
+      let vaultProtocolFee = vault.totalProtocolFee ? vault.totalProtocolFee : ZERO_BD;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      vault.totalProtocolFee = vaultProtocolFee!.plus(protocolFeeUSD);
+      // create or update balancer's vault snapshot
+      getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
     }
   } else if (isBurn) {
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));

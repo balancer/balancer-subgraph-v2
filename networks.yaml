@@ -212,11 +212,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Apr 13 - block before a mock ManagedPool was created
-    block: 41501266
+    # Jul 4
+    block: 44676035
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmPRLQvJ1qwoVZcpRHRbRgMzf5wq5gE5hrnyj8AtTbhYRU
+    base: QmegAtzM2Lv1tbJaaHrh3SgKDK9K3CcjtqbLsKUAHzdtdB
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -328,11 +328,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Apr 13 - block before a mock ManagedPool was created
-    block: 80173696
+    # Jul 4
+    block: 107825037
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYrKwmsXkL65NxGQX6rj3c6XdJSVwN3YdhHw77F7ZTkGJ
+    base: QmSoXwL7Y9tfrALTRGjkfwPAbLraxr8WZL8TLNYUSHsLYp
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -585,6 +585,9 @@ optimism:
   ProtocolIdRegistry:
     address: "0x9805dcfD25e6De36bad8fe9D3Fe2c9b44B764102"
     startBlock: 77557576
+  GyroEPoolFactory:
+    address: "0xefdE1c764Df6522a068b38106563DE166Ac97f58"
+    startBlock: 97252407
 avalanche:
   network: avalanche
   Vault:
