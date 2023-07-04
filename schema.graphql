@@ -117,6 +117,7 @@ type Pool @entity {
   totalProtocolFeePaidInBPT: BigDecimal
 
   # Composable Stable Only
+  lastJoinExitAmp: BigInt
   lastPostJoinExitInvariant: BigDecimal
 
   # AaveLinearV3 Only
