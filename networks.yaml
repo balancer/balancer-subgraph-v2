@@ -586,7 +586,7 @@ optimism:
     address: "0x9805dcfD25e6De36bad8fe9D3Fe2c9b44B764102"
     startBlock: 77557576
   GyroEPoolFactory:
-    address: "0x3477fe0444878C168A87459F8167EEF28FCF956c"
+    address: "0xefdE1c764Df6522a068b38106563DE166Ac97f58"
     startBlock: 97252407
 avalanche:
   network: avalanche
