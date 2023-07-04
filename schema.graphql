@@ -8,7 +8,8 @@ type Balancer @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
-
+  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
+  
   protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
 
@@ -376,6 +377,7 @@ type BalancerSnapshot @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
 }
 
 type ProtocolIdData @entity {
