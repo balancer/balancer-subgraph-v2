@@ -578,6 +578,7 @@ export function handleSwapEvent(event: SwapEvent): void {
         let invariantInt = calculateInvariant(amp, balances, swapId);
         let invariant = scaleDown(invariantInt, 18);
         pool.lastPostJoinExitInvariant = invariant;
+        pool.lastJoinExitAmp = pool.amp;
       }
     }
   }
