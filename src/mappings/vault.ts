@@ -235,6 +235,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   let vaultProtocolFee = vault.totalProtocolFee ? vault.totalProtocolFee : ZERO_BD;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   vault.totalProtocolFee = vaultProtocolFee!.plus(protocolFeeUSD);
+  vault.save();
   // create or update balancer's vault snapshot
   getBalancerSnapshot(vault.id, blockTimestamp);
 
@@ -374,6 +375,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   let vaultProtocolFee = vault.totalProtocolFee ? vault.totalProtocolFee : ZERO_BD;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   vault.totalProtocolFee = vaultProtocolFee!.plus(protocolFeeUSD);
+  vault.save();
   // create or update balancer's vault snapshot
   getBalancerSnapshot(vault.id, blockTimestamp);
 

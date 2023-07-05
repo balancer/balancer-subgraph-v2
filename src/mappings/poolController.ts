@@ -633,6 +633,7 @@ export function handleTransfer(event: Transfer): void {
       let vaultProtocolFee = vault.totalProtocolFee ? vault.totalProtocolFee : ZERO_BD;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       vault.totalProtocolFee = vaultProtocolFee!.plus(protocolFeeUSD);
+      vault.save();
       // create or update balancer's vault snapshot
       getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
     }
