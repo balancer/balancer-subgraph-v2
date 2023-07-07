@@ -146,9 +146,6 @@ function querySubgraph(entity = 'indexingStatusForCurrentVersion', subgraph = 'b
         continue;
       }
       if (s === 'balancer') {
-        if (n === '-optimism') {
-          continue;
-        }
         n += '-v2';
       }
       for (let v of versions) {
