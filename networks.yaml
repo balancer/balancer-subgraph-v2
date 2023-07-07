@@ -45,6 +45,9 @@ mainnet:
   ComposableStablePoolV4Factory:
     address: "0xfADa0f4547AB2de89D1304A668C39B3E09Aa7c76"
     startBlock: 16878679
+  ComposableStablePoolV5Factory:
+    address: "0xDB8d758BCb971e482B2C45f7F8a7740283A1bd3A"
+    startBlock: 17643198
   HighAmpComposableStablePoolFactory:
     address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
     startBlock: 15852258
@@ -161,6 +164,9 @@ goerli:
   ComposableStablePoolV4Factory:
     address: "0x1802953277FD955f9a254B80Aa0582f193cF1d77"
     startBlock: 8695012
+  ComposableStablePoolV5Factory:
+    address: "0x4bdCc2fb18AEb9e2d281b0278D946445070EAda7"
+    startBlock: 9306452
   HighAmpComposableStablePoolFactory:
     address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
     startBlock: 7842251
@@ -256,6 +262,9 @@ polygon:
   ComposableStablePoolV4Factory:
     address: "0x6Ab5549bBd766A43aFb687776ad8466F8b42f777"
     startBlock: 40613553
+  ComposableStablePoolV5Factory:
+    address: "0xe2fa4e1d17725e72dcdAfe943Ecf45dF4B9E285b"
+    startBlock: 44798194
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 17913016
@@ -372,6 +381,9 @@ arbitrum:
   ComposableStablePoolV4Factory:
     address: "0x2498A2B0d6462d2260EAC50aE1C3e03F4829BA95"
     startBlock: 72235860
+  ComposableStablePoolV5Factory:
+    address: "0xA8920455934Da4D853faac1f94Fe7bEf72943eF1"
+    startBlock: 108834057
   MetaStablePoolFactory:
     address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
     startBlock: 222868
@@ -484,6 +496,9 @@ gnosis:
   ComposableStablePoolV4Factory:
     address: "0xD87F44Df0159DC78029AB9CA7D7e57E7249F5ACD"
     startBlock: 27056416
+  ComposableStablePoolV5Factory:
+    address: "0x4bdCc2fb18AEb9e2d281b0278D946445070EAda7"
+    startBlock: 28832248
   AaveLinearPoolV3Factory:
     address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
     startBlock: 25415464
@@ -537,6 +552,9 @@ optimism:
   ComposableStablePoolV4Factory:
     address: "0x1802953277FD955f9a254B80Aa0582f193cF1d77"
     startBlock: 82748180
+  ComposableStablePoolV5Factory:
+    address: "0x043A2daD730d585C44FB79D2614F295D2d625412"
+    startBlock: 106574795
   MetaStablePoolFactory:
     address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
     startBlock: 7005662
@@ -596,6 +614,9 @@ avalanche:
   ComposableStablePoolV4Factory:
     address: "0x3B1eb8EB7b43882b385aB30533D9A2BeF9052a98"
     startBlock: 29221425
+  ComposableStablePoolV5Factory:
+    address: "0xE42FFA682A26EF8F25891db4882932711D42e467"
+    startBlock: 32301646
   WeightedPoolV3Factory:
     address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
     startBlock: 26389236
@@ -636,6 +657,9 @@ sepolia:
   ComposableStablePoolV4Factory:
     address: "0xA3fd20E29358c056B727657E83DFd139abBC9924"
     startBlock: 3425277
+  ComposableStablePoolV5Factory:
+    address: "0xa523f47A933D5020b23629dDf689695AA94612Dc"
+    startBlock: 3844648
   AaveLinearPoolV5Factory:
     address: "0xDF9B5B00Ef9bca66e9902Bd813dB14e4343Be025"
     startBlock: 3421724
@@ -671,6 +695,9 @@ polygon-zkevm:
   ComposableStablePoolV4Factory:
     address: "0x8eA89804145c007e7D226001A96955ad53836087"
     startBlock: 220016
+  ComposableStablePoolV5Factory:
+    address: "0x956CCab09898C0AF2aCa5e6C229c3aD4E93d9288"
+    startBlock: 2157318
   AaveLinearPoolV5Factory:
     address: "0x4b7b369989e613ff2C65768B7Cf930cC927F901E"
     startBlock: 220075
