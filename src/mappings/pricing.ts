@@ -354,7 +354,7 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
   }
 
   // All tokens we track have oracles with 8 decimals
-  if (token.fxOracleDecimals == null) {
+  if (!token.fxOracleDecimals) {
     token.fxOracleDecimals = 8;
   }
 
