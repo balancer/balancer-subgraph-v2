@@ -231,6 +231,14 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   pool.totalProtocolFee = totalProtocolFee!.plus(protocolFeeUSD);
 
+  let vault = Balancer.load('2') as Balancer;
+  let vaultProtocolFee = vault.totalProtocolFee ? vault.totalProtocolFee : ZERO_BD;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  vault.totalProtocolFee = vaultProtocolFee!.plus(protocolFeeUSD);
+  vault.save();
+  // create or update balancer's vault snapshot
+  getBalancerSnapshot(vault.id, blockTimestamp);
+
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
     if (isPricingAsset(tokenAddress)) {
@@ -362,6 +370,14 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   pool.totalProtocolFee = totalProtocolFee!.plus(protocolFeeUSD);
   pool.save();
+
+  let vault = Balancer.load('2') as Balancer;
+  let vaultProtocolFee = vault.totalProtocolFee ? vault.totalProtocolFee : ZERO_BD;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  vault.totalProtocolFee = vaultProtocolFee!.plus(protocolFeeUSD);
+  vault.save();
+  // create or update balancer's vault snapshot
+  getBalancerSnapshot(vault.id, blockTimestamp);
 
   for (let i: i32 = 0; i < tokenAddresses.length; i++) {
     let tokenAddress: Address = Address.fromString(tokenAddresses[i].toHexString());
@@ -578,6 +594,7 @@ export function handleSwapEvent(event: SwapEvent): void {
         let invariantInt = calculateInvariant(amp, balances, swapId);
         let invariant = scaleDown(invariantInt, 18);
         pool.lastPostJoinExitInvariant = invariant;
+        pool.lastJoinExitAmp = pool.amp;
       }
     }
   }

@@ -353,6 +353,11 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
     return;
   }
 
+  // All tokens we track have oracles with 8 decimals
+  if (token.fxOracleDecimals == null) {
+    token.fxOracleDecimals = 8;
+  }
+
   let rate = scaleDown(event.params.current, 8);
   token.latestFXPrice = rate;
   token.save();
