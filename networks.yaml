@@ -522,6 +522,12 @@ gnosis:
     startBlock: 26691522
 optimism:
   network: optimism
+  graft:
+    # GyroEPoolFactory start block
+    block: 97253023
+    # always make sure the base subgraph has not been pruned
+    # it should be possible to run time travel queries on it going back to the vault's startBlock
+    base: QmRJyWfTacLi1dCQTDh57Q5nrEcL8td944yTZugzJRfWXM
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
@@ -605,7 +611,7 @@ optimism:
     startBlock: 77557576
   GyroEPoolFactory:
     address: "0x9b683ca24b0e013512e2566b68704dbe9677413c"
-    startBlock: 97252407
+    startBlock: 97253023
 avalanche:
   network: avalanche
   Vault:
