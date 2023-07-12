@@ -218,8 +218,8 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Jul 7
-    block: 44780000
+    # Jul 9
+    block: 44889400
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmegAtzM2Lv1tbJaaHrh3SgKDK9K3CcjtqbLsKUAHzdtdB
