@@ -51,52 +51,52 @@ jobs:
           graph_subgraph_name: "balancer-v2"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.yaml"
-  deploy-polygon:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets polygon
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: balancer-labs/graph-deploy@v0.0.1
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-polygon-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.polygon.yaml"
-  deploy-polygon-pruned:
-    runs-on: ubuntu-latest
-    environment: graph
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16
-      - name: Install
-        run: yarn --frozen-lockfile
-      - name: Assets
-        run: yarn generate-assets polygon-prune
-      - name: Codegen
-        run: yarn codegen
-      - name: Build
-        run: yarn build
-      - uses: balancer-labs/graph-deploy@v0.0.1
-        with:
-          graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
-          graph_subgraph_name: "balancer-polygon-prune-v2"
-          graph_account: "balancer-labs"
-          graph_config_file: "subgraph.polygon.yaml"
+  # deploy-polygon:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 16
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets polygon
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: balancer-labs/graph-deploy@v0.0.1
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-polygon-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.polygon.yaml"
+  # deploy-polygon-pruned:
+  #   runs-on: ubuntu-latest
+  #   environment: graph
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Install node
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 16
+  #     - name: Install
+  #       run: yarn --frozen-lockfile
+  #     - name: Assets
+  #       run: yarn generate-assets polygon-prune
+  #     - name: Codegen
+  #       run: yarn codegen
+  #     - name: Build
+  #       run: yarn build
+  #     - uses: balancer-labs/graph-deploy@v0.0.1
+  #       with:
+  #         graph_access_token: ${{secrets.GRAPH_ACCESS_TOKEN}}
+  #         graph_subgraph_name: "balancer-polygon-prune-v2"
+  #         graph_account: "balancer-labs"
+  #         graph_config_file: "subgraph.polygon.yaml"
   deploy-arbitrum:
     runs-on: ubuntu-latest
     environment: graph
