@@ -12,7 +12,6 @@ const generateManifests = async (): Promise<void> => {
 
   const template = fs.readFileSync('manifest.template.yaml').toString();
   Object.entries(networks).forEach(([network, config]) => {
-
     // if both config.graft and config.graft_pruned are defined, generate two manifests
     if (config.graft && config.graft_pruned) {
       const pruned_config = { ...config };
