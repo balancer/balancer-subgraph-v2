@@ -221,11 +221,11 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Jul 9
-    block: 44889400
+    # Jul 14
+    block: 45068000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmegAtzM2Lv1tbJaaHrh3SgKDK9K3CcjtqbLsKUAHzdtdB
+    base: QmZgXMhne5Li4CL6TYy9iv4TtEaCkJu8A3PANpYXZxzsVr
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -340,11 +340,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Jul 7
-    block: 108700000
+    # Jul 14
+    block: 111100000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmSoXwL7Y9tfrALTRGjkfwPAbLraxr8WZL8TLNYUSHsLYp
+    base: QmW4Lxqgx5UUKpqExMpFEPoxoAGvKMyz4guBMF9z9cjAL4
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -527,10 +527,10 @@ optimism:
   network: optimism
   graft:
     # GyroEPoolFactory start block
-    block: 97253023
+    # block: 97253023
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmRJyWfTacLi1dCQTDh57Q5nrEcL8td944yTZugzJRfWXM
+    # base: QmRJyWfTacLi1dCQTDh57Q5nrEcL8td944yTZugzJRfWXM
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
