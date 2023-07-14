@@ -446,6 +446,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
         - name: ManagedPoolV2Factory
           file: ./abis/ManagedPoolV2Factory.json
         - name: ManagedPool
@@ -1817,8 +1819,6 @@ templates:
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: WeightedPoolV2
-          file: ./abis/WeightedPoolV2.json
         - name: ManagedPool
           file: ./abis/ManagedPoolV2.json
         - name: Vault
