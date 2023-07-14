@@ -724,6 +724,9 @@ polygon-zkevm:
     startBlock: 220536
 base:
   network: base
+  EventEmitter:
+    address: "0x94eA79f1dD4f1B89D87fE1E71c9723b8003AB3d3"
+    startBlock: 1275405
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 1196036
