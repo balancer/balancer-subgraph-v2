@@ -1,5 +1,10 @@
 {
-  "stableAssets": [],
+  "stableAssets": [
+    {
+      "address": "0x0000000000000000000000000000000000000000",
+      "symbol": "USDC"
+    }
+  ],
   "pricingAssets": [
     {
       "address": "0x4200000000000000000000000000000000000006",
