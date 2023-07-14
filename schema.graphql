@@ -11,7 +11,8 @@ type Balancer @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
-
+  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
+  
   protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
 
@@ -119,6 +120,7 @@ type Pool @entity {
   totalProtocolFeePaidInBPT: BigDecimal
 
   # Composable Stable Only
+  lastJoinExitAmp: BigInt
   lastPostJoinExitInvariant: BigDecimal
 
   # AaveLinearV3 Only
@@ -340,6 +342,7 @@ type Token @entity {
   latestUSDPriceTimestamp: BigInt # timestamp at which the latestUSDPrice was updated
   latestFXPrice: BigDecimal # latest "off-chain" price of token in USD, only available if token has an offchain price aggregator
   pool: Pool # pool entity associated with the token, if it is a Balancer pool
+  fxOracleDecimals: Int # only available if token has an FX oracle
 }
 
 type TokenSnapshot @entity {
@@ -379,6 +382,7 @@ type BalancerSnapshot @entity {
   totalSwapCount: BigInt!
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
+  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
 }
 
 type ProtocolIdData @entity {
