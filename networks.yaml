@@ -125,7 +125,7 @@ mainnet:
     startBlock: 16719996
   GyroEPoolFactory:
     address: "0x412a5B2e7a678471985542757A6855847D4931D5"
-    startBlock: 17672980
+    startBlock: 17672894
 goerli:
   network: goerli
   EventEmitter:
