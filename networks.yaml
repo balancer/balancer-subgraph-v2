@@ -123,6 +123,9 @@ mainnet:
   ProtocolIdRegistry:
     address: "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68"
     startBlock: 16719996
+  GyroEPoolFactory:
+    address: "0x412a5B2e7a678471985542757A6855847D4931D5"
+    startBlock: 17672980
 goerli:
   network: goerli
   EventEmitter:
