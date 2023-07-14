@@ -722,3 +722,20 @@ polygon-zkevm:
   ManagedPoolV2Factory:
     address: "0xaf779e58dafb4307b998C7b3C9D3f788DFc80632"
     startBlock: 220536
+base:
+  network: base
+  EventEmitter:
+    address: "0x94eA79f1dD4f1B89D87fE1E71c9723b8003AB3d3"
+    startBlock: 1275405
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 1196036
+  WeightedPoolV4Factory:
+    address: "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4"
+    startBlock: 1204869
+  ComposableStablePoolV5Factory:
+    address: "0x8df317a729fcaA260306d7de28888932cb579b88"
+    startBlock: 1204710
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x0c6052254551EAe3ECac77B01DFcf1025418828f"
+    startBlock: 1206531

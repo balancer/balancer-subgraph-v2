@@ -5,7 +5,7 @@ on:
     branches: dev
 
 jobs:
-  deploy-studio-base-beta:
+  deploy-studio-base-testnet-beta:
     runs-on: ubuntu-latest
     environment: graph
     steps:
@@ -79,6 +79,31 @@ jobs:
           graph_subgraph_name: "balancer-polygon-zk-v2-beta"
           graph_account: "balancer-labs"
           graph_config_file: "subgraph.polygon-zkevm.yaml"
+          graph_deploy_studio: true
+  deploy-studio-base-beta:
+    runs-on: ubuntu-latest
+    environment: graph
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install
+        run: yarn --frozen-lockfile
+      - name: Assets
+        run: yarn generate-assets base
+      - name: Codegen
+        run: yarn codegen
+      - name: Build
+        run: yarn build
+      - uses: gtaschuk/graph-deploy@v0.1.11
+        with:
+          graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
+          graph_version_label: ${GITHUB_SHA::8}
+          graph_subgraph_name: "balancer-base-v2-beta"
+          graph_account: "balancer-labs"
+          graph_config_file: "subgraph.base.yaml"
           graph_deploy_studio: true
 
 env:
