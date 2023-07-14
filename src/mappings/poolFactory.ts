@@ -61,6 +61,7 @@ import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
 import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
+import { ComposableStablePool } from '../types/ComposableStablePoolFactory/ComposableStablePool';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
