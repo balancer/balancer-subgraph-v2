@@ -1203,10 +1203,10 @@
     graphql-import-node "^0.0.5"
     js-yaml "^4.1.0"
 
-"@graphprotocol/graph-cli@0.51.2":
-  version "0.51.2"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.51.2.tgz#ad333a5110b4835e648c3205b46a2582653d1966"
-  integrity sha512-C+h6HLeYhsNFpV3TmVz1j6MMYA0K81+iInysFdnqX2J1ZwH7ldiHZyJuNq4ajxZlXhBL7+UV9zx7id6OSaj6GA==
+"@graphprotocol/graph-cli@0.52.0":
+  version "0.52.0"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.52.0.tgz#8232fa6852d26ec7c2ddf3567de9bbeb6edd5f5e"
+  integrity sha512-eypShsC0sB7QWiPz4O2k0oh/sY75JYL1XXSCdBUFOIh+N5Pf0oKjKRx88B9wKLlUTlS2m+/tCVnHuTA9tL0wlQ==
   dependencies:
     "@float-capital/float-subgraph-uncrashable" "^0.0.0-alpha.4"
     "@oclif/core" "2.8.6"
