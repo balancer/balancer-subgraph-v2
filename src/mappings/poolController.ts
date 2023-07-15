@@ -63,6 +63,7 @@ import {
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { Transfer } from '../types/Vault/ERC20';
 import { valueInUSD } from './pricing';
 
@@ -273,7 +274,15 @@ export function handleRecoveryModeStateChanged(event: RecoveryModeStateChanged):
     pool.protocolSwapFeeCache = ZERO_BD;
     pool.protocolYieldFeeCache = ZERO_BD;
   } else {
-    // TODO: handle the case where pools are taken out of recovery mode
+    let weightedContract = WeightedPoolV2.bind(poolAddress);
+
+    let protocolSwapFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Swap));
+    let protocolYieldFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Yield));
+    let protocolAumFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Aum));
+
+    pool.protocolSwapFeeCache = protocolSwapFee.reverted ? null : scaleDown(protocolSwapFee.value, 18);
+    pool.protocolYieldFeeCache = protocolYieldFee.reverted ? null : scaleDown(protocolYieldFee.value, 18);
+    pool.protocolAumFeeCache = protocolAumFee.reverted ? null : scaleDown(protocolAumFee.value, 18);
   }
   pool.save();
 }
