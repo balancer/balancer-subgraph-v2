@@ -644,6 +644,9 @@ avalanche:
   ERC4626LinearPoolV4Factory:
     address: "0x4507d91Cd2C0D51D9B4F30Bf0B93AFC938A70BA5"
     startBlock: 29513456
+  FXPoolFactory:
+    address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
+    startBlock: 32585313
 basegoerli:
   network: base-testnet
   Vault:

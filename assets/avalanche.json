@@ -30,6 +30,26 @@
         "address": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7", 
         "symbol": "wAVAX"
       }
+    ],
+    "fxAssets": [
+      {
+        "address": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+        "symbol": "USDC"
+      },
+      {
+        "address": "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD",
+        "symbol": "EUROC"
+      }
+    ],
+    "fxAggregators": [
+      {
+        "address": "0xfBd998938f8f7210eEC3D1e12E80A10972F02aEd",
+        "symbol": "USDC-USD"
+      },
+      {
+        "address": "0x95Edda00bCE60f99Fb0bE38fE500eBd879AB651a",
+        "symbol": "EUR-USD"
+      }
     ]
   }
   
