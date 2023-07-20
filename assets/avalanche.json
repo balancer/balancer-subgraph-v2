@@ -19,6 +19,10 @@
       {
         "address": "0xd586E7F844cEa2F87f50152665BCbc2C279D8d70",
         "symbol": "DAI"
+      },
+      {
+        "address": "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD",
+        "symbol": "EUROC"
       }
     ],
     "pricingAssets": [
