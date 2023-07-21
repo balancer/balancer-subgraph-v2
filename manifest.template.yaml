@@ -7,6 +7,13 @@ graft:
   base: {{graft.base}}
   block: {{graft.block}}
 {{/if}}
+{{#if graft_pruned}}
+features:
+  - grafting
+graft:
+  base: {{graft_pruned.base}}
+  block: {{graft_pruned.block}}
+{{/if}}
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
