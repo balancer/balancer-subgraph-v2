@@ -123,6 +123,9 @@ mainnet:
   ProtocolIdRegistry:
     address: "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68"
     startBlock: 16719996
+  GyroEPoolFactory:
+    address: "0x412a5B2e7a678471985542757A6855847D4931D5"
+    startBlock: 17672894
 goerli:
   network: goerli
   EventEmitter:
@@ -342,11 +345,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Jul 7
-    block: 108700000
+    # Jul 14
+    block: 111100000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmSoXwL7Y9tfrALTRGjkfwPAbLraxr8WZL8TLNYUSHsLYp
+    base: QmW4Lxqgx5UUKpqExMpFEPoxoAGvKMyz4guBMF9z9cjAL4
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -529,10 +532,10 @@ optimism:
   network: optimism
   graft:
     # GyroEPoolFactory start block
-    block: 97253023
+    # block: 97253023
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmRJyWfTacLi1dCQTDh57Q5nrEcL8td944yTZugzJRfWXM
+    # base: QmRJyWfTacLi1dCQTDh57Q5nrEcL8td944yTZugzJRfWXM
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
@@ -727,3 +730,20 @@ polygon-zkevm:
   ManagedPoolV2Factory:
     address: "0xaf779e58dafb4307b998C7b3C9D3f788DFc80632"
     startBlock: 220536
+base:
+  network: base
+  EventEmitter:
+    address: "0x94eA79f1dD4f1B89D87fE1E71c9723b8003AB3d3"
+    startBlock: 1275405
+  Vault:
+    address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
+    startBlock: 1196036
+  WeightedPoolV4Factory:
+    address: "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4"
+    startBlock: 1204869
+  ComposableStablePoolV5Factory:
+    address: "0x8df317a729fcaA260306d7de28888932cb579b88"
+    startBlock: 1204710
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x0c6052254551EAe3ECac77B01DFcf1025418828f"
+    startBlock: 1206531
