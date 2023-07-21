@@ -6,7 +6,7 @@ export const AMP_PRECISION = BigInt.fromI32(1000);
 
 export function updateAmpFactor(pool: Pool, blockTimestamp: BigInt): void {
   let latestAmpUpdateId = pool.latestAmpUpdate;
-  if (!latestAmpUpdateId) return;
+  if (latestAmpUpdateId === null) return;
 
   let latestAmpUpdate = AmpUpdate.load(latestAmpUpdateId);
   if (!latestAmpUpdate) return;

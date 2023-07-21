@@ -338,15 +338,25 @@ export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
+  let poolId = poolContract.pool;
+
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let ampUpdate = new AmpUpdate(id);
-  ampUpdate.poolId = poolContract.pool;
+  ampUpdate.poolId = poolId;
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   ampUpdate.startTimestamp = event.params.startTime;
   ampUpdate.endTimestamp = event.params.endTime;
   ampUpdate.startAmp = event.params.startValue;
   ampUpdate.endAmp = event.params.endValue;
   ampUpdate.save();
+
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
+
+  pool.latestAmpUpdate = ampUpdate.id;
+  pool.save();
+
+  updateAmpFactor(pool, event.block.timestamp);
 }
 
 export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
@@ -368,7 +378,11 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
 
   let pool = Pool.load(poolId);
   if (pool == null) return;
-  updateAmpFactor(pool);
+
+  pool.latestAmpUpdate = ampUpdate.id;
+  pool.save();
+
+  updateAmpFactor(pool, event.block.timestamp);
 }
 
 /************************************
