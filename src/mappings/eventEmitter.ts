@@ -66,9 +66,16 @@ function setPricingAsset(event: LogArgument): void {
   if (!vault) return;
 
   const tokenAddress = event.params.message;
-  vault.pricingAssets = vault.pricingAssets.concat(tokenAddress);
+
+  let pricingAssets = vault.pricingAssets;
+  pricingAssets.push(tokenAddress);
+  vault.pricingAssets = pricingAssets;
+
   if (event.params.value.toI32() == 1) {
-    vault.stableAssets = vault.stableAssets.concat(tokenAddress);
+    let stableAssets = vault.stableAssets;
+    stableAssets.push(tokenAddress);
+    vault.stableAssets = stableAssets;
   }
+
   vault.save();
 }

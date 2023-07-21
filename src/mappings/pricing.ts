@@ -36,7 +36,9 @@ export function getPreferentialPricingAsset(assets: Address[]): Address {
 
   // Assumes pricing assets are sorted by order of preference
   for (let i: i32 = 0; i < vault.pricingAssets.length; i++) {
-    if (assets.includes(vault.pricingAssets[i])) return vault.pricingAssets[i];
+    if (assets.includes(bytesToAddress(vault.pricingAssets[i]))) {
+      return bytesToAddress(vault.pricingAssets[i]);
+    }
   }
 
   return ZERO_ADDRESS;

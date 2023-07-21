@@ -2,28 +2,28 @@
 // Generate for other networks by running: yarn generate-assets [network].
 // Supported networks are: arbitrum, goerli, mainnet, and polygon.
 
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, Bytes } from '@graphprotocol/graph-ts';
 
 class Assets {
-  public stableAssets: Address[];
-  public pricingAssets: Address[];
+  public stableAssets: Bytes[];
+  public pricingAssets: Bytes[];
   public fxAssets: Address[];
   public fxAggregators: Address[];
 }
 
 {{#each stableAssets}}
-export const {{symbol}}_ADDRESS = Address.fromString('{{address}}');
+export const {{symbol}}_ADDRESS = Bytes.fromHexString('{{address}}');
 {{/each}}
 
 export const assets: Assets = {
   stableAssets: [
     {{#each stableAssets}}
-    Address.fromString('{{address}}'), // {{symbol}}
+    Bytes.fromHexString('{{address}}'), // {{symbol}}
     {{/each}}
   ],
   pricingAssets: [
     {{#each pricingAssets}}
-    Address.fromString('{{address}}'), // {{symbol}}
+    Bytes.fromHexString('{{address}}'), // {{symbol}}
     {{/each}}
   ],
   fxAssets: [
