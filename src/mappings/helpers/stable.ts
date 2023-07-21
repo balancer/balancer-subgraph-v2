@@ -1,28 +1,43 @@
-import { Address, BigInt, log } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
-import { StablePool } from '../../types/templates/StablePool/StablePool';
+import { BigInt, log } from '@graphprotocol/graph-ts';
+import { AmpUpdate, Pool } from '../../types/schema';
 import { ZERO, ONE } from './constants';
 
 export const AMP_PRECISION = BigInt.fromI32(1000);
 
-export function updateAmpFactor(pool: Pool): void {
-  let poolContract = StablePool.bind(changetype<Address>(pool.address));
+export function updateAmpFactor(pool: Pool, blockTimestamp: BigInt): void {
+  let latestAmpUpdateId = pool.latestAmpUpdate;
+  if (!latestAmpUpdateId) return;
 
-  pool.amp = getAmp(poolContract);
+  let latestAmpUpdate = AmpUpdate.load(latestAmpUpdateId);
+  if (!latestAmpUpdate) return;
+
+  pool.amp = calculateAmpFactor(latestAmpUpdate, blockTimestamp);
 
   pool.save();
 }
 
-// TODO: allow passing MetaStablePool once AS supports union types
-export function getAmp(poolContract: StablePool): BigInt {
-  let ampCall = poolContract.try_getAmplificationParameter();
-  let amp = ZERO;
-  if (!ampCall.reverted) {
-    let value = ampCall.value.value0;
-    let precision = ampCall.value.value2;
-    amp = value.div(precision);
+function calculateAmpFactor(latestAmpUpdate: AmpUpdate, blockTimestamp: BigInt): BigInt {
+  let startValue = latestAmpUpdate.startAmp;
+  let endValue = latestAmpUpdate.endAmp;
+  let startTime = latestAmpUpdate.startTimestamp;
+  let endTime = latestAmpUpdate.endTimestamp;
+
+  let value = ZERO;
+  if (blockTimestamp.lt(endTime)) {
+    if (endValue.gt(startValue)) {
+      value = startValue.plus(
+        endValue.minus(startValue).times(blockTimestamp.minus(startTime)).div(endTime.minus(startTime))
+      );
+    } else {
+      value = startValue.minus(
+        startValue.minus(endValue).times(blockTimestamp.minus(startTime)).div(endTime.minus(startTime))
+      );
+    }
+  } else {
+    value = endValue;
   }
-  return amp;
+
+  return value;
 }
 
 export function calculateInvariant(amp: BigInt, balances: BigInt[], swapId: string): BigInt {
