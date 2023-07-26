@@ -8,7 +8,7 @@ import {
   ZERO_ADDRESS,
   MIN_POOL_LIQUIDITY,
 } from './helpers/constants';
-import { hasVirtualSupply, isComposableStablePool, isLinearPool, PoolType } from './helpers/pools';
+import { hasVirtualSupply, isComposableStablePool, isLinearPool, isFXPool, PoolType } from './helpers/pools';
 import {
   bytesToAddress,
   createPoolSnapshot,
@@ -136,7 +136,14 @@ export function updatePoolLiquidity(poolId: string, block_number: BigInt, timest
     if (poolToken == null) continue;
 
     let poolTokenQuantity: BigDecimal = poolToken.balance;
-    let poolTokenValue = valueInUSD(poolTokenQuantity, tokenAddress);
+    let poolTokenValue: BigDecimal = ZERO_BD;
+    if (!isFXPool(pool)) {
+      poolTokenValue = valueInUSD(poolTokenQuantity, tokenAddress);
+    } else {
+      // Custom computation for FXPool tokens
+      poolTokenValue = valueInFX(poolTokenQuantity, tokenAddress);
+    }
+
     newPoolLiquidity = newPoolLiquidity.plus(poolTokenValue);
   }
 
@@ -187,6 +194,19 @@ export function valueInUSD(value: BigDecimal, asset: Address): BigDecimal {
   }
 
   return usdValue;
+}
+
+export function valueInFX(value: BigDecimal, asset: Address): BigDecimal {
+  let token = getToken(asset);
+
+  if (token.latestFXPrice) {
+    // convert to USD using latestFXPrice
+    const latestFXPrice = token.latestFXPrice as BigDecimal;
+    return value.times(latestFXPrice);
+  } else {
+    // fallback if latestFXPrice is not available
+    return valueInUSD(value, asset);
+  }
 }
 
 export function updateBptPrice(pool: Pool): void {
