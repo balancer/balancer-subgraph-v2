@@ -27,8 +27,16 @@
       "symbol": "BAL"
     },
     {
-      "address": "0xa0b862F60edEf4452F25B4160F177db44DeB6Cf1", 
-      "symbol": "GNO"
+      "address": "0xf0cb2dc0db5e6c66B9a70Ac27B06b878da017028", 
+      "symbol": "OHM"
+    },
+    {
+      "address": "0x32dF62dc3aEd2cD6224193052Ce665DC18165841",
+      "symbol": "B-80RDNT-20WETH"
+    },
+    {
+      "address": "0xDa1CD1711743e57Dd57102E9e61b75f3587703da",
+      "symbol": "bb-a-WETH-V3"
     }
   ]
 }

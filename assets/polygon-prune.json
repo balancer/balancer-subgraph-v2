@@ -19,6 +19,10 @@
       "symbol": "WMATIC"
     },
     {
+      "address": "0xE4885Ed2818Cc9E840A25f94F9b2A28169D1AEA7",
+      "symbol": "bb-a-WMATIC-V3"
+    },
+    {
       "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619", 
       "symbol": "WETH"
     },
@@ -37,14 +41,6 @@
     {
       "address": "0x48e6b98ef6329f8f0a30ebb8c7c960330d648085",
       "symbol": "bb-am-USD"
-    },
-    {
-      "address": "0x6f7C932e7684666C9fd1d44527765433e01fF61d", 
-      "symbol": "MKR"
-    },
-    {
-      "address": "0x5FFD62D3C3eE2E81C00A7b9079FB248e7dF024A8", 
-      "symbol": "GNO"
     },
     {
       "address": "0xBA1BA1ba1BA1bA1bA1Ba1BA1ba1BA1bA1ba1ba1B", 
