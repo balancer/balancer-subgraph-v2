@@ -7,6 +7,13 @@ graft:
   base: {{graft.base}}
   block: {{graft.block}}
 {{/if}}
+{{#if graft_pruned}}
+features:
+  - grafting
+graft:
+  base: {{graft_pruned.base}}
+  block: {{graft_pruned.block}}
+{{/if}}
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
@@ -446,6 +453,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
         - name: ManagedPoolV2Factory
           file: ./abis/ManagedPoolV2Factory.json
         - name: ManagedPool
@@ -1817,6 +1826,8 @@ templates:
       abis:
         - name: WeightedPool
           file: ./abis/WeightedPool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
         - name: ManagedPool
           file: ./abis/ManagedPoolV2.json
         - name: Vault
@@ -1911,6 +1922,8 @@ templates:
           file: ./abis/ComposableStablePool.json
         - name: StablePool
           file: ./abis/StablePool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
         - name: Vault
           file: ./abis/Vault.json
       eventHandlers:
@@ -1951,6 +1964,8 @@ templates:
       abis:
         - name: LinearPool
           file: ./abis/LinearPool.json
+        - name: WeightedPoolV2
+          file: ./abis/WeightedPoolV2.json
         - name: Vault
           file: ./abis/Vault.json
       eventHandlers:

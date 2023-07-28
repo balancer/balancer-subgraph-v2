@@ -6,6 +6,7 @@ import {
   USD_STABLE_ASSETS,
   VAULT_ADDRESS,
   ZERO_ADDRESS,
+  ProtocolFeeType,
 } from './helpers/constants';
 import {
   getPoolTokenManager,
@@ -53,6 +54,7 @@ import { GyroEPool as GyroEPoolTemplate } from '../types/templates';
 import { FXPool as FXPoolTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
+import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
@@ -61,6 +63,7 @@ import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
 import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
+import { ComposableStablePool } from '../types/ComposableStablePoolFactory/ComposableStablePool';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
@@ -86,6 +89,20 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
 
   if (poolType == PoolType.Managed) {
     pool.totalAumFeeCollectedInBPT = ZERO_BD;
+  }
+
+  // Get protocol fee via on-chain calls since ProtocolFeePercentageCacheUpdated
+  // event is emitted before the PoolCreated
+  if ((poolType == PoolType.Weighted && poolTypeVersion >= 2) || poolType == PoolType.Managed) {
+    let weightedContract = WeightedPoolV2.bind(poolAddress);
+
+    let protocolSwapFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Swap));
+    let protocolYieldFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Yield));
+    let protocolAumFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Aum));
+
+    pool.protocolSwapFeeCache = protocolSwapFee.reverted ? null : scaleDown(protocolSwapFee.value, 18);
+    pool.protocolYieldFeeCache = protocolYieldFee.reverted ? null : scaleDown(protocolYieldFee.value, 18);
+    pool.protocolAumFeeCache = protocolAumFee.reverted ? null : scaleDown(protocolAumFee.value, 18);
   }
 
   pool.save();
@@ -171,6 +188,20 @@ function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVers
   let tokens = getPoolTokens(poolId);
   if (tokens == null) return null;
   pool.tokensList = tokens;
+
+  // Get protocol fee via on-chain calls since ProtocolFeePercentageCacheUpdated
+  // event is emitted before the PoolCreated
+  if (poolType == PoolType.ComposableStable) {
+    let composableContract = ComposableStablePool.bind(poolAddress);
+
+    let protocolSwapFee = composableContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Swap));
+    let protocolYieldFee = composableContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Yield));
+    let protocolAumFee = composableContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Aum));
+
+    pool.protocolSwapFeeCache = protocolSwapFee.reverted ? null : scaleDown(protocolSwapFee.value, 18);
+    pool.protocolYieldFeeCache = protocolYieldFee.reverted ? null : scaleDown(protocolYieldFee.value, 18);
+    pool.protocolAumFeeCache = protocolAumFee.reverted ? null : scaleDown(protocolAumFee.value, 18);
+  }
 
   pool.save();
 
