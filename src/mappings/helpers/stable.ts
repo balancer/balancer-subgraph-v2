@@ -24,14 +24,12 @@ function calculateAmpFactor(latestAmpUpdate: AmpUpdate, blockTimestamp: BigInt):
 
   let value = ZERO;
   if (blockTimestamp.lt(endTime)) {
+    const duration = endTime.minus(startTime);
+    const elapsedTime = blockTimestamp.minus(startTime);
     if (endValue.gt(startValue)) {
-      value = startValue.plus(
-        endValue.minus(startValue).times(blockTimestamp.minus(startTime)).div(endTime.minus(startTime))
-      );
+      value = startValue.plus(endValue.minus(startValue).times(elapsedTime).div(duration));
     } else {
-      value = startValue.minus(
-        startValue.minus(endValue).times(blockTimestamp.minus(startTime)).div(endTime.minus(startTime))
-      );
+      value = startValue.minus(startValue.minus(endValue).times(elapsedTime).div(duration));
     }
   } else {
     value = endValue;
