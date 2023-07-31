@@ -46,6 +46,7 @@ export function hasVirtualSupply(pool: Pool): boolean {
     pool.poolType == PoolType.SiloLinear ||
     pool.poolType == PoolType.YearnLinear ||
     pool.poolType == PoolType.StablePhantom ||
+    pool.poolType == PoolType.Managed ||
     isComposableStablePool(pool)
   );
 }
