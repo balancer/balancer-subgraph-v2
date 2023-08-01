@@ -622,6 +622,9 @@ optimism:
     startBlock: 97253023
 avalanche:
   network: avalanche
+  EventEmitter:
+    address: "0xf04378a3ff97b3f979a46f91f9b2d5A1D2394773"
+    startBlock: 33336746
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 26386141
