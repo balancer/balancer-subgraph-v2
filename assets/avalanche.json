@@ -33,6 +33,14 @@
       {
         "address": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7", 
         "symbol": "wAVAX"
+      },
+      {
+        "address": "0x7275c131b1F67e8B53b4691F92B0E35A4c1C6e22",
+        "symbol": "bb-a-WAVAX-V3"
+      },
+      {
+        "address": "0xa1D14d922a575232066520EDA11E27760946c991",
+        "symbol": "bb-a-USD-V3"
       }
     ],
     "fxAssets": [
