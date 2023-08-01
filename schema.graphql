@@ -9,7 +9,6 @@ type Balancer @entity {
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
   totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
-  
   protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
 
@@ -54,6 +53,8 @@ type Pool @entity {
 
   # StablePool Only
   amp: BigInt
+  latestAmpUpdate: AmpUpdate
+  ampUpdates: [AmpUpdate!] @derivedFrom(field: "poolId")
 
   # MetaStablePool and LinearPool Only
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")
