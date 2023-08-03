@@ -33,7 +33,7 @@ function setSwapEnabled(event: LogArgument): void {
     pool.swapEnabled = false;
   } else {
     pool.swapEnabledCurationSignal = true;
-    pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, true, pool._swapEnabled);
+    pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, true, pool.swapEnabledInternal);
   }
   pool.save();
 }

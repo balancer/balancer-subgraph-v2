@@ -28,7 +28,7 @@ type Pool @entity {
   swapEnabled: Boolean!
   
   "The native swapEnabled boolean. internal to the pool. Only applies to Gyro, LBPs and InvestmentPools"
-  _swapEnabled: Boolean
+  swapEnabledInternal: Boolean
   
   "External indication from an offchain permissioned actor"
   swapEnabledCurationSignal: Boolean
