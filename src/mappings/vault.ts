@@ -483,7 +483,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     updatePoolWeights(poolId.toHexString());
   } else if (isStableLikePool(pool)) {
     // Stablelike pools' amplification factors update over time so we need to update them after each swap
-    updateAmpFactor(pool);
+    updateAmpFactor(pool, event.block.timestamp);
   }
 
   // If swapping on a pool with preminted BPT and the BPT itself is being swapped then this is equivalent to a mint/burn in a regular pool

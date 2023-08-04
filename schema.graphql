@@ -9,7 +9,6 @@ type Balancer @entity {
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
   totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
-  
   protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
 
@@ -23,7 +22,16 @@ type Pool @entity {
   oracleEnabled: Boolean!
   symbol: String
   name: String
+  
+  "Indicates if a pool can be swapped against. Combines multiple sources, including offchain curation"
   swapEnabled: Boolean!
+  
+  "The native swapEnabled boolean. internal to the pool. Only applies to Gyro, LBPs and InvestmentPools"
+  swapEnabledInternal: Boolean
+  
+  "External indication from an offchain permissioned actor"
+  swapEnabledCurationSignal: Boolean
+  
   swapFee: BigDecimal!
   owner: Bytes
   isPaused: Boolean
@@ -32,6 +40,7 @@ type Pool @entity {
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
+  totalLiquiditySansBPT: BigDecimal # TODO: make mandatory at next full sync
   totalShares: BigDecimal!
   totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
   createTime: Int!
@@ -54,6 +63,8 @@ type Pool @entity {
 
   # StablePool Only
   amp: BigInt
+  latestAmpUpdate: AmpUpdate
+  ampUpdates: [AmpUpdate!] @derivedFrom(field: "poolId")
 
   # MetaStablePool and LinearPool Only
   priceRateProviders: [PriceRateProvider!] @derivedFrom(field: "poolId")

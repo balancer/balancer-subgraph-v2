@@ -48,6 +48,7 @@ import {
   getPoolTokenId,
   loadPriceRateProvider,
   getPoolShare,
+  computeCuratedSwapEnabled,
   createPoolTokenEntity,
   bytesToAddress,
   getProtocolFeeCollector,
@@ -249,7 +250,9 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = event.params.swapEnabled;
+  let swapEnabledInternal = event.params.swapEnabled;
+  pool.swapEnabledInternal = swapEnabledInternal;
+  pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, pool.swapEnabledCurationSignal, swapEnabledInternal);
   pool.save();
 }
 
@@ -258,8 +261,9 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = !event.params.paused;
-  pool.isPaused = event.params.paused;
+  let isPaused = event.params.paused;
+  pool.isPaused = isPaused;
+  pool.swapEnabled = computeCuratedSwapEnabled(isPaused, pool.swapEnabledCurationSignal, pool.swapEnabledInternal);
   pool.save();
 }
 
@@ -294,6 +298,7 @@ export function handlePauseGyroPool(event: PausedLocally): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.isPaused = true;
+  pool.swapEnabledInternal = false;
   pool.swapEnabled = false;
   pool.save();
 }
@@ -305,7 +310,8 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.isPaused = false;
-  pool.swapEnabled = true;
+  pool.swapEnabledInternal = true;
+  pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, pool.swapEnabledCurationSignal, true);
   pool.save();
 }
 
@@ -338,15 +344,25 @@ export function handleAmpUpdateStarted(event: AmpUpdateStarted): void {
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
+  let poolId = poolContract.pool;
+
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let ampUpdate = new AmpUpdate(id);
-  ampUpdate.poolId = poolContract.pool;
+  ampUpdate.poolId = poolId;
   ampUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   ampUpdate.startTimestamp = event.params.startTime;
   ampUpdate.endTimestamp = event.params.endTime;
   ampUpdate.startAmp = event.params.startValue;
   ampUpdate.endAmp = event.params.endValue;
   ampUpdate.save();
+
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
+
+  pool.latestAmpUpdate = ampUpdate.id;
+  pool.save();
+
+  updateAmpFactor(pool, event.block.timestamp);
 }
 
 export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
@@ -368,7 +384,11 @@ export function handleAmpUpdateStopped(event: AmpUpdateStopped): void {
 
   let pool = Pool.load(poolId);
   if (pool == null) return;
-  updateAmpFactor(pool);
+
+  pool.latestAmpUpdate = ampUpdate.id;
+  pool.save();
+
+  updateAmpFactor(pool, event.block.timestamp);
 }
 
 /************************************

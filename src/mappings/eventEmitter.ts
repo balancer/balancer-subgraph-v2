@@ -1,6 +1,7 @@
 import { LogArgument } from '../types/EventEmitter/EventEmitter';
 import { Pool, Token } from '../types/schema';
 import { BigDecimal } from '@graphprotocol/graph-ts';
+import { computeCuratedSwapEnabled } from './helpers/misc';
 
 export function handleLogArgument(event: LogArgument): void {
   const identifier = event.params.identifier.toHexString();
@@ -28,9 +29,11 @@ function setSwapEnabled(event: LogArgument): void {
   if (!pool) return;
 
   if (event.params.value.toI32() == 0) {
+    pool.swapEnabledCurationSignal = false;
     pool.swapEnabled = false;
   } else {
-    pool.swapEnabled = true;
+    pool.swapEnabledCurationSignal = true;
+    pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, true, pool.swapEnabledInternal);
   }
   pool.save();
 }
