@@ -40,6 +40,7 @@ type Pool @entity {
   totalSwapVolume: BigDecimal!
   totalSwapFee: BigDecimal!
   totalLiquidity: BigDecimal!
+  totalLiquiditySansBPT: BigDecimal # TODO: make mandatory at next full sync
   totalShares: BigDecimal!
   totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
   createTime: Int!

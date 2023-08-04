@@ -1,4 +1,4 @@
-import { Address, Bytes, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, BigInt, BigDecimal, log, dataSource } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
 import {
   ZERO_BD,
@@ -124,6 +124,7 @@ export function updatePoolLiquidity(poolId: string, block_number: BigInt, timest
   if (pool == null) return false;
   let tokensList: Bytes[] = pool.tokensList;
   let newPoolLiquidity: BigDecimal = ZERO_BD;
+  let newPoolLiquiditySansBPT: BigDecimal = ZERO_BD;
 
   for (let j: i32 = 0; j < tokensList.length; j++) {
     let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
@@ -145,12 +146,27 @@ export function updatePoolLiquidity(poolId: string, block_number: BigInt, timest
     }
 
     newPoolLiquidity = newPoolLiquidity.plus(poolTokenValue);
+
+    let token = getToken(tokenAddress);
+    if (token.pool == null) {
+      newPoolLiquiditySansBPT = newPoolLiquiditySansBPT.plus(poolTokenValue);
+    }
   }
 
-  let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
-  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
-
   // Update pool stats
+  let liquidityChange = ZERO_BD;
+  let oldPoolLiquidity = pool.totalLiquidity;
+  let oldPoolLiquiditySansBPT = pool.totalLiquiditySansBPT;
+
+  if (dataSource.network() == 'arbitrum' || dataSource.network() == 'matic') {
+    // keep old logic on arbitrum and polygon to avoid breaking liquidity charts
+    liquidityChange = newPoolLiquidity.minus(oldPoolLiquidity);
+  } else if (oldPoolLiquiditySansBPT) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    liquidityChange = newPoolLiquiditySansBPT.minus(oldPoolLiquiditySansBPT!);
+  }
+
+  pool.totalLiquiditySansBPT = newPoolLiquiditySansBPT;
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
 
