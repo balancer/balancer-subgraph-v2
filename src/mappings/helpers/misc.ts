@@ -455,6 +455,15 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   return snapshot;
 }
 
+export function computeCuratedSwapEnabled(
+  isPaused: boolean,
+  swapEnabledCurationSignal: boolean,
+  internalSwapEnabled: boolean
+): boolean {
+  if (isPaused) return false;
+  return swapEnabledCurationSignal && internalSwapEnabled;
+}
+
 export function getProtocolFeeCollector(): Address | null {
   let vaultContract = Vault.bind(VAULT_ADDRESS);
   let feesCollector = vaultContract.try_getProtocolFeesCollector();

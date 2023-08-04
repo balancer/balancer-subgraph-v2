@@ -48,6 +48,7 @@ import {
   getPoolTokenId,
   loadPriceRateProvider,
   getPoolShare,
+  computeCuratedSwapEnabled,
   createPoolTokenEntity,
   bytesToAddress,
   getProtocolFeeCollector,
@@ -249,7 +250,9 @@ export function handleSwapEnabledSet(event: SwapEnabledSet): void {
   if (poolContract == null) return;
 
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = event.params.swapEnabled;
+  let swapEnabledInternal = event.params.swapEnabled;
+  pool.swapEnabledInternal = swapEnabledInternal;
+  pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, pool.swapEnabledCurationSignal, swapEnabledInternal);
   pool.save();
 }
 
@@ -258,8 +261,9 @@ export function handlePausedStateChanged(event: PausedStateChanged): void {
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
   let pool = Pool.load(poolContract.pool) as Pool;
-  pool.swapEnabled = !event.params.paused;
-  pool.isPaused = event.params.paused;
+  let isPaused = event.params.paused;
+  pool.isPaused = isPaused;
+  pool.swapEnabled = computeCuratedSwapEnabled(isPaused, pool.swapEnabledCurationSignal, pool.swapEnabledInternal);
   pool.save();
 }
 
@@ -294,6 +298,7 @@ export function handlePauseGyroPool(event: PausedLocally): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.isPaused = true;
+  pool.swapEnabledInternal = false;
   pool.swapEnabled = false;
   pool.save();
 }
@@ -305,7 +310,8 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.isPaused = false;
-  pool.swapEnabled = true;
+  pool.swapEnabledInternal = true;
+  pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, pool.swapEnabledCurationSignal, true);
   pool.save();
 }
 
