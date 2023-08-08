@@ -49,6 +49,8 @@ function calculateAmp(latestAmpUpdate: AmpUpdate, blockTimestamp: BigInt): BigIn
     value = endValue;
   }
 
+  value = value.div(AMP_PRECISION);
+
   return value;
 }
 
