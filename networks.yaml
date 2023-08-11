@@ -221,14 +221,14 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Aug 8
-    block: 46055000
+    # Aug 11
+    block: 46175000
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmTqmUs4xp7zQkdfPB4jNv5fZfeF7jp9iKjZ3FGvRpYqUz
   graft_pruned:
-    # Aug 4
-    block: 45900000
+    # Aug 11
+    block: 46175000
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
     base: QmRkFHajzzSbLX1yvMV9vrYL9XEaiuSb2dmGV1eyEX43VN
   EventEmitter:
