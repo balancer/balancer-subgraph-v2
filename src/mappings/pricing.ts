@@ -177,7 +177,9 @@ export function updatePoolLiquidity(poolId: string, block_number: BigInt, timest
   }
 
   // update BPT price
-  updateBptPrice(pool);
+  if (newPoolLiquidity.gt(MIN_POOL_LIQUIDITY)) {
+    updateBptPrice(pool);
+  }
 
   // Create or update pool daily snapshot
   createPoolSnapshot(pool, timestamp.toI32());
