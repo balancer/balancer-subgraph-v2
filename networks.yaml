@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Mar 30
-    # block: 16938731
+    # Aug 27
+    block: 18004633
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    # base: QmQnxRrmWbFUTfLFeHv8qi6Tf7ZMfrUVqoK7tvbF1tapbM
+    base: QmSCp25Ep62sPErV2NjY9LWZyBnqGKsCYaDBXkXfWzBxGw
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -221,16 +221,16 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Aug 11
-    block: 46175000
+    # Aug 27
+    block: 46810000
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmTqmUs4xp7zQkdfPB4jNv5fZfeF7jp9iKjZ3FGvRpYqUz
+    base: QmdotN5vu9VXZZvHNJqugkJ2ZCHFQmx8eLe3UbDvNUxzHJ
   graft_pruned:
-    # Aug 11
-    block: 46175000
+    # Aug 27
+    block: 46810000
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: QmRkFHajzzSbLX1yvMV9vrYL9XEaiuSb2dmGV1eyEX43VN
+    base: QmULAfA3eS5yojxeSR2KmbyuiwCGYPjymsFcpa6uYsu6CJ
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -345,11 +345,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Aug 8
-    block: 119340000
+    # Aug 27
+    block: 125400000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmVGGmBgze1tSc85fG9RpfGKSX1C5RjmWo2EpffEZyyKHa
+    base: QmSRfL652VGbQ1MnfFgGQdsxuLwdNebKoiLYn4Ph49XsWU
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
