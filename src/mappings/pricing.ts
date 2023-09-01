@@ -1,4 +1,4 @@
-import { Address, Bytes, BigInt, BigDecimal, log } from '@graphprotocol/graph-ts';
+import { Address, Bytes, BigInt, BigDecimal, log, dataSource } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
 import {
   ZERO_BD,
@@ -8,7 +8,7 @@ import {
   ZERO_ADDRESS,
   MIN_POOL_LIQUIDITY,
 } from './helpers/constants';
-import { hasVirtualSupply, isComposableStablePool, isLinearPool, PoolType } from './helpers/pools';
+import { hasVirtualSupply, isComposableStablePool, isLinearPool, isFXPool, PoolType } from './helpers/pools';
 import {
   bytesToAddress,
   createPoolSnapshot,
@@ -124,6 +124,7 @@ export function updatePoolLiquidity(poolId: string, block_number: BigInt, timest
   if (pool == null) return false;
   let tokensList: Bytes[] = pool.tokensList;
   let newPoolLiquidity: BigDecimal = ZERO_BD;
+  let newPoolLiquiditySansBPT: BigDecimal = ZERO_BD;
 
   for (let j: i32 = 0; j < tokensList.length; j++) {
     let tokenAddress: Address = Address.fromString(tokensList[j].toHexString());
@@ -136,14 +137,36 @@ export function updatePoolLiquidity(poolId: string, block_number: BigInt, timest
     if (poolToken == null) continue;
 
     let poolTokenQuantity: BigDecimal = poolToken.balance;
-    let poolTokenValue = valueInUSD(poolTokenQuantity, tokenAddress);
+    let poolTokenValue: BigDecimal = ZERO_BD;
+    if (!isFXPool(pool)) {
+      poolTokenValue = valueInUSD(poolTokenQuantity, tokenAddress);
+    } else {
+      // Custom computation for FXPool tokens
+      poolTokenValue = valueInFX(poolTokenQuantity, tokenAddress);
+    }
+
     newPoolLiquidity = newPoolLiquidity.plus(poolTokenValue);
+
+    let token = getToken(tokenAddress);
+    if (token.pool == null) {
+      newPoolLiquiditySansBPT = newPoolLiquiditySansBPT.plus(poolTokenValue);
+    }
   }
 
-  let oldPoolLiquidity: BigDecimal = pool.totalLiquidity;
-  let liquidityChange: BigDecimal = newPoolLiquidity.minus(oldPoolLiquidity);
-
   // Update pool stats
+  let liquidityChange = ZERO_BD;
+  let oldPoolLiquidity = pool.totalLiquidity;
+  let oldPoolLiquiditySansBPT = pool.totalLiquiditySansBPT;
+
+  if (dataSource.network() == 'arbitrum' || dataSource.network() == 'matic') {
+    // keep old logic on arbitrum and polygon to avoid breaking liquidity charts
+    liquidityChange = newPoolLiquidity.minus(oldPoolLiquidity);
+  } else if (oldPoolLiquiditySansBPT) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    liquidityChange = newPoolLiquiditySansBPT.minus(oldPoolLiquiditySansBPT!);
+  }
+
+  pool.totalLiquiditySansBPT = newPoolLiquiditySansBPT;
   pool.totalLiquidity = newPoolLiquidity;
   pool.save();
 
@@ -187,6 +210,19 @@ export function valueInUSD(value: BigDecimal, asset: Address): BigDecimal {
   }
 
   return usdValue;
+}
+
+export function valueInFX(value: BigDecimal, asset: Address): BigDecimal {
+  let token = getToken(asset);
+
+  if (token.latestFXPrice) {
+    // convert to USD using latestFXPrice
+    const latestFXPrice = token.latestFXPrice as BigDecimal;
+    return value.times(latestFXPrice);
+  } else {
+    // fallback if latestFXPrice is not available
+    return valueInUSD(value, asset);
+  }
 }
 
 export function updateBptPrice(pool: Pool): void {

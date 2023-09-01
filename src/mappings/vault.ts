@@ -251,11 +251,11 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
   }
 
-  // StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
+  // Managed, StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
   // with a non-zero value for the BPT amount when the pool is initialized,
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
   // and therefore must be subtracted from totalShares
-  if (pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool)) {
+  if (pool.poolType == PoolType.Managed || pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool)) {
     let preMintedBpt = ZERO;
     let scaledPreMintedBpt = ZERO_BD;
     for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -483,7 +483,7 @@ export function handleSwapEvent(event: SwapEvent): void {
     updatePoolWeights(poolId.toHexString());
   } else if (isStableLikePool(pool)) {
     // Stablelike pools' amplification factors update over time so we need to update them after each swap
-    updateAmpFactor(pool);
+    updateAmpFactor(pool, event.block.timestamp);
   }
 
   // If swapping on a pool with preminted BPT and the BPT itself is being swapped then this is equivalent to a mint/burn in a regular pool

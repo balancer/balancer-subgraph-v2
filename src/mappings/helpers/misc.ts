@@ -117,6 +117,7 @@ export function newPoolEntity(poolId: string): Pool {
   pool.totalSwapFee = ZERO_BD;
   pool.totalProtocolFee = ZERO_BD;
   pool.totalLiquidity = ZERO_BD;
+  pool.totalLiquiditySansBPT = ZERO_BD;
   pool.totalShares = ZERO_BD;
   pool.swapsCount = BigInt.fromI32(0);
   pool.holdersCount = BigInt.fromI32(0);
@@ -453,6 +454,15 @@ export function getBalancerSnapshot(vaultId: string, timestamp: i32): BalancerSn
   }
 
   return snapshot;
+}
+
+export function computeCuratedSwapEnabled(
+  isPaused: boolean,
+  swapEnabledCurationSignal: boolean,
+  internalSwapEnabled: boolean
+): boolean {
+  if (isPaused) return false;
+  return swapEnabledCurationSignal && internalSwapEnabled;
 }
 
 export function getProtocolFeeCollector(): Address | null {

@@ -650,6 +650,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.oracleEnabled = false;
     pool.tx = event.transaction.hash;
     pool.swapEnabled = true;
+    pool.swapEnabledInternal = true;
     pool.isPaused = false;
 
     let bpt = getToken(poolAddress);

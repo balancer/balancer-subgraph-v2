@@ -1,14 +1,19 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts';
-import { Pool } from '../../types/schema';
-import { StablePool } from '../../types/templates/StablePool/StablePool';
+import { AmpUpdate, Pool } from '../../types/schema';
 import { ZERO, ONE } from './constants';
+import { StablePool } from '../../types/templates/StablePool/StablePool';
 
 export const AMP_PRECISION = BigInt.fromI32(1000);
 
-export function updateAmpFactor(pool: Pool): void {
-  let poolContract = StablePool.bind(changetype<Address>(pool.address));
-
-  pool.amp = getAmp(poolContract);
+export function updateAmpFactor(pool: Pool, blockTimestamp: BigInt): void {
+  let latestAmpUpdateId = pool.latestAmpUpdate;
+  if (latestAmpUpdateId === null) {
+    let poolContract = StablePool.bind(changetype<Address>(pool.address));
+    pool.amp = getAmp(poolContract);
+  } else {
+    let latestAmpUpdate = AmpUpdate.load(latestAmpUpdateId) as AmpUpdate;
+    pool.amp = calculateAmp(latestAmpUpdate, blockTimestamp);
+  }
 
   pool.save();
 }
@@ -23,6 +28,30 @@ export function getAmp(poolContract: StablePool): BigInt {
     amp = value.div(precision);
   }
   return amp;
+}
+
+function calculateAmp(latestAmpUpdate: AmpUpdate, blockTimestamp: BigInt): BigInt {
+  let startValue = latestAmpUpdate.startAmp;
+  let endValue = latestAmpUpdate.endAmp;
+  let startTime = latestAmpUpdate.startTimestamp;
+  let endTime = latestAmpUpdate.endTimestamp;
+
+  let value = ZERO;
+  if (blockTimestamp.lt(endTime)) {
+    const duration = endTime.minus(startTime);
+    const elapsedTime = blockTimestamp.minus(startTime);
+    if (endValue.gt(startValue)) {
+      value = startValue.plus(endValue.minus(startValue).times(elapsedTime).div(duration));
+    } else {
+      value = startValue.minus(startValue.minus(endValue).times(elapsedTime).div(duration));
+    }
+  } else {
+    value = endValue;
+  }
+
+  value = value.div(AMP_PRECISION);
+
+  return value;
 }
 
 export function calculateInvariant(amp: BigInt, balances: BigInt[], swapId: string): BigInt {
