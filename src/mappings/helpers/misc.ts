@@ -462,6 +462,7 @@ export function computeCuratedSwapEnabled(
   internalSwapEnabled: boolean
 ): boolean {
   if (isPaused) return false;
+  if (swapEnabledCurationSignal == null) return internalSwapEnabled;
   return swapEnabledCurationSignal && internalSwapEnabled;
 }
 
