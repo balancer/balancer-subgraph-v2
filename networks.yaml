@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Aug 27
-    block: 18004633
+    # GyroE V2
+    block: 17672894
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmSCp25Ep62sPErV2NjY9LWZyBnqGKsCYaDBXkXfWzBxGw
+    base: QmYA3WuYqS74BYkKbfE4oWrv12YU4RC9FnYaPWF5YMavaj
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
