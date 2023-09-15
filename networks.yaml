@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # Aug 27
-    block: 18004633
+    # GyroE V2
+    block: 17672894
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmSCp25Ep62sPErV2NjY9LWZyBnqGKsCYaDBXkXfWzBxGw
+    base: QmYA3WuYqS74BYkKbfE4oWrv12YU4RC9FnYaPWF5YMavaj
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -123,7 +123,7 @@ mainnet:
   ProtocolIdRegistry:
     address: "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68"
     startBlock: 16719996
-  GyroEPoolFactory:
+  GyroEV2PoolFactory:
     address: "0x412a5B2e7a678471985542757A6855847D4931D5"
     startBlock: 17672894
 goerli:
@@ -617,7 +617,7 @@ optimism:
   ProtocolIdRegistry:
     address: "0x9805dcfD25e6De36bad8fe9D3Fe2c9b44B764102"
     startBlock: 77557576
-  GyroEPoolFactory:
+  GyroEV2PoolFactory:
     address: "0x9b683ca24b0e013512e2566b68704dbe9677413c"
     startBlock: 97253023
 avalanche:
