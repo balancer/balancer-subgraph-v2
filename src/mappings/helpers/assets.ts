@@ -31,7 +31,7 @@ export const assets: Assets = {
     Address.fromString('0x82698aeCc9E28e9Bb27608Bd52cF57f704BD1B83'), // bb-a-USDC-V2
     Address.fromString('0x2F4eb100552ef93840d5aDC30560E5513DFfFACb'), // bb-a-USDT-V2
     Address.fromString('0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599'), // WBTC
-    Address.fromString('0xba100000625a3754423978a60c9317c58a424e3D'), // BAL
+    Address.fromString('0x949449E9f339Ac6b934004D64d776AB3340D7E67'), // JLY
     Address.fromString('0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2'), // MKR
     Address.fromString('0x6810e776880C02933D47DB1b9fc05908e5386b96'), // GNO
     Address.fromString('0x5c6ee304399dbdb9c8ef030ab642b10820db8f56'), // B-80BAL-20WETH
