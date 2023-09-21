@@ -59,6 +59,14 @@
     {
       "address": "0xE111178A87A3BFf0c8d18DECBa5798827539Ae99",
       "symbol":  "EURS"
+    },
+    {
+      "address": "0xE6A537a407488807F0bbeb0038B79004f19DDDFb",
+      "symbol":  "BRLA"
+    },
+    {
+      "address": "0xC8bB8eDa94931cA2F20EF43eA7dBD58E68400400",
+      "symbol":  "VNXAU"
     }
   ],
   "fxAggregators": [
@@ -77,6 +85,14 @@
     {
       "address": "0x310990E8091b5cF083fA55F500F140CFBb959016",
       "symbol": "EURS-USD"
+    },
+    {
+      "address": "0xB90DA3ff54C3ED09115abf6FbA0Ff4645586af2c",
+      "symbol": "BRL-USD"
+    },
+    {
+      "address": "0x0C466540B2ee1a31b441671eac0ca886e051E410",
+      "symbol": "XAU-USD"
     }
   ]
 }
