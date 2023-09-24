@@ -1,8 +1,8 @@
 mainnet:
   network: mainnet
   graft:
-    # Sep 22
-    block: 18191000
+    # WeightedV3 start block to fix rate providers
+    block: 16520627
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmesRNivF7vFYoh29b1cusrD9X5Zq3mfeFzcpx2m8WV7cV
