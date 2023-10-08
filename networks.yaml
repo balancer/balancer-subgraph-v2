@@ -437,6 +437,9 @@ arbitrum:
   ProtocolIdRegistry:
     address: "0x5cF4928a3205728bd12830E1840F7DB85c62a4B9"
     startBlock: 65101370
+  GyroEV2PoolFactory:
+    address: "0xdCA5f1F0d7994A32BC511e7dbA0259946653Eaf6"
+    startBlock: 124858976
 bnb:
   network: bsc
   Vault:
