@@ -23,6 +23,10 @@
       "symbol": "WETH"
     },
     {
+      "address": "0x5D8cfF95D7A57c0BF50B30b43c7CC0D52825D4a9",
+      "symbol": "wstETH"
+    },
+    {
       "address": "0x16C9a4D841E88E52b51936106010F27085a529EC",
       "symbol": "bb-o-USDC"
     },

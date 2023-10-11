@@ -110,8 +110,8 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   // Load pool with initial weights
   updatePoolWeights(poolId.toHexString());
 
-  // Create PriceRateProvider entities for WeightedPoolV2
-  if (poolType == PoolType.Weighted && poolTypeVersion == 2) {
+  // Create PriceRateProvider entities for WeightedPoolV2+
+  if (poolType == PoolType.Weighted && poolTypeVersion >= 2) {
     setPriceRateProviders(poolId.toHex(), poolAddress, tokens);
   }
 
