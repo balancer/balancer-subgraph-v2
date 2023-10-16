@@ -39,24 +39,24 @@
         "symbol": "bb-a-USD-V3"
       }
     ],
-    "fxAssets": [
+    "fxAssetAggregators": [
       {
-        "address": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
-        "symbol": "USDC"
+        "asset": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+        "assetSymbol": "USDC",
+        "aggregator": "0xfBd998938f8f7210eEC3D1e12E80A10972F02aEd",
+        "aggregatorSymbol": "USDC/USD"
       },
       {
-        "address": "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD",
-        "symbol": "EUROC"
-      }
-    ],
-    "fxAggregators": [
-      {
-        "address": "0xfBd998938f8f7210eEC3D1e12E80A10972F02aEd",
-        "symbol": "USDC-USD"
+        "asset": "0xC891EB4cbdEFf6e073e859e987815Ed1505c2ACD",
+        "assetSymbol": "EUROC",
+        "aggregator": "0x95Edda00bCE60f99Fb0bE38fE500eBd879AB651a",
+        "aggregatorSymbol": "EUR/USD"
       },
       {
-        "address": "0x95Edda00bCE60f99Fb0bE38fE500eBd879AB651a",
-        "symbol": "EUR-USD"
+        "asset": "0x7678e162f38ec9ef2Bfd1d0aAF9fd93355E5Fa0b",
+        "assetSymbol": "VEUR",
+        "aggregator": "0x95Edda00bCE60f99Fb0bE38fE500eBd879AB651a",
+        "aggregatorSymbol": "EUR/USD"
       }
     ]
   }
