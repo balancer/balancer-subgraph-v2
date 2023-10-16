@@ -739,6 +739,9 @@ polygon-zkevm:
   ManagedPoolV2Factory:
     address: "0xaf779e58dafb4307b998C7b3C9D3f788DFc80632"
     startBlock: 220536
+  GyroEV2PoolFactory:
+    address: "0x5D56EA1B2595d2dbe4f5014b967c78ce75324f0c"
+    startBlock: 5147666
 base:
   network: base
   EventEmitter:
