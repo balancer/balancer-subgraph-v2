@@ -57,6 +57,12 @@
         "assetSymbol": "VEUR",
         "aggregator": "0x95Edda00bCE60f99Fb0bE38fE500eBd879AB651a",
         "aggregatorSymbol": "EUR/USD"
+      },
+      {
+        "asset": "0x228a48df6819CCc2eCa01e2192ebAFfFdAD56c19",
+        "assetSymbol": "VCHF",
+        "aggregator": "0xA418573AB5226711c8564Eeb449c3618ABFaf677",
+        "aggregatorSymbol": "CHF/USD"
       }
     ]
   }
