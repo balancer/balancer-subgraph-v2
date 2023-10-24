@@ -221,16 +221,16 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Sep 22
-    block: 47850000
+    # Oct 2 - VNXAU/USDC FX pool creation
+    block: 48238450
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmazgY16yHabe6LVVBzXyRAis2izSXzeBwcXg7aDGPKrLt
+    base: QmZQsfDj4jf7H16kg2p4jmPUVXFe7TYFBtuoL5tGQTMBrC
   graft_pruned:
-    # Sep 22
-    block: 47850000
+    # Oct 2 - VNXAU/USDC FX pool creation
+    block: 48238450
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: QmazgY16yHabe6LVVBzXyRAis2izSXzeBwcXg7aDGPKrLt
+    base: QmZQsfDj4jf7H16kg2p4jmPUVXFe7TYFBtuoL5tGQTMBrC
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
