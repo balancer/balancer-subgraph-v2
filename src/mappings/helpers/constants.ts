@@ -27,8 +27,7 @@ export let MAX_NEG_PRICE_CHANGE = BigDecimal.fromString('-0.5'); // -50%%
 export const MIN_POOL_LIQUIDITY = BigDecimal.fromString('2000');
 export const MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
 
-export let FX_AGGREGATOR_ADDRESSES = assets.fxAggregators;
-export let FX_TOKEN_ADDRESSES = assets.fxAssets;
+export let FX_ASSET_AGGREGATORS = assets.fxAssetAggregators;
 
 export let USD_STABLE_ASSETS = assets.stableAssets;
 export let PRICING_ASSETS = assets.stableAssets.concat(assets.pricingAssets);

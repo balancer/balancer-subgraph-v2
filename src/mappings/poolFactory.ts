@@ -1,11 +1,4 @@
-import {
-  ZERO_BD,
-  ZERO,
-  FX_AGGREGATOR_ADDRESSES,
-  VAULT_ADDRESS,
-  ZERO_ADDRESS,
-  ProtocolFeeType,
-} from './helpers/constants';
+import { ZERO_BD, ZERO, FX_ASSET_AGGREGATORS, VAULT_ADDRESS, ZERO_ADDRESS, ProtocolFeeType } from './helpers/constants';
 import {
   getPoolTokenManager,
   getPoolTokens,
@@ -584,7 +577,7 @@ export function handleNewFXPool(event: ethereum.Event): void {
    * */
   let poolId = event.parameters[1].value.toBytes();
   let poolAddress = event.parameters[2].value.toAddress();
-  let swapFee = ZERO; // @todo: figure out how to get swap fee from FXPool
+  let swapFee = ZERO; // fee is calculated on every swap
 
   // Create a PoolCreated event from generic ethereum.Event
   const poolCreatedEvent = new PoolCreated(
@@ -612,10 +605,16 @@ export function handleNewFXPool(event: ethereum.Event): void {
 
   FXPoolTemplate.create(poolAddress);
 
-  // Create templates for every Offchain Aggregator
-  for (let i: i32 = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
-    OffchainAggregator.create(FX_AGGREGATOR_ADDRESSES[i]);
-  }
+  // Create templates for each token Offchain Aggregator
+  let tokensAddresses = changetype<Address[]>(tokens);
+  tokensAddresses.forEach((tokenAddress) => {
+    for (let i = 0; i < FX_ASSET_AGGREGATORS.length; i++) {
+      if (FX_ASSET_AGGREGATORS[i][0] == tokenAddress) {
+        OffchainAggregator.create(FX_ASSET_AGGREGATORS[i][1]);
+        break;
+      }
+    }
+  });
 }
 
 function findOrInitializeVault(): Balancer {
