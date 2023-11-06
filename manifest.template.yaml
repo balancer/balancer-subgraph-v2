@@ -1535,6 +1535,37 @@ dataSources:
         - event: NewFXPool(indexed address,indexed bytes32,indexed address)
           handler: handleNewFXPool
   {{/if}}
+  {{#if FXPoolDeployer}}
+  - kind: ethereum/contract
+    name: FXPoolDeployer
+    network: {{network}}
+    source:
+      address: '{{FXPoolDeployer.address}}'
+      abi: FXPoolDeployer
+      startBlock: {{FXPoolDeployer.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: FXPool
+          file: ./abis/FXPool.json
+        - name: FXPoolDeployer
+          file: ./abis/FXPoolDeployer.json
+      eventHandlers:
+        - event: NewFXPool(indexed address,indexed bytes32,indexed address)
+          handler: handleNewFXPool
+  {{/if}}
   {{#if ProtocolIdRegistry}}
   - kind: ethereum/contract
     name: ProtocolIdRegistry
