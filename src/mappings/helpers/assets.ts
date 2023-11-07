@@ -59,9 +59,5 @@ export const assets: Assets = {
       Address.fromString('0xdB25f211AB05b1c97D595516F45794528a807ad8'), // EURS
       Address.fromString('0x02F878A94a1AE1B15705aCD65b5519A46fe3517e'), // EUR/USD
     ],
-    [
-      Address.fromString('0x86B4dBE5D203e634a12364C0e428fa242A3FbA98'), // GBPT
-      Address.fromString('0x568B8FD03992F56bF240958D22f5a6fcf7Bd850b'), // GBP/USD
-    ],
   ],
 };

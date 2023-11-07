@@ -119,12 +119,6 @@
       "assetSymbol": "EURS",
       "aggregator": "0x02F878A94a1AE1B15705aCD65b5519A46fe3517e",
       "aggregatorSymbol": "EUR/USD"
-    },
-    {
-      "asset": "0x86B4dBE5D203e634a12364C0e428fa242A3FbA98",
-      "assetSymbol": "GBPT",
-      "aggregator": "0x568B8FD03992F56bF240958D22f5a6fcf7Bd850b",
-      "aggregatorSymbol": "GBP/USD"
     }
   ]
 }
