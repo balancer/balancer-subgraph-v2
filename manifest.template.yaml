@@ -1531,9 +1531,13 @@ dataSources:
           file: ./abis/FXPool.json
         - name: FXPoolFactory
           file: ./abis/FXPoolFactory.json
+        - name: Assimilator
+          file: ./abis/Assimilator.json
+        - name: ChainlinkPriceFeed
+          file: ./abis/ChainlinkPriceFeed.json
       eventHandlers:
         - event: NewFXPool(indexed address,indexed bytes32,indexed address)
-          handler: handleNewFXPool
+          handler: handleNewFXPoolV1
   {{/if}}
   {{#if FXPoolDeployer}}
   - kind: ethereum/contract
@@ -1562,9 +1566,13 @@ dataSources:
           file: ./abis/FXPool.json
         - name: FXPoolDeployer
           file: ./abis/FXPoolDeployer.json
+        - name: Assimilator
+          file: ./abis/Assimilator.json
+        - name: ChainlinkPriceFeed
+          file: ./abis/ChainlinkPriceFeed.json
       eventHandlers:
         - event: NewFXPool(indexed address,indexed bytes32,indexed address)
-          handler: handleNewFXPool
+          handler: handleNewFXPoolV2
   {{/if}}
   {{#if ProtocolIdRegistry}}
   - kind: ethereum/contract
