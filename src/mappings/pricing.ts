@@ -386,7 +386,11 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
   let oracle = FXOracle.load(aggregatorAddress.toHexString());
   if (oracle) {
     for (let i = 0; i < oracle.tokens.length; i++) {
-      tokenAddressesToUpdate.push(Address.fromBytes(oracle.tokens[i]));
+      const tokenAddress = Address.fromBytes(oracle.tokens[i]);
+      const tokenExists = tokenAddressesToUpdate.includes(tokenAddress);
+      if (!tokenExists) {
+        tokenAddressesToUpdate.push(tokenAddress);
+      }
     }
   }
 

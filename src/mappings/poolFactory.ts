@@ -618,7 +618,7 @@ function handleNewFXPool(event: ethereum.Event, permissionless: boolean): void {
   FXPoolTemplate.create(poolAddress);
 
   // Create templates for each token Offchain Aggregator
-  let tokensAddresses = changetype<Address[]>(tokens);
+  let tokensAddresses: Address[] = changetype<Address[]>(tokens);
 
   if (!permissionless) {
     // For FXPoolFactory, use hardcoded aggregator addresses
@@ -662,7 +662,12 @@ function handleNewFXPool(event: ethereum.Event, permissionless: boolean): void {
 
       // Update FXOracle supported tokens
       let oracle = getFXOracle(aggregatorAddress);
-      oracle.tokens.push(tokenAddress); // @todo: add if not exists
+      let tokenAddresses = oracle.tokens;
+      const tokenExists = tokenAddresses.includes(tokenAddress);
+      if (!tokenExists) {
+        tokenAddresses.push(tokenAddress);
+      }
+      oracle.tokens = tokenAddresses;
       oracle.save();
     }
   }
