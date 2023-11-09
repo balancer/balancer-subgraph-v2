@@ -20,8 +20,7 @@ import {
 } from './helpers/misc';
 import { AaveLinearPool } from '../types/AaveLinearPoolFactory/AaveLinearPool';
 import {
-  FX_AGGREGATOR_ADDRESSES,
-  FX_TOKEN_ADDRESSES,
+  FX_ASSET_AGGREGATORS,
   MAX_POS_PRICE_CHANGE,
   MAX_NEG_PRICE_CHANGE,
   MAX_TIME_DIFF_FOR_PRICING,
@@ -375,28 +374,35 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
   let tokenAddress = ZERO_ADDRESS;
   const aggregatorAddress = event.address;
 
-  for (let i = 0; i < FX_AGGREGATOR_ADDRESSES.length; i++) {
-    if (aggregatorAddress == FX_AGGREGATOR_ADDRESSES[i]) {
-      tokenAddress = FX_TOKEN_ADDRESSES[i];
-      break;
+  for (let i = 0; i < FX_ASSET_AGGREGATORS.length; i++) {
+    if (aggregatorAddress != FX_ASSET_AGGREGATORS[i][1]) continue;
+
+    tokenAddress = FX_ASSET_AGGREGATORS[i][0];
+
+    const token = Token.load(tokenAddress.toHexString());
+    if (token == null) {
+      log.warning('Token with address {} not found', [tokenAddress.toHexString()]);
+      return;
     }
+
+    // All tokens we track have oracles with 8 decimals
+    if (!token.fxOracleDecimals) {
+      token.fxOracleDecimals = 8; // @todo: get decimals on-chain
+    }
+
+    const answer = event.params.current;
+
+    if (tokenAddress == Address.fromString('0xc8bb8eda94931ca2f20ef43ea7dbd58e68400400')) {
+      // XAU-USD oracle returns an answer with price unit of "USD per troy ounce"
+      // For VNXAU however, we wanna use a price unit of "USD per gram"
+      const divisor = '3110347680'; // 31.1034768 * 1e8 (31.10 gram per troy ounce)
+      const multiplier = '100000000'; // 1 * 1e8
+      const pricePerGram = answer.times(BigInt.fromString(multiplier)).div(BigInt.fromString(divisor));
+      token.latestFXPrice = scaleDown(pricePerGram, 8);
+    } else {
+      token.latestFXPrice = scaleDown(answer, 8);
+    }
+
+    token.save();
   }
-
-  // Return if this answer is for another token we don't track
-  if (tokenAddress == ZERO_ADDRESS) return;
-
-  const token = Token.load(tokenAddress.toHexString());
-  if (token == null) {
-    log.warning('Token with address {} not found', [tokenAddress.toHexString()]);
-    return;
-  }
-
-  // All tokens we track have oracles with 8 decimals
-  if (!token.fxOracleDecimals) {
-    token.fxOracleDecimals = 8;
-  }
-
-  let rate = scaleDown(event.params.current, 8);
-  token.latestFXPrice = rate;
-  token.save();
 }

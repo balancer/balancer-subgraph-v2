@@ -16,7 +16,7 @@ import {
 import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent, Vault } from '../../types/Vault/Vault';
-import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_ADDRESS, ZERO_BD, FX_TOKEN_ADDRESSES } from './constants';
+import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_ADDRESS, ZERO_BD } from './constants';
 import { PoolType, getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
 import { valueInUSD } from '../pricing';
@@ -298,12 +298,6 @@ export function createToken(tokenAddress: Address): Token {
   if (!isPoolCall.reverted) {
     let poolId = isPoolCall.value;
     token.pool = poolId.toHexString();
-  }
-
-  // assign oracle decimals for FX tokens
-  let tokenIndex = FX_TOKEN_ADDRESSES.indexOf(tokenAddress);
-  if (tokenIndex >= 0) {
-    token.fxOracleDecimals = 8; // @TODO: get decimals on-chain
   }
 
   token.name = name;

@@ -7,8 +7,7 @@ import { Address } from '@graphprotocol/graph-ts';
 class Assets {
   public stableAssets: Address[];
   public pricingAssets: Address[];
-  public fxAssets: Address[];
-  public fxAggregators: Address[];
+  public fxAssetAggregators: Address[][];
 }
 
 {{#each stableAssets}}
@@ -26,14 +25,12 @@ export const assets: Assets = {
     Address.fromString('{{address}}'), // {{symbol}}
     {{/each}}
   ],
-  fxAssets: [
-    {{#each fxAssets}}
-    Address.fromString('{{address}}'), // {{symbol}}
-    {{/each}}
-  ],
-  fxAggregators: [
-    {{#each fxAggregators}}
-    Address.fromString('{{address}}'), // {{symbol}}
+  fxAssetAggregators: [
+    {{#each fxAssetAggregators}}
+    [
+      Address.fromString('{{asset}}'), // {{assetSymbol}}
+      Address.fromString('{{aggregator}}'), // {{aggregatorSymbol}}
+    ],
     {{/each}}
   ],
 };
