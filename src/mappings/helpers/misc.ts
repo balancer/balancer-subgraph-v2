@@ -12,6 +12,7 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
+  FXOracle
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
@@ -466,4 +467,14 @@ export function getProtocolFeeCollector(): Address | null {
   if (feesCollector.reverted) return null;
 
   return feesCollector.value;
+}
+
+export function getFXOracle(oracleAddress: Address): FXOracle {
+  let oracle = FXOracle.load(oracleAddress.toHexString());
+  if (oracle == null) {
+    oracle = new FXOracle(oracleAddress.toHexString());
+    oracle.tokens = [];
+    oracle.save();
+  }
+  return oracle;
 }

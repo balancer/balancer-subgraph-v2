@@ -61,7 +61,7 @@
       {
         "asset": "0x228a48df6819CCc2eCa01e2192ebAFfFdAD56c19",
         "assetSymbol": "VCHF",
-        "aggregator": "0xA418573AB5226711c8564Eeb449c3618ABFaf677",
+        "aggregator": "0x3D22B2c729A952402d898D1041F5E4828FF3695c",
         "aggregatorSymbol": "CHF/USD"
       }
     ]

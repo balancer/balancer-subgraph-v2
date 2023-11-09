@@ -1,5 +1,5 @@
 import { Address, Bytes, BigInt, BigDecimal, log, dataSource } from '@graphprotocol/graph-ts';
-import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token } from '../types/schema';
+import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token, FXOracle } from '../types/schema';
 import {
   ZERO_BD,
   PRICING_ASSETS,
@@ -371,14 +371,28 @@ export function setWrappedTokenPrice(pool: Pool, poolId: string, block_number: B
 }
 
 export function handleAnswerUpdated(event: AnswerUpdated): void {
-  let tokenAddress = ZERO_ADDRESS;
   const aggregatorAddress = event.address;
+  const answer = event.params.current;
+  const tokenAddressesToUpdate: Address[] = [];
 
+  // Check if the aggregator is under FX_ASSET_AGGREGATORS first (FXPoolFactory version)
   for (let i = 0; i < FX_ASSET_AGGREGATORS.length; i++) {
-    if (aggregatorAddress != FX_ASSET_AGGREGATORS[i][1]) continue;
+    if (aggregatorAddress == FX_ASSET_AGGREGATORS[i][1]) {
+      tokenAddressesToUpdate.push(FX_ASSET_AGGREGATORS[i][0]);
+    }
+  }
 
-    tokenAddress = FX_ASSET_AGGREGATORS[i][0];
+  // Also check if aggregator exists from FXOracle entity (FXPoolDeployer version)
+  let oracle = FXOracle.load(aggregatorAddress.toHexString());
+  if (oracle) {
+    for (let i = 0; i < oracle.tokens.length; i++) {
+      tokenAddressesToUpdate.push(Address.fromBytes(oracle.tokens[i]));
+    }
+  }
 
+  // Update all tokens using this aggregator
+  for (let i = 0; i < tokenAddressesToUpdate.length; i++) {
+    const tokenAddress = tokenAddressesToUpdate[i];
     const token = Token.load(tokenAddress.toHexString());
     if (token == null) {
       log.warning('Token with address {} not found', [tokenAddress.toHexString()]);
@@ -389,8 +403,6 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
     if (!token.fxOracleDecimals) {
       token.fxOracleDecimals = 8; // @todo: get decimals on-chain
     }
-
-    const answer = event.params.current;
 
     if (tokenAddress == Address.fromString('0xc8bb8eda94931ca2f20ef43ea7dbd58e68400400')) {
       // XAU-USD oracle returns an answer with price unit of "USD per troy ounce"

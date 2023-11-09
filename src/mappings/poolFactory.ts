@@ -17,10 +17,11 @@ import {
   bytesToAddress,
   getProtocolFeeCollector,
   getToken,
+  getFXOracle,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum, log } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
@@ -632,20 +633,37 @@ function handleNewFXPool(event: ethereum.Event, permissionless: boolean): void {
   } else {
     // For FXPoolDeployer (permissionless), fetch the aggregator address dynamically
     let poolContract = FXPool.bind(poolAddress);
+
     for (let i = 0; i < tokensAddresses.length; i++) {
       let tokenAddress = tokensAddresses[i];
       let assimCall = poolContract.try_assimilator(tokenAddress);
-      if (!assimCall.reverted) {
-        let assimContract = Assimilator.bind(assimCall.value);
-        let oracleCall = assimContract.try_oracle();
-        if (!oracleCall.reverted) {
-          let oracleContract = ChainlinkPriceFeed.bind(oracleCall.value);
-          let aggregatorCall = oracleContract.try_aggregator();
-          if (!aggregatorCall.reverted) {
-            OffchainAggregator.create(aggregatorCall.value);
-          }
-        }
-      }
+      log.warning('[JAMES-DEBUG] Token assim: {} = {}', [tokenAddress.toHexString(), assimCall.value.toHexString()]);
+      if (assimCall.reverted) continue;
+
+      let assimContract = Assimilator.bind(assimCall.value);
+      let oracleCall = assimContract.try_oracle();
+      log.warning('[JAMES-DEBUG] Assim oracle: {} = {}', [
+        assimCall.value.toHexString(),
+        oracleCall.value.toHexString(),
+      ]);
+      if (oracleCall.reverted) continue;
+
+      let oracleContract = ChainlinkPriceFeed.bind(oracleCall.value);
+      let aggregatorCall = oracleContract.try_aggregator();
+      log.warning('[JAMES-DEBUG] Oracle agregator: {} = {}', [
+        oracleCall.value.toHexString(),
+        aggregatorCall.value.toHexString(),
+      ]);
+      if (aggregatorCall.reverted) continue;
+
+      // Create OffchainAggregator template
+      let aggregatorAddress = aggregatorCall.value;
+      OffchainAggregator.create(aggregatorAddress);
+
+      // Update FXOracle supported tokens
+      let oracle = getFXOracle(aggregatorAddress);
+      oracle.tokens.push(tokenAddress); // @todo: add if not exists
+      oracle.save();
     }
   }
 }
