@@ -721,6 +721,9 @@ polygon-zkevm:
   ComposableStablePoolV5Factory:
     address: "0x956CCab09898C0AF2aCa5e6C229c3aD4E93d9288"
     startBlock: 2157318
+  ComposableStablePoolV5FactoryV2:
+    address: "0x577e5993B9Cc480F07F98B5Ebd055604bd9071C4"
+    startBlock: 7248126
   AaveLinearPoolV5Factory:
     address: "0x4b7b369989e613ff2C65768B7Cf930cC927F901E"
     startBlock: 220075
