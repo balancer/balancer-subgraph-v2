@@ -12,7 +12,7 @@ import {
   TradePairSnapshot,
   BalancerSnapshot,
   Balancer,
-  FXOracle
+  FXOracle,
 } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { WeightedPool } from '../../types/Vault/WeightedPool';
