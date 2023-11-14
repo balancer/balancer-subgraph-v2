@@ -17,6 +17,7 @@ import {
   bytesToAddress,
   getProtocolFeeCollector,
   getToken,
+  getFXOracle,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
@@ -52,6 +53,9 @@ import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
+import { FXPool } from '../types/templates/FXPool/FXPool';
+import { Assimilator } from '../types/FXPoolDeployer/Assimilator';
+import { ChainlinkPriceFeed } from '../types/FXPoolDeployer/ChainlinkPriceFeed';
 import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
 import { ComposableStablePool } from '../types/ComposableStablePoolFactory/ComposableStablePool';
@@ -568,9 +572,17 @@ export function handleNewGyroEV2Pool(event: PoolCreated): void {
   createGyroEPool(event, 2);
 }
 
-export function handleNewFXPool(event: ethereum.Event): void {
+export function handleNewFXPoolV1(event: ethereum.Event): void {
+  return handleNewFXPool(event, false);
+}
+
+export function handleNewFXPoolV2(event: ethereum.Event): void {
+  return handleNewFXPool(event, true);
+}
+
+function handleNewFXPool(event: ethereum.Event, permissionless: boolean): void {
   /**
-   * FXPoolFactory emits a custom NewFXPool event with the following params:
+   * FXPoolFactory/FXPoolDeployer emits a custom NewFXPool event with the following params:
    *   event.parameters[0] = caller
    *   event.parameters[1] = id (vault poolId)
    *   event.parameters[2] = fxpool (pool address)
@@ -606,15 +618,50 @@ export function handleNewFXPool(event: ethereum.Event): void {
   FXPoolTemplate.create(poolAddress);
 
   // Create templates for each token Offchain Aggregator
-  let tokensAddresses = changetype<Address[]>(tokens);
-  tokensAddresses.forEach((tokenAddress) => {
-    for (let i = 0; i < FX_ASSET_AGGREGATORS.length; i++) {
-      if (FX_ASSET_AGGREGATORS[i][0] == tokenAddress) {
-        OffchainAggregator.create(FX_ASSET_AGGREGATORS[i][1]);
-        break;
+  let tokensAddresses: Address[] = changetype<Address[]>(tokens);
+
+  if (!permissionless) {
+    // For FXPoolFactory, use hardcoded aggregator addresses
+    tokensAddresses.forEach((tokenAddress) => {
+      for (let i = 0; i < FX_ASSET_AGGREGATORS.length; i++) {
+        if (FX_ASSET_AGGREGATORS[i][0] == tokenAddress) {
+          OffchainAggregator.create(FX_ASSET_AGGREGATORS[i][1]);
+          break;
+        }
       }
+    });
+  } else {
+    // For FXPoolDeployer (permissionless), fetch the aggregator address dynamically
+    let poolContract = FXPool.bind(poolAddress);
+
+    for (let i = 0; i < tokensAddresses.length; i++) {
+      let tokenAddress = tokensAddresses[i];
+      let assimCall = poolContract.try_assimilator(tokenAddress);
+      if (assimCall.reverted) continue;
+
+      let assimContract = Assimilator.bind(assimCall.value);
+      let oracleCall = assimContract.try_oracle();
+      if (oracleCall.reverted) continue;
+
+      let oracleContract = ChainlinkPriceFeed.bind(oracleCall.value);
+      let aggregatorCall = oracleContract.try_aggregator();
+      if (aggregatorCall.reverted) continue;
+
+      // Create OffchainAggregator template
+      let aggregatorAddress = aggregatorCall.value;
+      OffchainAggregator.create(aggregatorAddress);
+
+      // Update FXOracle supported tokens
+      let oracle = getFXOracle(aggregatorAddress);
+      let tokenAddresses = oracle.tokens;
+      const tokenExists = tokenAddresses.includes(tokenAddress);
+      if (!tokenExists) {
+        tokenAddresses.push(tokenAddress);
+      }
+      oracle.tokens = tokenAddresses;
+      oracle.save();
     }
-  });
+  }
 }
 
 function findOrInitializeVault(): Balancer {

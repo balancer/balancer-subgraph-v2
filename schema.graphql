@@ -397,3 +397,8 @@ type ProtocolIdData @entity {
   id: ID!
   name: String!
 }
+
+type FXOracle @entity {
+  id: ID! # FX oracle aggregator address
+  tokens: [Bytes!]! # token addresses using this oracle
+}

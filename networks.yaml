@@ -120,6 +120,9 @@ mainnet:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
+  FXPoolDeployer:
+    address: "0xfb23Bc0D2629268442CD6521CF4170698967105f"
+    startBlock: 18469425
   ProtocolIdRegistry:
     address: "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68"
     startBlock: 16719996
@@ -339,6 +342,9 @@ polygon:
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054793
+  FXPoolDeployer:
+    address: "0xF169c1Ae8De24Da43a3dC5c5F05De412b4848bD3"
+    startBlock: 49368321
   ProtocolIdRegistry:
     address: "0xa523f47A933D5020b23629dDf689695AA94612Dc"
     startBlock: 39769528
@@ -658,6 +664,9 @@ avalanche:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 32585313
+  FXPoolDeployer:
+    address: "0x4042dC4110Ea9500338737605A60065c3de152C6"
+    startBlock: 37150792
 basegoerli:
   network: base-testnet
   Vault:
