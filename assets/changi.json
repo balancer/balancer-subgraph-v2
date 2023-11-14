@@ -1,0 +1,14 @@
+{
+  "stableAssets": [
+    {
+      "address": "0x9e2A2E8549cFD4B52651e639351db8cf5a63800a",
+      "symbol": "jdUSD"
+    }
+  ],
+  "pricingAssets": [
+    {
+      "address": "0x66ecB1eF31d9D176543Db5E306360bcF1f2f5930",
+      "symbol": "WDFI"
+    }
+  ]
+}

@@ -9,6 +9,10 @@
       "symbol": "DAI"
     },
     {
+      "address": "0x96e20800fc46D450B18E61344b3B1f53EffA54f7",
+      "symbol": "jdUSD"
+    },
+    {
       "address": "0x9C84391B443ea3a48788079a5f98e2EaD55c9309",
       "symbol": "USDT"
     }
@@ -19,8 +23,8 @@
       "symbol": "WETH"
     },
     {
-      "address": "0xb19382073c7A0aDdbb56Ac6AF1808Fa49e377B75",
-      "symbol": "BAL"
+      "address": "0x949449E9f339Ac6b934004D64d776AB3340D7E67",
+      "symbol": "JLY"
     },
     {
       "address": "0x650c15c9cfc6063e5046813f079774f56946df21",

@@ -25,7 +25,7 @@ export let MAX_POS_PRICE_CHANGE = BigDecimal.fromString('1'); // +100%
 export let MAX_NEG_PRICE_CHANGE = BigDecimal.fromString('-0.5'); // -50%%
 
 export const MIN_POOL_LIQUIDITY = BigDecimal.fromString('2000');
-export const MIN_SWAP_VALUE_USD = BigDecimal.fromString('1');
+export const MIN_SWAP_VALUE_USD = BigDecimal.fromString('0');
 
 export let FX_AGGREGATOR_ADDRESSES = assets.fxAggregators;
 export let FX_TOKEN_ADDRESSES = assets.fxAssets;
@@ -45,7 +45,7 @@ let network: string = dataSource.network();
 // in that case, AddressByNetwork and forNetwork must be updated accordingly
 // with a new entry for the new network - folowwing subgraph slugs
 let vaultAddressByNetwork: AddressByNetwork = {
-  canonical: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+  canonical: '0x4fFbbDea67CeDE852BFb17243463502f33473092',
   custom: '0x0000000000000000000000000000000000000000',
 };
 
