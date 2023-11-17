@@ -379,6 +379,18 @@ export function handleNewYearnLinearPoolV2(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.YearnLinear, 2);
 }
 
+export function handleNewBooLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.BooLinear, 1);
+}
+
+export function handleNewBooLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.BooLinear, 2);
+}
+
+export function handleNewTarotLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.TarotLinear, 1);
+}
+
 export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
   let poolAddress = event.params.pool;
   let poolContract = PoolContract.load(poolAddress.toHexString());

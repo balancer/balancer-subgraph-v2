@@ -762,3 +762,89 @@ base:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0c6052254551EAe3ECac77B01DFcf1025418828f"
     startBlock: 1206531
+fantom:
+  network: fantom
+  graft:
+    block: 65629000
+    base: QmYsfRRojKnUBbF383mrXh3qE9zyjkwDQqZ4QtPfkijohT
+  Vault:
+    address: "0x20dd72Ed959b6147912C2e529F0a0C651c33c9ce"
+    startBlock: 17433594
+  WeightedPoolFactory:
+    address: "0x60467cb225092cE0c989361934311175f437Cf53"
+    startBlock: 16897200
+  WeightedPoolV2Factory: #griefing vuln, mitigation no fee
+    address: "0xB2ED595Afc445b47Db7043bEC25e772bf0FA1fbb"
+    startBlock: 50594400
+  WeightedPoolV3Factory: #griefing vuln fixed
+    address: "0xd678b6Acd834Cc969Bb19Ce82727f2a541fb7941"
+    startBlock: 55681500
+  WeightedPoolV4Factory: #pool id salt, beets fee collector
+    address: "0xb841Df73861E65E6D61a80F503F095a91ce75e15"
+    startBlock: 58624700
+  WeightedPool2TokenFactory:
+    address: "0x92b377187bcCC6556FceD2f1e6DAd65850C20630"
+    startBlock: 16897244
+  StablePoolFactory:
+    address: "0x55df810876354Fc3e249f701Dd78DeDE57991F8D"
+    startBlock: 16897287
+  StablePoolV2Factory:
+    address: "0xc01f37345f14686396Ef43Ad19F72E323Cd1EC43"
+    startBlock: 45593952
+  ComposableStablePoolFactory:
+    address: "0xB384A86F2Fd7788720db42f9daa60fc07EcBeA06"
+    startBlock: 46579020
+  ComposableStablePoolV2Factory:
+    address: "0x5AdAF6509BCEc3219455348AC45d6D3261b1A990"
+    startBlock: 50564007
+  ComposableStablePoolV3Factory: #griefing vuln, mitigation no fee
+    address: "0x911566c808bF00acB200B418564440A2Af177548"
+    startBlock: 55681400
+  ComposableStablePoolV4Factory: #griefing vuln fixed, pool id salt, beets fee collector
+    address: "0x5c3094982cF3c97A06b7d62A6f7669F14a199B19"
+    startBlock: 58624600
+  ComposableStablePoolV5Factory: #vuln fix
+    address: "0x23F03a4fb344d8B98833d2ACe093cc305E03474f"
+    startBlock: 65629500
+  MetaStablePoolFactory:
+    address: "0x70b55Af71B29c5Ca7e67bD1995250364C4bE5554"
+    startBlock: 16898079
+  LiquidityBootstrappingPoolFactory:
+    address: "0x458368B3724B5a1c1057A00b28eB03FEb5b64968"
+    startBlock: 16897962
+  TempLiquidityBootstrappingPoolFactory:
+    address: "0x2C774732c93CE393eC8125bDA49fb3737Ae6F473"
+    startBlock: 24906900
+  StablePhantomPoolFactory:
+    address: "0x0E2AFa0b5F9174750d4E84Bf9798f89b79Bd5bF4"
+    startBlock: 28658437
+  YearnLinearPoolV1:
+    address: "0x1F73AE6ED391A2b1e84Ff988A1Bb5394B78a4A71"
+    startBlock: 28657909
+  YearnLinearPoolV2:
+    address: "0xe6332A48bE7496489561ab4CfAb71407B1Ac8cA4"
+    startBlock: 51907910
+  BooLinearPoolFactory:
+    address: "0xba306e3Cf84751d8Ef5e812C18cAa6C567c783E8"
+    startBlock: 32452165
+  BooLinearPoolV2Factory:
+    address: "0x541fE4B02f5099809ae778CF08169edcD82CbBd4"
+    startBlock: 51908040
+  ReaperLinearPoolV1:
+    address: "0x80434cF3661313D1a0632f567c1ba389ee2F7665"
+    startBlock: 35348849
+  ReaperLinearPoolV2:
+    address: "0xD448c4156b8dE31E56fDFC071C8D96459BB28119"
+    startBlock: 49385437
+  TarotLinearPoolFactory:
+    address: "0x681B59C9cbBb6AB43ee3360ac6C34E1Dd2f147e9"
+    startBlock: 36713100
+  ERC4626LinearPoolFactory:
+    address: "0xf9F0ad4B944eEcCbBfEcaE7311d7B40272E186B1"
+    startBlock: 50654196
+  ERC4626LinearPoolV3Factory:
+    address: "0x89857161e0ad36F8c5a537733c1FCf7145220AaE"
+    startBlock: 55683200
+  MidasLinearPoolFactory:
+    address: "0x301F12ec02100e9c7DC1e2423C035590E9d54033"
+    startBlock: 60692200
