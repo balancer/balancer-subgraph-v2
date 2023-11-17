@@ -2,10 +2,10 @@ mainnet:
   network: mainnet
   graft:
     # FXPoolDeployer startBlock
-    block: 18469425
+    # block: 18469425
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmeYeqQgZysfHv4U4PYs5VzLDsxYSe79auxnp2G9kudpvT
+    # base: QmeYeqQgZysfHv4U4PYs5VzLDsxYSe79auxnp2G9kudpvT
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -224,14 +224,14 @@ goerli:
 polygon:
   network: matic
   graft:
-    # FXPoolDeployer startBlock
-    block: 49368321
+    # GyroEV2 startBlock
+    block: 41209677
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmV7rtPzCPSkn3JfjVe7cRHxJxwZzdFC1tb6r9AFzcNPzv
   graft_pruned:
-    # FXPoolDeployer startBlock
-    block: 49368321
+    # GyroEV2 startBlock
+    block: 41209677
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
     base: QmV7rtPzCPSkn3JfjVe7cRHxJxwZzdFC1tb6r9AFzcNPzv
   EventEmitter:
@@ -351,11 +351,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Sep 22
-    block: 133500000
+    # GyroEV2 startBlock 
+    block: 124858976
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmQ8Na4uwXNUNdKKAdGPUhP1qxoYxHQCoagZuKJ2zZ3qWW
+    base: Qma59fhnZU98BZ7T1duaMBdBXWB2AieadiBhaD2oMGmaJn
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240

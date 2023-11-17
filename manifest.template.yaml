@@ -1529,8 +1529,8 @@ dataSources:
           file: ./abis/ERC20.json
         - name: WeightedPool
           file: ./abis/WeightedPool.json
-        - name: GyroEPool
-          file: ./abis/GyroEPool.json
+        - name: GyroEV2Pool
+          file: ./abis/GyroEV2Pool.json
         - name: GyroEV2PoolFactory
           file: ./abis/GyroEV2PoolFactory.json
       eventHandlers:
@@ -2115,7 +2115,7 @@ templates:
     name: GyroEPool
     network: {{network}}
     source:
-      abi: GyroEPool
+      abi: GyroEV2Pool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -2128,8 +2128,8 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: GyroEPool
-          file: ./abis/GyroEPool.json
+        - name: GyroEV2Pool
+          file: ./abis/GyroEV2Pool.json
         - name: Vault
           file: ./abis/Vault.json
       eventHandlers:

@@ -52,12 +52,12 @@ import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/Conv
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
 import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
-import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
+import { GyroEV2Pool } from '../types/templates/GyroEPool/GyroEV2Pool';
 import { FXPool } from '../types/templates/FXPool/FXPool';
 import { Assimilator } from '../types/FXPoolDeployer/Assimilator';
 import { ChainlinkPriceFeed } from '../types/FXPoolDeployer/ChainlinkPriceFeed';
 import { Transfer } from '../types/Vault/ERC20';
-import { handleTransfer } from './poolController';
+import { handleTransfer, setPriceRateProvider } from './poolController';
 import { ComposableStablePool } from '../types/ComposableStablePoolFactory/ComposableStablePool';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
@@ -518,7 +518,7 @@ export function handleNewGyro3Pool(event: PoolCreated): void {
 
 function createGyroEPool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
-  let poolContract = GyroEPool.bind(poolAddress);
+  let poolContract = GyroEV2Pool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -556,6 +556,20 @@ function createGyroEPool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
   let tokens = getPoolTokens(poolId);
   if (tokens == null) return;
   pool.tokensList = tokens;
+
+  if (poolTypeVersion == 2) {
+    let rateProvider0Call = poolContract.try_rateProvider0();
+    let rateProvider1Call = poolContract.try_rateProvider1();
+
+    let blockTimestamp = event.block.timestamp.toI32();
+
+    if (!rateProvider0Call.reverted) {
+      setPriceRateProvider(poolId.toHex(), changetype<Address>(tokens[0]), rateProvider0Call.value, 0, blockTimestamp);
+    }
+    if (!rateProvider1Call.reverted) {
+      setPriceRateProvider(poolId.toHex(), changetype<Address>(tokens[1]), rateProvider1Call.value, 0, blockTimestamp);
+    }
+  }
 
   pool.save();
 
