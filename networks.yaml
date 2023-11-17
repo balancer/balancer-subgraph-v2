@@ -764,9 +764,9 @@ base:
     startBlock: 1206531
 fantom:
   network: fantom
-  graft:
-    block: 65629000
-    base: QmYsfRRojKnUBbF383mrXh3qE9zyjkwDQqZ4QtPfkijohT
+  # graft:
+  #   block: 65629000
+  #   base: QmYsfRRojKnUBbF383mrXh3qE9zyjkwDQqZ4QtPfkijohT
   Vault:
     address: "0x20dd72Ed959b6147912C2e529F0a0C651c33c9ce"
     startBlock: 17433594

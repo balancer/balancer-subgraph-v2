@@ -1655,8 +1655,6 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewBooLinearPool
-        - event: BooLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
   {{/if}}
   {{#if BooLinearPoolV2Factory}}
   - kind: ethereum/contract
@@ -1688,8 +1686,6 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewBooLinearPoolV2
-        - event: BooLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
   {{/if}}
   {{#if TarotLinearPoolFactory}}
   - kind: ethereum/contract
@@ -1721,8 +1717,6 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewTarotLinearPool
-        - event: TarotLinearPoolCreated(indexed address,indexed uint256)
-          handler: handleLinearPoolProtocolId
   {{/if}}
 templates:
   - kind: ethereum/contract
