@@ -1500,6 +1500,8 @@ dataSources:
           file: ./abis/WeightedPool.json
         - name: GyroEPool
           file: ./abis/GyroEPool.json
+        - name: GyroEV2Pool
+          file: ./abis/GyroEV2Pool.json
         - name: GyroEPoolFactory
           file: ./abis/GyroEPoolFactory.json
       eventHandlers:
