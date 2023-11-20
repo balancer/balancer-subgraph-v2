@@ -30,5 +30,31 @@
       "address": "0x650c15c9cfc6063e5046813f079774f56946df21",
       "symbol": "B-80BAL-20WETH"
     }
+  ],
+  "whitelistedAssets": [
+    {
+      "symbol": "JLY",
+      "address": "0x949449E9f339Ac6b934004D64d776AB3340D7E67"
+    },
+    {
+      "symbol": "jBTC",
+      "address": "0x001aB49b91c0eB85D53CDef57ab8FAd9D456cD01"
+    },
+    {
+      "symbol": "WETH",
+      "address": "0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9"
+    },
+    {
+      "symbol": "jETH",
+      "address": "0x1E41AA782B07d1e693D2b265A4A5D7E2a50acAe3"
+    },
+    {
+      "symbol": "jdUSD",
+      "address": "0x96e20800fc46D450B18E61344b3B1f53EffA54f7"
+    },
+    {
+      "symbol": "jDFI",
+      "address": "0x9B470B2f7860cBa2C18f1Ee8BEFc074a67CFD5d0"
+    }
   ]
 }
