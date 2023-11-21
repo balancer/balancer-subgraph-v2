@@ -62,6 +62,8 @@ import { GyroEPool } from '../types/templates/GyroEPool/GyroEPool';
 import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
 import { ComposableStablePool } from '../types/ComposableStablePoolFactory/ComposableStablePool';
+import { OfficialPoolRegistered } from '../types/templates/OfficialPoolsRegister/OfficialPoolsRegister';
+import { OfficialPoolDeregistered } from '../types/templates/OfficialPoolsRegister/OfficialPoolsRegister';
 
 function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
   let poolAddress: Address = event.params.pool;
@@ -701,4 +703,20 @@ export function handleProtocolIdRegistryOrRename(event: ProtocolIdRegistered): v
     protocol.name = event.params.name;
   }
   protocol.save();
+}
+
+export function handleOfficialPoolRegistered(event: OfficialPoolRegistered): void {
+  let poolId = event.params.poolId;
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.poolType = PoolType.OfficialPool;
+
+  pool.save();
+}
+
+export function handleOfficalPoolDeregistered(event: OfficialPoolDeregistered): void {
+  let poolId = event.params.poolId;
+  let pool = Pool.load(poolId.toHexString()) as Pool;
+  pool.poolType = PoolType.OfficialPool;
+
+  pool.save();
 }

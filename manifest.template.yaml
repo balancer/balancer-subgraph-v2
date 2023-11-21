@@ -2113,4 +2113,23 @@ templates:
       eventHandlers:
         - event: AnswerUpdated(indexed int256,indexed uint256,uint256)
           handler: handleAnswerUpdated
-
+  - kind: ethereum/contract
+    name: OfficialPoolsRegister
+    network: {{network}}
+    source:
+      abi: OfficialPoolsRegister
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolController.ts
+      entities:
+        - PoolContract
+      abis:
+        - name: OfficialPoolsRegister
+          file: ./abis/OfficialPoolsRegister.json
+      eventHandlers:
+        - event: OfficialPoolRegistered(indexed address,indexed bytes32)
+          handler: handleOfficialPoolRegistered
+        - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
+          handler: handleOfficalPoolDeregistered
