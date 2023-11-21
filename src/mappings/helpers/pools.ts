@@ -29,7 +29,6 @@ export namespace PoolType {
   export const Gyro3 = 'Gyro3';
   export const GyroE = 'GyroE';
   export const FX = 'FX';
-  export const OfficialPool = 'OfficialPool';
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {
@@ -99,10 +98,6 @@ export function isMetaStableDeprecated(blockNumber: i32): boolean {
   } else {
     return false;
   }
-}
-
-export function isOfficialPool(pool: Pool): boolean {
-  return pool.poolType == PoolType.OfficialPool;
 }
 
 export function getPoolAddress(poolId: string): Address {
