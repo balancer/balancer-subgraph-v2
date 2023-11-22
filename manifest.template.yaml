@@ -1559,6 +1559,30 @@ dataSources:
         - event: ProtocolIdRenamed(indexed uint256,string)
           handler: handleProtocolIdRegistryOrRename
     {{/if}}
+  {{#if OfficialPoolsRegister}}
+  - kind: ethereum/contract
+    name: OfficialPoolsRegister
+    network: {{network}}
+    source:
+      address: '{{OfficialPoolsRegister.address}}'
+      abi: OfficialPoolsRegister
+      startBlock: {{OfficialPoolsRegister.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolOfficial.ts
+      entities:
+        - Pool
+      abis:
+        - name: OfficialPoolsRegister
+          file: ./abis/OfficialPoolsRegister.json
+      eventHandlers:
+        - event: OfficialPoolRegistered(indexed address,indexed bytes32)
+          handler: handleOfficialPoolRegistered
+        - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
+          handler: handleOfficialPoolDeregistered
+    {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
