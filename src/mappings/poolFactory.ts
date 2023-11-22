@@ -25,6 +25,9 @@ import {
   getProtocolFeeCollector,
   getToken,
 } from './helpers/misc';
+
+import { assets } from './helpers/assets';
+
 import { updatePoolWeights } from './helpers/weighted';
 
 import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
@@ -83,6 +86,9 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
 
   let tokens = getPoolTokens(poolId);
   if (tokens == null) return null;
+
+  pool.poolAllowed = !tokens.some(token => !assets.whitelistedAssets.includes(Address.fromBytes(token)))
+
   pool.tokensList = tokens;
 
   if (poolType == PoolType.Managed) {

@@ -9,6 +9,7 @@ class Assets {
   public pricingAssets: Address[];
   public fxAssets: Address[];
   public fxAggregators: Address[];
+  public whitelistedAssets: Address[];
 }
 
 export const USDC_ADDRESS = Address.fromString('0x835E81CB4a45b6338B43A7a66ba1C78900A76Ef3');
@@ -18,14 +19,27 @@ export const USDT_ADDRESS = Address.fromString('0x9C84391B443ea3a48788079a5f98e2
 
 export const assets: Assets = {
   stableAssets: [
-    Address.fromString('0x9e2A2E8549cFD4B52651e639351db8cf5a63800a'), // jdUSD
+    Address.fromString('0x835E81CB4a45b6338B43A7a66ba1C78900A76Ef3'), // USDC
+    Address.fromString('0xeF5f222c49c89a231F3aBE30114c77EE904e1e44'), // DAI
+    Address.fromString('0x96e20800fc46D450B18E61344b3B1f53EffA54f7'), // jdUSD
+    Address.fromString('0x9C84391B443ea3a48788079a5f98e2EaD55c9309'), // USDT
   ],
   pricingAssets: [
-    Address.fromString('0x7b79995e5f793a07bc00c21412e50ecae098e7f9'), // WDFI
-    Address.fromString('0x66ecB1eF31d9D176543Db5E306360bcF1f2f5930'), // JLY
+    Address.fromString('0x7b79995e5f793a07bc00c21412e50ecae098e7f9'), // WETH
+    Address.fromString('0x949449E9f339Ac6b934004D64d776AB3340D7E67'), // JLY
+    Address.fromString('0x650c15c9cfc6063e5046813f079774f56946df21'), // B-80BAL-20WETH
   ],
   fxAssets: [
   ],
   fxAggregators: [
+  ],
+
+  whitelistedAssets: [
+    Address.fromString('0x949449E9f339Ac6b934004D64d776AB3340D7E67'), // JLY
+    Address.fromString('0x001aB49b91c0eB85D53CDef57ab8FAd9D456cD01'), // jBTC
+    Address.fromString('0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9'), // WETH
+    Address.fromString('0x1E41AA782B07d1e693D2b265A4A5D7E2a50acAe3'), // jETH
+    Address.fromString('0x96e20800fc46D450B18E61344b3B1f53EffA54f7'), // jdUSD
+    Address.fromString('0x9B470B2f7860cBa2C18f1Ee8BEFc074a67CFD5d0'), // jDFI
   ],
 };
