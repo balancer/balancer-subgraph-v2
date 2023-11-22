@@ -28,6 +28,7 @@ type Pool @entity {
   swapFee: BigDecimal!
   owner: Bytes
   isPaused: Boolean
+  officialPool: Boolean!
 
   totalWeight: BigDecimal
   totalSwapVolume: BigDecimal!

@@ -657,6 +657,7 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     pool.tx = event.transaction.hash;
     pool.swapEnabled = true;
     pool.isPaused = false;
+    pool.officialPool = false;
 
     let bpt = getToken(poolAddress);
 

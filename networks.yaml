@@ -701,6 +701,9 @@ sepolia:
   ManagedPoolV2Factory:
     address: "0x63e179C5b6d54B2c2e36b9cE4085EF5A8C86D50c"
     startBlock: 4276797
+  OfficialPoolsRegister:
+    address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
+    startBlock: 4737221
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:
