@@ -10,10 +10,10 @@ export function handleOfficialPoolRegistered(event: OfficialPoolRegistered): voi
   pool.save();
 }
 
-export function handleOfficalPoolDeregistered(event: OfficialPoolDeregistered): void {
+export function handleOfficialPoolDeregistered(event: OfficialPoolDeregistered): void {
   let poolId = event.params.poolId;
   let pool = Pool.load(poolId.toHexString()) as Pool;
-  pool.officialPool = true;
+  pool.officialPool = false;
 
   pool.save();
 }

@@ -2124,7 +2124,7 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappings/poolOfficial.ts
       entities:
-        - PoolContract
+        - Pool
       abis:
         - name: OfficialPoolsRegister
           file: ./abis/OfficialPoolsRegister.json
@@ -2132,4 +2132,4 @@ templates:
         - event: OfficialPoolRegistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolRegistered
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
-          handler: handleOfficalPoolDeregistered
+          handler: handleOfficialPoolDeregistered
