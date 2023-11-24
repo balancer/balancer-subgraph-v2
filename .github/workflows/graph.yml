@@ -63,7 +63,7 @@ jobs:
       - name: Install
         run: yarn --frozen-lockfile
       - name: Assets
-        run: yarn generate-assets polygon
+        run: yarn generate-assets polygon-prune
       - name: Codegen
         run: yarn codegen
       - name: Build
