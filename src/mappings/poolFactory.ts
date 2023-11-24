@@ -50,7 +50,7 @@ import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
-import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Gyro2V2Pool } from '../types/templates/Gyro2Pool/Gyro2V2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEV2Pool } from '../types/templates/GyroEPool/GyroEV2Pool';
 import { FXPool } from '../types/templates/FXPool/FXPool';
@@ -456,10 +456,10 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
   LinearPoolTemplate.create(poolAddress);
 }
 
-export function handleNewGyro2Pool(event: PoolCreated): void {
+function createGyro2Pool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
 
-  let poolContract = Gyro2Pool.bind(poolAddress);
+  let poolContract = Gyro2V2Pool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
@@ -470,6 +470,7 @@ export function handleNewGyro2Pool(event: PoolCreated): void {
   let pool = handleNewPool(event, poolId, swapFee);
 
   pool.poolType = PoolType.Gyro2;
+  pool.poolTypeVersion = poolTypeVersion;
   let sqrtParamsCall = poolContract.try_getSqrtParameters();
   pool.sqrtAlpha = scaleDown(sqrtParamsCall.value[0], 18);
   pool.sqrtBeta = scaleDown(sqrtParamsCall.value[1], 18);
@@ -478,11 +479,33 @@ export function handleNewGyro2Pool(event: PoolCreated): void {
   if (tokens == null) return;
   pool.tokensList = tokens;
 
+  if (poolTypeVersion == 2) {
+    let rateProvider0Call = poolContract.try_rateProvider0();
+    let rateProvider1Call = poolContract.try_rateProvider1();
+
+    let blockTimestamp = event.block.timestamp.toI32();
+
+    if (!rateProvider0Call.reverted) {
+      setPriceRateProvider(poolId.toHex(), changetype<Address>(tokens[0]), rateProvider0Call.value, 0, blockTimestamp);
+    }
+    if (!rateProvider1Call.reverted) {
+      setPriceRateProvider(poolId.toHex(), changetype<Address>(tokens[1]), rateProvider1Call.value, 0, blockTimestamp);
+    }
+  }
+
   pool.save();
 
   handleNewPoolTokens(pool, tokens);
 
   Gyro2PoolTemplate.create(event.params.pool);
+}
+
+export function handleNewGyro2Pool(event: PoolCreated): void {
+  createGyro2Pool(event);
+}
+
+export function handleNewGyro2V2Pool(event: PoolCreated): void {
+  createGyro2Pool(event, 2);
 }
 
 export function handleNewGyro3Pool(event: PoolCreated): void {
