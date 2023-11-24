@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # WeightedV3 start block to fix rate providers
-    block: 16520627
+    # FXPoolDeployer startBlock
+    # block: 18469425
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmesRNivF7vFYoh29b1cusrD9X5Zq3mfeFzcpx2m8WV7cV
+    # base: QmeYeqQgZysfHv4U4PYs5VzLDsxYSe79auxnp2G9kudpvT
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -120,6 +120,9 @@ mainnet:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
+  FXPoolDeployer:
+    address: "0xfb23Bc0D2629268442CD6521CF4170698967105f"
+    startBlock: 18469425
   ProtocolIdRegistry:
     address: "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68"
     startBlock: 16719996
@@ -221,16 +224,16 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Oct 2 - VNXAU/USDC FX pool creation
-    block: 48238450
+    # GyroEV2 startBlock
+    block: 41209677
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmZQsfDj4jf7H16kg2p4jmPUVXFe7TYFBtuoL5tGQTMBrC
+    base: QmV7rtPzCPSkn3JfjVe7cRHxJxwZzdFC1tb6r9AFzcNPzv
   graft_pruned:
-    # Oct 2 - VNXAU/USDC FX pool creation
-    block: 48238450
+    # GyroEV2 startBlock
+    block: 41209677
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: QmZQsfDj4jf7H16kg2p4jmPUVXFe7TYFBtuoL5tGQTMBrC
+    base: QmV7rtPzCPSkn3JfjVe7cRHxJxwZzdFC1tb6r9AFzcNPzv
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -339,17 +342,20 @@ polygon:
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054793
+  FXPoolDeployer:
+    address: "0xF169c1Ae8De24Da43a3dC5c5F05De412b4848bD3"
+    startBlock: 49368321
   ProtocolIdRegistry:
     address: "0xa523f47A933D5020b23629dDf689695AA94612Dc"
     startBlock: 39769528
 arbitrum:
   network: arbitrum-one
   graft:
-    # Sep 22
-    block: 133500000
+    # GyroEV2 startBlock 
+    block: 124858976
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmQ8Na4uwXNUNdKKAdGPUhP1qxoYxHQCoagZuKJ2zZ3qWW
+    base: Qma59fhnZU98BZ7T1duaMBdBXWB2AieadiBhaD2oMGmaJn
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -658,6 +664,9 @@ avalanche:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 32585313
+  FXPoolDeployer:
+    address: "0x4042dC4110Ea9500338737605A60065c3de152C6"
+    startBlock: 37150792
 basegoerli:
   network: base-testnet
   Vault:
