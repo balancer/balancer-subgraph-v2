@@ -1438,11 +1438,44 @@ dataSources:
           file: ./abis/WeightedPool.json
         - name: Gyro2Pool
           file: ./abis/Gyro2Pool.json
+        - name: Gyro2V2Pool
+          file: ./abis/Gyro2V2Pool.json
         - name: Gyro2PoolFactory
           file: ./abis/Gyro2PoolFactory.json
       eventHandlers:
         - event: PoolCreated(indexed address)
           handler: handleNewGyro2Pool
+  {{/if}}
+  {{#if Gyro2V2PoolFactory}}
+  - kind: ethereum/contract
+    name: Gyro2V2PoolFactory
+    network: {{network}}
+    source:
+      address: '{{Gyro2V2PoolFactory.address}}'
+      abi: Gyro2V2PoolFactory
+      startBlock: {{Gyro2V2PoolFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: Gyro2V2Pool
+          file: ./abis/Gyro2V2Pool.json
+        - name: Gyro2V2PoolFactory
+          file: ./abis/Gyro2V2PoolFactory.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewGyro2V2Pool
   {{/if}}
   {{#if Gyro3PoolFactory}}
   - kind: ethereum/contract
@@ -2057,7 +2090,7 @@ templates:
     name: Gyro2Pool
     network: {{network}}
     source:
-      abi: Gyro2Pool
+      abi: Gyro2V2Pool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -2070,8 +2103,8 @@ templates:
         - PoolToken
         - GradualWeightUpdate
       abis:
-        - name: Gyro2Pool
-          file: ./abis/Gyro2Pool.json
+        - name: Gyro2V2Pool
+          file: ./abis/Gyro2V2Pool.json
         - name: Vault
           file: ./abis/Vault.json
       eventHandlers:

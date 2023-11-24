@@ -129,6 +129,9 @@ mainnet:
   GyroEV2PoolFactory:
     address: "0x412a5B2e7a678471985542757A6855847D4931D5"
     startBlock: 17672894
+  Gyro2V2PoolFactory:
+    address: "0x579653927BF509B361F6e3813f5D4B95331d98c9"
+    startBlock: 18577307
 goerli:
   network: goerli
   EventEmitter:
@@ -351,7 +354,7 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # GyroEV2 startBlock 
+    # GyroEV2 startBlock
     block: 124858976
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
