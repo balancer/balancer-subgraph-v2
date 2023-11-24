@@ -50,7 +50,7 @@ import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2
 import { StablePool } from '../types/templates/StablePool/StablePool';
 import { ConvergentCurvePool } from '../types/templates/ConvergentCurvePool/ConvergentCurvePool';
 import { LinearPool } from '../types/templates/LinearPool/LinearPool';
-import { Gyro2Pool } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { Gyro2V2Pool } from '../types/templates/Gyro2Pool/Gyro2V2Pool';
 import { Gyro3Pool } from '../types/templates/Gyro3Pool/Gyro3Pool';
 import { GyroEV2Pool } from '../types/templates/GyroEPool/GyroEV2Pool';
 import { FXPool } from '../types/templates/FXPool/FXPool';
@@ -459,7 +459,7 @@ function handleNewLinearPool(event: PoolCreated, poolType: string, poolTypeVersi
 function createGyro2Pool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
 
-  let poolContract = Gyro2Pool.bind(poolAddress);
+  let poolContract = Gyro2V2Pool.bind(poolAddress);
 
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
