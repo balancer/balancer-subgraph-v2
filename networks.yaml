@@ -756,3 +756,14 @@ base:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0c6052254551EAe3ECac77B01DFcf1025418828f"
     startBlock: 1206531
+changi:
+  network: changi
+  Vault:
+    address: "0xA99F58760A6bcDc177788de4A85A15245ee543E9"
+    startBlock: 85340
+  WeightedPoolV4Factory:
+    address: "0x4068392380755D2B3b885aB230d8D479019Ae515"
+    startBlock: 87476
+  OfficialPoolsRegister:
+    address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
+    startBlock: 4737221
