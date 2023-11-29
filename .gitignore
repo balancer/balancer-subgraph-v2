@@ -10,3 +10,4 @@ data/postgres
 *.js
 subgraph*.yaml
 generated
+src/mappings/helpers/assets.ts
