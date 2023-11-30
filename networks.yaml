@@ -765,5 +765,5 @@ changi:
     address: "0x4068392380755D2B3b885aB230d8D479019Ae515"
     startBlock: 87476
   OfficialPoolsRegister:
-    address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
-    startBlock: 4737221
+    address: "0xb2580828928802CE42d5d54D2c57631D420cdE6C"
+    startBlock: 88496
