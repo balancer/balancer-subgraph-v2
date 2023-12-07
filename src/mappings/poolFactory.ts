@@ -359,6 +359,10 @@ export function handleNewReaperLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ReaperLinear, 1);
 }
 
+export function handleNewReaperLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ReaperLinear, 2);
+}
+
 export function handleNewReaperLinearPoolV3(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ReaperLinear, 3);
 }

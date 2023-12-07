@@ -818,10 +818,10 @@ fantom:
   StablePhantomPoolFactory:
     address: "0x0E2AFa0b5F9174750d4E84Bf9798f89b79Bd5bF4"
     startBlock: 28658437
-  YearnLinearPoolV1:
+  YearnLinearPoolFactory:
     address: "0x1F73AE6ED391A2b1e84Ff988A1Bb5394B78a4A71"
     startBlock: 28657909
-  YearnLinearPoolV2:
+  YearnLinearPoolV2Factory:
     address: "0xe6332A48bE7496489561ab4CfAb71407B1Ac8cA4"
     startBlock: 51907910
   BooLinearPoolFactory:
@@ -830,10 +830,10 @@ fantom:
   BooLinearPoolV2Factory:
     address: "0x541fE4B02f5099809ae778CF08169edcD82CbBd4"
     startBlock: 51908040
-  ReaperLinearPoolV1:
+  ReaperLinearPoolFactory:
     address: "0x80434cF3661313D1a0632f567c1ba389ee2F7665"
     startBlock: 35348849
-  ReaperLinearPoolV2:
+  ReaperLinearPoolV2Factory:
     address: "0xD448c4156b8dE31E56fDFC071C8D96459BB28119"
     startBlock: 49385437
   TarotLinearPoolFactory:
