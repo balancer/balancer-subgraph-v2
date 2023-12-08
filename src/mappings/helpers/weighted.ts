@@ -31,9 +31,9 @@ class GradualValueChange {
 
   public getInterpolateValue(
     startValue: BigInt,
-    endValue: BigInt, 
-    startTimestamp: BigInt, 
-    endTimestamp: BigInt, 
+    endValue: BigInt,
+    startTimestamp: BigInt,
+    endTimestamp: BigInt,
     blockTimestamp: BigInt
   ): BigInt {
     let pctProgress: BigInt = this.calculateValueChangeProgress(startTimestamp, endTimestamp, blockTimestamp);
@@ -44,7 +44,6 @@ class GradualValueChange {
 const Calc = new GradualValueChange();
 
 export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void {
-
   let pool = Pool.load(poolId);
   if (pool == null) return;
 
@@ -62,12 +61,13 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
   // let tokensList = pool.tokensList;
 
   let latestWeightUpdateId = pool.latestWeightUpdate;
+  
   if (latestWeightUpdateId === null) {
       return;
   } else {
     // Load in the last GradualWeightUpdateScheduled event information
     let latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
-  
+    
     let startWeights: BigInt[] = latestUpdate.startWeights;
     let endWeights: BigInt[] = latestUpdate.endWeights;
     let startTimestamp: BigInt = latestUpdate.startTimestamp;
@@ -79,9 +79,15 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
 
       for (let i = 0; i < tokensList.length; i++) {
         let tokenAddress = changetype<Address>(tokensList[i]);
-
-        let weight = Calc.getInterpolateValue(startWeights[i], endWeights[i], startTimestamp, endTimestamp, blockTimestamp);
-
+ 
+        let weight = Calc.getInterpolateValue(
+          startWeights[i],
+          endWeights[i],
+          startTimestamp,
+          endTimestamp,
+          blockTimestamp
+        );
+  
         let poolToken = loadPoolToken(poolId, tokenAddress);
         if (poolToken != null) {
           poolToken.weight = scaleDown(weight, 18);
