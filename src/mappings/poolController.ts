@@ -324,6 +324,8 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
+  let poolId = poolContract.pool;
+
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let weightUpdate = new GradualWeightUpdate(id);
   weightUpdate.poolId = poolContract.pool;
@@ -333,6 +335,14 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
   weightUpdate.startWeights = event.params.startWeights;
   weightUpdate.endWeights = event.params.endWeights;
   weightUpdate.save();
+
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
+
+  pool.latestWeightUpdate = weightUpdate.id;
+  pool.save();
+
+  updatePoolWeights(poolId, event.block.timestamp);
 }
 
 /************************************
