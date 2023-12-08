@@ -1,7 +1,6 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 
 import { Pool, GradualWeightUpdate } from '../../types/schema';
-import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
 
 import { ZERO_BD, ONE, ZERO } from './constants';
 import { scaleDown, loadPoolToken } from './misc';
