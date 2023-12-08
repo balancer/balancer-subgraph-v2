@@ -22,7 +22,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.11
+      - uses: balancer-labs/graph-deploy@v0.0.1
         with:
           graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
           graph_version_label: ${GITHUB_SHA::8}
@@ -47,7 +47,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.11
+      - uses: balancer-labs/graph-deploy@v0.0.1
         with:
           graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
           graph_version_label: ${GITHUB_SHA::8}
@@ -72,7 +72,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.11
+      - uses: balancer-labs/graph-deploy@v0.0.1
         with:
           graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
           graph_version_label: ${GITHUB_SHA::8}
@@ -97,7 +97,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
-      - uses: gtaschuk/graph-deploy@v0.1.11
+      - uses: balancer-labs/graph-deploy@v0.0.1
         with:
           graph_deploy_key: ${{secrets.GRAPH_DEPLOY_KEY}}
           graph_version_label: ${GITHUB_SHA::8}
