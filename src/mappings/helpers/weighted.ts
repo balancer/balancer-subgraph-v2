@@ -61,25 +61,22 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
   // let tokensList = pool.tokensList;
 
   let latestWeightUpdateId = pool.latestWeightUpdate;
-  
   if (latestWeightUpdateId === null) {
       return;
   } else {
     // Load in the last GradualWeightUpdateScheduled event information
     let latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
-    
+
     let startWeights: BigInt[] = latestUpdate.startWeights;
     let endWeights: BigInt[] = latestUpdate.endWeights;
     let startTimestamp: BigInt = latestUpdate.startTimestamp;
     let endTimestamp: BigInt = latestUpdate.endTimestamp;
 
     if (startWeights.length == tokensList.length) {
-
       let totalWeight = ZERO_BD;
 
       for (let i = 0; i < tokensList.length; i++) {
         let tokenAddress = changetype<Address>(tokensList[i]);
- 
         let weight = Calc.getInterpolateValue(
           startWeights[i],
           endWeights[i],
@@ -87,7 +84,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
           endTimestamp,
           blockTimestamp
         );
-  
+
         let poolToken = loadPoolToken(poolId, tokenAddress);
         if (poolToken != null) {
           poolToken.weight = scaleDown(weight, 18);
