@@ -32,7 +32,11 @@ export namespace PoolType {
 }
 
 export function isVariableWeightPool(pool: Pool): boolean {
-  return pool.poolType == PoolType.LiquidityBootstrapping || pool.poolType == PoolType.Investment;
+  return (
+    pool.poolType == PoolType.LiquidityBootstrapping ||
+    pool.poolType == PoolType.Investment ||
+    pool.poolType == PoolType.Managed
+  );
 }
 
 export function hasVirtualSupply(pool: Pool): boolean {
