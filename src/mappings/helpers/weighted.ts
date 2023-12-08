@@ -21,11 +21,11 @@ class GradualValueChange {
 
   private interpolateValue(startValue: BigInt, endValue: BigInt, pctProgress: BigInt): BigInt {
     if (startValue.gt(endValue)) {
-        let delta: BigInt = pctProgress.times(startValue.minus(endValue));
-        return startValue.minus(delta);
+      let delta: BigInt = pctProgress.times(startValue.minus(endValue));
+      return startValue.minus(delta);
     } else {
-        let delta: BigInt = pctProgress.times(endValue.minus(startValue));
-        return startValue.plus(delta);
+      let delta: BigInt = pctProgress.times(endValue.minus(startValue));
+      return startValue.plus(delta);
     }
   }
 
@@ -62,7 +62,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
 
   let latestWeightUpdateId = pool.latestWeightUpdate;
   if (latestWeightUpdateId === null) {
-      return;
+    return;
   } else {
     // Load in the last GradualWeightUpdateScheduled event information
     let latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
