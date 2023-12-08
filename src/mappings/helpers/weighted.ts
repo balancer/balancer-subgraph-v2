@@ -29,7 +29,13 @@ class GradualValueChange {
     }
   }
 
-  public getInterpolateValue(startValue: BigInt, endValue: BigInt, startTimestamp: BigInt, endTimestamp: BigInt, blockTimestamp: BigInt): BigInt {
+  public getInterpolateValue(
+    startValue: BigInt,
+    endValue: BigInt, 
+    startTimestamp: BigInt, 
+    endTimestamp: BigInt, 
+    blockTimestamp: BigInt
+  ): BigInt {
     let pctProgress: BigInt = this.calculateValueChangeProgress(startTimestamp, endTimestamp, blockTimestamp);
     return this.interpolateValue(startValue, endValue, pctProgress);
   }
