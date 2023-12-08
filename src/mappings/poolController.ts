@@ -58,6 +58,7 @@ import {
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
+import { updatePoolWeights } from './helpers/weighted';
 import { getPoolTokenManager, getPoolTokens } from './helpers/pools';
 import {
   ProtocolFeePercentageCacheUpdated,
