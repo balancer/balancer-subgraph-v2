@@ -255,6 +255,7 @@ type Swap @entity(immutable: true) {
   poolId: Pool!
   userAddress: User!
   timestamp: Int!
+  block: BigInt!
   tx: Bytes!
 }
 

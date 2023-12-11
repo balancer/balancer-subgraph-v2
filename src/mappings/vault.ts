@@ -617,6 +617,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
+  swap.block = event.block.number;
   swap.save();
 
   // update pool swapsCount
