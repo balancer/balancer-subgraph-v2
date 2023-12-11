@@ -19,7 +19,11 @@ class GradualValueChange {
   }
 
   private interpolateValue(startValue: BigInt, endValue: BigInt, pctProgress: BigInt): BigInt {
-    if (startValue.gt(endValue)) {
+    if (pctProgress.ge(ONE) || startValue == endValue) {
+      return endValue;
+    } else if (pctProgress == ZERO) {
+      return startValue;
+    } else if (startValue.gt(endValue)) {
       let delta: BigInt = pctProgress.times(startValue.minus(endValue));
       return startValue.minus(delta);
     } else {
