@@ -95,6 +95,6 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
       }
       pool.totalWeight = totalWeight;
     }
-    pool.save();
   }
+  pool.save();
 }
