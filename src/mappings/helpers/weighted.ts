@@ -47,8 +47,6 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
   if (pool == null) return;
 
   const poolAddress = pool.address;
-  let poolContract = WeightedPool.bind(changetype<Address>(poolAddress));
-
   let tokensList = new Array<Bytes>();
   for (let i = 0; i < pool.tokensList.length; i++) {
     let tokenAddress = pool.tokensList[i];
