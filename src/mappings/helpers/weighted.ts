@@ -1,8 +1,9 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 
 import { Pool, GradualWeightUpdate } from '../../types/schema';
+import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
 
-import { ZERO_BD, ONE, ZERO } from './constants';
+import { ZERO_BD, ZERO } from './constants';
 import { scaleDown, loadPoolToken } from './misc';
 
 export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void {
@@ -19,7 +20,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
   }
 
   let latestWeightUpdateId = pool.latestWeightUpdate;
-  let weights: BigInt[] = []
+  let weights: BigInt[] = [];
   if (!latestWeightUpdateId) {
     let poolContract = WeightedPool.bind(changetype<Address>(pool.address));
     let weightsCall = poolContract.try_getNormalizedWeights();
@@ -32,10 +33,11 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
 
     for (let i = 0; i < tokensList.length; i++) {
       let tokenAddress = changetype<Address>(tokensList[i]);
+      let weight = ZERO;
       if (!latestWeightUpdateId) {
-        let weight = scaleDown(weights[i], 18);
+        weight = scaleDown(weights[i], 18);
       } else {
-        let weight = calculateCurrentWeight(
+        weight = calculateCurrentWeight(
           latestUpdate.startWeights[i],
           latestUpdate.endWeights[i],
           latestUpdate.startTimestamp,
@@ -75,13 +77,13 @@ function calculateCurrentWeight(
     const totalSeconds: BigInt = endTimestamp.minus(startTimestamp);
     const secondsElapsed: BigInt = blockTimestamp.minus(startTimestamp);
     pctProgress = secondsElapsed.div(totalSeconds);
-    if (startWeight.gt(endWeight)) {
-    delta = pctProgress.times(startWeight.minus(endWeight));
-    currentWeight = startWeight.minus(delta);
-    } else {
-    delta = pctProgress.times(endWeight.minus(startWeight));
-    currentWeight = startWeight.plus(delta);
-    }
+      if (startWeight.gt(endWeight)) {
+      delta = pctProgress.times(startWeight.minus(endWeight));
+      currentWeight = startWeight.minus(delta);
+      } else {
+      delta = pctProgress.times(endWeight.minus(startWeight));
+      currentWeight = startWeight.plus(delta);
+      }
   }
   currentWeight = scaleDown(currentWeight, 18);
   return currentWeight;
