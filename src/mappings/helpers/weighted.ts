@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts';
 
 import { Pool, GradualWeightUpdate } from '../../types/schema';
 
@@ -40,7 +40,8 @@ class GradualValueChange {
     blockTimestamp: BigInt
   ): BigInt {
     let pctProgress: BigInt = this.calculateValueChangeProgress(startTimestamp, endTimestamp, blockTimestamp);
-    return this.interpolateValue(startValue, endValue, pctProgress);
+    let currentWeight: BigInt = this.interpolateValue(startValue, endValue, pctProgress);
+    return currentWeight;
   }
 }
 
@@ -72,9 +73,13 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
     let endWeights: BigInt[] = latestUpdate.endWeights;
     let startTimestamp: BigInt = latestUpdate.startTimestamp;
     let endTimestamp: BigInt = latestUpdate.endTimestamp;
+    //let x: string = "In else statement";
+    //log.warning('Current info: (start: {}), (end: {}), (blocktime: {})', [startTimestamp.toString(), endTimestamp.toString(), blockTimestamp.toString()]);
+    //log.warning('X: {}', [x])
 
     if (startWeights.length == tokensList.length) {
       let totalWeight = ZERO_BD;
+      //log.warning('Passed into second if statement: {} {}', [changetype<string>(startWeights.length), changetype<string>(tokensList.length)]);
 
       for (let i = 0; i < tokensList.length; i++) {
         let tokenAddress = changetype<Address>(tokensList[i]);
@@ -90,6 +95,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
         if (poolToken != null) {
           poolToken.weight = scaleDown(weight, 18);
           poolToken.save();
+          //log.debug('Token weight has been saved: {}', [changetype<string>(weight)])
         }
         totalWeight = totalWeight.plus(scaleDown(weight, 18));
       }
