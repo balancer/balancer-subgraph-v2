@@ -329,7 +329,7 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
 
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let weightUpdate = new GradualWeightUpdate(id);
-  weightUpdate.poolId = poolContract.pool;
+  weightUpdate.poolId = poolId;
   weightUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   weightUpdate.startTimestamp = event.params.startTime;
   weightUpdate.endTimestamp = event.params.endTime;

@@ -478,13 +478,14 @@ export function handleSwapEvent(event: SwapEvent): void {
   //   pool.swapEnabled = true;
   // }
 
+  let blockTimestamp = event.block.timestamp;
   if (isVariableWeightPool(pool)) {
     // Some pools' weights update over time so we need to update them after each swap
-    updatePoolWeights(poolId.toHexString(), event.block.timestamp);
+    updatePoolWeights(poolId.toHexString(), blockTimestamp);
     log.debug('updatePoolWeights called: {}', [poolId.toHexString()]);
   } else if (isStableLikePool(pool)) {
     // Stablelike pools' amplification factors update over time so we need to update them after each swap
-    updateAmpFactor(pool, event.block.timestamp);
+    updateAmpFactor(pool, blockTimestamp);
   }
 
   // If swapping on a pool with preminted BPT and the BPT itself is being swapped then this is equivalent to a mint/burn in a regular pool
@@ -516,7 +517,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
-  let blockTimestamp = event.block.timestamp.toI32();
+  let blockTimestamp = blockTimestamp.toI32();
 
   let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress);
   let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress);
