@@ -190,6 +190,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.timestamp = blockTimestamp;
   join.tx = transactionHash;
   join.valueUSD = valueUSD;
+  join.block = event.block.number;
   join.save();
 
   let protocolFeeUSD = ZERO_BD;
@@ -329,6 +330,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.timestamp = blockTimestamp;
   exit.tx = transactionHash;
   exit.valueUSD = valueUSD;
+  exit.block = event.block.number;
   exit.save();
 
   let protocolFeeUSD = ZERO_BD;

@@ -274,6 +274,7 @@ type JoinExit @entity(immutable: true) {
   user: User!
   timestamp: Int!
   tx: Bytes!
+  block: BigInt!
 }
 
 type LatestPrice @entity {
