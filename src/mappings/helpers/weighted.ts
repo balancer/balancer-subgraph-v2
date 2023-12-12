@@ -21,7 +21,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
 
   let latestWeightUpdateId = pool.latestWeightUpdate;
   let weights: BigInt[] = [];
-  let latestUpdate = null;
+  let latestUpdate: any = "anything";
 
   if (latestWeightUpdateId === null) {
     let poolContract = WeightedPool.bind(changetype<Address>(pool.address));
