@@ -48,10 +48,10 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
 
       let poolToken = loadPoolToken(poolId, tokenAddress);
       if (poolToken != null) {
-        poolToken.weight = weight;
+        poolToken.weight = scaleDown(weight, 18);
         poolToken.save();
       }
-      totalWeight = totalWeight.plus(weight);
+      totalWeight = totalWeight.plus(scaleDown(weight, 18));
     }
     pool.totalWeight = totalWeight;
   }
@@ -67,24 +67,21 @@ function calculateCurrentWeight(
 ): BigInt {
   let pctProgress: BigInt = ZERO;
   let delta: BigInt = ZERO;
-  let currentWeight: BigInt = ZERO;
 
   if (blockTimestamp.ge(endTimestamp) || startWeight == endWeight) {
-    currentWeight = endWeight;
+    return endWeight;
   } else if (blockTimestamp.le(startTimestamp)) {
-    currentWeight = startWeight;
+    return startWeight;
   } else {
     const totalSeconds: BigInt = endTimestamp.minus(startTimestamp);
     const secondsElapsed: BigInt = blockTimestamp.minus(startTimestamp);
     pctProgress = secondsElapsed.div(totalSeconds);
     if (startWeight.gt(endWeight)) {
       delta = pctProgress.times(startWeight.minus(endWeight));
-      currentWeight = startWeight.minus(delta);
+      return startWeight.minus(delta);
     } else {
       delta = pctProgress.times(endWeight.minus(startWeight));
-      currentWeight = startWeight.plus(delta);
+      return startWeight.plus(delta);
     }
   }
-  currentWeight = scaleDown(currentWeight, 18);
-  return currentWeight;
 }

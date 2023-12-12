@@ -517,7 +517,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let logIndex = event.logIndex;
   let transactionHash = event.transaction.hash;
-  blockTimestamp = event.block.timestamp.toI32();
+  let blockTimestamp = event.block.timestamp.toI32();
 
   let poolTokenIn = loadPoolToken(poolId.toHexString(), tokenInAddress);
   let poolTokenOut = loadPoolToken(poolId.toHexString(), tokenOutAddress);
