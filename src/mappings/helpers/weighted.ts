@@ -35,7 +35,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
       let tokenAddress = changetype<Address>(tokensList[i]);
       let weight = ZERO;
       if (!latestWeightUpdateId) {
-        weight = scaleDown(weights[i], 18);
+        weight = weights[i];
       } else {
         weight = calculateCurrentWeight(
           latestUpdate.startWeights[i],
