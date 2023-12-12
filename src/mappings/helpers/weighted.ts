@@ -29,8 +29,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
     if (weights.length == tokensList.length) {
       for (let i = 0; i < tokensList.length; i++) {
         let tokenAddress = changetype<Address>(tokensList[i]);
-        let weight = ZERO;
-        weight = weights[i];
+        let weight = weights[i];
         let poolToken = loadPoolToken(poolId, tokenAddress);
         if (poolToken != null) {
           poolToken.weight = scaleDown(weight, 18);
@@ -45,7 +44,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
     if (latestUpdate.startWeights.length == tokensList.length) {
       for (let i = 0; i < tokensList.length; i++) {
         let tokenAddress = changetype<Address>(tokensList[i]);
-        weight = calculateCurrentWeight(
+        let weight = calculateCurrentWeight(
           latestUpdate.startWeights[i],
           latestUpdate.endWeights[i],
           latestUpdate.startTimestamp,
