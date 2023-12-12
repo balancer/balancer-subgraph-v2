@@ -20,26 +20,31 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
   }
 
   let latestWeightUpdateId = pool.latestWeightUpdate;
-  let weights: BigInt[] = [];
-  let latestUpdate: any = 'anything';
+  let totalWeight = ZERO_BD;
 
   if (latestWeightUpdateId === null) {
     let poolContract = WeightedPool.bind(changetype<Address>(pool.address));
     let weightsCall = poolContract.try_getNormalizedWeights();
-    weights = weightsCall.value;
-  } else {
-    latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
-  }
-
-  if (latestUpdate.startWeights.length == tokensList.length || weights.length == tokensList.length) {
-    let totalWeight = ZERO_BD;
-
-    for (let i = 0; i < tokensList.length; i++) {
-      let tokenAddress = changetype<Address>(tokensList[i]);
-      let weight = ZERO;
-      if (!latestWeightUpdateId) {
+    let weights = weightsCall.value;
+    if (weights.length == tokensList.length) {
+      for (let i = 0; i < tokensList.length; i++) {
+        let tokenAddress = changetype<Address>(tokensList[i]);
+        let weight = ZERO;
         weight = weights[i];
-      } else {
+        let poolToken = loadPoolToken(poolId, tokenAddress);
+        if (poolToken != null) {
+          poolToken.weight = scaleDown(weight, 18);
+          poolToken.save();
+        }
+        totalWeight = totalWeight.plus(scaleDown(weight, 18));
+      }
+      pool.totalWeight = totalWeight;
+    }
+  } else {
+    let latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
+    if (latestUpdate.startWeights.length == tokensList.length) {
+      for (let i = 0; i < tokensList.length; i++) {
+        let tokenAddress = changetype<Address>(tokensList[i]);
         weight = calculateCurrentWeight(
           latestUpdate.startWeights[i],
           latestUpdate.endWeights[i],
@@ -47,16 +52,15 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
           latestUpdate.endTimestamp,
           blockTimestamp
         );
+        let poolToken = loadPoolToken(poolId, tokenAddress);
+        if (poolToken != null) {
+          poolToken.weight = scaleDown(weight, 18);
+          poolToken.save();
+        }
+        totalWeight = totalWeight.plus(scaleDown(weight, 18));
       }
-
-      let poolToken = loadPoolToken(poolId, tokenAddress);
-      if (poolToken != null) {
-        poolToken.weight = scaleDown(weight, 18);
-        poolToken.save();
-      }
-      totalWeight = totalWeight.plus(scaleDown(weight, 18));
+      pool.totalWeight = totalWeight;
     }
-    pool.totalWeight = totalWeight;
   }
   pool.save();
 }
