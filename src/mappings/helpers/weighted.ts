@@ -77,13 +77,13 @@ function calculateCurrentWeight(
     const totalSeconds: BigInt = endTimestamp.minus(startTimestamp);
     const secondsElapsed: BigInt = blockTimestamp.minus(startTimestamp);
     pctProgress = secondsElapsed.div(totalSeconds);
-      if (startWeight.gt(endWeight)) {
+    if (startWeight.gt(endWeight)) {
       delta = pctProgress.times(startWeight.minus(endWeight));
       currentWeight = startWeight.minus(delta);
-      } else {
+    } else {
       delta = pctProgress.times(endWeight.minus(startWeight));
       currentWeight = startWeight.plus(delta);
-      }
+    }
   }
   currentWeight = scaleDown(currentWeight, 18);
   return currentWeight;
