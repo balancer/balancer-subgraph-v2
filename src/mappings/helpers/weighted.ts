@@ -21,12 +21,15 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
 
   let latestWeightUpdateId = pool.latestWeightUpdate;
   let weights: BigInt[] = [];
+  let latestWeightUpdate: GradualWeightUpdate = null;
+
   if (!latestWeightUpdateId) {
     let poolContract = WeightedPool.bind(changetype<Address>(pool.address));
     let weightsCall = poolContract.try_getNormalizedWeights();
     weights = weightsCall.value;
+  } else {
+      latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
   }
-  let latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
 
   if (latestUpdate.startWeights.length == tokensList.length || weights.length == tokensList.length) {
     let totalWeight = ZERO_BD;
