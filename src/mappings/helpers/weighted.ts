@@ -1,9 +1,9 @@
-import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
 
 import { Pool, GradualWeightUpdate } from '../../types/schema';
 import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
 
-import { ZERO_BD, ZERO } from './constants';
+import { ZERO_BD } from './constants';
 import { scaleDown, loadPoolToken } from './misc';
 
 export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void {
@@ -53,10 +53,10 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
         );
         let poolToken = loadPoolToken(poolId, tokenAddress);
         if (poolToken != null) {
-          poolToken.weight = scaleDown(weight, 18);
+          poolToken.weight = weight;
           poolToken.save();
         }
-        totalWeight = totalWeight.plus(scaleDown(weight, 18));
+        totalWeight = totalWeight.plus(weight);
       }
       pool.totalWeight = totalWeight;
     }
@@ -70,24 +70,24 @@ function calculateCurrentWeight(
   startTimestamp: BigInt,
   endTimestamp: BigInt,
   blockTimestamp: BigInt
-): BigInt {
-  let pctProgress: BigInt = ZERO;
-  let delta: BigInt = ZERO;
+): BigDecimal {
+  const scalar: BigDecimal = BigDecimal.fromString('1000000000000000000');
 
   if (blockTimestamp.ge(endTimestamp) || startWeight == endWeight) {
-    return endWeight;
+    return endWeight.toBigDecimal() / scalar;
   } else if (blockTimestamp.le(startTimestamp)) {
-    return startWeight;
+    return startWeight.toBigDecimal() / scalar;
   } else {
-    const totalSeconds: BigInt = endTimestamp.minus(startTimestamp);
-    const secondsElapsed: BigInt = blockTimestamp.minus(startTimestamp);
-    pctProgress = secondsElapsed.div(totalSeconds);
+    const duration: BigInt = endTimestamp.minus(startTimestamp);
+    const elapsedTime: BigInt = blockTimestamp.minus(startTimestamp);
+    const pctProgress: BigDecimal = elapsedTime.toBigDecimal() / duration.toBigDecimal();
+
     if (startWeight.gt(endWeight)) {
-      delta = pctProgress.times(startWeight.minus(endWeight));
-      return startWeight.minus(delta);
+      let delta = pctProgress * (startWeight - endWeight).toBigDecimal();
+      return (startWeight.toBigDecimal() - delta) / scalar;
     } else {
-      delta = pctProgress.times(endWeight.minus(startWeight));
-      return startWeight.plus(delta);
+      let delta = pctProgress * (endWeight - startWeight).toBigDecimal();
+      return (startWeight.toBigDecimal() + delta) / scalar;
     }
   }
 }
