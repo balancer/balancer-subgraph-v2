@@ -35,7 +35,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
           poolToken.weight = scaleDown(weight, 18);
           poolToken.save();
         }
-        totalWeight = totalWeight.plus(scaleDown(weight, 18));
+        totalWeight = totalWeight + scaleDown(weight, 18);
       }
       pool.totalWeight = totalWeight;
     }
@@ -56,7 +56,7 @@ export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void 
           poolToken.weight = weight;
           poolToken.save();
         }
-        totalWeight = totalWeight.plus(weight);
+        totalWeight = totalWeight + weight;
       }
       pool.totalWeight = totalWeight;
     }
@@ -73,16 +73,16 @@ function calculateCurrentWeight(
 ): BigDecimal {
   const scalar: BigDecimal = BigDecimal.fromString('1000000000000000000');
 
-  if (blockTimestamp.ge(endTimestamp) || startWeight == endWeight) {
+  if (blockTimestamp >= endTimestamp || startWeight == endWeight) {
     return endWeight.toBigDecimal() / scalar;
-  } else if (blockTimestamp.le(startTimestamp)) {
+  } else if (blockTimestamp <= startTimestamp) {
     return startWeight.toBigDecimal() / scalar;
   } else {
-    const duration: BigInt = endTimestamp.minus(startTimestamp);
-    const elapsedTime: BigInt = blockTimestamp.minus(startTimestamp);
+    const duration: BigInt = endTimestamp - startTimestamp;
+    const elapsedTime: BigInt = blockTimestamp - startTimestamp;
     const pctProgress: BigDecimal = elapsedTime.toBigDecimal() / duration.toBigDecimal();
 
-    if (startWeight.gt(endWeight)) {
+    if (startWeight > endWeight) {
       let delta = pctProgress * (startWeight - endWeight).toBigDecimal();
       return (startWeight.toBigDecimal() - delta) / scalar;
     } else {
