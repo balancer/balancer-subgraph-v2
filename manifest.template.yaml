@@ -463,6 +463,28 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewManagedPoolV2
   {{/if}}
+  {{#if ManagedKassandraPoolControllerFactory}}
+  - kind: ethereum/contract
+    name: ManagedKassandraPoolControllerFactory
+    network: {{network}}
+    source:
+      address: '{{ManagedKassandraPoolControllerFactory.address}}'
+      abi: ManagedKassandraPoolControllerFactory
+      startBlock: {{ManagedKassandraPoolControllerFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Pool
+      abis:
+        - name: ManagedKassandraPoolControllerFactory
+          file: ./abis/ManagedKassandraPoolControllerFactory.json
+      eventHandlers:
+        - event: KassandraPoolCreated(indexed address,indexed bytes32,indexed address,address,address,bool)
+          handler: handleNewManagedKassandraPool
+  {{/if}}
   {{#if ConvergentPoolFactory}}
   - kind: ethereum/contract
     name: ConvergentPoolFactory

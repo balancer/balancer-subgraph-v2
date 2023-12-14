@@ -26,6 +26,7 @@ import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
 import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
+import { KassandraPoolCreated } from '../types/ManagedKassandraPoolControllerFactory/ManagedKassandraPoolControllerFactory';
 
 // datasource
 import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -160,6 +161,12 @@ export function handleNewManagedPoolV2(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Managed, 2);
   if (pool == null) return;
   ManagedPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewManagedKassandraPool(event: KassandraPoolCreated): void {
+  const pool = Pool.load(event.params.vaultPoolId.toHexString());
+  if (pool == null) return;
+  pool.controllerFactory = event.address;
 }
 
 function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
