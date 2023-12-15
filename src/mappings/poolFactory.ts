@@ -167,6 +167,7 @@ export function handleNewManagedKassandraPool(event: KassandraPoolCreated): void
   const pool = Pool.load(event.params.vaultPoolId.toHexString());
   if (pool == null) return;
   pool.controllerFactory = event.address;
+  pool.save();
 }
 
 function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
