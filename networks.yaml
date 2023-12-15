@@ -66,9 +66,6 @@ mainnet:
   ManagedPoolV2Factory:
     address: "0xBF904F9F340745B4f0c4702c7B6Ab1e808eA6b93"
     startBlock: 17046230
-  ManagedKassandraPoolControllerFactory:
-    address: "0x228885c9d0440Ae640B88fBeE31522CC6a59Fd2F"
-    startBlock: 42020509
   ConvergentPoolFactory:
     address: "0xb7561f547F3207eDb42A6AfA42170Cd47ADD17BD"
     startBlock: 12686198
@@ -294,6 +291,9 @@ polygon:
   ManagedPoolV2Factory:
     address: "0xB8Dfa4fd0F083de2B7EDc0D5eeD5E684e54bA45D"
     startBlock: 41501253
+  ManagedKassandraPoolControllerFactory:
+    address: "0x228885c9d0440Ae640B88fBeE31522CC6a59Fd2F"
+    startBlock: 42020509
   StablePhantomPoolFactory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22288478
@@ -416,6 +416,9 @@ arbitrum:
   ManagedPoolV2Factory:
     address: "0x8eA89804145c007e7D226001A96955ad53836087"
     startBlock: 80173649
+  ManagedKassandraPoolControllerFactory:
+    address: "0xF9c9073590F502F12B5497ae49DA1446D224A9EA"
+    startBlock: 120161662
   ERC4626LinearPoolFactory:
     address: "0x2794953110874981a0d301286c986992022A62a1"
     startBlock: 9311471
@@ -658,6 +661,9 @@ avalanche:
   ManagedPoolV2Factory:
     address: "0x03F3Fb107e74F2EAC9358862E91ad3c692712054"
     startBlock: 29221742
+  ManagedKassandraPoolControllerFactory:
+    address: "0xbBa46B512a158aF0e41111109617c660Ff903819"
+    startBlock: 34853589
   AaveLinearPoolV5Factory:
     address: "0x6caf662b573F577DE01165d2d38D1910bba41F8A"
     startBlock: 29512658
