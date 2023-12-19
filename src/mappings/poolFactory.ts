@@ -2,6 +2,7 @@ import { ZERO_BD, ZERO, FX_ASSET_AGGREGATORS, VAULT_ADDRESS, ZERO_ADDRESS, Proto
 import {
   getPoolTokenManager,
   getPoolTokens,
+  isManagedPool,
   isMetaStableDeprecated,
   PoolType,
   setPriceRateProviders,
@@ -83,13 +84,13 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   if (tokens == null) return null;
   pool.tokensList = tokens;
 
-  if (poolType == PoolType.Managed) {
+  if (isManagedPool(pool)) {
     pool.totalAumFeeCollectedInBPT = ZERO_BD;
   }
 
   // Get protocol fee via on-chain calls since ProtocolFeePercentageCacheUpdated
   // event is emitted before the PoolCreated
-  if ((poolType == PoolType.Weighted && poolTypeVersion >= 2) || poolType == PoolType.Managed) {
+  if ((poolType == PoolType.Weighted && poolTypeVersion >= 2) || isManagedPool(pool)) {
     let weightedContract = WeightedPoolV2.bind(poolAddress);
 
     let protocolSwapFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Swap));
@@ -166,7 +167,7 @@ export function handleNewManagedPoolV2(event: PoolCreated): void {
 export function handleNewManagedKassandraPool(event: KassandraPoolCreated): void {
   const pool = Pool.load(event.params.vaultPoolId.toHexString());
   if (pool == null) return;
-  pool.controllerFactory = event.address;
+  pool.poolType = PoolType.KassandraManaged;
   pool.save();
 }
 

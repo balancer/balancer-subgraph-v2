@@ -14,6 +14,7 @@ export namespace PoolType {
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
   export const Investment = 'Investment';
   export const Managed = 'Managed';
+  export const KassandraManaged = 'KassandraManaged';
   export const StablePhantom = 'StablePhantom';
   export const ComposableStable = 'ComposableStable';
   export const HighAmpComposableStable = 'HighAmpComposableStable';
@@ -46,9 +47,13 @@ export function hasVirtualSupply(pool: Pool): boolean {
     pool.poolType == PoolType.SiloLinear ||
     pool.poolType == PoolType.YearnLinear ||
     pool.poolType == PoolType.StablePhantom ||
-    pool.poolType == PoolType.Managed ||
-    isComposableStablePool(pool)
+    isComposableStablePool(pool) ||
+    isManagedPool(pool)
   );
+}
+
+export function isManagedPool(pool: Pool): boolean {
+  return pool.poolType == PoolType.Managed || pool.poolType == PoolType.KassandraManaged;
 }
 
 export function isComposableStablePool(pool: Pool): boolean {
