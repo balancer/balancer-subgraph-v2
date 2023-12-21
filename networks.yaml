@@ -704,6 +704,9 @@ sepolia:
   OfficialPoolsRegister:
     address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
     startBlock: 4737221
+  LiquidityRewardDistribution:
+    address: "0xafcfa0a08af1d2f94cdc2f3217f59db0e2fd00af"
+    startBlock: 4884896
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:

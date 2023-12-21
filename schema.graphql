@@ -388,3 +388,26 @@ type ProtocolIdData @entity {
   id: ID!
   name: String!
 }
+
+type RewardDistributionSnapshot @entity {
+  id: ID! #epochId
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  ipfsCid: String! 
+}
+
+type UserRewardDistribution @entity {
+  id: ID! # address
+  amountOfClaimedToken: BigInt!
+  amountOfTokenAvailableForClaim: BigInt!
+  snapshots: [SnapshotsUsersData!]! @derivedFrom(field: "user")
+}
+
+type SnapshotsUsersData @entity {
+  id:ID!
+  epochId: BigInt!
+  initialAmount: BigInt!
+  claimedAmount: BigInt!
+  claimed: Boolean!
+  user: UserRewardDistribution! 
+}

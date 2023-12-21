@@ -14,6 +14,8 @@ graft:
   base: {{graft_pruned.base}}
   block: {{graft_pruned.block}}
 {{/if}}
+features:
+  - ipfsOnEthereumContracts
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
@@ -1583,6 +1585,34 @@ dataSources:
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolDeregistered
     {{/if}}
+  {{#if LiquidityRewardDistribution}}
+  - kind: ethereum/contract
+    name: LiquidityRewardDistribution
+    network: {{network}}
+    source:
+      address: '{{LiquidityRewardDistribution.address}}'
+      abi: LiquidityRewardDistribution
+      startBlock: {{LiquidityRewardDistribution.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - RemoveDistributionSnapshot
+        - UserRewardDistribution
+        - Snapshot
+      abis:
+        - name: LiquidityRewardDistribution
+          file: ./abis/LiquidityRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,uint256)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
+      file: ./src/mappings/liquidityRewardDistribution.ts
+    {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -2157,3 +2187,27 @@ templates:
           handler: handleOfficialPoolRegistered
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolDeregistered
+  - kind: ethereum/contract
+    name: LiquidityRewardDistribution
+    network: {{network}}
+    source:
+      abi: LiquidityRewardDistribution
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/liquidityRewardDistribution.ts
+      entities:
+        - RemoveDistributionSnapshot
+        - UserRewardDistribution
+        - RewardDistributionSnapshot
+      abis:
+        - name: LiquidityRewardDistribution
+          file: ./abis/LiquidityRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,uint256)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
