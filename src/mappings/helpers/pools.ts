@@ -14,6 +14,7 @@ export namespace PoolType {
   export const LiquidityBootstrapping = 'LiquidityBootstrapping';
   export const Investment = 'Investment';
   export const Managed = 'Managed';
+  export const KassandraManaged = 'KassandraManaged';
   export const StablePhantom = 'StablePhantom';
   export const ComposableStable = 'ComposableStable';
   export const HighAmpComposableStable = 'HighAmpComposableStable';
@@ -32,6 +33,32 @@ export namespace PoolType {
   export const GyroE = 'GyroE';
   export const FX = 'FX';
 }
+
+export const poolTypes = [
+  PoolType.Weighted,
+  PoolType.Stable,
+  PoolType.MetaStable,
+  PoolType.Element,
+  PoolType.LiquidityBootstrapping,
+  PoolType.Investment,
+  PoolType.Managed,
+  PoolType.KassandraManaged,
+  PoolType.StablePhantom,
+  PoolType.ComposableStable,
+  PoolType.HighAmpComposableStable,
+  PoolType.AaveLinear,
+  PoolType.ERC4626Linear,
+  PoolType.EulerLinear,
+  PoolType.GearboxLinear,
+  PoolType.MidasLinear,
+  PoolType.ReaperLinear,
+  PoolType.SiloLinear,
+  PoolType.YearnLinear,
+  PoolType.Gyro2,
+  PoolType.Gyro3,
+  PoolType.GyroE,
+  PoolType.FX,
+];
 
 export function isVariableWeightPool(pool: Pool): boolean {
   return (
@@ -52,9 +79,13 @@ export function hasVirtualSupply(pool: Pool): boolean {
     pool.poolType == PoolType.SiloLinear ||
     pool.poolType == PoolType.YearnLinear ||
     pool.poolType == PoolType.StablePhantom ||
-    pool.poolType == PoolType.Managed ||
-    isComposableStablePool(pool)
+    isComposableStablePool(pool) ||
+    isManagedPool(pool)
   );
+}
+
+export function isManagedPool(pool: Pool): boolean {
+  return pool.poolType == PoolType.Managed || pool.poolType == PoolType.KassandraManaged;
 }
 
 export function isComposableStablePool(pool: Pool): boolean {

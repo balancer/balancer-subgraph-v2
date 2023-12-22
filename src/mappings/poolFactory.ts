@@ -2,6 +2,7 @@ import { ZERO_BD, ZERO, FX_ASSET_AGGREGATORS, VAULT_ADDRESS, ZERO_ADDRESS, Proto
 import {
   getPoolTokenManager,
   getPoolTokens,
+  isManagedPool,
   isMetaStableDeprecated,
   PoolType,
   setPriceRateProviders,
@@ -26,6 +27,7 @@ import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
 import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
+import { KassandraPoolCreated } from '../types/ManagedKassandraPoolControllerFactory/ManagedKassandraPoolControllerFactory';
 
 // datasource
 import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -82,13 +84,13 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   if (tokens == null) return null;
   pool.tokensList = tokens;
 
-  if (poolType == PoolType.Managed) {
+  if (isManagedPool(pool)) {
     pool.totalAumFeeCollectedInBPT = ZERO_BD;
   }
 
   // Get protocol fee via on-chain calls since ProtocolFeePercentageCacheUpdated
   // event is emitted before the PoolCreated
-  if ((poolType == PoolType.Weighted && poolTypeVersion >= 2) || poolType == PoolType.Managed) {
+  if ((poolType == PoolType.Weighted && poolTypeVersion >= 2) || isManagedPool(pool)) {
     let weightedContract = WeightedPoolV2.bind(poolAddress);
 
     let protocolSwapFee = weightedContract.try_getProtocolFeePercentageCache(BigInt.fromI32(ProtocolFeeType.Swap));
@@ -160,6 +162,13 @@ export function handleNewManagedPoolV2(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Managed, 2);
   if (pool == null) return;
   ManagedPoolTemplate.create(event.params.pool);
+}
+
+export function handleNewManagedKassandraPool(event: KassandraPoolCreated): void {
+  const pool = Pool.load(event.params.vaultPoolId.toHexString());
+  if (pool == null) return;
+  pool.poolType = PoolType.KassandraManaged;
+  pool.save();
 }
 
 function createStableLikePool(event: PoolCreated, poolType: string, poolTypeVersion: i32 = 1): string | null {
