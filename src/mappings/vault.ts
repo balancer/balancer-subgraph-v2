@@ -480,7 +480,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   if (isVariableWeightPool(pool)) {
     // Some pools' weights update over time so we need to update them after each swap
-    updatePoolWeights(poolId.toHexString());
+    updatePoolWeights(poolId.toHexString(), event.block.timestamp);
   } else if (isStableLikePool(pool)) {
     // Stablelike pools' amplification factors update over time so we need to update them after each swap
     updateAmpFactor(pool, event.block.timestamp);

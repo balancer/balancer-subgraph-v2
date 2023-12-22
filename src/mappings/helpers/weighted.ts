@@ -1,18 +1,16 @@
-import { Address, Bytes } from '@graphprotocol/graph-ts';
+import { Address, BigInt, Bytes, BigDecimal } from '@graphprotocol/graph-ts';
 
-import { Pool } from '../../types/schema';
+import { Pool, GradualWeightUpdate } from '../../types/schema';
 import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
 
 import { ZERO_BD } from './constants';
 import { scaleDown, loadPoolToken } from './misc';
 
-export function updatePoolWeights(poolId: string): void {
+export function updatePoolWeights(poolId: string, blockTimestamp: BigInt): void {
   let pool = Pool.load(poolId);
   if (pool == null) return;
 
   const poolAddress = pool.address;
-  let poolContract = WeightedPool.bind(changetype<Address>(poolAddress));
-
   let tokensList = new Array<Bytes>();
   for (let i = 0; i < pool.tokensList.length; i++) {
     let tokenAddress = pool.tokensList[i];
@@ -21,29 +19,75 @@ export function updatePoolWeights(poolId: string): void {
     }
   }
 
-  let weightsCall = poolContract.try_getNormalizedWeights();
-  if (!weightsCall.reverted) {
+  let latestWeightUpdateId = pool.latestWeightUpdate;
+  let totalWeight = ZERO_BD;
+
+  if (latestWeightUpdateId === null) {
+    let poolContract = WeightedPool.bind(changetype<Address>(pool.address));
+    let weightsCall = poolContract.try_getNormalizedWeights();
     let weights = weightsCall.value;
-
     if (weights.length == tokensList.length) {
-      let totalWeight = ZERO_BD;
-
       for (let i = 0; i < tokensList.length; i++) {
         let tokenAddress = changetype<Address>(tokensList[i]);
         let weight = weights[i];
-
         let poolToken = loadPoolToken(poolId, tokenAddress);
         if (poolToken != null) {
           poolToken.weight = scaleDown(weight, 18);
           poolToken.save();
         }
-
         totalWeight = totalWeight.plus(scaleDown(weight, 18));
       }
-
+      pool.totalWeight = totalWeight;
+    }
+  } else {
+    let latestUpdate = GradualWeightUpdate.load(latestWeightUpdateId) as GradualWeightUpdate;
+    if (latestUpdate.startWeights.length == tokensList.length) {
+      for (let i = 0; i < tokensList.length; i++) {
+        let tokenAddress = changetype<Address>(tokensList[i]);
+        let weight = calculateCurrentWeight(
+          latestUpdate.startWeights[i],
+          latestUpdate.endWeights[i],
+          latestUpdate.startTimestamp,
+          latestUpdate.endTimestamp,
+          blockTimestamp
+        );
+        let poolToken = loadPoolToken(poolId, tokenAddress);
+        if (poolToken != null) {
+          poolToken.weight = weight;
+          poolToken.save();
+        }
+        totalWeight = totalWeight.plus(weight);
+      }
       pool.totalWeight = totalWeight;
     }
   }
-
   pool.save();
+}
+
+function calculateCurrentWeight(
+  startWeight: BigInt,
+  endWeight: BigInt,
+  startTimestamp: BigInt,
+  endTimestamp: BigInt,
+  blockTimestamp: BigInt
+): BigDecimal {
+  const scalar: BigDecimal = BigDecimal.fromString('1000000000000000000');
+
+  if (blockTimestamp.ge(endTimestamp) || startWeight.equals(endWeight)) {
+    return endWeight.toBigDecimal().div(scalar);
+  } else if (blockTimestamp.le(startTimestamp)) {
+    return startWeight.toBigDecimal().div(scalar);
+  } else {
+    const duration: BigInt = endTimestamp.minus(startTimestamp);
+    const elapsedTime: BigInt = blockTimestamp.minus(startTimestamp);
+    const pctProgress: BigDecimal = elapsedTime.toBigDecimal().div(duration.toBigDecimal());
+
+    if (startWeight.gt(endWeight)) {
+      let delta = pctProgress.times((startWeight - endWeight).toBigDecimal());
+      return startWeight.toBigDecimal().minus(delta).div(scalar).truncate(18);
+    } else {
+      let delta = pctProgress.times((endWeight - startWeight).toBigDecimal());
+      return startWeight.toBigDecimal().plus(delta).div(scalar).truncate(18);
+    }
+  }
 }

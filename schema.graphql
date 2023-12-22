@@ -59,6 +59,7 @@ type Pool @entity {
   historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
 
   # LiquidityBootstrappingPool Only
+  latestWeightUpdate: GradualWeightUpdate
   weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
 
   # StablePool Only

@@ -58,6 +58,7 @@ import {
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
+import { updatePoolWeights } from './helpers/weighted';
 import { getPoolTokenManager, getPoolTokens } from './helpers/pools';
 import {
   ProtocolFeePercentageCacheUpdated,
@@ -324,15 +325,25 @@ export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateSch
   let poolContract = PoolContract.load(poolAddress.toHexString());
   if (poolContract == null) return;
 
+  let poolId = poolContract.pool;
+
   let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
   let weightUpdate = new GradualWeightUpdate(id);
-  weightUpdate.poolId = poolContract.pool;
+  weightUpdate.poolId = poolId;
   weightUpdate.scheduledTimestamp = event.block.timestamp.toI32();
   weightUpdate.startTimestamp = event.params.startTime;
   weightUpdate.endTimestamp = event.params.endTime;
   weightUpdate.startWeights = event.params.startWeights;
   weightUpdate.endWeights = event.params.endWeights;
   weightUpdate.save();
+
+  let pool = Pool.load(poolId);
+  if (pool == null) return;
+
+  pool.latestWeightUpdate = weightUpdate.id;
+  pool.save();
+
+  updatePoolWeights(poolId, event.block.timestamp);
 }
 
 /************************************
