@@ -18,12 +18,14 @@ export namespace PoolType {
   export const ComposableStable = 'ComposableStable';
   export const HighAmpComposableStable = 'HighAmpComposableStable';
   export const AaveLinear = 'AaveLinear';
+  export const BooLinear = 'BooLinear';
   export const ERC4626Linear = 'ERC4626Linear';
   export const EulerLinear = 'EulerLinear';
   export const GearboxLinear = 'GearboxLinear';
   export const MidasLinear = 'MidasLinear';
   export const ReaperLinear = 'ReaperLinear';
   export const SiloLinear = 'SiloLinear';
+  export const TarotLinear = 'TarotLinear';
   export const YearnLinear = 'YearnLinear';
   export const Gyro2 = 'Gyro2';
   export const Gyro3 = 'Gyro3';

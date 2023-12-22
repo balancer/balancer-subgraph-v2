@@ -363,6 +363,10 @@ export function handleNewReaperLinearPool(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ReaperLinear, 1);
 }
 
+export function handleNewReaperLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.ReaperLinear, 2);
+}
+
 export function handleNewReaperLinearPoolV3(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.ReaperLinear, 3);
 }
@@ -381,6 +385,18 @@ export function handleNewYearnLinearPool(event: PoolCreated): void {
 
 export function handleNewYearnLinearPoolV2(event: PoolCreated): void {
   handleNewLinearPool(event, PoolType.YearnLinear, 2);
+}
+
+export function handleNewBooLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.BooLinear, 1);
+}
+
+export function handleNewBooLinearPoolV2(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.BooLinear, 2);
+}
+
+export function handleNewTarotLinearPool(event: PoolCreated): void {
+  handleNewLinearPool(event, PoolType.TarotLinear, 1);
 }
 
 export function handleLinearPoolProtocolId(event: AaveLinearPoolCreated): void {
