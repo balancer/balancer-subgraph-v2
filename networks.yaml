@@ -66,6 +66,10 @@ mainnet:
   ManagedPoolV2Factory:
     address: "0xBF904F9F340745B4f0c4702c7B6Ab1e808eA6b93"
     startBlock: 17046230
+  # hack to make the types be generated - codegen uses mainnet manifest by default
+  ManagedKassandraPoolControllerFactory:
+    address: "0x0000000000000000000000000000000000000000"
+    startBlock: 17046230
   ConvergentPoolFactory:
     address: "0xb7561f547F3207eDb42A6AfA42170Cd47ADD17BD"
     startBlock: 12686198
