@@ -1,0 +1,485 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "vaultPoolId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "pool",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "poolController",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "whitelist",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isPrivatePool",
+        "type": "bool"
+      }
+    ],
+    "name": "KassandraPoolCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "vaultPoolId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "tokenName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "tokenSymbol",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "contract IERC20[]",
+        "name": "tokens",
+        "type": "address[]"
+      }
+    ],
+    "name": "KassandraPoolCreatedTokens",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPrivatePool",
+            "type": "bool"
+          },
+          {
+            "internalType": "contract IWhitelist",
+            "name": "whitelist",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "amountsIn",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct KassandraControlledManagedPoolFactory.PoolParams",
+        "name": "poolParams",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20[]",
+            "name": "tokens",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "normalizedWeights",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "swapFeePercentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "swapEnabledOnStart",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "mustAllowlistLPs",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "managementAumFeePercentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "aumFeeId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct ManagedPoolSettings.ManagedPoolSettingsParams",
+        "name": "settingsParams",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "feesToManager",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "feesToReferral",
+            "type": "uint64"
+          }
+        ],
+        "internalType": "struct KassandraManagedPoolController.FeesPercentages",
+        "name": "feesSettings",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20",
+            "name": "tokenIn",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes[]",
+            "name": "datas",
+            "type": "bytes[]"
+          }
+        ],
+        "internalType": "struct KassandraControlledManagedPoolFactory.JoinParams",
+        "name": "joinParams",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "salt",
+        "type": "bytes32"
+      }
+    ],
+    "name": "create",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "pool",
+        "type": "address"
+      },
+      {
+        "internalType": "contract KassandraManagedPoolController",
+        "name": "poolController",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAssetManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAuthorizedManagers",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getKassandraRules",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getManagedPoolFactory",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPrivateInvestors",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getProxyInvest",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getProxyProviderTransfer",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSwapProvider",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVault",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getWETH",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "factory",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IPrivateInvestors",
+        "name": "privateInvestors",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IAuthorizedManagers",
+        "name": "authorizationContract",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IVault",
+        "name": "vault",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "rules",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "assetManagerAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "proxyInvest",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "swapProvider",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "proxyProviderTransfer",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IWETH",
+        "name": "weth",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pool",
+        "type": "address"
+      }
+    ],
+    "name": "isPoolFromFactory",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "kassandraAumFeePercentage",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
