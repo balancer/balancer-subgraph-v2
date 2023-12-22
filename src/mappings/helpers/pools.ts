@@ -32,6 +32,32 @@ export namespace PoolType {
   export const FX = 'FX';
 }
 
+export const poolTypes = [
+  PoolType.Weighted,
+  PoolType.Stable,
+  PoolType.MetaStable,
+  PoolType.Element,
+  PoolType.LiquidityBootstrapping,
+  PoolType.Investment,
+  PoolType.Managed,
+  PoolType.KassandraManaged,
+  PoolType.StablePhantom,
+  PoolType.ComposableStable,
+  PoolType.HighAmpComposableStable,
+  PoolType.AaveLinear,
+  PoolType.ERC4626Linear,
+  PoolType.EulerLinear,
+  PoolType.GearboxLinear,
+  PoolType.MidasLinear,
+  PoolType.ReaperLinear,
+  PoolType.SiloLinear,
+  PoolType.YearnLinear,
+  PoolType.Gyro2,
+  PoolType.Gyro3,
+  PoolType.GyroE,
+  PoolType.FX,
+];
+
 export function isVariableWeightPool(pool: Pool): boolean {
   return pool.poolType == PoolType.LiquidityBootstrapping || pool.poolType == PoolType.Investment;
 }
