@@ -257,7 +257,7 @@ type Swap @entity(immutable: true) {
   poolId: Pool!
   userAddress: User!
   timestamp: Int!
-  block: BigInt!
+  block: BigInt
   tx: Bytes!
 }
 
@@ -276,7 +276,7 @@ type JoinExit @entity(immutable: true) {
   user: User!
   timestamp: Int!
   tx: Bytes!
-  block: BigInt!
+  block: BigInt
 }
 
 type LatestPrice @entity {
