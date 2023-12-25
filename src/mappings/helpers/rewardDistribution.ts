@@ -6,25 +6,17 @@ class UserData {
   amount: string;
 }
 
-export function getDistributionData(ipfsCid: string): UserData[] {
-  if (ipfsCid && ipfsCid.startsWith("Qm")) {
-    log.debug("Entered to queryng ipfs: {}", [ipfsCid.toString()]);
-    let ipfsData = ipfs.cat(ipfsCid);
-    //TODO! Add better error handlig, as the merkle tree with this CID is not maybe yet updated on the ipfs maybe.
-    if (!ipfsData) {
-      log.warning("There is no data found for given cid: {}", [ipfsCid]);
-      return [];
-    }
-    let merkleTree = getMerkleTree(ipfsData);
-    if (merkleTree == null) {
-      log.warning("The given cid {}, does not contain merkle tree field", [ipfsCid]);
-      return [];
-    }
-    let usersData = getUsersData(merkleTree);
+export function getDistributionData(data: Bytes): UserData[] {
+  log.debug("Entered to queryng ipfs: {}", [data.toString()]);
 
-    return usersData;
+  let merkleTree = getMerkleTree(data);
+  if (merkleTree == null) {
+    log.warning("The given cid {}, does not contain merkle tree field", []);
+    return [];
   }
-  return [];
+  let usersData = getUsersData(merkleTree);
+
+  return usersData;
 }
 
 function getMerkleTree(data: Bytes): JSONValue | null {

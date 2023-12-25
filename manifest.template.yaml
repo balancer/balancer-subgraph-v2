@@ -2211,3 +2211,17 @@ templates:
           handler: handleEpochAdded
         - event: EpochRemoved(uint256)
           handler: handleEpochRemoved
+  - kind: file/ipfs
+    name: UserRewardDistributionMetadata
+    mapping:
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/liquidityRewardDistribution.ts
+      handler: handleMetadata
+      entities:
+        - RemoveDistributionSnapshot
+        - UserRewardDistribution
+        - RewardDistributionSnapshot
+      abis:
+        - name: LiquidityRewardDistribution
+          file: ./abis/LiquidityRewardDistribution.json
