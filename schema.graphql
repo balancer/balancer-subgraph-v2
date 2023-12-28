@@ -393,21 +393,27 @@ type RewardDistributionSnapshot @entity {
   id: ID! #epochId
   blockNumber: BigInt!
   blockTimestamp: BigInt!
-  ipfsCid: String! 
+  ipfsCid: String!
+  distributionData: UserRewardDistributionMetaData
+  succesfullyFetch: Boolean!
 }
 
 type UserRewardDistribution @entity {
   id: ID! # address
   amountOfClaimedToken: BigInt!
   amountOfTokenAvailableForClaim: BigInt!
-  snapshots: [SnapshotsUsersData!]! @derivedFrom(field: "user")
 }
 
-type SnapshotsUsersData @entity {
-  id:ID!
-  epochId: BigInt!
+type UserRewardDistributionMetaData @entity {
+  id: ID!
+  users: [UserData!]! @derivedFrom(field: "user")
+}
+
+type UserData @entity {
+  id: ID!
+  address: Bytes!
   initialAmount: BigInt!
   claimedAmount: BigInt!
   claimed: Boolean!
-  user: UserRewardDistribution! 
+  user: UserRewardDistributionMetaData!
 }
