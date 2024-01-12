@@ -435,10 +435,9 @@ type UserStakingRewardDistributionMetaData @entity {
 type UserStakingData @entity {
   id: ID!
   address: Bytes!
-  tokens: [TokenDeposited!]
+  claimedTokens: [TokenDeposited!]
   votingPower: BigInt!
   claimedAmount: BigInt!
-  claimed: Boolean!
   user: UserStakingRewardDistributionMetaData!
 }
 

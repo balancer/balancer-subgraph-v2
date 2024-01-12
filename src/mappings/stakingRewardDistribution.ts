@@ -52,10 +52,9 @@ export function handleClaimed(event: ClaimedEvent): void {
     return;
   }
 
-  userMetadata.tokens = [tokenDeposited.id];
+  userMetadata.claimedTokens = [tokenDeposited.id];
 
   userMetadata.claimedAmount = userMetadata.claimedAmount.plus(amountToClaim);
-  userMetadata.claimed = true;
 
   userMetadata.save();
 }
@@ -120,10 +119,9 @@ function handleDistributionData(content: Bytes, cid: string): UserStakingRewardD
     log.warning("The key for user data {}", [key]);
     let userData = new UserStakingData(key);
     userData.address = address;
-    userData.tokens = [];
+    userData.claimedTokens = [];
     userData.votingPower = BigInt.fromString(distribution.amount);
     userData.claimedAmount = BigInt.zero();
-    userData.claimed = false;
     userRewardDistributionMetadata.save();
     userData.user = userRewardDistributionMetadata.id;
     userData.save();
@@ -155,10 +153,11 @@ export function handleEpochRemoved(event: EpochRemovedEvent): void {
   let users = distributionsData.users.load();
   for (let index = 0; index < users.length; index++) {
     const data = users.at(index);
-    if (data.claimed) {
-      log.warning("The user has claimed amount {} for the epoch {}", [data.claimedAmount.toString(), snapshotId.toString()]);
+    if (data == null) {
+      log.warning("There is no distribution data for the given epoch {}", [snapshotId.toString()]);
       return;
     }
+
     store.remove("UserStakingData", data.id);
   }
 }
