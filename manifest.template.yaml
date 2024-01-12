@@ -2198,10 +2198,10 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappings/liquidityRewardDistribution.ts
       entities:
-        - RewardDistributionSnapshot
-        - UserRewardDistribution
-        - UserRewardDistributionMetaData
-        - UserData
+        - LiquidityRewardDistributionSnapshot
+        - UserLiquidityRewardDistribution
+        - UserLiquidityRewardDistributionMetaData
+        - UserLiquidityData
       abis:
         - name: LiquidityRewardDistribution
           file: ./abis/LiquidityRewardDistribution.json
@@ -2212,3 +2212,30 @@ templates:
           handler: handleEpochAdded
         - event: EpochRemoved(uint256)
           handler: handleEpochRemoved
+  - kind: ethereum/contract
+    name: StakingRewardDistribution
+    network: {{network}}
+    source:
+      abi: StakingRewardDistribution
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/stakingRewardDistribution.ts
+      entities:
+        - StakingRewardDistributionSnapshot
+        - UserStakingRewardDistribution
+        - TokenDeposited
+        - UserStakingData
+      abis:
+        - name: StakingRewardDistribution
+          file: ./abis/StakingRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,address)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
+        - event: Deposited(address,uint256)
+          handler: handleDeposited

@@ -1,5 +1,5 @@
 import { Claimed as ClaimedEvent, EpochAdded as EpochAddedEvent, EpochRemoved as EpochRemovedEvent } from '../types/templates/LiquidityRewardDistribution/LiquidityRewardDistribution';
-import { RewardDistributionSnapshot, UserRewardDistribution, UserRewardDistributionMetaData, UserData } from '../types/schema';
+import { LiquidityRewardDistributionSnapshot, UserLiquidityRewardDistribution, UserLiquidityRewardDistributionMetaData, UserLiquidityData } from '../types/schema';
 import { log, store, ipfs, Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
 import { getDistributionData } from './helpers/rewardDistribution';
 
@@ -8,7 +8,7 @@ export function handleClaimed(event: ClaimedEvent): void {
   let address = event.params.claimant.toHexString();
   let amountToClaim = event.params.balance;
 
-  let snapshot = RewardDistributionSnapshot.load(snapshotId.toString());
+  let snapshot = LiquidityRewardDistributionSnapshot.load(snapshotId.toString());
   if (snapshot == null) {
     log.warning("There is no snapshot", []);
     return;
@@ -21,13 +21,13 @@ export function handleClaimed(event: ClaimedEvent): void {
   let key = snapshot.ipfsCid + "-" + address;
   log.warning("The key to find user data {}", [key]);
 
-  let user = UserRewardDistribution.load(address);
+  let user = UserLiquidityRewardDistribution.load(address);
   if (user == null) {
     log.warning("The user {} is not eligible for claim", [address]);
     return;
   }
 
-  let userMetadata = UserData.load(key);
+  let userMetadata = UserLiquidityData.load(key);
   if (userMetadata == null) {
     log.warning("The USER {}", [key]);
     return;
@@ -52,7 +52,7 @@ export function handleEpochAdded(event: EpochAddedEvent): void {
   let ipfsCid = event.params._ipfs;
   log.warning("The ipf cid {}", [ipfsCid.toString()]);
 
-  let snapshot = new RewardDistributionSnapshot(snapshotId.toString());
+  let snapshot = new LiquidityRewardDistributionSnapshot(snapshotId.toString());
   snapshot.blockNumber = event.block.number;
   snapshot.blockTimestamp = event.block.timestamp;
   snapshot.ipfsCid = ipfsCid;
@@ -79,21 +79,21 @@ export function handleEpochAdded(event: EpochAddedEvent): void {
   snapshot.save();
 }
 
-function handleDistributionData(content: Bytes, cid: string): UserRewardDistributionMetaData | null {
+function handleDistributionData(content: Bytes, cid: string): UserLiquidityRewardDistributionMetaData | null {
   let distributionsData = getDistributionData(content);
   if (distributionsData.length == 0) {
     log.warning("There is a problem with geting data from ipfs", []);
     return null;
   }
 
-  let userRewardDistributionMetadata = new UserRewardDistributionMetaData(cid);
+  let userRewardDistributionMetadata = new UserLiquidityRewardDistributionMetaData(cid);
   for (let index = 0; index < distributionsData.length; index++) {
     let distribution = distributionsData[index];
     log.warning("Distribution data to save {} {}", [distribution.amount, distribution.address]);
     let address = changetype<Address>(Address.fromHexString(distribution.address));
     let key = cid + "-" + address.toHexString();
     log.warning("The key for user data {}", [key]);
-    let userData = new UserData(key);
+    let userData = new UserLiquidityData(key);
     userData.address = address;
     userData.initialAmount = BigInt.fromString(distribution.amount);
     userData.claimedAmount = BigInt.zero();
@@ -102,9 +102,9 @@ function handleDistributionData(content: Bytes, cid: string): UserRewardDistribu
     userData.user = userRewardDistributionMetadata.id;
     userData.save();
 
-    let userReward = UserRewardDistribution.load(address.toHexString());
+    let userReward = UserLiquidityRewardDistribution.load(address.toHexString());
     if (userReward == null) {
-      userReward = new UserRewardDistribution(address.toHexString());
+      userReward = new UserLiquidityRewardDistribution(address.toHexString());
       userReward.amountOfClaimedToken = BigInt.zero();
       userReward.amountOfTokenAvailableForClaim = BigInt.fromString(distribution.amount);
     } else {
@@ -118,7 +118,7 @@ function handleDistributionData(content: Bytes, cid: string): UserRewardDistribu
 
 export function handleEpochRemoved(event: EpochRemovedEvent): void {
   let snapshotId = event.params.epoch;
-  let snapshot = RewardDistributionSnapshot.load(snapshotId.toString());
+  let snapshot = LiquidityRewardDistributionSnapshot.load(snapshotId.toString());
   if (snapshot == null) {
     log.warning("There is no snapshot with epoch {}", [snapshotId.toString()]);
     return;
@@ -130,7 +130,7 @@ export function handleEpochRemoved(event: EpochRemovedEvent): void {
   }
 
   let ipfsCid = snapshot.ipfsCid;
-  let distributionsData = UserRewardDistributionMetaData.load(ipfsCid);
+  let distributionsData = UserLiquidityRewardDistributionMetaData.load(ipfsCid);
   if (distributionsData == null) {
     log.warning("There is a problem with geting data from ipfs", []);
     return;
@@ -139,7 +139,7 @@ export function handleEpochRemoved(event: EpochRemovedEvent): void {
   let users = distributionsData.users.load();
   for (let index = 0; index < users.length; index++) {
     const data = users.at(index);
-    let userReward = UserRewardDistribution.load(data.address.toString());
+    let userReward = UserLiquidityRewardDistribution.load(data.address.toString());
     if (userReward == null) {
       log.warning("The user {} does not have distribution", [data.address.toString()]);
       return;
