@@ -401,6 +401,7 @@ type Minter @entity {
 type TokenMint @entity {
   id: ID!
   minter: Minter!
+  epoch: BigInt!
   mintInitiator: Bytes!
   amount: BigInt!
   benefactor: Bytes!

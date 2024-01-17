@@ -14,6 +14,7 @@ export function handleJellyMinted(event: JellyMinted): void {
   tokenMintLpRewards.timestamp = event.block.timestamp;
   tokenMintLpRewards.mintInitiator = event.params.sender;
   tokenMintLpRewards.benefactor = event.params.lpRewardsContract;
+  tokenMintLpRewards.epoch = event.params.epochId;
   tokenMintLpRewards.save();
 
   let tokenMintStakingRewards = new TokenMint(event.transaction.hash.toHexString() + '-Staking');
@@ -22,6 +23,7 @@ export function handleJellyMinted(event: JellyMinted): void {
   tokenMintStakingRewards.timestamp = event.block.timestamp;
   tokenMintStakingRewards.mintInitiator = event.params.sender;
   tokenMintStakingRewards.benefactor = event.params.stakingRewardsContract;
+  tokenMintStakingRewards.epoch = event.params.epochId;
   tokenMintStakingRewards.save();
 
   minter.lastMintedTimestamp = event.params.mintingPeriod;

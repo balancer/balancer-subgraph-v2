@@ -1602,7 +1602,7 @@ dataSources:
         - name: Minter
           file: ./abis/Minter.json
       eventHandlers:
-        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,indexed uint256)
+        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,uint256,indexed uint256)
           handler: handleJellyMinted
         - event: MintingStarted(indexed address,indexed uint256)
           handler: handleMintingStarted
@@ -2199,7 +2199,7 @@ templates:
         - name: Minter
           file: ./abis/Minter.json
       eventHandlers:
-        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,indexed uint256)
+        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,uint256,indexed uint256)
           handler: handleJellyMinted
         - event: MintingStarted(indexed address,indexed uint256)
           handler: handleMintingStarted
