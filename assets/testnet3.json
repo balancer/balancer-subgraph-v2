@@ -1,0 +1,48 @@
+{
+  "stableAssets": [
+    {
+      "address": "0xF8504bd3662a6A0719e8C22d1DFF182836fefb04",
+      "symbol": "USDC"
+    },
+    {
+      "address": "0xF8504bd3662a6A0719e8C22d1DFF182836fefb04",
+      "symbol": "jdUSD"
+    }
+  ],
+  "pricingAssets": [
+    {
+      "address": "0x62AF40e6d8714eF9210AeF7e94A151c27673d7A9",
+      "symbol": "WDFI"
+    },
+    {
+      "address": "0x66ecB1eF31d9D176543Db5E306360bcF1f2f5930",
+      "symbol": "JLY"
+    }
+  ],
+  "whitelistedAssets": [
+    {
+      "symbol": "JLY",
+      "address": "0x66ecB1eF31d9D176543Db5E306360bcF1f2f5930"
+    },
+    {
+      "symbol": "jBTC",
+      "address": "0xC001bE9FaD650D669a20EBD159c2B6CECb0ff293"
+    },
+    {
+      "symbol": "WDFI",
+      "address": "0x62AF40e6d8714eF9210AeF7e94A151c27673d7A9"
+    },
+    {
+      "symbol": "jETH",
+      "address": "0x5ca70a668c1875764D87c738d62FdF7e0c227091"
+    },
+    {
+      "symbol": "jdUSD",
+      "address": "0xF8504bd3662a6A0719e8C22d1DFF182836fefb04"
+    },
+    {
+      "symbol": "jDFI",
+      "address": "0xD0A4a86B62c01C3d6B3Bbd39c08e0dBd302c3b70"
+    }
+  ]
+}

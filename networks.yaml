@@ -768,5 +768,16 @@ changi:
     address: "0x4068392380755D2B3b885aB230d8D479019Ae515"
     startBlock: 87476
   OfficialPoolsRegister:
-    address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
-    startBlock: 4737221
+    address: "0xb2580828928802CE42d5d54D2c57631D420cdE6C"
+    startBlock: 88496
+testnet3:
+  network: testnet3
+  Vault:
+    address: "0xA99F58760A6bcDc177788de4A85A15245ee543E9"
+    startBlock: 89286
+  WeightedPoolV4Factory:
+    address: "0x938a384bebFe2d4c78c499F9C5e2D19ceCcc029D"
+    startBlock: 89384
+  OfficialPoolsRegister:
+    address: "0x93406dF225C16e6B9764f7c9A29B722AB0b98a10"
+    startBlock: 89404
