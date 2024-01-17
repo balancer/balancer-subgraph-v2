@@ -2157,3 +2157,57 @@ templates:
           handler: handleOfficialPoolRegistered
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolDeregistered
+  - kind: ethereum
+    name: Chest
+    network: {{network}}
+    source:
+      abi: Chest
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - FeeWithdrawn
+        - IncreaseStake
+        - NewVestingPosition
+        - OwnershipTransferCanceled
+        - OwnershipTransferRequested
+        - OwnershipTransferred
+        - SetFee
+        - SetMaxBooster
+        - Staked
+        - Transfer
+        - Unstake
+      abis:
+        - name: Chest
+          file: ./abis/Chest.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: FeeWithdrawn(indexed address)
+          handler: handleFeeWithdrawn
+        - event: IncreaseStake(indexed uint256,uint256,uint256,uint128)
+          handler: handleIncreaseStake
+        - event: NewVestingPosition((uint256,uint256,uint48,uint32,uint32,uint128,uint8),uint256)
+          handler: handleNewVestingPosition
+        - event: OwnershipTransferCanceled(indexed address,indexed address)
+          handler: handleOwnershipTransferCanceled
+        - event: OwnershipTransferRequested(indexed address,indexed address)
+          handler: handleOwnershipTransferRequested
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: SetFee(uint256)
+          handler: handleSetFee
+        - event: SetMaxBooster(uint128)
+          handler: handleSetMaxBooster
+        - event: Staked(indexed address,indexed uint256,uint256,uint256,uint32,uint128,uint8)
+          handler: handleStaked
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Unstake(indexed uint256,uint256,uint256,uint128)
+          handler: handleUnstake
+      file: ./src/mappings/chest.ts
