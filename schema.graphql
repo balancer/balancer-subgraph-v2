@@ -388,3 +388,21 @@ type ProtocolIdData @entity {
   id: ID!
   name: String!
 }
+
+type Minter @entity {
+  id: ID!
+  benfactors: [Bytes!]!
+  lastMintedTimestamp: BigInt!
+  mintingPeriod: BigInt
+  lastMintedAmount: BigInt!
+  mints: [TokenMint!]! @derivedFrom(field: "minter")
+}
+
+type TokenMint @entity {
+  id: ID!
+  minter: Minter!
+  mintInitiator: Bytes!
+  amount: BigInt!
+  benefactor: Bytes!
+  timestamp: BigInt!
+}

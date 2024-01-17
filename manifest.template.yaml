@@ -1583,6 +1583,31 @@ dataSources:
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolDeregistered
     {{/if}}
+  {{#if Minter}}
+  - kind: ethereum/contract
+    name: Minter
+    network: {{network}}
+    source:
+      address: '{{Minter.address}}'
+      abi: Minter
+      startBlock: {{Minter.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Minter
+        - TokenMint
+      abis:
+        - name: Minter
+          file: ./abis/Minter.json
+      eventHandlers:
+        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,indexed uint256)
+          handler: handleJellyMinted
+        - event: MintingStarted(indexed address,indexed uint256)
+          handler: handleMintingStarted
+      file: ./src/mappings/minter.ts
+  {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -2157,3 +2182,24 @@ templates:
           handler: handleOfficialPoolRegistered
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolDeregistered
+  - kind: ethereum/contract
+    name: Minter
+    network: {{network}}
+    source:
+      abi: Minter
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/minter.ts
+      entities:
+        - Minter
+        - TokenMint
+      abis:
+        - name: Minter
+          file: ./abis/Minter.json
+      eventHandlers:
+        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,indexed uint256)
+          handler: handleJellyMinted
+        - event: MintingStarted(indexed address,indexed uint256)
+          handler: handleMintingStarted
