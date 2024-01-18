@@ -192,7 +192,7 @@ type User @entity {
   sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
   swaps: [Swap!] @derivedFrom(field: "userAddress")
   userInternalBalances: [UserInternalBalance!]
-    @derivedFrom(field: "userAddress")
+  @derivedFrom(field: "userAddress")
 }
 
 type UserInternalBalance @entity {
@@ -388,29 +388,16 @@ type ProtocolIdData @entity {
   id: ID!
   name: String!
 }
-type Approval @entity(immutable: true) {
+
+type Chest @entity(immutable: true) {
   id: Bytes!
-  owner: Bytes! # address
-  approved: Bytes! # address
+  user: Bytes! # address
   tokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ApprovalForAll @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  operator: Bytes! # address
-  approved: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type FeeWithdrawn @entity(immutable: true) {
-  id: Bytes!
-  beneficiary: Bytes! # address
+  amount: BigInt! # uint256
+  freezedUntil: BigInt! # uint256
+  vestingDuration: BigInt! # uint32
+  booster: BigInt! # uint128
+  nerfParameter: Int! # uint8
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -427,87 +414,6 @@ type IncreaseStake @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type NewVestingPosition @entity(immutable: true) {
-  id: Bytes!
-  position_totalVestedAmount: BigInt! # uint256
-  position_releasedAmount: BigInt! # uint256
-  position_cliffTimestamp: BigInt! # uint48
-  position_vestingDuration: BigInt! # uint32
-  position_freezingPeriod: BigInt! # uint32
-  position_booster: BigInt! # uint128
-  position_nerfParameter: Int! # uint8
-  index: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type OwnershipTransferCanceled @entity(immutable: true) {
-  id: Bytes!
-  from: Bytes! # address
-  to: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type OwnershipTransferRequested @entity(immutable: true) {
-  id: Bytes!
-  from: Bytes! # address
-  to: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type OwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  from: Bytes! # address
-  to: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SetFee @entity(immutable: true) {
-  id: Bytes!
-  fee: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SetMaxBooster @entity(immutable: true) {
-  id: Bytes!
-  maxBooster: BigInt! # uint128
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Staked @entity(immutable: true) {
-  id: Bytes!
-  user: Bytes! # address
-  tokenId: BigInt! # uint256
-  amount: BigInt! # uint256
-  freezedUntil: BigInt! # uint256
-  vestingDuration: BigInt! # uint32
-  booster: BigInt! # uint128
-  nerfParameter: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Transfer @entity(immutable: true) {
-  id: Bytes!
-  from: Bytes! # address
-  to: Bytes! # address
-  tokenId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
 
 type Unstake @entity(immutable: true) {
   id: Bytes!
