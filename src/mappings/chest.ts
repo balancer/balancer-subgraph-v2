@@ -1,5 +1,5 @@
-import { Bytes, log } from '@graphprotocol/graph-ts';
-import { Chest, IncreaseStake, Unstake } from '../types/schema';
+import { Bytes, BigInt, log } from '@graphprotocol/graph-ts';
+import { Chest } from '../types/schema';
 import {
   IncreaseStake as IncreaseStakeEvent,
   Staked as ChestEvent,
@@ -7,10 +7,10 @@ import {
 } from '../types/templates/Chest/Chest';
 
 export function handleIncreaseStake(event: IncreaseStakeEvent): void {
-  let entity = new IncreaseStake(Bytes.fromBigInt(event.params.tokenId));
+  let entity = new Chest(Bytes.fromBigInt(event.params.tokenId));
 
   if (entity == null) {
-    log.error('Increase stake entity does not exist', [event.address.toHexString()]);
+    log.error('Chest entity does not exist', [event.address.toHexString()]);
     return;
   }
 
@@ -40,19 +40,20 @@ export function handleStaked(event: ChestEvent): void {
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
+  entity.totalStaked = BigInt.fromI32(0);
 
   entity.save();
 }
 
 export function handleUnstake(event: UnstakeEvent): void {
-  let entity = Unstake.load(Bytes.fromBigInt(event.params.tokenId));
+  let entity = Chest.load(Bytes.fromBigInt(event.params.tokenId));
 
   if (entity == null) {
     log.error('Unstake entity does not exist', [event.address.toString()]);
     return;
   }
 
-  if (event.params.amount > entity.amount){
+  if (event.params.amount > entity.amount) {
     log.error('Requested amount cannot be bigger that current amount!', [event.address.toString()]);
     return;
   }
@@ -65,6 +66,7 @@ export function handleUnstake(event: UnstakeEvent): void {
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
+  entity.totalUnstaked = entity.totalUnstaked.plus(event.params.amount);
 
   entity.save();
 }

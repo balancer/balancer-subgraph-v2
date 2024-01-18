@@ -401,27 +401,6 @@ type Chest @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
-}
-
-type IncreaseStake @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
   totalStaked: BigInt! # uint256
-  freezedUntil: BigInt! # uint256
-  booster: BigInt! # uint128
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-
-type Unstake @entity(immutable: true) {
-  id: Bytes!
-  tokenId: BigInt! # uint256
-  amount: BigInt! # uint256
-  totalStaked: BigInt! # uint256
-  booster: BigInt! # uint128
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  totalUnstaked: BigInt! # uint256
 }
