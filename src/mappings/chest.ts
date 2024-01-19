@@ -1,4 +1,4 @@
-import { Bytes, BigInt, log } from '@graphprotocol/graph-ts';
+import { BigInt, log } from '@graphprotocol/graph-ts';
 import { Chest } from '../types/schema';
 import {
   IncreaseStake as IncreaseStakeEvent,
@@ -7,7 +7,7 @@ import {
 } from '../types/templates/Chest/Chest';
 
 export function handleIncreaseStake(event: IncreaseStakeEvent): void {
-  let entity = new Chest(Bytes.fromBigInt(event.params.tokenId));
+  let entity = Chest.load(event.address);
 
   if (entity == null) {
     log.error('Chest entity does not exist', [event.address.toHexString()]);
@@ -46,7 +46,7 @@ export function handleStaked(event: ChestEvent): void {
 }
 
 export function handleUnstake(event: UnstakeEvent): void {
-  let entity = Chest.load(Bytes.fromBigInt(event.params.tokenId));
+  let entity = Chest.load(event.address);
 
   if (entity == null) {
     log.error('Unstake entity does not exist', [event.address.toString()]);
