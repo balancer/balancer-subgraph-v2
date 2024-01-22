@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
+description: JellyVerse
 {{#if graft}}
 features:
   - grafting
@@ -14,7 +14,7 @@ graft:
   base: {{graft_pruned.base}}
   block: {{graft_pruned.block}}
 {{/if}}
-repository: https://github.com/balancer-labs/balancer-subgraph-v2
+repository: https://github.com/MVPWorkshop/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
 dataSources:
