@@ -705,8 +705,8 @@ sepolia:
     address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
     startBlock: 4737221
   Minter:
-    address: "0xf630c28A12fAeF9A82D857e38E60204C26EE1131"
-    startBlock: 5098393
+    address: "0xEDF2e09Df35241782Cb6F5b647CD60C50A67bE60"
+    startBlock: 5133832
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:
