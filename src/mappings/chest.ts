@@ -7,7 +7,7 @@ import {
 } from '../types/templates/Chest/Chest';
 
 export function handleIncreaseStake(event: IncreaseStakeEvent): void {
-  let chest = Chest.load(Bytes.fromBigInt(event.params.tokenId));
+  let chest = Chest.load(event.params.tokenId.toHexString());
 
   if (chest == null) {
     log.error('Chest does not exist', [event.address.toHexString()]);
@@ -22,7 +22,7 @@ export function handleIncreaseStake(event: IncreaseStakeEvent): void {
 }
 
 export function handleStaked(event: ChestEvent): void {
-  let chest: Chest = new Chest(Bytes.fromBigInt(event.params.tokenId));
+  let chest: Chest = new Chest(event.params.tokenId.toHexString());
 
   chest.user = event.params.user;
   chest.tokenId = event.params.tokenId;
@@ -40,7 +40,7 @@ export function handleStaked(event: ChestEvent): void {
 }
 
 export function handleUnstake(event: UnstakeEvent): void {
-  let chest = Chest.load(Bytes.fromBigInt(event.params.tokenId));
+  let chest = Chest.load(event.params.tokenId.toHexString());
 
   if (chest == null) {
     log.error('Unstake chest does not exist', [event.address.toString()]);

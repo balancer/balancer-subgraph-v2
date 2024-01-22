@@ -389,8 +389,8 @@ type ProtocolIdData @entity {
   name: String!
 }
 
-type Chest @entity(immutable: true) {
-  id: Bytes!
+type Chest @entity {
+  id: ID!
   user: Bytes! # address
   tokenId: BigInt! # uint256
   amount: BigInt! # uint256

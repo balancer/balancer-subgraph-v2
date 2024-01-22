@@ -1584,9 +1584,9 @@ dataSources:
           handler: handleOfficialPoolDeregistered
     {{/if}}
   {{#if Chest}}
-     - kind: ethereum/contract
-         name: Chest
-         network: {{network}}
+  - kind: ethereum/contract
+    name: Chest
+    network: {{network}}
     source:
       address: '{{Chest.address}}'
       abi: Chest
@@ -2190,7 +2190,7 @@ templates:
       abi: Chest
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.7
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Chest
