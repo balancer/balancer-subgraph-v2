@@ -192,7 +192,7 @@ type User @entity {
   sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
   swaps: [Swap!] @derivedFrom(field: "userAddress")
   userInternalBalances: [UserInternalBalance!]
-    @derivedFrom(field: "userAddress")
+  @derivedFrom(field: "userAddress")
 }
 
 type UserInternalBalance @entity {
@@ -387,4 +387,18 @@ type BalancerSnapshot @entity {
 type ProtocolIdData @entity {
   id: ID!
   name: String!
+}
+
+type Chest @entity {
+  id: ID!
+  user: Bytes! # address
+  tokenId: BigInt! # uint256
+  amount: BigInt! # uint256
+  freezedUntil: BigInt! # uint256
+  vestingDuration: BigInt! # uint32
+  booster: BigInt! # uint128
+  nerfParameter: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }

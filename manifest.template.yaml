@@ -1583,6 +1583,32 @@ dataSources:
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolDeregistered
     {{/if}}
+  {{#if Chest}}
+  - kind: ethereum/contract
+    name: Chest
+    network: {{network}}
+    source:
+      address: '{{Chest.address}}'
+      abi: Chest
+      startBlock: {{Chest.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Chest
+      abis:
+        - name: Chest
+          file: ./abis/Chest.json
+      eventHandlers:
+        - event: IncreaseStake(indexed uint256,uint256,uint256,uint128)
+          handler: handleIncreaseStake
+        - event: Staked(indexed address,indexed uint256,uint256,uint256,uint32,uint128,uint8)
+          handler: handleStaked
+        - event: Unstake(indexed uint256,uint256,uint256,uint128)
+          handler: handleUnstake
+      file: ./src/mappings/chest.ts
+  {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -2157,3 +2183,25 @@ templates:
           handler: handleOfficialPoolRegistered
         - event: OfficialPoolDeregistered(indexed address,indexed bytes32)
           handler: handleOfficialPoolDeregistered
+  - kind: ethereum
+    name: Chest
+    network: {{network}}
+    source:
+      abi: Chest
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Chest
+      abis:
+        - name: Chest
+          file: ./abis/Chest.json
+      eventHandlers:
+        - event: IncreaseStake(indexed uint256,uint256,uint256,uint128)
+          handler: handleIncreaseStake
+        - event: Staked(indexed address,indexed uint256,uint256,uint256,uint32,uint128,uint8)
+          handler: handleStaked
+        - event: Unstake(indexed uint256,uint256,uint256,uint128)
+          handler: handleUnstake
+      file: ./src/mappings/chest.ts
