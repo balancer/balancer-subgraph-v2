@@ -2199,8 +2199,8 @@ templates:
       file: ./src/mappings/liquidityRewardDistribution.ts
       entities:
         - LiquidityRewardDistributionSnapshot
-        - UserLiquidityRewardDistribution
-        - UserLiquidityRewardDistributionMetaData
+        - UserClaimedLiquidityRewardDistribution
+        - SnapshotLiquidityRewardDistribution
         - UserLiquidityData
       abis:
         - name: LiquidityRewardDistribution
@@ -2224,7 +2224,6 @@ templates:
       file: ./src/mappings/stakingRewardDistribution.ts
       entities:
         - StakingRewardDistributionSnapshot
-        - UserStakingRewardDistribution
         - TokenDeposited
         - UserStakingData
       abis:
@@ -2239,3 +2238,27 @@ templates:
           handler: handleEpochRemoved
         - event: Deposited(address,uint256)
           handler: handleDeposited
+  - kind: file/ipfs 
+    name: UserLiquidityRewardDistributionMetaData
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/mappings/liquidityRewardDistribution.ts
+      handler: handlerMetaData
+      entities:
+        - UserLiquidityRewardDistributionMetaData
+      abis:
+        - name: LiquidityRewardDistribution
+          file: ./abis/LiquidityRewardDistribution.json
+  - kind: file/ipfs 
+    name: UserStakingRewardDistributionMetaData
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/mappings/stakingRewardDistribution.ts
+      handler: handlerMetaData
+      entities:
+        - UserStakingRewardDistributionMetaData
+      abis:
+        - name: StakingRewardDistribution
+          file: ./abis/StakingRewardDistribution.json

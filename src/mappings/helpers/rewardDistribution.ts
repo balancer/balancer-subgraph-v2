@@ -1,14 +1,12 @@
 import { ipfs, json, JSONValue, Bytes, BigInt } from '@graphprotocol/graph-ts';
 import { log } from '@graphprotocol/graph-ts';
 
-class UserData {
+export class UserData {
   address: string;
   amount: string;
 }
 
 export function getDistributionData(data: Bytes): UserData[] {
-  log.debug("Entered to queryng ipfs: {}", [data.toString()]);
-
   let merkleTree = getMerkleTree(data);
   if (merkleTree == null) {
     log.warning("The given cid {}, does not contain merkle tree field", []);

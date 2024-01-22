@@ -394,28 +394,30 @@ type LiquidityRewardDistributionSnapshot @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   ipfsCid: String!
-  distributionData: UserLiquidityRewardDistributionMetaData
-  succesfullyFetch: Boolean!
-}
-
-type UserLiquidityRewardDistribution @entity {
-  id: ID! # address
-  amountOfClaimedToken: BigInt!
-  amountOfTokenAvailableForClaim: BigInt!
+  distributionMetaData: UserLiquidityRewardDistributionMetaData
 }
 
 type UserLiquidityRewardDistributionMetaData @entity {
   id: ID!
+  address: Bytes!
+  value: BigInt!
+}
+
+type UserClaimedLiquidityRewardDistribution @entity {
+  id: ID! # address
+  totalAmountOfClaimedToken: BigInt!
+}
+
+type SnapshotLiquidityRewardDistribution @entity {
+  id: ID! #ipfsCID
   users: [UserLiquidityData!]! @derivedFrom(field: "user")
 }
 
 type UserLiquidityData @entity {
   id: ID!
   address: Bytes!
-  initialAmount: BigInt!
   claimedAmount: BigInt!
-  claimed: Boolean!
-  user: UserLiquidityRewardDistributionMetaData!
+  user: SnapshotLiquidityRewardDistribution!
 }
 
 type StakingRewardDistributionSnapshot @entity {
@@ -424,21 +426,25 @@ type StakingRewardDistributionSnapshot @entity {
   blockTimestamp: BigInt!
   ipfsCid: String!
   distributionData: UserStakingRewardDistributionMetaData
-  succesfullyFetch: Boolean!
 }
 
 type UserStakingRewardDistributionMetaData @entity {
   id: ID!
-  users: [UserStakingData!]! @derivedFrom(field: "user")
+  address: Bytes!
+  value: BigInt!
 }
 
 type UserStakingData @entity {
   id: ID!
   address: Bytes!
-  claimedTokens: [TokenDeposited!]
-  votingPower: BigInt!
-  claimedAmount: BigInt!
-  user: UserStakingRewardDistributionMetaData!
+  claimedTokens: [TokenClaimed!]! @derivedFrom(field: "user")
+}
+
+type TokenClaimed @entity {
+  id: ID!
+  address: Bytes!
+  amount: BigInt!
+  user: UserStakingData!
 }
 
 type TokenDeposited @entity {
