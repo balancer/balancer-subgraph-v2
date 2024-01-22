@@ -401,6 +401,4 @@ type Chest @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
-  totalStaked: BigInt! # uint256
-  totalUnstaked: BigInt! # uint256
 }

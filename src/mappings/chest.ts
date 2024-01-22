@@ -1,4 +1,4 @@
-import { BigInt, log } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes, log } from "@graphprotocol/graph-ts";
 import { Chest } from '../types/schema';
 import {
   IncreaseStake as IncreaseStakeEvent,
@@ -7,66 +7,53 @@ import {
 } from '../types/templates/Chest/Chest';
 
 export function handleIncreaseStake(event: IncreaseStakeEvent): void {
-  let entity = Chest.load(event.address);
+  let chest = Chest.load(Bytes.fromBigInt(event.params.tokenId));
 
-  if (entity == null) {
-    log.error('Chest entity does not exist', [event.address.toHexString()]);
+  if (chest == null) {
+    log.error('Chest does not exist', [event.address.toHexString()]);
     return;
   }
 
-  entity.tokenId = event.params.tokenId;
-  entity.totalStaked = entity.totalStaked.plus(event.params.totalStaked);
-  entity.freezedUntil = entity.freezedUntil.plus(event.params.freezedUntil);
-  entity.booster = event.params.booster;
+  chest.amount = event.params.totalStaked;
+  chest.freezedUntil = event.params.freezedUntil;
+  chest.booster = event.params.booster;
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-
-  entity.save();
+  chest.save();
 }
 
 export function handleStaked(event: ChestEvent): void {
-  let entity: Chest = new Chest(event.address);
+  let chest: Chest = new Chest(Bytes.fromBigInt(event.params.tokenId));
 
-  entity.user = event.params.user;
-  entity.tokenId = event.params.tokenId;
-  entity.amount = event.params.amount;
-  entity.freezedUntil = event.params.freezedUntil;
-  entity.vestingDuration = event.params.vestingDuration;
-  entity.booster = event.params.booster;
-  entity.nerfParameter = event.params.nerfParameter;
+  chest.user = event.params.user;
+  chest.tokenId = event.params.tokenId;
+  chest.amount = event.params.amount;
+  chest.freezedUntil = event.params.freezedUntil;
+  chest.vestingDuration = event.params.vestingDuration;
+  chest.booster = event.params.booster;
+  chest.nerfParameter = event.params.nerfParameter;
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-  entity.totalStaked = BigInt.fromI32(0);
+  chest.blockNumber = event.block.number;
+  chest.blockTimestamp = event.block.timestamp;
+  chest.transactionHash = event.transaction.hash;
 
-  entity.save();
+  chest.save();
 }
 
 export function handleUnstake(event: UnstakeEvent): void {
-  let entity = Chest.load(event.address);
+  let chest = Chest.load(Bytes.fromBigInt(event.params.tokenId));
 
-  if (entity == null) {
-    log.error('Unstake entity does not exist', [event.address.toString()]);
+  if (chest == null) {
+    log.error('Unstake chest does not exist', [event.address.toString()]);
     return;
   }
 
-  if (event.params.amount > entity.amount) {
+  if (event.params.amount > chest.amount) {
     log.error('Requested amount cannot be bigger that current amount!', [event.address.toString()]);
     return;
   }
 
-  entity.tokenId = event.params.tokenId;
-  entity.amount = event.params.amount;
-  entity.totalStaked = event.params.totalStaked;
-  entity.booster = event.params.booster;
+  chest.amount = event.params.totalStaked;
+  chest.booster = event.params.booster;
 
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
-  entity.transactionHash = event.transaction.hash;
-  entity.totalUnstaked = entity.totalUnstaked.plus(event.params.amount);
-
-  entity.save();
+  chest.save();
 }
