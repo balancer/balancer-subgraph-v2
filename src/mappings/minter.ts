@@ -5,7 +5,7 @@ import { JellyMinted, MintingStarted } from '../types/templates/Minter/Minter';
 export function handleJellyMinted(event: JellyMinted): void {
   let minter = Minter.load(event.address.toHexString()) as Minter;
   if (minter == null) {
-    log.error('Minter {} does not exist', [event.address.toHexString()]);
+    log.warning('Minter {} does not exist', [event.address.toHexString()]);
     return;
   }
   let tokenMintLpRewards = new TokenMint(event.transaction.hash.toHexString() + '-LP');
