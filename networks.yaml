@@ -707,6 +707,9 @@ sepolia:
   Minter:
     address: "0xEDF2e09Df35241782Cb6F5b647CD60C50A67bE60"
     startBlock: 5133832
+  Chest:
+    address: "0x3032F0541DDa019DE2991FF75eA2d829Ffb857F2"
+    startBlock: 5047909
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:

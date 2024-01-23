@@ -10,7 +10,7 @@
     "lint": "eslint --max-warnings 0 . --ext .ts",
     "test": "jest ./test/*.test.ts",
     "deploy": "graph deploy balancer-labs/balancer-v2 --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy:local": "graph deploy balancer-labs/balancer-v2 subgraph.subgraph.yaml --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy:local": "graph deploy balancer-labs/balancer-v2 subgraph.sepolia.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:sepolia": "graph deploy balancer-labs/balancer-v2 subgraph.sepolia.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:changi": "graph deploy balancer-labs/balancer-v2 subgraph.changi.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:testnet3": "graph deploy jelly/testnet3 subgraph.testnet3.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
