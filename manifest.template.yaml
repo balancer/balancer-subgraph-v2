@@ -1598,9 +1598,10 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - RemoveDistributionSnapshot
-        - UserRewardDistribution
-        - Snapshot
+        - LiquidityRewardDistributionSnapshot
+        - UserClaimedLiquidityRewardDistribution
+        - SnapshotLiquidityRewardDistribution
+        - UserLiquidityData
       abis:
         - name: LiquidityRewardDistribution
           file: ./abis/LiquidityRewardDistribution.json
@@ -1612,6 +1613,35 @@ dataSources:
         - event: EpochRemoved(uint256)
           handler: handleEpochRemoved
       file: ./src/mappings/liquidityRewardDistribution.ts
+    {{/if}}
+  {{#if StakingRewardDistribution}}
+  - kind: ethereum/contract
+    name: StakingRewardDistribution
+    network: {{network}}
+    source:
+      address: '{{StakingRewardDistribution.address}}'
+      abi: StakingRewardDistribution
+      startBlock: {{StakingRewardDistribution.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - StakingRewardDistributionSnapshot
+        - TokenDeposited
+        - UserStakingData
+      abis:
+        - name: StakingRewardDistribution
+          file: ./abis/StakingRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,address,uint256)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
     {{/if}}
 templates:
   - kind: ethereum/contract
@@ -2230,13 +2260,13 @@ templates:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
       eventHandlers:
-        - event: Claimed(address,uint256,address)
+        - event: Claimed(address,uint256,address,uint256)
           handler: handleClaimed
         - event: EpochAdded(uint256,bytes32,string)
           handler: handleEpochAdded
         - event: EpochRemoved(uint256)
           handler: handleEpochRemoved
-        - event: Deposited(address,uint256)
+        - event: Deposited(address,uint256,uint256)
           handler: handleDeposited
   - kind: file/ipfs 
     name: UserLiquidityRewardDistributionMetaData

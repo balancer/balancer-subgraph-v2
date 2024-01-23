@@ -5,7 +5,7 @@ import { log, store, Bytes, Address, BigInt, dataSource } from '@graphprotocol/g
 import { getDistributionData, UserData } from './helpers/rewardDistribution';
 
 export function handleClaimed(event: ClaimedEvent): void {
-  let snapshotId = "0";//event.params.week;
+  let snapshotId = event.params.epoch;
   let address = event.params.claimant;
   let amount = event.params.balance;
   let tokenAddress = event.params.token;
@@ -75,8 +75,7 @@ export function handleEpochRemoved(event: EpochRemovedEvent): void {
 }
 
 export function handleDeposited(event: DepositedEvent): void {
-  // TODO! Epoch Id - CHECK if this need to be filter by epoch ID? 
-  let epochId = "0";
+  let epochId = event.params.epoch;
   let token = event.params.token;
   let amount = event.params.amount;
 

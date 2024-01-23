@@ -708,8 +708,8 @@ sepolia:
     address: "0xafcfa0a08af1d2f94cdc2f3217f59db0e2fd00af"
     startBlock: 4884896
   StakingRewardDistribution:
-    address: "0x07e703d918A967093166b6B713066A16296f6ce7"
-    startBlock: 5060351
+    address: "0x6D36bDdB849Bec41DB0216b5E09708D5Fa8A19fA"
+    startBlock: 5133806
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:
