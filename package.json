@@ -1,5 +1,5 @@
 {
-  "name": "balancer",
+  "name": "jelly-subgraph",
   "version": "0.1.0",
   "scripts": {
     "create": "graph create balancer-labs/balancer-v2 --node https://api.thegraph.com/deploy/",
