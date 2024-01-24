@@ -704,6 +704,9 @@ sepolia:
   OfficialPoolsRegister:
     address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
     startBlock: 4737221
+  Minter:
+    address: "0xEDF2e09Df35241782Cb6F5b647CD60C50A67bE60"
+    startBlock: 5133832
   Chest:
     address: "0x3032F0541DDa019DE2991FF75eA2d829Ffb857F2"
     startBlock: 5047909
