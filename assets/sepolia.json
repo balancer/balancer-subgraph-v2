@@ -9,8 +9,12 @@
       "symbol": "DAI"
     },
     {
-      "address": "0x96e20800fc46D450B18E61344b3B1f53EffA54f7",
-      "symbol": "jdUSD"
+      "symbol": "jUSDT",
+      "address": "0xAcA89B57BD451aEb7ab5dD372991899e6480AA7B"
+    },
+    {
+      "symbol": "jUSDC",
+      "address": "0x8F4b72F5253ebF7a69f69758892122bfB56B120F"
     },
     {
       "address": "0x9C84391B443ea3a48788079a5f98e2EaD55c9309",
@@ -23,7 +27,7 @@
       "symbol": "WETH"
     },
     {
-      "address": "0x949449E9f339Ac6b934004D64d776AB3340D7E67",
+      "address": "0x655B3a67a82d2028126935691b74DFBf773eC465",
       "symbol": "JLY"
     },
     {
@@ -34,7 +38,7 @@
   "whitelistedAssets": [
     {
       "symbol": "JLY",
-      "address": "0x949449E9f339Ac6b934004D64d776AB3340D7E67"
+      "address": "0x655B3a67a82d2028126935691b74DFBf773eC465"
     },
     {
       "symbol": "jBTC",
@@ -49,12 +53,20 @@
       "address": "0x1E41AA782B07d1e693D2b265A4A5D7E2a50acAe3"
     },
     {
-      "symbol": "jdUSD",
-      "address": "0x96e20800fc46D450B18E61344b3B1f53EffA54f7"
+      "symbol": "jUSDT",
+      "address": "0xAcA89B57BD451aEb7ab5dD372991899e6480AA7B"
     },
     {
-      "symbol": "jDFI",
-      "address": "0x9B470B2f7860cBa2C18f1Ee8BEFc074a67CFD5d0"
+      "symbol": "jUSDC",
+      "address": "0x8F4b72F5253ebF7a69f69758892122bfB56B120F"
+    },
+    {
+      "symbol": "jGOLD",
+      "address": "0xF94EEACdB5611caEa8Ef3b3bd2bBb51ac06E16c2"
+    },
+    {
+      "symbol": "jTSLA",
+      "address": "0x3f1038377F15f0AFb6dEa5D8b631dCa2bAA8585D"
     }
   ]
 }
