@@ -1609,7 +1609,7 @@ dataSources:
         - event: MintingStarted(indexed address,indexed uint256)
           handler: handleMintingStarted
       file: ./src/mappings/minter.ts
-  {{/if}}
+    {{/if}}
   {{#if Chest}}
   - kind: ethereum/contract
     name: Chest
@@ -1635,27 +1635,28 @@ dataSources:
         - event: Unstake(indexed uint256,uint256,uint256,uint128)
           handler: handleUnstake
       file: ./src/mappings/chest.ts
-  {{/if}}
-  {{#if LiquidityRewardDistribution}}
+    {{/if}}
+  {{#if LPRewardDistribution}}
   - kind: ethereum/contract
-    name: LiquidityRewardDistribution
+    name: LPRewardDistribution
     network: {{network}}
     source:
-      address: '{{LiquidityRewardDistribution.address}}'
-      abi: LiquidityRewardDistribution
-      startBlock: {{LiquidityRewardDistribution.startBlock}}
+      address: '{{LPRewardDistribution.address}}'
+      abi: LPRewardDistribution
+      startBlock: {{LPRewardDistribution.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
+      file: ./src/mappings/lpRewardDistribution.ts
       entities:
-        - LiquidityRewardDistributionSnapshot
-        - UserClaimedLiquidityRewardDistribution
-        - SnapshotLiquidityRewardDistribution
-        - UserLiquidityData
+        - LPRewardDistributionSnapshot
+        - UserClaimedLPRewardDistribution
+        - SnapshotLPRewardDistribution
+        - UserLPData
       abis:
-        - name: LiquidityRewardDistribution
-          file: ./abis/LiquidityRewardDistribution.json
+        - name: LPRewardDistribution
+          file: ./abis/LPRewardDistribution.json
       eventHandlers:
         - event: Claimed(address,uint256,uint256)
           handler: handleClaimed
@@ -1663,7 +1664,6 @@ dataSources:
           handler: handleEpochAdded
         - event: EpochRemoved(uint256)
           handler: handleEpochRemoved
-      file: ./src/mappings/liquidityRewardDistribution.ts
     {{/if}}
   {{#if StakingRewardDistribution}}
   - kind: ethereum/contract
@@ -1677,6 +1677,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
+      file: ./src/mappings/stakingRewardDistribution.ts
       entities:
         - StakingRewardDistributionSnapshot
         - TokenDeposited
@@ -2312,23 +2313,23 @@ templates:
           handler: handleUnstake
       file: ./src/mappings/chest.ts
   - kind: ethereum/contract
-    name: LiquidityRewardDistribution
+    name: LPRewardDistribution
     network: {{network}}
     source:
-      abi: LiquidityRewardDistribution
+      abi: LPRewardDistribution
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/liquidityRewardDistribution.ts
+      file: ./src/mappings/lpRewardDistribution.ts
       entities:
-        - LiquidityRewardDistributionSnapshot
-        - UserClaimedLiquidityRewardDistribution
-        - SnapshotLiquidityRewardDistribution
-        - UserLiquidityData
+        - LPRewardDistributionSnapshot
+        - UserClaimedLPRewardDistribution
+        - SnapshotLPRewardDistribution
+        - UserLPData
       abis:
-        - name: LiquidityRewardDistribution
-          file: ./abis/LiquidityRewardDistribution.json
+        - name: LPRewardDistribution
+          file: ./abis/LPRewardDistribution.json
       eventHandlers:
         - event: Claimed(address,uint256,uint256)
           handler: handleClaimed
@@ -2363,17 +2364,17 @@ templates:
         - event: Deposited(address,uint256,uint256)
           handler: handleDeposited
   - kind: file/ipfs 
-    name: UserLiquidityRewardDistributionMetaData
+    name: UserLPRewardDistributionMetaData
     mapping:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/mappings/liquidityRewardDistribution.ts
+      file: ./src/mappings/lpRewardDistribution.ts
       handler: handlerMetaData
       entities:
-        - UserLiquidityRewardDistributionMetaData
+        - UserLPRewardDistributionMetaData
       abis:
-        - name: LiquidityRewardDistribution
-          file: ./abis/LiquidityRewardDistribution.json
+        - name: LPRewardDistribution
+          file: ./abis/LPRewardDistribution.json
   - kind: file/ipfs 
     name: UserStakingRewardDistributionMetaData
     mapping:

@@ -389,35 +389,35 @@ type ProtocolIdData @entity {
   name: String!
 }
 
-type LiquidityRewardDistributionSnapshot @entity {
+type LPRewardDistributionSnapshot @entity {
   id: ID! #epochId
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   ipfsCid: String!
-  distributionMetaData: UserLiquidityRewardDistributionMetaData
+  distributionMetaData: UserLPRewardDistributionMetaData
 }
 
-type UserLiquidityRewardDistributionMetaData @entity {
+type UserLPRewardDistributionMetaData @entity {
   id: ID!
   address: Bytes!
   value: BigInt!
 }
 
-type UserClaimedLiquidityRewardDistribution @entity {
+type UserClaimedLPRewardDistribution @entity {
   id: ID! # address
   totalAmountOfClaimedToken: BigInt!
 }
 
-type SnapshotLiquidityRewardDistribution @entity {
+type SnapshotLPRewardDistribution @entity {
   id: ID! #ipfsCID
-  users: [UserLiquidityData!]! @derivedFrom(field: "user")
+  users: [UserLPData!]! @derivedFrom(field: "user")
 }
 
-type UserLiquidityData @entity {
+type UserLPData @entity {
   id: ID!
   address: Bytes!
   claimedAmount: BigInt!
-  user: SnapshotLiquidityRewardDistribution!
+  user: SnapshotLPRewardDistribution!
 }
 
 type StakingRewardDistributionSnapshot @entity {
