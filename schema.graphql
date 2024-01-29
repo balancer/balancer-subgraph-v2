@@ -394,7 +394,7 @@ type LPRewardDistributionSnapshot @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   ipfsCid: String!
-  distributionMetaData: UserLPRewardDistributionMetaData
+  ipfsData: UserLPRewardDistributionMetaData
 }
 
 type UserLPRewardDistributionMetaData @entity {
@@ -425,7 +425,7 @@ type StakingRewardDistributionSnapshot @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   ipfsCid: String!
-  distributionData: UserStakingRewardDistributionMetaData
+  ipfsData: UserStakingRewardDistributionMetaData
 }
 
 type UserStakingRewardDistributionMetaData @entity {

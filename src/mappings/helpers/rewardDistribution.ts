@@ -1,4 +1,4 @@
-import { ipfs, json, JSONValue, Bytes, BigInt } from '@graphprotocol/graph-ts';
+import { json, JSONValue, Bytes } from '@graphprotocol/graph-ts';
 import { log } from '@graphprotocol/graph-ts';
 
 export class UserData {

@@ -38,7 +38,7 @@ export function handleEpochAdded(event: EpochAddedEvent): void {
   snapshot.blockNumber = event.block.number;
   snapshot.blockTimestamp = event.block.timestamp;
   snapshot.ipfsCid = ipfsCid;
-  snapshot.ipfsCid = ipfsCid;
+  snapshot.ipfsData = ipfsCid;
 
   UserStakingRewardDistributionMetaDataTemplate.create(ipfsCid);
   snapshot.save();
