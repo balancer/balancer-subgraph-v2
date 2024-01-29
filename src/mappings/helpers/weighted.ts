@@ -1,4 +1,4 @@
-import { Address } from '@graphprotocol/graph-ts';
+import { Address, Bytes } from '@graphprotocol/graph-ts';
 
 import { Pool } from '../../types/schema';
 import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
@@ -10,9 +10,17 @@ export function updatePoolWeights(poolId: string): void {
   let pool = Pool.load(poolId);
   if (pool == null) return;
 
-  let poolContract = WeightedPool.bind(changetype<Address>(pool.address));
+  const poolAddress = pool.address;
+  let poolContract = WeightedPool.bind(changetype<Address>(poolAddress));
 
-  let tokensList = pool.tokensList;
+  let tokensList = new Array<Bytes>();
+  for (let i = 0; i < pool.tokensList.length; i++) {
+    let tokenAddress = pool.tokensList[i];
+    if (tokenAddress != poolAddress) {
+      tokensList.push(tokenAddress);
+    }
+  }
+
   let weightsCall = poolContract.try_getNormalizedWeights();
   if (!weightsCall.reverted) {
     let weights = weightsCall.value;

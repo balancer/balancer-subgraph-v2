@@ -35,6 +35,7 @@ export let PRICING_ASSETS = assets.stableAssets.concat(assets.pricingAssets);
 class AddressByNetwork {
   public canonical: string;
   public custom: string;
+  public fantom: string;
 }
 
 let network: string = dataSource.network();
@@ -46,11 +47,14 @@ let network: string = dataSource.network();
 let vaultAddressByNetwork: AddressByNetwork = {
   canonical: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
   custom: '0x0000000000000000000000000000000000000000',
+  fantom: '0x20dd72Ed959b6147912C2e529F0a0C651c33c9ce',
 };
 
 function forNetwork(addressByNetwork: AddressByNetwork, network: string): Address {
   if (network == 'custom') {
     return Address.fromString(addressByNetwork.custom);
+  } else if (network == 'fantom') {
+    return Address.fromString(addressByNetwork.fantom);
   } else {
     return Address.fromString(addressByNetwork.canonical);
   }

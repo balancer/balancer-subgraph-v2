@@ -3,6 +3,7 @@ type Balancer @entity {
   id: ID!
   poolCount: Int!
   pools: [Pool!] @derivedFrom(field: "vaultID")
+  snapshots: [BalancerSnapshot!] @derivedFrom(field: "vault")
 
   totalLiquidity: BigDecimal!
   totalSwapCount: BigInt!
@@ -22,16 +23,16 @@ type Pool @entity {
   oracleEnabled: Boolean!
   symbol: String
   name: String
-  
+
   "Indicates if a pool can be swapped against. Combines multiple sources, including offchain curation"
   swapEnabled: Boolean!
-  
+
   "The native swapEnabled boolean. internal to the pool. Only applies to Gyro, LBPs and InvestmentPools"
   swapEnabledInternal: Boolean
-  
+
   "External indication from an offchain permissioned actor"
   swapEnabledCurationSignal: Boolean
-  
+
   swapFee: BigDecimal!
   owner: Bytes
   isPaused: Boolean
@@ -53,6 +54,7 @@ type Pool @entity {
   tokensList: [Bytes!]!
 
   tokens: [PoolToken!] @derivedFrom(field: "poolId")
+  joinsExits: [JoinExit!] @derivedFrom(field: "pool")
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
   snapshots: [PoolSnapshot!] @derivedFrom(field: "pool")
@@ -255,6 +257,7 @@ type Swap @entity(immutable: true) {
   poolId: Pool!
   userAddress: User!
   timestamp: Int!
+  block: BigInt
   tx: Bytes!
 }
 
@@ -273,6 +276,7 @@ type JoinExit @entity(immutable: true) {
   user: User!
   timestamp: Int!
   tx: Bytes!
+  block: BigInt
 }
 
 type LatestPrice @entity {
