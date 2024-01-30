@@ -2,6 +2,7 @@ import { LogArgument } from '../types/EventEmitter/EventEmitter';
 import { Pool, Token } from '../types/schema';
 import { BigDecimal } from '@graphprotocol/graph-ts';
 import { computeCuratedSwapEnabled } from './helpers/misc';
+import { poolTypes } from './helpers/pools';
 
 export function handleLogArgument(event: LogArgument): void {
   const identifier = event.params.identifier.toHexString();
@@ -14,6 +15,10 @@ export function handleLogArgument(event: LogArgument): void {
   // keccak256(setLatestUSDPrice) = 0x205869a4266a1bbcc5e2e5255221a32636b162e29887138cc0a8ba5141d05c62
   if (identifier == '0x205869a4266a1bbcc5e2e5255221a32636b162e29887138cc0a8ba5141d05c62') {
     setLatestUSDPrice(event);
+  }
+  // keccak256(setPoolType) = 0x23462a935a3b72f9098a1e3b21d6506d4a63139cb3b4c372a5df6fdde64cf80d
+  if (identifier == '0x23462a935a3b72f9098a1e3b21d6506d4a63139cb3b4c372a5df6fdde64cf80d') {
+    setPoolType(event);
   }
 }
 
@@ -52,4 +57,23 @@ function setLatestUSDPrice(event: LogArgument): void {
   const base = BigDecimal.fromString('100');
   token.latestUSDPrice = event.params.value.toBigDecimal().div(base);
   token.save();
+}
+
+function setPoolType(event: LogArgument): void {
+  /**
+   * Sets a pool's poolType attribute
+   *
+   * @param message - The pool id (eg. 0x12345abce... - all lowercase)
+   * @param value - pool type index/position in the poolTypes array
+   */ //
+
+  const poolTypeIndex = event.params.value.toI32();
+  if (poolTypeIndex < 0 || poolTypeIndex >= poolTypes.length) return;
+
+  const poolId = event.params.message.toHexString();
+  const pool = Pool.load(poolId);
+  if (!pool) return;
+
+  pool.poolType = poolTypes[poolTypeIndex];
+  pool.save();
 }

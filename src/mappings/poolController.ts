@@ -63,7 +63,7 @@ import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
 } from '../types/WeightedPoolV2Factory/WeightedPoolV2';
-import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2Pool';
+import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2V2Pool';
 import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { Transfer } from '../types/Vault/ERC20';
 import { valueInUSD } from './pricing';

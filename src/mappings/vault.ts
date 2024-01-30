@@ -63,6 +63,7 @@ import {
   isLinearPool,
   isFXPool,
   isComposableStablePool,
+  isManagedPool,
 } from './helpers/pools';
 import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
 import { USDC_ADDRESS } from './helpers/assets';
@@ -190,6 +191,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.timestamp = blockTimestamp;
   join.tx = transactionHash;
   join.valueUSD = valueUSD;
+  join.block = event.block.number;
   join.save();
 
   let protocolFeeUSD = ZERO_BD;
@@ -255,7 +257,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   // with a non-zero value for the BPT amount when the pool is initialized,
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
   // and therefore must be subtracted from totalShares
-  if (pool.poolType == PoolType.Managed || pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool)) {
+  if (pool.poolType == PoolType.StablePhantom || isComposableStablePool(pool) || isManagedPool(pool)) {
     let preMintedBpt = ZERO;
     let scaledPreMintedBpt = ZERO_BD;
     for (let i: i32 = 0; i < tokenAddresses.length; i++) {
@@ -329,6 +331,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.timestamp = blockTimestamp;
   exit.tx = transactionHash;
   exit.valueUSD = valueUSD;
+  exit.block = event.block.number;
   exit.save();
 
   let protocolFeeUSD = ZERO_BD;
@@ -617,6 +620,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   swap.timestamp = blockTimestamp;
   swap.tx = transactionHash;
+  swap.block = event.block.number;
   swap.save();
 
   // update pool swapsCount
