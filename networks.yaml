@@ -361,11 +361,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-  # Dec-08-2023 02:04:07 PM +UTC
-  # block: 158100000
+  # Jan-30-2024 11:11:47 AM +UTC
+  block: 175700000
   # always make sure the base subgraph has not been pruned
   # it should be possible to run time travel queries on it going back to the vault's startBlock
-  # base: QmQ3C1UqrvqE6eDUcntbM4v2BqBhpJTbpcEoEjtjaTaoK5
+  base: QmWypFxeYArf6bEJzEdkRhUeL7sMN9Pc4SZaJmP4PnxUTr
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -459,6 +459,9 @@ arbitrum:
   GyroEV2PoolFactory:
     address: "0xdCA5f1F0d7994A32BC511e7dbA0259946653Eaf6"
     startBlock: 124858976
+  FXPoolDeployer:
+    address: "0x8BDdD2dcB49056f99556A4E0288c419391693aE7"
+    startBlock: 170630353
 bnb:
   network: bsc
   Vault:
