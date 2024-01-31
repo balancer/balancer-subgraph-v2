@@ -399,6 +399,7 @@ type LPRewardDistributionSnapshot @entity {
 
 type UserLPRewardDistributionMetaData @entity {
   id: ID!
+  ipfsCid: String!
   address: Bytes!
   value: BigInt!
 }
@@ -419,6 +420,7 @@ type StakingRewardDistributionSnapshot @entity {
 
 type UserStakingRewardDistributionMetaData @entity {
   id: ID!
+  ipfsCid: String!
   address: Bytes!
   value: BigInt!
 }
@@ -431,6 +433,8 @@ type UserClaimedStakingRewardDistribution @entity {
 
 type TokenClaimed @entity {
   id: ID!
+  epochId: BigInt!
+  ipfsCid: String!
   address: Bytes!
   amount: BigInt!
   user: UserClaimedStakingRewardDistribution!
@@ -438,6 +442,7 @@ type TokenClaimed @entity {
 
 type TokenDeposited @entity {
   id: ID! #token+epochId
+  epochId: BigInt!
   token: Bytes!
   amount: BigInt!
 }

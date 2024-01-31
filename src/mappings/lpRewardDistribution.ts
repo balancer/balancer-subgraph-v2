@@ -49,6 +49,7 @@ export function handleMetaData(content: Bytes): void {
     let address = changetype<Address>(Address.fromHexString(distribution.address));
     let key = dataSource.stringParam() + "-" + address.toHexString();
     let userRewardDistributionMetadata = new UserLPRewardDistributionMetaData(key);
+    userRewardDistributionMetadata.ipfsCid = dataSource.stringParam();
     userRewardDistributionMetadata.address = address;
     userRewardDistributionMetadata.value = BigInt.fromString(distribution.amount);
     userRewardDistributionMetadata.save();

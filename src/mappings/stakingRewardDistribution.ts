@@ -19,6 +19,8 @@ export function handleClaimed(event: ClaimedEvent): void {
   let tokenKey = snapshot.ipfsCid.toString() + "-" + tokenAddress.toHexString();
 
   let tokenClaimed = new TokenClaimed(tokenKey);
+  tokenClaimed.epochId = snapshotId;
+  tokenClaimed.ipfsCid = snapshot.ipfsCid.toString();
   tokenClaimed.address = tokenAddress;
   tokenClaimed.amount = amount;
 
@@ -63,6 +65,7 @@ export function handleMetaData(content: Bytes): void {
     let address = changetype<Address>(Address.fromHexString(distribution.address));
     let key = dataSource.stringParam() + "-" + address.toHexString();
     let userRewardDistributionMetadata = new UserStakingRewardDistributionMetaData(key);
+    userRewardDistributionMetadata.ipfsCid = dataSource.stringParam();
     userRewardDistributionMetadata.address = address;
     userRewardDistributionMetadata.value = BigInt.fromString(distribution.amount);
     userRewardDistributionMetadata.save();
@@ -86,6 +89,7 @@ export function handleDeposited(event: DepositedEvent): void {
   let amount = event.params.amount;
 
   let tokenDeposited = new TokenDeposited(epochId.toString() + "-" + token.toHexString());
+  tokenDeposited.epochId = epochId;
   tokenDeposited.token = token;
   tokenDeposited.amount = amount;
 
