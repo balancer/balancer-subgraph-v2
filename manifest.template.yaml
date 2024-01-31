@@ -1680,7 +1680,7 @@ dataSources:
       entities:
         - StakingRewardDistributionSnapshot
         - TokenDeposited
-        - UserStakingData
+        - UserClaimedStakingRewardDistribution
         - UserStakingRewardDistributionMetaData
       abis:
         - name: StakingRewardDistribution
@@ -2351,7 +2351,7 @@ templates:
       entities:
         - StakingRewardDistributionSnapshot
         - TokenDeposited
-        - UserStakingData
+        - UserClaimedStakingRewardDistribution
         - UserStakingRewardDistributionMetaData
       abis:
         - name: StakingRewardDistribution

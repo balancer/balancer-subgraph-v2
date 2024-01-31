@@ -1,5 +1,5 @@
 import { Claimed as ClaimedEvent, EpochAdded as EpochAddedEvent, EpochRemoved as EpochRemovedEvent, Deposited as DepositedEvent } from '../types/templates/StakingRewardDistribution/StakingRewardDistribution';
-import { StakingRewardDistributionSnapshot, UserStakingRewardDistributionMetaData, TokenClaimed, UserStakingData, TokenDeposited } from '../types/schema';
+import { StakingRewardDistributionSnapshot, UserStakingRewardDistributionMetaData, TokenClaimed, UserClaimedStakingRewardDistribution, TokenDeposited } from '../types/schema';
 import { UserStakingRewardDistributionMetaData as UserStakingRewardDistributionMetaDataTemplate } from '../types/templates';
 import { log, store, Bytes, Address, BigInt, dataSource } from '@graphprotocol/graph-ts'
 import { getDistributionData, UserData } from './helpers/rewardDistribution';
@@ -16,17 +16,23 @@ export function handleClaimed(event: ClaimedEvent): void {
     return;
   }
 
-  let userKey = snapshot.ipfsCid.toString() + "-" + address.toHexString();
   let tokenKey = snapshot.ipfsCid.toString() + "-" + tokenAddress.toHexString();
 
   let tokenClaimed = new TokenClaimed(tokenKey);
   tokenClaimed.address = tokenAddress;
   tokenClaimed.amount = amount;
 
-  let userData = new UserStakingData(userKey);
-  userData.address = address;
-  userData.save();
-  tokenClaimed.user = userData.id;
+  let userClaimedData = UserClaimedStakingRewardDistribution.load(address.toHexString());
+  if (userClaimedData == null) {
+    userClaimedData = new UserClaimedStakingRewardDistribution(address.toHexString());
+    userClaimedData.snapshots = [snapshotId];
+    userClaimedData.save();
+  } else {
+    userClaimedData.snapshots.push(snapshotId);
+    userClaimedData.save();
+  }
+
+  tokenClaimed.user = userClaimedData.id;
   tokenClaimed.save();
 }
 

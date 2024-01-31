@@ -1,5 +1,5 @@
 import { Claimed as ClaimedEvent, EpochAdded as EpochAddedEvent, EpochRemoved as EpochRemovedEvent } from '../types/templates/LPRewardDistribution/LPRewardDistribution';
-import { LPRewardDistributionSnapshot, UserLPRewardDistributionMetaData, UserClaimedLPRewardDistribution, SnapshotLPRewardDistribution, UserLPData } from '../types/schema';
+import { LPRewardDistributionSnapshot, UserLPRewardDistributionMetaData, UserClaimedLPRewardDistribution } from '../types/schema';
 import { UserLPRewardDistributionMetaData as UserLPRewardDistributionMetaDataTemplate } from '../types/templates';
 import { log, store, Bytes, Address, BigInt, dataSource } from '@graphprotocol/graph-ts'
 import { getDistributionData, UserData } from './helpers/rewardDistribution';
@@ -9,34 +9,17 @@ export function handleClaimed(event: ClaimedEvent): void {
   let address = event.params.claimant;
   let amountToClaim = event.params.balance;
 
-  let snapshot = LPRewardDistributionSnapshot.load(snapshotId.toString());
-  if (snapshot == null) {
-    log.warning("There is no snapshot", []);
-    return;
-  }
-
-  let key = snapshot.ipfsCid.toString() + "-" + address.toHexString();
   let userClaimedData = UserClaimedLPRewardDistribution.load(address.toHexString());
   if (userClaimedData == null) {
     userClaimedData = new UserClaimedLPRewardDistribution(address.toHexString());
+    userClaimedData.snapshots = [snapshotId];
     userClaimedData.totalAmountOfClaimedToken = amountToClaim;
     userClaimedData.save();
-    return;
   } else {
+    userClaimedData.snapshots.push(snapshotId);
     userClaimedData.totalAmountOfClaimedToken = userClaimedData.totalAmountOfClaimedToken.plus(amountToClaim);
     userClaimedData.save();
   }
-
-  let userData = new UserLPData(key);
-  userData.address = address;
-  userData.claimedAmount = amountToClaim;
-  let snapshotData = SnapshotLPRewardDistribution.load(snapshot.ipfsCid.toString());
-  if (snapshotData == null) {
-    snapshotData = new SnapshotLPRewardDistribution(snapshot.ipfsCid.toString());
-    snapshotData.save();
-  }
-  userData.user = snapshotData.id;
-  userData.save();
 }
 
 export function handleEpochAdded(event: EpochAddedEvent): void {
@@ -80,17 +63,5 @@ export function handleEpochRemoved(event: EpochRemovedEvent): void {
     return;
   }
 
-  let ipfsCid = snapshot.ipfsCid;
-  let distributionsData = SnapshotLPRewardDistribution.load(ipfsCid);
-  if (distributionsData == null) {
-    log.warning("There is a problem with geting data from ipfs", []);
-    return;
-  }
-
-  let users = distributionsData.users.load();
-  if (users.length > 1) {
-    log.warning("There is claimed data for the epoch {}, remove can not be done ", [ipfsCid]);
-    return;
-  }
   store.remove("LPRewardDistributionSnapshot", snapshot.id);
 }
