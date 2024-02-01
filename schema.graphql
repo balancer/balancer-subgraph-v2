@@ -389,6 +389,64 @@ type ProtocolIdData @entity {
   name: String!
 }
 
+type LPRewardDistributionSnapshot @entity {
+  id: ID! #epochId
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  ipfsCid: String!
+  ipfsData: UserLPRewardDistributionMetaData
+}
+
+type UserLPRewardDistributionMetaData @entity {
+  id: ID!
+  ipfsCid: String!
+  address: Bytes!
+  value: BigInt!
+}
+
+type UserClaimedLPRewardDistribution @entity {
+  id: ID! # address
+  snapshots: [BigInt!]!
+  totalAmountOfClaimedToken: BigInt!
+}
+
+type StakingRewardDistributionSnapshot @entity {
+  id: ID! #epochId
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  ipfsCid: String!
+  ipfsData: UserStakingRewardDistributionMetaData
+}
+
+type UserStakingRewardDistributionMetaData @entity {
+  id: ID!
+  ipfsCid: String!
+  address: Bytes!
+  value: BigInt!
+}
+
+type UserClaimedStakingRewardDistribution @entity {
+  id: ID!
+  snapshots: [BigInt!]!
+  claimedTokens: [TokenClaimed!]! @derivedFrom(field: "user")
+}
+
+type TokenClaimed @entity {
+  id: ID!
+  epochId: BigInt!
+  ipfsCid: String!
+  address: Bytes!
+  amount: BigInt!
+  user: UserClaimedStakingRewardDistribution!
+}
+
+type TokenDeposited @entity {
+  id: ID! #token+epochId
+  epochId: BigInt!
+  token: Bytes!
+  amount: BigInt!
+}
+
 type Minter @entity {
   id: ID!
   benfactors: [Bytes!]!

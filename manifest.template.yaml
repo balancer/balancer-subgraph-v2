@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.4
 description: JellyVerse
 {{#if graft}}
 features:
@@ -28,7 +28,7 @@ dataSources:
       startBlock: {{EventEmitter.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/eventEmitter.ts
       entities:
@@ -49,7 +49,7 @@ dataSources:
       startBlock: {{Vault.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/vault.ts
       entities:
@@ -97,7 +97,7 @@ dataSources:
       startBlock: {{WeightedPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -126,7 +126,7 @@ dataSources:
       startBlock: {{WeightedPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -157,7 +157,7 @@ dataSources:
       startBlock: {{WeightedPoolV3Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -188,7 +188,7 @@ dataSources:
       startBlock: {{WeightedPoolV4Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -221,7 +221,7 @@ dataSources:
       startBlock: {{WeightedPool2TokenFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -252,7 +252,7 @@ dataSources:
       startBlock: {{StablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -283,7 +283,7 @@ dataSources:
       startBlock: {{StablePoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -314,7 +314,7 @@ dataSources:
       startBlock: {{MetaStablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -347,7 +347,7 @@ dataSources:
       startBlock: {{LiquidityBootstrappingPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -378,7 +378,7 @@ dataSources:
       startBlock: {{TempLiquidityBootstrappingPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -409,7 +409,7 @@ dataSources:
       startBlock: {{InvestmentPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -440,7 +440,7 @@ dataSources:
       startBlock: {{ManagedPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -473,7 +473,7 @@ dataSources:
       startBlock: {{ConvergentPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -504,7 +504,7 @@ dataSources:
       startBlock: {{StablePhantomPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -537,7 +537,7 @@ dataSources:
       startBlock: {{ComposableStablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -570,7 +570,7 @@ dataSources:
       startBlock: {{ComposableStablePoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -603,7 +603,7 @@ dataSources:
       startBlock: {{ComposableStablePoolV3Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -636,7 +636,7 @@ dataSources:
       startBlock: {{ComposableStablePoolV4Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -669,7 +669,7 @@ dataSources:
       startBlock: {{ComposableStablePoolV5Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -702,7 +702,7 @@ dataSources:
       startBlock: {{HighAmpComposableStablePoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -735,7 +735,7 @@ dataSources:
       startBlock: {{AaveLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -768,7 +768,7 @@ dataSources:
       startBlock: {{AaveLinearPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -801,7 +801,7 @@ dataSources:
       startBlock: {{AaveLinearPoolV3Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -836,7 +836,7 @@ dataSources:
       startBlock: {{AaveLinearPoolV4Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -871,7 +871,7 @@ dataSources:
       startBlock: {{AaveLinearPoolV5Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -906,7 +906,7 @@ dataSources:
       startBlock: {{ERC4626LinearPoolFactoryBeta.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -939,7 +939,7 @@ dataSources:
       startBlock: {{EulerLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -974,7 +974,7 @@ dataSources:
       startBlock: {{ERC4626LinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1007,7 +1007,7 @@ dataSources:
       startBlock: {{ERC4626LinearPoolV3Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1042,7 +1042,7 @@ dataSources:
       startBlock: {{ERC4626LinearPoolV4Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1077,7 +1077,7 @@ dataSources:
       startBlock: {{GearboxLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1112,7 +1112,7 @@ dataSources:
       startBlock: {{GearboxLinearPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1147,7 +1147,7 @@ dataSources:
       startBlock: {{MidasLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1182,7 +1182,7 @@ dataSources:
       startBlock: {{ReaperLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1217,7 +1217,7 @@ dataSources:
       startBlock: {{ReaperLinearPoolV3Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1250,7 +1250,7 @@ dataSources:
       startBlock: {{SiloLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1285,7 +1285,7 @@ dataSources:
       startBlock: {{SiloLinearPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1320,7 +1320,7 @@ dataSources:
       startBlock: {{YearnLinearPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1355,7 +1355,7 @@ dataSources:
       startBlock: {{YearnLinearPoolV2Factory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1390,7 +1390,7 @@ dataSources:
       startBlock: {{Gyro2PoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1421,7 +1421,7 @@ dataSources:
       startBlock: {{Gyro3PoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1452,7 +1452,7 @@ dataSources:
       startBlock: {{GyroEPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1483,7 +1483,7 @@ dataSources:
       startBlock: {{GyroEV2PoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1514,7 +1514,7 @@ dataSources:
       startBlock: {{FXPoolFactory.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1545,7 +1545,7 @@ dataSources:
       startBlock: {{ProtocolIdRegistry.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolFactory.ts
       entities:
@@ -1569,7 +1569,7 @@ dataSources:
       startBlock: {{OfficialPoolsRegister.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolOfficial.ts
       entities:
@@ -1593,7 +1593,7 @@ dataSources:
       startBlock: {{Minter.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Minter
@@ -1607,7 +1607,7 @@ dataSources:
         - event: MintingStarted(indexed address,indexed uint256)
           handler: handleMintingStarted
       file: ./src/mappings/minter.ts
-  {{/if}}
+    {{/if}}
   {{#if Chest}}
   - kind: ethereum/contract
     name: Chest
@@ -1618,7 +1618,7 @@ dataSources:
       startBlock: {{Chest.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Chest
@@ -1633,7 +1633,68 @@ dataSources:
         - event: Unstake(indexed uint256,uint256,uint256,uint128)
           handler: handleUnstake
       file: ./src/mappings/chest.ts
-  {{/if}}
+    {{/if}}
+  {{#if LPRewardDistribution}}
+  - kind: ethereum/contract
+    name: LPRewardDistribution
+    network: {{network}}
+    source:
+      address: '{{LPRewardDistribution.address}}'
+      abi: LPRewardDistribution
+      startBlock: {{LPRewardDistribution.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/lpRewardDistribution.ts
+      entities:
+        - LPRewardDistributionSnapshot
+        - UserClaimedLPRewardDistribution
+        - SnapshotLPRewardDistribution
+        - UserLPData
+        - UserLPRewardDistributionMetaData
+      abis:
+        - name: LPRewardDistribution
+          file: ./abis/LPRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,uint256)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
+    {{/if}}
+  {{#if StakingRewardDistribution}}
+  - kind: ethereum/contract
+    name: StakingRewardDistribution
+    network: {{network}}
+    source:
+      address: '{{StakingRewardDistribution.address}}'
+      abi: StakingRewardDistribution
+      startBlock: {{StakingRewardDistribution.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/stakingRewardDistribution.ts
+      entities:
+        - StakingRewardDistributionSnapshot
+        - TokenDeposited
+        - UserClaimedStakingRewardDistribution
+        - UserStakingRewardDistributionMetaData
+      abis:
+        - name: StakingRewardDistribution
+          file: ./abis/StakingRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,address,uint256)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+    {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -1642,7 +1703,7 @@ templates:
       abi: WeightedPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1669,7 +1730,7 @@ templates:
       abi: WeightedPoolV2
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1700,7 +1761,7 @@ templates:
       abi: WeightedPool2Tokens
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1729,7 +1790,7 @@ templates:
       abi: StablePool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1760,7 +1821,7 @@ templates:
       abi: MetaStablePool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1800,7 +1861,7 @@ templates:
       abi: ConvergentCurvePool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1823,7 +1884,7 @@ templates:
       abi: LiquidityBootstrappingPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1855,7 +1916,7 @@ templates:
       abi: InvestmentPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1889,7 +1950,7 @@ templates:
       abi: ManagedPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1945,7 +2006,7 @@ templates:
       abi: StablePhantomPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -1983,7 +2044,7 @@ templates:
       abi: ComposableStablePool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -2027,7 +2088,7 @@ templates:
       abi: LinearPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -2061,7 +2122,7 @@ templates:
       abi: Gyro2Pool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -2091,7 +2152,7 @@ templates:
       abi: Gyro3Pool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -2121,7 +2182,7 @@ templates:
       abi: GyroEPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -2151,7 +2212,7 @@ templates:
       abi: FXPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolController.ts
       entities:
@@ -2177,7 +2238,7 @@ templates:
       abi: AccessControlledOffchainAggregator
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/pricing.ts
       entities:
@@ -2195,7 +2256,7 @@ templates:
       abi: OfficialPoolsRegister
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/poolOfficial.ts
       entities:
@@ -2215,7 +2276,7 @@ templates:
       abi: Minter
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/minter.ts
       entities:
@@ -2236,7 +2297,7 @@ templates:
       abi: Chest
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - Chest
@@ -2251,3 +2312,80 @@ templates:
         - event: Unstake(indexed uint256,uint256,uint256,uint128)
           handler: handleUnstake
       file: ./src/mappings/chest.ts
+  - kind: ethereum/contract
+    name: LPRewardDistribution
+    network: {{network}}
+    source:
+      abi: LPRewardDistribution
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/lpRewardDistribution.ts
+      entities:
+        - LPRewardDistributionSnapshot
+        - UserClaimedLPRewardDistribution
+        - SnapshotLPRewardDistribution
+        - UserLPData
+        - UserLPRewardDistributionMetaData
+      abis:
+        - name: LPRewardDistribution
+          file: ./abis/LPRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,uint256)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
+  - kind: ethereum/contract
+    name: StakingRewardDistribution
+    network: {{network}}
+    source:
+      abi: StakingRewardDistribution
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/stakingRewardDistribution.ts
+      entities:
+        - StakingRewardDistributionSnapshot
+        - TokenDeposited
+        - UserClaimedStakingRewardDistribution
+        - UserStakingRewardDistributionMetaData
+      abis:
+        - name: StakingRewardDistribution
+          file: ./abis/StakingRewardDistribution.json
+      eventHandlers:
+        - event: Claimed(address,uint256,address,uint256)
+          handler: handleClaimed
+        - event: EpochAdded(uint256,bytes32,string)
+          handler: handleEpochAdded
+        - event: EpochRemoved(uint256)
+          handler: handleEpochRemoved
+        - event: Deposited(address,uint256,uint256)
+          handler: handleDeposited
+  - kind: file/ipfs 
+    name: UserLPRewardDistributionMetaData
+    mapping:
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/lpRewardDistribution.ts
+      handler: handleMetaData
+      entities:
+        - UserLPRewardDistributionMetaData
+      abis:
+        - name: LPRewardDistribution
+          file: ./abis/LPRewardDistribution.json
+  - kind: file/ipfs 
+    name: UserStakingRewardDistributionMetaData
+    mapping:
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/stakingRewardDistribution.ts
+      handler: handleMetaData
+      entities:
+        - UserStakingRewardDistributionMetaData
+      abis:
+        - name: StakingRewardDistribution
+          file: ./abis/StakingRewardDistribution.json
