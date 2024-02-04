@@ -15,19 +15,19 @@
   ],
   "pricingAssets": [
     {
-      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", 
+      "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       "symbol": "WETH"
     },
     {
-      "address": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0", 
+      "address": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
       "symbol": "wstETH"
     },
     {
-      "address": "0x804CdB9116a10bB78768D3252355a1b18067bF8f", 
+      "address": "0x804CdB9116a10bB78768D3252355a1b18067bF8f",
       "symbol": "bb-a-DAI-V1"
     },
     {
-      "address": "0x9210F1204b5a24742Eba12f710636D76240dF3d0", 
+      "address": "0x9210F1204b5a24742Eba12f710636D76240dF3d0",
       "symbol": "bb-a-USDC-V1"
     },
     {
@@ -59,35 +59,35 @@
       "symbol": "bb-a-USDT-V3"
     },
     {
-      "address": "0xfeBb0bbf162E64fb9D0dfe186E517d84C395f016", 
+      "address": "0xfeBb0bbf162E64fb9D0dfe186E517d84C395f016",
       "symbol": "bb-a-USD-V3"
     },
     {
-      "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599", 
+      "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
       "symbol": "WBTC"
     },
     {
-      "address": "0xba100000625a3754423978a60c9317c58a424e3D", 
+      "address": "0xba100000625a3754423978a60c9317c58a424e3D",
       "symbol": "BAL"
     },
     {
-      "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2", 
+      "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
       "symbol": "MKR"
     },
     {
-      "address": "0x6810e776880C02933D47DB1b9fc05908e5386b96", 
+      "address": "0x6810e776880C02933D47DB1b9fc05908e5386b96",
       "symbol": "GNO"
     },
     {
-      "address": "0x5c6ee304399dbdb9c8ef030ab642b10820db8f56", 
+      "address": "0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
       "symbol": "B-80BAL-20WETH"
     },
     {
-      "address": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0", 
+      "address": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
       "symbol": "MATIC"
     },
     {
-      "address": "0xA13a9247ea42D743238089903570127DdA72fE44", 
+      "address": "0xA13a9247ea42D743238089903570127DdA72fE44",
       "symbol": "bb-a-USD"
     },
     {
@@ -119,8 +119,12 @@
       "assetSymbol": "EURS",
       "aggregator": "0x02F878A94a1AE1B15705aCD65b5519A46fe3517e",
       "aggregatorSymbol": "EUR/USD"
+    },
+    {
+      "asset": "0x6d57B2E05F26C26b549231c866bdd39779e4a488",
+      "assetSymbol": "VNXAU",
+      "aggregator": "0xea5f70faa03f5C30B96029635C8d431d1A3cD1b8",
+      "aggregatorSymbol": "XAU/USD"
     }
   ]
 }
-
-

@@ -14,6 +14,9 @@ export const USDC_ADDRESS = Address.fromString('0xA0b86991c6218b36c1d19D4a2e9Eb0
 export const DAI_ADDRESS = Address.fromString('0x6B175474E89094C44Da98b954EedeAC495271d0F');
 export const USDT_ADDRESS = Address.fromString('0xdAC17F958D2ee523a2206206994597C13D831ec7');
 
+export const VNXAU_ADDRESS = Address.fromString('0x6d57b2e05f26c26b549231c866bdd39779e4a488')
+
+
 export const assets: Assets = {
   stableAssets: [
     Address.fromString('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'), // USDC
@@ -58,6 +61,10 @@ export const assets: Assets = {
     [
       Address.fromString('0xdB25f211AB05b1c97D595516F45794528a807ad8'), // EURS
       Address.fromString('0x02F878A94a1AE1B15705aCD65b5519A46fe3517e'), // EUR/USD
+    ],
+    [
+      Address.fromString('0x6d57B2E05F26C26b549231c866bdd39779e4a488'), // VNXAU
+      Address.fromString('0xea5f70faa03f5C30B96029635C8d431d1A3cD1b8'), // XAU/USD
     ],
   ],
 };
