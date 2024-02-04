@@ -14,7 +14,7 @@ export const USDC_ADDRESS = Address.fromString('0xA0b86991c6218b36c1d19D4a2e9Eb0
 export const DAI_ADDRESS = Address.fromString('0x6B175474E89094C44Da98b954EedeAC495271d0F');
 export const USDT_ADDRESS = Address.fromString('0xdAC17F958D2ee523a2206206994597C13D831ec7');
 
-export const VNXAU_ADDRESS = Address.fromString('0x6d57B2E05F26C26b549231c866bdd39779e4a488')
+export const VNXAU_ADDRESS = Address.fromString('0x6d57b2e05f26c26b549231c866bdd39779e4a488')
 
 
 export const assets: Assets = {
