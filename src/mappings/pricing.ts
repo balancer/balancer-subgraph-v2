@@ -1,5 +1,6 @@
 import { Address, Bytes, BigInt, BigDecimal, log, dataSource } from '@graphprotocol/graph-ts';
 import { Pool, TokenPrice, Balancer, PoolHistoricalLiquidity, LatestPrice, Token, FXOracle } from '../types/schema';
+import { VNXAU_ADDRESS } from './helpers/assets';
 import {
   ZERO_BD,
   PRICING_ASSETS,
@@ -408,7 +409,7 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
       token.fxOracleDecimals = 8; // @todo: get decimals on-chain
     }
 
-    if (tokenAddress == Address.fromString('0xc8bb8eda94931ca2f20ef43ea7dbd58e68400400')) {
+    if (tokenAddress == VNXAU_ADDRESS) {
       // XAU-USD oracle returns an answer with price unit of "USD per troy ounce"
       // For VNXAU however, we wanna use a price unit of "USD per gram"
       const divisor = '3110347680'; // 31.1034768 * 1e8 (31.10 gram per troy ounce)
