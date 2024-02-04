@@ -409,7 +409,7 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
       token.fxOracleDecimals = 8; // @todo: get decimals on-chain
     }
 
-    if (tokenAddress == VNXAU_ADDRESS) {
+    if (tokenAddress != ZERO_ADDRESS && tokenAddress == VNXAU_ADDRESS) {
       // XAU-USD oracle returns an answer with price unit of "USD per troy ounce"
       // For VNXAU however, we wanna use a price unit of "USD per gram"
       const divisor = '3110347680'; // 31.1034768 * 1e8 (31.10 gram per troy ounce)
