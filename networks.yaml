@@ -702,8 +702,8 @@ sepolia:
     address: "0x63e179C5b6d54B2c2e36b9cE4085EF5A8C86D50c"
     startBlock: 4276797
   OfficialPoolsRegister:
-    address: "0xb6f8782a311feabde69e97b22474505f6d1f788d"
-    startBlock: 4737221
+    address: "0x5493dfBe46A769C4dc7eAed97b33b8DaDD9C9469"
+    startBlock: 5227759
   LPRewardDistribution:
     address: "0xafcfa0a08af1d2f94cdc2f3217f59db0e2fd00af"
     startBlock: 4884896
