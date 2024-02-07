@@ -1578,8 +1578,10 @@ dataSources:
         - name: OfficialPoolsRegister
           file: ./abis/OfficialPoolsRegister.json
       eventHandlers:
-        - event: OfficialPoolRegistered(indexed address,indexed bytes32,uint256)
+        - event: OfficialPoolRegistered(indexed bytes32,uint32)
           handler: handleOfficialPoolRegistered
+        - event: OfficialPoolDeregistered(indexed bytes32)
+          handler: handleOfficialPoolDeregistered
     {{/if}}
   {{#if Minter}}
   - kind: ethereum/contract
@@ -2263,8 +2265,10 @@ templates:
         - name: OfficialPoolsRegister
           file: ./abis/OfficialPoolsRegister.json
       eventHandlers:
-        - event: OfficialPoolRegistered(indexed address,indexed bytes32,uint256)
+        - event: OfficialPoolRegistered(indexed bytes32,uint32)
           handler: handleOfficialPoolRegistered
+        - event: OfficialPoolDeregistered(indexed bytes32)
+          handler: handleOfficialPoolDeregistered
   - kind: ethereum/contract
     name: Minter
     network: {{network}}
