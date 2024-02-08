@@ -45,10 +45,17 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
+        "internalType": "bytes32",
+        "name": "poolId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "OfficialPoolDeregistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
       {
         "indexed": true,
         "internalType": "bytes32",
@@ -57,9 +64,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "weight",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "OfficialPoolRegistered",
@@ -141,21 +148,9 @@
     "name": "getAllOfficialPools",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "poolId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "weight",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct OfficialPoolsRegister.Pool[]",
+        "internalType": "bytes32[]",
         "name": "",
-        "type": "tuple[]"
+        "type": "bytes32[]"
       }
     ],
     "stateMutability": "view",
@@ -197,9 +192,9 @@
             "type": "bytes32"
           },
           {
-            "internalType": "uint256",
+            "internalType": "uint32",
             "name": "weight",
-            "type": "uint256"
+            "type": "uint32"
           }
         ],
         "internalType": "struct OfficialPoolsRegister.Pool[]",
@@ -210,19 +205,6 @@
     "name": "registerOfficialPool",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "totalPools",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
