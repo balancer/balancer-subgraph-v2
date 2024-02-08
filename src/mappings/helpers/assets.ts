@@ -14,19 +14,21 @@ class Assets {
 
 export const USDC_ADDRESS = Address.fromString('0x835E81CB4a45b6338B43A7a66ba1C78900A76Ef3');
 export const DAI_ADDRESS = Address.fromString('0xeF5f222c49c89a231F3aBE30114c77EE904e1e44');
-export const jdUSD_ADDRESS = Address.fromString('0x96e20800fc46D450B18E61344b3B1f53EffA54f7');
+export const jUSDT_ADDRESS = Address.fromString('0xAcA89B57BD451aEb7ab5dD372991899e6480AA7B');
+export const jUSDC_ADDRESS = Address.fromString('0x8F4b72F5253ebF7a69f69758892122bfB56B120F');
 export const USDT_ADDRESS = Address.fromString('0x9C84391B443ea3a48788079a5f98e2EaD55c9309');
 
 export const assets: Assets = {
   stableAssets: [
     Address.fromString('0x835E81CB4a45b6338B43A7a66ba1C78900A76Ef3'), // USDC
     Address.fromString('0xeF5f222c49c89a231F3aBE30114c77EE904e1e44'), // DAI
-    Address.fromString('0x96e20800fc46D450B18E61344b3B1f53EffA54f7'), // jdUSD
+    Address.fromString('0xAcA89B57BD451aEb7ab5dD372991899e6480AA7B'), // jUSDT
+    Address.fromString('0x8F4b72F5253ebF7a69f69758892122bfB56B120F'), // jUSDC
     Address.fromString('0x9C84391B443ea3a48788079a5f98e2EaD55c9309'), // USDT
   ],
   pricingAssets: [
     Address.fromString('0x7b79995e5f793a07bc00c21412e50ecae098e7f9'), // WETH
-    Address.fromString('0x949449E9f339Ac6b934004D64d776AB3340D7E67'), // JLY
+    Address.fromString('0x655B3a67a82d2028126935691b74DFBf773eC465'), // JLY
     Address.fromString('0x650c15c9cfc6063e5046813f079774f56946df21'), // B-80BAL-20WETH
   ],
   fxAssets: [
@@ -35,11 +37,13 @@ export const assets: Assets = {
   ],
 
   whitelistedAssets: [
-    Address.fromString('0x949449E9f339Ac6b934004D64d776AB3340D7E67'), // JLY
+    Address.fromString('0x655B3a67a82d2028126935691b74DFBf773eC465'), // JLY
     Address.fromString('0x001aB49b91c0eB85D53CDef57ab8FAd9D456cD01'), // jBTC
     Address.fromString('0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9'), // WETH
     Address.fromString('0x1E41AA782B07d1e693D2b265A4A5D7E2a50acAe3'), // jETH
-    Address.fromString('0x96e20800fc46D450B18E61344b3B1f53EffA54f7'), // jdUSD
-    Address.fromString('0x9B470B2f7860cBa2C18f1Ee8BEFc074a67CFD5d0'), // jDFI
+    Address.fromString('0xAcA89B57BD451aEb7ab5dD372991899e6480AA7B'), // jUSDT
+    Address.fromString('0x8F4b72F5253ebF7a69f69758892122bfB56B120F'), // jUSDC
+    Address.fromString('0xF94EEACdB5611caEa8Ef3b3bd2bBb51ac06E16c2'), // jGOLD
+    Address.fromString('0x3f1038377F15f0AFb6dEa5D8b631dCa2bAA8585D'), // jTSLA
   ],
 };
