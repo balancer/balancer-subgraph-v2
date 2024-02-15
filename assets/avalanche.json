@@ -27,12 +27,16 @@
         "symbol": "WETH"
       },
       {
-        "address": "0x152b9d0FdC40C096757F570A51E494bd4b943E50",
-        "symbol": "BTCb"
+        "address": "0xB26f0e66317846Bd5fE0cBAa1d269f0efEb05c96",
+        "symbol": "USDC-USDT-BPT"
       },
       {
         "address": "0x2b2C81e08f1Af8835a78Bb2A90AE924ACE0eA4bE",
         "symbol": "sAVAX"
+      },
+      {
+        "address": "0x152b9d0FdC40C096757F570A51E494bd4b943E50",
+        "symbol": "BTCb"
       },
       {
         "address": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7", 
