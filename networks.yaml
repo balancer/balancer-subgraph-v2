@@ -711,8 +711,8 @@ sepolia:
     address: "0x6D36bDdB849Bec41DB0216b5E09708D5Fa8A19fA"
     startBlock: 5133806
   Minter:
-    address: "0xEDF2e09Df35241782Cb6F5b647CD60C50A67bE60"
-    startBlock: 5133832
+    address: "0x6BAf0B4be9A3523e13D5dF610c76C1A1AeB61C50"
+    startBlock: 5326480
   Chest:
     address: "0x3032F0541DDa019DE2991FF75eA2d829Ffb857F2"
     startBlock: 5047909
