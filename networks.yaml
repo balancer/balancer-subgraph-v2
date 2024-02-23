@@ -361,8 +361,8 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Jan-31-2024 03:50:44 PM +UTC
-    block: 176100000
+    # Feb-23-2024 12:41:58 AM +UTC
+    block: 183500000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmWypFxeYArf6bEJzEdkRhUeL7sMN9Pc4SZaJmP4PnxUTr
