@@ -361,11 +361,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-  # Dec-08-2023 02:04:07 PM +UTC
-  # block: 158100000
-  # always make sure the base subgraph has not been pruned
-  # it should be possible to run time travel queries on it going back to the vault's startBlock
-  # base: QmQ3C1UqrvqE6eDUcntbM4v2BqBhpJTbpcEoEjtjaTaoK5
+    # Jan-31-2024 03:50:44 PM +UTC
+    block: 176100000
+    # always make sure the base subgraph has not been pruned
+    # it should be possible to run time travel queries on it going back to the vault's startBlock
+    base: QmWypFxeYArf6bEJzEdkRhUeL7sMN9Pc4SZaJmP4PnxUTr
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
