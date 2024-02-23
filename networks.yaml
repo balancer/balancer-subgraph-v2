@@ -361,8 +361,8 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # Feb-23-2024 12:41:58 AM +UTC
-    block: 183500000
+    # FXPoolDeployer start block
+    block: 183603903
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
     base: QmWypFxeYArf6bEJzEdkRhUeL7sMN9Pc4SZaJmP4PnxUTr
@@ -461,7 +461,7 @@ arbitrum:
     startBlock: 124858976
   FXPoolDeployer:
     address: "0x0bd5EC16658346eeCd5dE8c704a38Efe02B5DA69"
-    startBlock: 183603904
+    startBlock: 183603903
 bnb:
   network: bsc
   Vault:
