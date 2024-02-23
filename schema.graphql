@@ -480,3 +480,31 @@ type Chest @entity {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type VestedLiquidity @entity {
+  id: ID!
+  timestamp: BigInt!
+  beneficiary: Bytes!
+  amount: BigInt!
+}
+
+type VestingLiquidityClaimed @entity {
+  id: ID!
+  timestamp: BigInt!
+  beneficiary: Bytes!
+  amount: BigInt!
+}
+
+type VestedStaking @entity {
+  id: ID!
+  timestamp: BigInt!
+  beneficiary: Bytes!
+  amount: BigInt!
+}
+
+type VestingStakingClaimed @entity {
+  id: ID!
+  timestamp: BigInt!
+  beneficiary: Bytes!
+  amount: BigInt!
+}

@@ -716,6 +716,9 @@ sepolia:
   Chest:
     address: "0x3032F0541DDa019DE2991FF75eA2d829Ffb857F2"
     startBlock: 5047909
+  RewardVesting:
+    address: "0x5053e56276AA70181EDFAC6eF713E030b031D3E5"
+    startBlock: 5321049
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:
