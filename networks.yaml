@@ -460,8 +460,8 @@ arbitrum:
     address: "0xdCA5f1F0d7994A32BC511e7dbA0259946653Eaf6"
     startBlock: 124858976
   FXPoolDeployer:
-    address: "0xC11596288F7a827eFC143E657faD5F389abe6f3a"
-    startBlock: 170630353
+    address: "0x0bd5EC16658346eeCd5dE8c704a38Efe02B5DA69"
+    startBlock: 183603904
 bnb:
   network: bsc
   Vault:
