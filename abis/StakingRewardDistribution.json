@@ -2,6 +2,11 @@
   {
     "inputs": [
       {
+        "internalType": "contract IERC20",
+        "name": "_jellyToken",
+        "type": "address"
+      },
+      {
         "internalType": "address",
         "name": "_owner",
         "type": "address"
@@ -96,6 +101,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "vestingContract",
+        "type": "address"
+      }
+    ],
+    "name": "ContractChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "contract IERC20",
         "name": "token",
         "type": "address"
@@ -122,7 +140,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "Epoch",
+        "name": "epoch",
         "type": "uint256"
       },
       {
@@ -134,7 +152,7 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "_ipfs",
+        "name": "ipfs",
         "type": "string"
       }
     ],
@@ -246,6 +264,11 @@
         "internalType": "bytes32[]",
         "name": "_merkleProof",
         "type": "bytes32[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isVesting",
+        "type": "bool"
       }
     ],
     "name": "claimWeek",
@@ -274,6 +297,11 @@
         "internalType": "bytes32[][]",
         "name": "_merkleProofs",
         "type": "bytes32[][]"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isVesting",
+        "type": "bool"
       }
     ],
     "name": "claimWeeks",
@@ -385,6 +413,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "jellyToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -425,6 +466,19 @@
       }
     ],
     "name": "removeEpoch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_vestingContract",
+        "type": "address"
+      }
+    ],
+    "name": "setVestingContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

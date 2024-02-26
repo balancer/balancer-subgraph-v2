@@ -1653,6 +1653,7 @@ dataSources:
         - SnapshotLPRewardDistribution
         - UserLPData
         - UserLPRewardDistributionMetaData
+        - LPMerkleTree
       abis:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
@@ -1682,6 +1683,7 @@ dataSources:
         - TokenDeposited
         - UserClaimedStakingRewardDistribution
         - UserStakingRewardDistributionMetaData
+        - StakingMerkleTree
       abis:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
@@ -1694,6 +1696,37 @@ dataSources:
           handler: handleEpochRemoved
         - event: Deposited(address,uint256,uint256)
           handler: handleDeposited
+    {{/if}}
+  {{#if RewardVesting}}
+  - kind: ethereum/contract
+    name: RewardVesting
+    network: {{network}}
+    source:
+      address: '{{RewardVesting.address}}'
+      abi: RewardVesting
+      startBlock: {{RewardVesting.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/rewardVesting.ts
+      entities:
+        - VestedLiquidity
+        - VestingLiquidityClaimed
+        - VestedStaking
+        - VestingStakingClaimed
+      abis:
+        - name: RewardVesting
+          file: ./abis/RewardVesting.json
+      eventHandlers:
+        - event: VestedLiqidty(uint256,address)
+          handler: handleVestedLiquidty
+        - event: VestingLiquidityClaimed(uint256,address)
+          handler: handleVestingLiquidityClaimed
+        - event: VestedStaking(uint256,address)
+          handler: handleVestedStaking
+        - event: VestingStakingClaimed(uint256,address)
+          handler: handleVestingStakingClaimed
     {{/if}}
 templates:
   - kind: ethereum/contract
@@ -2328,6 +2361,7 @@ templates:
         - SnapshotLPRewardDistribution
         - UserLPData
         - UserLPRewardDistributionMetaData
+        - LPMerkleTree
       abis:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
@@ -2353,6 +2387,7 @@ templates:
         - TokenDeposited
         - UserClaimedStakingRewardDistribution
         - UserStakingRewardDistributionMetaData
+        - StakingMerkleTree
       abis:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
@@ -2365,6 +2400,33 @@ templates:
           handler: handleEpochRemoved
         - event: Deposited(address,uint256,uint256)
           handler: handleDeposited
+  - kind: ethereum/contract
+    name: RewardVesting
+    network: {{network}}
+    source:
+      abi: RewardVesting
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/rewardVesting.ts
+      entities:
+        - VestedLiquidity
+        - VestingLiquidityClaimed
+        - VestedStaking
+        - VestingStakingClaimed
+      abis:
+        - name: RewardVesting
+          file: ./abis/RewardVesting.json
+      eventHandlers:
+        - event: VestedLiqidty(uint256,address)
+          handler: handleVestedLiquidty
+        - event: VestingLiquidityClaimed(uint256,address)
+          handler: handleVestingLiquidityClaimed
+        - event: VestedStaking(uint256,address)
+          handler: handleVestedStaking
+        - event: VestingStakingClaimed(uint256,address)
+          handler: handleVestingStakingClaimed
   - kind: file/ipfs 
     name: UserLPRewardDistributionMetaData
     mapping:
@@ -2374,6 +2436,7 @@ templates:
       handler: handleMetaData
       entities:
         - UserLPRewardDistributionMetaData
+        - LPMerkleTree
       abis:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
@@ -2386,6 +2449,7 @@ templates:
       handler: handleMetaData
       entities:
         - UserStakingRewardDistributionMetaData
+        - StakingMerkleTree
       abis:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json

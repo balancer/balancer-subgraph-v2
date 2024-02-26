@@ -705,17 +705,20 @@ sepolia:
     address: "0x7F22C03cC6b1FE37Bde676efcb7698C5C378E915"
     startBlock: 5237901
   LPRewardDistribution:
-    address: "0xafcfa0a08af1d2f94cdc2f3217f59db0e2fd00af"
-    startBlock: 4884896
+    address: "0x90F7630dC6c2b858b7853b53114cd707799EA107"
+    startBlock: 5319847
   StakingRewardDistribution:
-    address: "0x6D36bDdB849Bec41DB0216b5E09708D5Fa8A19fA"
-    startBlock: 5133806
+    address: "0xCF9c7631f75f0356fdb40B90B11D9D3713B5F8C3"
+    startBlock: 5319837
   Minter:
     address: "0x6BAf0B4be9A3523e13D5dF610c76C1A1AeB61C50"
     startBlock: 5326480
   Chest:
     address: "0x3032F0541DDa019DE2991FF75eA2d829Ffb857F2"
     startBlock: 5047909
+  RewardVesting:
+    address: "0x5053e56276AA70181EDFAC6eF713E030b031D3E5"
+    startBlock: 5321049
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:
