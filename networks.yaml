@@ -705,11 +705,11 @@ sepolia:
     address: "0x7F22C03cC6b1FE37Bde676efcb7698C5C378E915"
     startBlock: 5237901
   LPRewardDistribution:
-    address: "0xafcfa0a08af1d2f94cdc2f3217f59db0e2fd00af"
-    startBlock: 4884896
+    address: "0x90F7630dC6c2b858b7853b53114cd707799EA107"
+    startBlock: 5319847
   StakingRewardDistribution:
-    address: "0x6D36bDdB849Bec41DB0216b5E09708D5Fa8A19fA"
-    startBlock: 5133806
+    address: "0xCF9c7631f75f0356fdb40B90B11D9D3713B5F8C3"
+    startBlock: 5319837
   Minter:
     address: "0xEDF2e09Df35241782Cb6F5b647CD60C50A67bE60"
     startBlock: 5133832

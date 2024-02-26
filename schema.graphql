@@ -396,13 +396,20 @@ type LPRewardDistributionSnapshot @entity {
   blockTimestamp: BigInt!
   ipfsCid: String!
   ipfsData: UserLPRewardDistributionMetaData
+  ipfsMerkleTree: LPMerkleTree
 }
 
 type UserLPRewardDistributionMetaData @entity {
   id: ID!
+  epoch: BigInt!
   ipfsCid: String!
   address: Bytes!
   value: BigInt!
+}
+
+type LPMerkleTree @entity {
+  id: ID!
+  merkleTree: Bytes!
 }
 
 type UserClaimedLPRewardDistribution @entity {
@@ -417,13 +424,20 @@ type StakingRewardDistributionSnapshot @entity {
   blockTimestamp: BigInt!
   ipfsCid: String!
   ipfsData: UserStakingRewardDistributionMetaData
+  ipfsMerkleTree: StakingMerkleTree
 }
 
 type UserStakingRewardDistributionMetaData @entity {
   id: ID!
+  epoch: BigInt!
   ipfsCid: String!
   address: Bytes!
   value: BigInt!
+}
+
+type StakingMerkleTree @entity {
+  id: ID!
+  merkleTree: Bytes!
 }
 
 type UserClaimedStakingRewardDistribution @entity {
@@ -446,6 +460,7 @@ type TokenDeposited @entity {
   epochId: BigInt!
   token: Bytes!
   amount: BigInt!
+  blockTimestamp: BigInt!
 }
 
 type Minter @entity {
