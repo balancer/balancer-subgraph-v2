@@ -1653,6 +1653,7 @@ dataSources:
         - SnapshotLPRewardDistribution
         - UserLPData
         - UserLPRewardDistributionMetaData
+        - LPMerkleTree
       abis:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
@@ -1682,6 +1683,7 @@ dataSources:
         - TokenDeposited
         - UserClaimedStakingRewardDistribution
         - UserStakingRewardDistributionMetaData
+        - StakingMerkleTree
       abis:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
@@ -2359,6 +2361,7 @@ templates:
         - SnapshotLPRewardDistribution
         - UserLPData
         - UserLPRewardDistributionMetaData
+        - LPMerkleTree
       abis:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
@@ -2384,6 +2387,7 @@ templates:
         - TokenDeposited
         - UserClaimedStakingRewardDistribution
         - UserStakingRewardDistributionMetaData
+        - StakingMerkleTree
       abis:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
@@ -2432,6 +2436,7 @@ templates:
       handler: handleMetaData
       entities:
         - UserLPRewardDistributionMetaData
+        - LPMerkleTree
       abis:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
@@ -2444,6 +2449,7 @@ templates:
       handler: handleMetaData
       entities:
         - UserStakingRewardDistributionMetaData
+        - StakingMerkleTree
       abis:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json

@@ -2,29 +2,32 @@ import { json, JSONValue, Bytes } from '@graphprotocol/graph-ts';
 import { log } from '@graphprotocol/graph-ts';
 
 export class UserData {
+  epoch: string;
   address: string;
   amount: string;
 }
 
 export function getDistributionData(data: Bytes): UserData[] {
-  let merkleTree = getMerkleTree(data);
+  log.debug("Original data {}", [data.toString()]);
+  let jsonValue = json.fromBytes(data);
+  let jsonObj = jsonValue.toObject();
+
+  let merkleTree = jsonObj.get("merkleTree");
   if (merkleTree == null) {
     log.warning("The given cid {}, does not contain merkle tree field", []);
     return [];
   }
-  let usersData = getUsersData(merkleTree);
+  let epoch = jsonObj.get("epoch");
+  if (epoch == null) {
+    log.warning("The given cid {}, does not contain epoch field", []);
+    return [];
+  }
 
+  let usersData = getUsersData(merkleTree, epoch.toString());
   return usersData;
 }
 
-function getMerkleTree(data: Bytes): JSONValue | null {
-  log.debug("Original data {}", [data.toString()]);
-  let jsonValue = json.fromBytes(data);
-  let jsonObj = jsonValue.toObject();
-  return jsonObj.get("merkleTree");
-}
-
-function getUsersData(merkleTree: JSONValue): UserData[] {
+function getUsersData(merkleTree: JSONValue, epoch: string): UserData[] {
   let merkleTreeObject = merkleTree.toObject();
   let merkleTreeValues = merkleTreeObject.get("values");
   if (merkleTreeValues == null) {
@@ -60,6 +63,7 @@ function getUsersData(merkleTree: JSONValue): UserData[] {
     }
     log.debug("Value data {} {}", [address.toString(), amount.toString()]);
     let userData: UserData = {
+      epoch,
       address: address.toString(),
       amount: amount.toString()
     };
