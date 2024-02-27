@@ -48,6 +48,9 @@ mainnet:
   ComposableStablePoolV5Factory:
     address: "0xDB8d758BCb971e482B2C45f7F8a7740283A1bd3A"
     startBlock: 17643198
+  ComposableStablePoolV6Factory:
+    address: "0x5B42eC6D40f7B7965BE5308c70e2603c0281C1E9"
+    startBlock: 19314764
   HighAmpComposableStablePoolFactory:
     address: "0xBa1b4a90bAD57470a2cbA762A32955dC491f76e0"
     startBlock: 15852258
@@ -180,6 +183,9 @@ goerli:
   ComposableStablePoolV5Factory:
     address: "0x4bdCc2fb18AEb9e2d281b0278D946445070EAda7"
     startBlock: 9306452
+  ComposableStablePoolV6Factory:
+    address: "0x22625eEDd92c81a219A83e1dc48f88d54786B017"
+    startBlock: 10601027
   HighAmpComposableStablePoolFactory:
     address: "0x35802d6f8fe133215E1804EB70748fe39F10F318"
     startBlock: 7842251
@@ -231,16 +237,16 @@ goerli:
 polygon:
   network: matic
   graft:
-    # Dec-22-2023 11:21:09 AM +UTC
-    block: 51420000
+    # CSP V6 start block
+    block: 53996258
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmNpJAfmVFM8hUzNvfn2GHoAbEqHjsvThwcAtjEEt7QjTF
+    base: QmRCGtj72CHWPWhmfQW75SuvFhziHbBkr2aNm7rHGrsmth
   graft_pruned:
-    # Dec-22-2023 11:21:09 AM +UTC
-    block: 51420000
+    # CSP V6 start block
+    block: 53996258
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: QmNpJAfmVFM8hUzNvfn2GHoAbEqHjsvThwcAtjEEt7QjTF
+    base: QmRCGtj72CHWPWhmfQW75SuvFhziHbBkr2aNm7rHGrsmth
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -283,6 +289,9 @@ polygon:
   ComposableStablePoolV5Factory:
     address: "0xe2fa4e1d17725e72dcdAfe943Ecf45dF4B9E285b"
     startBlock: 44798194
+  ComposableStablePoolV6Factory:
+    address: "0xEAedc32a51c510d35ebC11088fD5fF2b47aACF2E"
+    startBlock: 53996258
   MetaStablePoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 17913016
@@ -361,11 +370,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # FXPoolDeployer start block
-    block: 183603903
+    # CSP V6 start block
+    block: 184805448
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmWypFxeYArf6bEJzEdkRhUeL7sMN9Pc4SZaJmP4PnxUTr
+    base: QmNqkQ3BMMjsDm1WschCn9uSdXLM49QtuB6wKuYpUC1izo
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -408,6 +417,9 @@ arbitrum:
   ComposableStablePoolV5Factory:
     address: "0xA8920455934Da4D853faac1f94Fe7bEf72943eF1"
     startBlock: 108834057
+  ComposableStablePoolV6Factory:
+    address: "0x4bdCc2fb18AEb9e2d281b0278D946445070EAda7"
+    startBlock: 184805448
   MetaStablePoolFactory:
     address: "0xEBFD5681977E38Af65A7487DC70B8221D089cCAD"
     startBlock: 222868
@@ -532,6 +544,9 @@ gnosis:
   ComposableStablePoolV5Factory:
     address: "0x4bdCc2fb18AEb9e2d281b0278D946445070EAda7"
     startBlock: 28832248
+  ComposableStablePoolV6Factory:
+    address: "0x47B489bf5836f83ABD928C316F8e39bC0587B020"
+    startBlock: 32650879
   AaveLinearPoolV3Factory:
     address: "0x9dd5Db2d38b50bEF682cE532bCca5DfD203915E1"
     startBlock: 25415464
@@ -594,6 +609,9 @@ optimism:
   ComposableStablePoolV5Factory:
     address: "0x043A2daD730d585C44FB79D2614F295D2d625412"
     startBlock: 106574795
+  ComposableStablePoolV6Factory:
+    address: "0x4bdCc2fb18AEb9e2d281b0278D946445070EAda7"
+    startBlock: 116694338
   MetaStablePoolFactory:
     address: "0xb08E16cFc07C684dAA2f93C70323BAdb2A6CBFd2"
     startBlock: 7005662
@@ -659,6 +677,9 @@ avalanche:
   ComposableStablePoolV5Factory:
     address: "0xE42FFA682A26EF8F25891db4882932711D42e467"
     startBlock: 32301646
+  ComposableStablePoolV6Factory:
+    address: "0xb9F8AB3ED3F3aCBa64Bc6cd2DcA74B7F38fD7B88"
+    startBlock: 42186350
   WeightedPoolV3Factory:
     address: "0x94f68b54191F62f781Fe8298A8A5Fa3ed772d227"
     startBlock: 26389236
@@ -711,6 +732,9 @@ sepolia:
   ComposableStablePoolV5Factory:
     address: "0xa523f47A933D5020b23629dDf689695AA94612Dc"
     startBlock: 3844648
+  ComposableStablePoolV6Factory:
+    address: "0x05503B3aDE04aCA81c8D6F88eCB73Ba156982D2B"
+    startBlock: 5369821
   AaveLinearPoolV5Factory:
     address: "0xDF9B5B00Ef9bca66e9902Bd813dB14e4343Be025"
     startBlock: 3421724
@@ -749,6 +773,9 @@ polygon-zkevm:
   ComposableStablePoolV5Factory:
     address: "0x956CCab09898C0AF2aCa5e6C229c3aD4E93d9288"
     startBlock: 2157318
+  ComposableStablePoolV6Factory:
+    address: "0xf23b4DB826DbA14c0e857029dfF076b1c0264843"
+    startBlock: 10268106
   ComposableStablePoolV5FactoryV2:
     address: "0x577e5993B9Cc480F07F98B5Ebd055604bd9071C4"
     startBlock: 7248126
@@ -787,6 +814,9 @@ base:
   ComposableStablePoolV5Factory:
     address: "0x8df317a729fcaA260306d7de28888932cb579b88"
     startBlock: 1204710
+  ComposableStablePoolV6Factory:
+    address: "0x956CCab09898C0AF2aCa5e6C229c3aD4E93d9288"
+    startBlock: 11099703
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0c6052254551EAe3ECac77B01DFcf1025418828f"
     startBlock: 1206531
