@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # FXPoolDeployer startBlock
-    # block: 18469425
+    # CSP V6 startBlock
+    block: 19314764
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    # base: QmeYeqQgZysfHv4U4PYs5VzLDsxYSe79auxnp2G9kudpvT
+    base: QmPHyJwnezdwnvvc8tsBshrsVi61JqacX6RMc8JBDZTmc9
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -571,11 +571,11 @@ gnosis:
 optimism:
   network: optimism
   graft:
-    # GyroEPoolFactory start block
-    # block: 97253023
+    # CSP V6 start block
+    block: 116694338
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    # base: QmRJyWfTacLi1dCQTDh57Q5nrEcL8td944yTZugzJRfWXM
+    base: QmYG3Ga4ipdhGCPaudZKatGXTbteoMLdkjBsxCUKDV6dwq
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
