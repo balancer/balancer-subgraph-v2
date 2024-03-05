@@ -93,6 +93,10 @@
     {
       "address": "0x60D604890feaa0b5460B28A424407c24fe89374a",
       "symbol": "bb-a-WETH-V3"
+    },
+    {
+      "address": "0x865377367054516e17014CcdED1e7d814EDC9ce4",
+      "symbol": "DOLA"
     }
   ],
   "fxAssetAggregators": [
