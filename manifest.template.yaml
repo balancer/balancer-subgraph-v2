@@ -747,6 +747,39 @@ dataSources:
         - event: PoolCreated(indexed address)
           handler: handleNewComposableStablePoolV5
   {{/if}}
+  {{#if ComposableStablePoolV6Factory}}
+  - kind: ethereum/contract
+    name: ComposableStablePoolV6Factory
+    network: {{network}}
+    source:
+      address: '{{ComposableStablePoolV6Factory.address}}'
+      abi: ComposableStablePoolV2Factory
+      startBlock: {{ComposableStablePoolV6Factory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolFactory.ts
+      entities:
+        - Balancer
+        - Pool
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: WeightedPool
+          file: ./abis/WeightedPool.json
+        - name: ComposableStablePoolV2Factory
+          file: ./abis/ComposableStablePoolV2Factory.json
+        - name: ComposableStablePool
+          file: ./abis/ComposableStablePool.json
+        - name: StablePool
+          file: ./abis/StablePool.json
+      eventHandlers:
+        - event: PoolCreated(indexed address)
+          handler: handleNewComposableStablePoolV6
+  {{/if}}
   {{#if HighAmpComposableStablePoolFactory}}
   - kind: ethereum/contract
     name: HighAmpComposableStablePoolFactory
