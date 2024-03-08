@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # CSP V6 startBlock
-    block: 19314764
+    # rETH/weETH pool creation to fix USD metrics
+    block: 18774976
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmPHyJwnezdwnvvc8tsBshrsVi61JqacX6RMc8JBDZTmc9
+    base: QmYacPMeFA5359vDGknEc8aPAieiXHUa8ksfJ6H7FnzRrB
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
