@@ -714,8 +714,8 @@ sepolia:
     address: "0x6BAf0B4be9A3523e13D5dF610c76C1A1AeB61C50"
     startBlock: 5326480
   Chest:
-    address: "0x3032F0541DDa019DE2991FF75eA2d829Ffb857F2"
-    startBlock: 5047909
+    address: "0x2d87286ADAEA7E9e49Fe34329AfE45e0ffe9375c"
+    startBlock: 5428437
   RewardVesting:
     address: "0x5053e56276AA70181EDFAC6eF713E030b031D3E5"
     startBlock: 5321049

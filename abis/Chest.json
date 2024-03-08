@@ -1,44 +1,125 @@
 [
   {
     "inputs": [
-      { "internalType": "address", "name": "jellyToken", "type": "address" },
-      { "internalType": "address", "name": "allocator", "type": "address" },
-      { "internalType": "address", "name": "distributor", "type": "address" },
-      { "internalType": "uint256", "name": "fee_", "type": "uint256" },
-      { "internalType": "uint128", "name": "maxBooster_", "type": "uint128" },
-      { "internalType": "uint32", "name": "timeFactor", "type": "uint32" },
-      { "internalType": "address", "name": "owner", "type": "address" },
-      { "internalType": "address", "name": "pendingOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "jellyToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint128",
+        "name": "mintingFee",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint32",
+        "name": "timeFactor",
+        "type": "uint32"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "pendingOwner",
+        "type": "address"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
-  { "inputs": [], "name": "Chest__CannotModifySpecial", "type": "error" },
+  {
+    "inputs": [],
+    "name": "Chest__CannotModifySpecial",
+    "type": "error"
+  },
   {
     "inputs": [],
     "name": "Chest__CannotUnstakeMoreThanReleasable",
     "type": "error"
   },
-  { "inputs": [], "name": "Chest__FreezingPeriodNotOver", "type": "error" },
-  { "inputs": [], "name": "Chest__InvalidBoosterValue", "type": "error" },
-  { "inputs": [], "name": "Chest__InvalidFreezingPeriod", "type": "error" },
-  { "inputs": [], "name": "Chest__InvalidStakingAmount", "type": "error" },
-  { "inputs": [], "name": "Chest__NoFeesToWithdraw", "type": "error" },
-  { "inputs": [], "name": "Chest__NonExistentToken", "type": "error" },
-  { "inputs": [], "name": "Chest__NonTransferrableToken", "type": "error" },
-  { "inputs": [], "name": "Chest__NotAuthorizedForSpecial", "type": "error" },
-  { "inputs": [], "name": "Chest__NotAuthorizedForToken", "type": "error" },
-  { "inputs": [], "name": "Chest__NothingToIncrease", "type": "error" },
-  { "inputs": [], "name": "Chest__NothingToUnstake", "type": "error" },
-  { "inputs": [], "name": "Chest__ZeroAddress", "type": "error" },
-  { "inputs": [], "name": "Ownable__CallerIsNotOwner", "type": "error" },
+  {
+    "inputs": [],
+    "name": "Chest__FreezingPeriodNotOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__InvalidBoosterValue",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__InvalidFreezingPeriod",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__InvalidStakingAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__InvalidVestingDuration",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__NoFeesToWithdraw",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__NonExistentToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__NonTransferrableToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__NotAuthorizedForToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__NothingToIncrease",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__NothingToUnstake",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Chest__ZeroAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Ownable__CallerIsNotOwner",
+    "type": "error"
+  },
   {
     "inputs": [],
     "name": "Ownable__CannotSetOwnerToZeroAddress",
     "type": "error"
   },
-  { "inputs": [], "name": "Ownable__CannotTransferToSelf", "type": "error" },
-  { "inputs": [], "name": "Ownable__MustBeProposedOwner", "type": "error" },
+  {
+    "inputs": [],
+    "name": "Ownable__CannotTransferToSelf",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Ownable__MustBeProposedOwner",
+    "type": "error"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -125,9 +206,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint128",
+        "internalType": "uint120",
         "name": "booster",
-        "type": "uint128"
+        "type": "uint120"
       }
     ],
     "name": "IncreaseStake",
@@ -154,20 +235,28 @@
             "type": "uint48"
           },
           {
+            "internalType": "uint48",
+            "name": "boosterTimestamp",
+            "type": "uint48"
+          },
+          {
             "internalType": "uint32",
             "name": "vestingDuration",
             "type": "uint32"
           },
           {
-            "internalType": "uint32",
-            "name": "freezingPeriod",
-            "type": "uint32"
+            "internalType": "uint120",
+            "name": "accumulatedBooster",
+            "type": "uint120"
           },
-          { "internalType": "uint128", "name": "booster", "type": "uint128" },
-          { "internalType": "uint8", "name": "nerfParameter", "type": "uint8" }
+          {
+            "internalType": "uint8",
+            "name": "nerfParameter",
+            "type": "uint8"
+          }
         ],
         "indexed": false,
-        "internalType": "struct VestingLib.VestingPosition",
+        "internalType": "struct VestingLibChest.VestingPosition",
         "name": "position",
         "type": "tuple"
       },
@@ -243,25 +332,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "fee",
-        "type": "uint256"
-      }
-    ],
-    "name": "SetFee",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint128",
-        "name": "maxBooster",
+        "name": "fee",
         "type": "uint128"
       }
     ],
-    "name": "SetMaxBooster",
+    "name": "SetFee",
     "type": "event"
   },
   {
@@ -299,9 +375,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint128",
+        "internalType": "uint120",
         "name": "booster",
-        "type": "uint128"
+        "type": "uint120"
       },
       {
         "indexed": false,
@@ -361,13 +437,39 @@
       },
       {
         "indexed": false,
-        "internalType": "uint128",
+        "internalType": "uint120",
         "name": "booster",
-        "type": "uint128"
+        "type": "uint120"
       }
     ],
     "name": "Unstake",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_BOOSTER",
+    "outputs": [
+      {
+        "internalType": "uint120",
+        "name": "",
+        "type": "uint120"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MIN_STAKING_AMOUNT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -378,8 +480,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "approve",
     "outputs": [],
@@ -388,10 +498,20 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "owner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
     ],
     "name": "balanceOf",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -403,33 +523,12 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "fee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
-    ],
-    "name": "getApproved",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
-    ],
-    "name": "getChestPower",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      },
       {
         "components": [
           {
@@ -448,38 +547,113 @@
             "type": "uint48"
           },
           {
+            "internalType": "uint48",
+            "name": "boosterTimestamp",
+            "type": "uint48"
+          },
+          {
             "internalType": "uint32",
             "name": "vestingDuration",
             "type": "uint32"
           },
           {
-            "internalType": "uint32",
-            "name": "freezingPeriod",
-            "type": "uint32"
+            "internalType": "uint120",
+            "name": "accumulatedBooster",
+            "type": "uint120"
           },
-          { "internalType": "uint128", "name": "booster", "type": "uint128" },
-          { "internalType": "uint8", "name": "nerfParameter", "type": "uint8" }
+          {
+            "internalType": "uint8",
+            "name": "nerfParameter",
+            "type": "uint8"
+          }
         ],
-        "internalType": "struct VestingLib.VestingPosition",
+        "internalType": "struct VestingLibChest.VestingPosition",
         "name": "vestingPosition",
         "type": "tuple"
       }
     ],
+    "name": "estimateChestPower",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fee",
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getApproved",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
     "name": "getChestPower",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "getPendingOwner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "getVestingPosition",
     "outputs": [
@@ -501,19 +675,27 @@
             "type": "uint48"
           },
           {
+            "internalType": "uint48",
+            "name": "boosterTimestamp",
+            "type": "uint48"
+          },
+          {
             "internalType": "uint32",
             "name": "vestingDuration",
             "type": "uint32"
           },
           {
-            "internalType": "uint32",
-            "name": "freezingPeriod",
-            "type": "uint32"
+            "internalType": "uint120",
+            "name": "accumulatedBooster",
+            "type": "uint120"
           },
-          { "internalType": "uint128", "name": "booster", "type": "uint128" },
-          { "internalType": "uint8", "name": "nerfParameter", "type": "uint8" }
+          {
+            "internalType": "uint8",
+            "name": "nerfParameter",
+            "type": "uint8"
+          }
         ],
-        "internalType": "struct VestingLib.VestingPosition",
+        "internalType": "struct VestingLibChest.VestingPosition",
         "name": "",
         "type": "tuple"
       }
@@ -523,19 +705,45 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
-      { "internalType": "uint256[]", "name": "tokenIds", "type": "uint256[]" }
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
     ],
     "name": "getVotingPower",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "internalType": "uint32", "name": "freezingPeriod", "type": "uint32" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "extendFreezingPeriod",
+        "type": "uint32"
+      }
     ],
     "name": "increaseStake",
     "outputs": [],
@@ -545,64 +753,121 @@
   {
     "inputs": [],
     "name": "index",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "owner", "type": "address" },
-      { "internalType": "address", "name": "operator", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      }
     ],
     "name": "isApprovedForAll",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "maxBooster",
-    "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "name",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "ownerOf",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "vestingIndex", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "vestingIndex",
+        "type": "uint256"
+      }
     ],
     "name": "releasableAmount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "from", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "safeTransferFrom",
     "outputs": [],
@@ -611,10 +876,26 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "from", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "bytes", "name": "data", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
     ],
     "name": "safeTransferFrom",
     "outputs": [],
@@ -623,8 +904,16 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "operator", "type": "address" },
-      { "internalType": "bool", "name": "approved", "type": "bool" }
+      {
+        "internalType": "address",
+        "name": "operator",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "approved",
+        "type": "bool"
+      }
     ],
     "name": "setApprovalForAll",
     "outputs": [],
@@ -633,7 +922,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "fee_", "type": "uint256" }
+      {
+        "internalType": "uint128",
+        "name": "fee_",
+        "type": "uint128"
+      }
     ],
     "name": "setFee",
     "outputs": [],
@@ -642,18 +935,21 @@
   },
   {
     "inputs": [
-      { "internalType": "uint128", "name": "maxBooster_", "type": "uint128" }
-    ],
-    "name": "setMaxBooster",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "internalType": "address", "name": "beneficiary", "type": "address" },
-      { "internalType": "uint32", "name": "freezingPeriod", "type": "uint32" }
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "freezingPeriod",
+        "type": "uint32"
+      }
     ],
     "name": "stake",
     "outputs": [],
@@ -662,11 +958,31 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "internalType": "address", "name": "beneficiary", "type": "address" },
-      { "internalType": "uint32", "name": "freezingPeriod", "type": "uint32" },
-      { "internalType": "uint32", "name": "vestingDuration", "type": "uint32" },
-      { "internalType": "uint8", "name": "nerfParameter", "type": "uint8" }
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "freezingPeriod",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "vestingDuration",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "nerfParameter",
+        "type": "uint8"
+      }
     ],
     "name": "stakeSpecial",
     "outputs": [],
@@ -675,48 +991,98 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
     ],
     "name": "supportsInterface",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "symbol",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "tokenURI",
-    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "totalFees",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "totalSupply",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "from", "type": "address" },
-      { "internalType": "address", "name": "to", "type": "address" },
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" }
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
     ],
     "name": "transferFrom",
     "outputs": [],
@@ -725,7 +1091,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -734,8 +1104,16 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
     ],
     "name": "unstake",
     "outputs": [],
@@ -744,7 +1122,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "beneficiary", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+      }
     ],
     "name": "withdrawFees",
     "outputs": [],

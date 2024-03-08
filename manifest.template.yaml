@@ -1626,11 +1626,11 @@ dataSources:
         - name: Chest
           file: ./abis/Chest.json
       eventHandlers:
-        - event: IncreaseStake(indexed uint256,uint256,uint256,uint128)
+        - event: IncreaseStake(indexed uint256,uint256,uint256,uint120)
           handler: handleIncreaseStake
-        - event: Staked(indexed address,indexed uint256,uint256,uint256,uint32,uint128,uint8)
+        - event: Staked(indexed address,indexed uint256,uint256,uint256,uint32,uint120,uint8)
           handler: handleStaked
-        - event: Unstake(indexed uint256,uint256,uint256,uint128)
+        - event: Unstake(indexed uint256,uint256,uint256,uint120)
           handler: handleUnstake
       file: ./src/mappings/chest.ts
     {{/if}}
@@ -2338,11 +2338,11 @@ templates:
         - name: Chest
           file: ./abis/Chest.json
       eventHandlers:
-        - event: IncreaseStake(indexed uint256,uint256,uint256,uint128)
+        - event: IncreaseStake(indexed uint256,uint256,uint256,uint120)
           handler: handleIncreaseStake
-        - event: Staked(indexed address,indexed uint256,uint256,uint256,uint32,uint128,uint8)
+        - event: Staked(indexed address,indexed uint256,uint256,uint256,uint32,uint120,uint8)
           handler: handleStaked
-        - event: Unstake(indexed uint256,uint256,uint256,uint128)
+        - event: Unstake(indexed uint256,uint256,uint256,uint120)
           handler: handleUnstake
       file: ./src/mappings/chest.ts
   - kind: ethereum/contract
