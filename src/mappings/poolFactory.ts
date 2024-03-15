@@ -270,6 +270,12 @@ export function handleNewComposableStablePoolV5(event: PoolCreated): void {
   StablePhantomPoolV2Template.create(event.params.pool);
 }
 
+export function handleNewComposableStablePoolV6(event: PoolCreated): void {
+  const pool = createStableLikePool(event, PoolType.ComposableStable, 6);
+  if (pool == null) return;
+  StablePhantomPoolV2Template.create(event.params.pool);
+}
+
 export function handleNewHighAmpComposableStablePool(event: PoolCreated): void {
   const pool = createStableLikePool(event, PoolType.HighAmpComposableStable);
   if (pool == null) return;
