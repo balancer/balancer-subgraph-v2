@@ -465,6 +465,9 @@ arbitrum:
   GyroEV2PoolFactory:
     address: "0xdCA5f1F0d7994A32BC511e7dbA0259946653Eaf6"
     startBlock: 124858976
+  FXPoolDeployerTracker:
+    address: "0xEa0a6fcc52Fcea683f962b6Bfd7f4F93E3804EA8"
+    startBlock: 191573392
   FXPoolDeployer:
     address: "0x0bd5EC16658346eeCd5dE8c704a38Efe02B5DA69"
     startBlock: 183603904
@@ -692,6 +695,9 @@ avalanche:
   FXPoolDeployer:
     address: "0x4042dC4110Ea9500338737605A60065c3de152C6"
     startBlock: 37150792
+  FXPoolDeployerTracker:
+    address: "0x7ff7B43CEAc9a1163cCB525ac9Dc1dE9A8837b4B"
+    startBlock: 43049862
 basegoerli:
   network: base-testnet
   Vault:
