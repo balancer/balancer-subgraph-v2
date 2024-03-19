@@ -571,11 +571,14 @@ gnosis:
 optimism:
   network: optimism
   graft:
-    # CSP V6 start block
-    block: 116694338
+    # Mar-18-2024 09:52:57 PM +UTC
+    block: 117600000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYG3Ga4ipdhGCPaudZKatGXTbteoMLdkjBsxCUKDV6dwq
+    base: QmYF2scyywkphqPgue1M4Q6kgwsMtETnhmJXq44SCguqe3
+  EventEmitter:
+    address: "0x082990116f256E078572a1b69772115d2cF6b0a2"
+    startBlock: 99124541
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
