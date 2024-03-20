@@ -4,7 +4,7 @@
   "scripts": {
     "create": "graph create balancer-labs/balancer-v2 --node https://api.thegraph.com/deploy/",
     "create:local": "graph create balancer-labs/balancer-v2 --node http://127.0.0.1:8020",
-    "codegen": "yarn generate-manifests && graph codegen --output-dir src/types/",
+    "codegen": "yarn generate-manifests subgraph.polygon.yaml && graph codegen --output-dir src/types/",
     "build": "graph build",
     "lint": "eslint --max-warnings 0 . --ext .ts",
     "test": "jest ./test/*.test.ts",
