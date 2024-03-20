@@ -240,16 +240,16 @@ goerli:
 polygon:
   network: matic
   graft:
-    # CSP V6 start block
-    block: 53996258
+    # FXPoolDeployerTracker start block
+    block: 54559455
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmRCGtj72CHWPWhmfQW75SuvFhziHbBkr2aNm7rHGrsmth
+    base: QmfFmtcLKRugnPe8HFmmvdtUgM6gvUSSsFXGeCTX6sH4Zg
   graft_pruned:
-    # CSP V6 start block
-    block: 53996258
+    # FXPoolDeployerTracker start block
+    block: 54559455
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: QmRCGtj72CHWPWhmfQW75SuvFhziHbBkr2aNm7rHGrsmth
+    base: Qmerm61ru3khP6zoAgU512KnRQgAwKa1zve5rAP93PnUt9
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -376,11 +376,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # CSP V6 start block
-    block: 184805448
+    # FXPoolDeployerTracker start block
+    block: 191573392
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmNqkQ3BMMjsDm1WschCn9uSdXLM49QtuB6wKuYpUC1izo
+    base: QmZewqKt12daEoy7P9SjDfsGheVq8VqPj1ytVr9usKaBtq
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
