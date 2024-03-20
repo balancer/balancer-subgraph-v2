@@ -13,6 +13,8 @@ features:
 graft:
   base: {{graft_pruned.base}}
   block: {{graft_pruned.block}}
+indexerHints:
+  prune: {{graft_pruned.prune}}
 {{/if}}
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:

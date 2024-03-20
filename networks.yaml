@@ -250,6 +250,8 @@ polygon:
     block: 54559455
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
     base: Qmerm61ru3khP6zoAgU512KnRQgAwKa1zve5rAP93PnUt9
+    #  number of blocks retained for time travel queries - must keep at least 24h of blocks
+    prune: 100000
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
