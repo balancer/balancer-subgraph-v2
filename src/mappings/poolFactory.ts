@@ -28,6 +28,7 @@ import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLine
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
 import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
 import { KassandraPoolCreated } from '../types/ManagedKassandraPoolControllerFactory/ManagedKassandraPoolControllerFactory';
+import { NewFXPoolDeployer } from '../types/FXPoolDeployerTracker/FXPoolDeployerTracker';
 
 // datasource
 import { OffchainAggregator, WeightedPool as WeightedPoolTemplate } from '../types/templates';
@@ -46,6 +47,7 @@ import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
 import { GyroEPool as GyroEPoolTemplate } from '../types/templates';
 import { FXPool as FXPoolTemplate } from '../types/templates';
+import { FXPoolDeployer as FXPoolDeployerTemplate } from '../types/templates';
 
 import { WeightedPool } from '../types/templates/WeightedPool/WeightedPool';
 import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
@@ -638,6 +640,10 @@ export function handleNewGyroEPool(event: PoolCreated): void {
 
 export function handleNewGyroEV2Pool(event: PoolCreated): void {
   createGyroEPool(event, 2);
+}
+
+export function handleNewFXPoolDeployer(event: NewFXPoolDeployer): void {
+  FXPoolDeployerTemplate.create(event.params.deployer);
 }
 
 export function handleNewFXPoolV1(event: ethereum.Event): void {
