@@ -1,4 +1,3 @@
-specVersion: 0.0.2
 description: Balancer is a non-custodial portfolio manager, liquidity provider, and price sensor.
 {{#if graft}}
 features:
@@ -8,6 +7,7 @@ graft:
   block: {{graft.block}}
 {{/if}}
 {{#if graft_pruned}}
+specVersion: 1.0.0
 features:
   - grafting
 graft:
@@ -15,6 +15,8 @@ graft:
   block: {{graft_pruned.block}}
 indexerHints:
   prune: {{graft_pruned.prune}}
+{{else}}
+specVersion: 0.0.2
 {{/if}}
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
