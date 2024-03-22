@@ -249,7 +249,7 @@ polygon:
     # FXPoolDeployerTracker start block
     block: 54559455
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: Qmerm61ru3khP6zoAgU512KnRQgAwKa1zve5rAP93PnUt9
+    base: QmfFmtcLKRugnPe8HFmmvdtUgM6gvUSSsFXGeCTX6sH4Zg
     #  number of blocks retained for time travel queries - must keep at least 24h of blocks
     prune: 100000
   EventEmitter:
