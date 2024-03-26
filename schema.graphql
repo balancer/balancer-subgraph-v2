@@ -487,6 +487,7 @@ type Chest @entity {
   user: Bytes! # address
   tokenId: BigInt! # uint256
   amount: BigInt! # uint256
+  unstaked: BigInt! # uint256
   freezedUntil: BigInt! # uint256
   vestingDuration: BigInt! # uint32
   booster: BigInt! # uint128
