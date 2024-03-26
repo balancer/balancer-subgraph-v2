@@ -45,7 +45,7 @@ let network: string = dataSource.network();
 // in that case, AddressByNetwork and forNetwork must be updated accordingly
 // with a new entry for the new network - folowwing subgraph slugs
 let vaultAddressByNetwork: AddressByNetwork = {
-  canonical: '0x4fFbbDea67CeDE852BFb17243463502f33473092',
+  canonical: '0x7ccBebeb88696f9c8b061f1112Bb970158e29cA5',
   custom: '0x0000000000000000000000000000000000000000',
 };
 

@@ -14,6 +14,7 @@ class Assets {
 
 export const jUSDT_ADDRESS = Address.fromString('0xe6C02C9D8B0cab886946f09F641afE9F8aCD92ca');
 export const jUSDC_ADDRESS = Address.fromString('0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981');
+export const USDC_ADDRESS = Address.fromString('0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981');
 
 export const assets: Assets = {
   stableAssets: [
