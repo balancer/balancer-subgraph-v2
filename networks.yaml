@@ -717,8 +717,8 @@ sepolia:
     address: "0x2d87286ADAEA7E9e49Fe34329AfE45e0ffe9375c"
     startBlock: 5428437
   RewardVesting:
-    address: "0x5053e56276AA70181EDFAC6eF713E030b031D3E5"
-    startBlock: 5321049
+    address: "0x407F9C0a0fCEE48ae0a86C74dF62093b2d9B9d83"
+    startBlock: 5531707
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:
@@ -793,3 +793,17 @@ testnet3:
   OfficialPoolsRegister:
     address: "0x93406dF225C16e6B9764f7c9A29B722AB0b98a10"
     startBlock: 89404
+sei-testnet:
+  network: sei-testnet
+  Vault:
+    address: "0x7ccBebeb88696f9c8b061f1112Bb970158e29cA5"
+    startBlock: 10613759
+  WeightedPoolV4Factory:
+    address: "0x848Ea834Ff33794140BF0aB270204F3C98FA57C3"
+    startBlock: 10614424
+  OfficialPoolsRegister:
+    address: "0x50574f2B56082C6DFE062dc20A3bfBF623193b5f"
+    startBlock: 10602962
+  Chest:
+    address: "0xD4ddE9EDA4F87a56a558A6c6F4600b2846227946"
+    startBlock: 11761198
