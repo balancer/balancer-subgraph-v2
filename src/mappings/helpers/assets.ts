@@ -20,10 +20,11 @@ export const assets: Assets = {
   stableAssets: [
     Address.fromString('0xe6C02C9D8B0cab886946f09F641afE9F8aCD92ca'), // jUSDT
     Address.fromString('0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981'), // jUSDC
+    Address.fromString('0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981'), // USDC
   ],
   pricingAssets: [
     Address.fromString('0x57ee725beeb991c70c53f9642f36755ec6eb2139'), // WSEI
-    Address.fromString('0x18b9f230580b32819e8bfb8d5643d92884004590'), // JLY
+    Address.fromString('0x9e7A8e558Ce582511f4104465a886b7bEfBC146b'), // JLY
   ],
   fxAssets: [
   ],
@@ -31,7 +32,7 @@ export const assets: Assets = {
   ],
 
   whitelistedAssets: [
-    Address.fromString('0x18b9f230580b32819e8bfb8d5643d92884004590'), // JLY
+    Address.fromString('0x9e7A8e558Ce582511f4104465a886b7bEfBC146b'), // JLY
     Address.fromString('0xD0A4a86B62c01C3d6B3Bbd39c08e0dBd302c3b70'), // jBTC
     Address.fromString('0x57ee725beeb991c70c53f9642f36755ec6eb2139'), // WSEI
     Address.fromString('0x5ca70a668c1875764D87c738d62FdF7e0c227091'), // jETH

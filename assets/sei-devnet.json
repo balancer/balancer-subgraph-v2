@@ -7,6 +7,10 @@
       {
         "symbol": "jUSDC",
         "address": "0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981"
+      },
+      {
+        "symbol": "USDC",
+        "address": "0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981"
       }
     ],
     "pricingAssets": [
@@ -15,14 +19,14 @@
         "symbol": "WSEI"
       },
       {
-        "address": "0x18b9f230580b32819e8bfb8d5643d92884004590",
+        "address": "0x9e7A8e558Ce582511f4104465a886b7bEfBC146b",
         "symbol": "JLY"
       }
     ],
     "whitelistedAssets": [
       {
         "symbol": "JLY",
-        "address": "0x18b9f230580b32819e8bfb8d5643d92884004590"
+        "address": "0x9e7A8e558Ce582511f4104465a886b7bEfBC146b"
       },
       {
         "symbol": "jBTC",
