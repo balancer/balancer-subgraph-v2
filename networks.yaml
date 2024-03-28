@@ -802,8 +802,8 @@ sei-testnet:
     address: "0x848Ea834Ff33794140BF0aB270204F3C98FA57C3"
     startBlock: 10614424
   OfficialPoolsRegister:
-    address: "0x50574f2B56082C6DFE062dc20A3bfBF623193b5f"
-    startBlock: 10602962
+    address: "0x3e337229D5534F90b9EDB4B64D3b4A397f4FeB2d"
+    startBlock: 12152803
   Chest:
     address: "0xD4ddE9EDA4F87a56a558A6c6F4600b2846227946"
     startBlock: 11761198
