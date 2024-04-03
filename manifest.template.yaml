@@ -12,9 +12,8 @@ features:
 graft:
   base: {{graft_pruned.base}}
   block: {{graft_pruned.block}}
-{{else}}
-specVersion: 0.0.2
 {{/if}}
+specVersion: 0.0.2
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
