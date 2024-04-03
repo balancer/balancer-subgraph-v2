@@ -483,6 +483,9 @@ arbitrum:
   FXPoolDeployer:
     address: "0x0bd5EC16658346eeCd5dE8c704a38Efe02B5DA69"
     startBlock: 183603903
+  Gyro2V2PoolFactory:
+    address: "0x8342b910815b0127c98e7717d4276c1d393478b6"
+    startBlock: 194366254
 bnb:
   network: bsc
   Vault:
