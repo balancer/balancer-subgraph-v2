@@ -7,14 +7,11 @@ graft:
   block: {{graft.block}}
 {{/if}}
 {{#if graft_pruned}}
-specVersion: 1.0.0
 features:
   - grafting
 graft:
   base: {{graft_pruned.base}}
   block: {{graft_pruned.block}}
-indexerHints:
-  prune: {{graft_pruned.prune}}
 {{else}}
 specVersion: 0.0.2
 {{/if}}
