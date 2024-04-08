@@ -41,6 +41,10 @@
     {
       "address": "0x48e6b98ef6329f8f0a30ebb8c7c960330d648085",
       "symbol": "bb-am-USD"
+    },
+    {
+      "address": "0xBA1BA1ba1BA1bA1bA1Ba1BA1ba1BA1bA1ba1ba1B",
+      "symbol": "Mock pricing asset to distinguish between pruned and full deployment"
     }
   ],
   "fxAssetAggregators": [

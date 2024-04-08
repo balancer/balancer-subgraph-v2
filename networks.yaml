@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # CSP V6 startBlock
-    block: 19314764
+    # rETH/weETH pool creation to fix USD metrics
+    block: 18774976
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmPHyJwnezdwnvvc8tsBshrsVi61JqacX6RMc8JBDZTmc9
+    base: QmYacPMeFA5359vDGknEc8aPAieiXHUa8ksfJ6H7FnzRrB
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -127,6 +127,9 @@ mainnet:
   FXPoolFactory:
     address: "0x81fE9e5B28dA92aE949b705DfDB225f7a7cc5134"
     startBlock: 15981805
+  FXPoolDeployerTracker:
+    address: "0x9E0d068Ede387888f8A24c92F7486920c200EfD5"
+    startBlock: 19417173
   FXPoolDeployer:
     address: "0xfb23Bc0D2629268442CD6521CF4170698967105f"
     startBlock: 18469425
@@ -237,16 +240,16 @@ goerli:
 polygon:
   network: matic
   graft:
-    # CSP V6 start block
-    block: 53996258
+    # FXPoolDeployerTracker start block
+    block: 54559455
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmRCGtj72CHWPWhmfQW75SuvFhziHbBkr2aNm7rHGrsmth
+    base: QmfFmtcLKRugnPe8HFmmvdtUgM6gvUSSsFXGeCTX6sH4Zg
   graft_pruned:
-    # CSP V6 start block
-    block: 53996258
+    # FXPoolDeployerTracker start block
+    block: 54559455
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: QmRCGtj72CHWPWhmfQW75SuvFhziHbBkr2aNm7rHGrsmth
+    base: QmfFmtcLKRugnPe8HFmmvdtUgM6gvUSSsFXGeCTX6sH4Zg
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -361,6 +364,9 @@ polygon:
   FXPoolFactory:
     address: "0x627D759314D5c4007b461A74eBaFA7EBC5dFeD71"
     startBlock: 32054793
+  FXPoolDeployerTracker:
+    address: "0xa2fC51a7f5246a718848F5bdAdBc4a78191A8E2a"
+    startBlock: 54559455
   FXPoolDeployer:
     address: "0xF169c1Ae8De24Da43a3dC5c5F05De412b4848bD3"
     startBlock: 49368321
@@ -370,11 +376,11 @@ polygon:
 arbitrum:
   network: arbitrum-one
   graft:
-    # CSP V6 start block
-    block: 184805448
+    # FXPoolDeployerTracker start block
+    block: 191573392
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmNqkQ3BMMjsDm1WschCn9uSdXLM49QtuB6wKuYpUC1izo
+    base: QmZewqKt12daEoy7P9SjDfsGheVq8VqPj1ytVr9usKaBtq
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -471,6 +477,9 @@ arbitrum:
   GyroEV2PoolFactory:
     address: "0xdCA5f1F0d7994A32BC511e7dbA0259946653Eaf6"
     startBlock: 124858976
+  FXPoolDeployerTracker:
+    address: "0xEa0a6fcc52Fcea683f962b6Bfd7f4F93E3804EA8"
+    startBlock: 191573392
   FXPoolDeployer:
     address: "0x0bd5EC16658346eeCd5dE8c704a38Efe02B5DA69"
     startBlock: 183603903
@@ -571,11 +580,14 @@ gnosis:
 optimism:
   network: optimism
   graft:
-    # CSP V6 start block
-    block: 116694338
+    # Mar-18-2024 09:52:57 PM +UTC
+    block: 117600000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYG3Ga4ipdhGCPaudZKatGXTbteoMLdkjBsxCUKDV6dwq
+    base: QmYF2scyywkphqPgue1M4Q6kgwsMtETnhmJXq44SCguqe3
+  EventEmitter:
+    address: "0x082990116f256E078572a1b69772115d2cF6b0a2"
+    startBlock: 99124541
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
@@ -707,6 +719,9 @@ avalanche:
   FXPoolDeployer:
     address: "0x4042dC4110Ea9500338737605A60065c3de152C6"
     startBlock: 37150792
+  FXPoolDeployerTracker:
+    address: "0x7ff7B43CEAc9a1163cCB525ac9Dc1dE9A8837b4B"
+    startBlock: 43049862
 basegoerli:
   network: base-testnet
   Vault:
