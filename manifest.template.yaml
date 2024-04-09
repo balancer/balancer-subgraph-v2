@@ -1728,6 +1728,28 @@ dataSources:
         - event: VestingStakingClaimed(uint256,address)
           handler: handleVestingStakingClaimed
     {{/if}}
+  {{#if PoolParty}}
+  - kind: ethereum/contract
+    name: PoolParty
+    network: {{network}}
+    source:
+      address: '{{PoolParty.address}}'
+      abi: PoolParty
+      startBlock: {{PoolParty.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolParty.ts
+      entities:
+        - PoolPartyBurner
+      abis:
+        - name: PoolParty
+          file: ./abis/PoolParty.json
+      eventHandlers:
+        - event: BuyWithUsd(uint256,uint256,address)
+          handler: handleBuyWithUsd
+    {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -2453,3 +2475,21 @@ templates:
       abis:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
+  - kind: ethereum/contract
+    name: PoolParty
+    network: {{network}}
+    source:
+      abi: PoolParty
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/poolParty.ts
+      entities:
+        - PoolPartyBurners
+      abis:
+        - name: PoolParty
+          file: ./abis/PoolParty.json
+      eventHandlers:
+        - event: BuyWithUsd(uint256,uint256,address)
+          handler: handleBuyWithUsd        

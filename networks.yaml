@@ -719,6 +719,9 @@ sepolia:
   RewardVesting:
     address: "0x407F9C0a0fCEE48ae0a86C74dF62093b2d9B9d83"
     startBlock: 5531707
+  PoolParty: 
+    address: "0x758b9Ce992C866821767854C2a4b0B28E3130110"
+    startBlock: 5633216
 polygon-zkevm:
   network: polygon-zkevm
   EventEmitter:
