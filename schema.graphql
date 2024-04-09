@@ -524,3 +524,10 @@ type VestingStakingClaimed @entity {
   beneficiary: Bytes!
   amount: BigInt!
 }
+
+type PoolPartyBurner @entity {
+  id: ID!
+  usdAmount: BigInt!
+  beneficiary: Bytes!
+  jellyAmount: BigInt!
+}
