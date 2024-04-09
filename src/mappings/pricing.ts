@@ -372,7 +372,7 @@ export function setWrappedTokenPrice(pool: Pool, poolId: string, block_number: B
 
 export function handleAnswerUpdated(event: AnswerUpdated): void {
   const aggregatorAddress = event.address;
-  const answer = event.params.current;
+  let answer = event.params.current;
   const tokenAddressesToUpdate: Address[] = [];
 
   // Check if the aggregator is under FX_ASSET_AGGREGATORS first (FXPoolFactory version)
@@ -415,6 +415,12 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
       const multiplier = '100000000'; // 1 * 1e8
       const pricePerGram = answer.times(BigInt.fromString(multiplier)).div(BigInt.fromString(divisor));
       token.latestFXPrice = scaleDown(pricePerGram, 8);
+    } else if (oracle && oracle.divisor !== null && oracle.decimals) {
+      const updatedAnswer = answer
+        .times(BigInt.fromString('10').pow(oracle.decimals as u8))
+        .div(BigInt.fromString(oracle.divisor!));
+      log.info('Converted Oracle answer from {} to {}', [answer.toString(), updatedAnswer.toString()]);
+      token.latestFXPrice = scaleDown(updatedAnswer, 8);
     } else {
       token.latestFXPrice = scaleDown(answer, 8);
     }
