@@ -697,11 +697,6 @@ function handleNewFXPool(event: ethereum.Event, permissionless: boolean): void {
   // Create templates for each token Offchain Aggregator
   let tokensAddresses: Address[] = changetype<Address[]>(tokens);
 
-  log.info('handleNewFXPool NEW POOL poolAddress {}; permissionless {};', [
-    poolAddress.toHexString(),
-    permissionless.toString(),
-  ]);
-
   if (!permissionless) {
     // For FXPoolFactory, use hardcoded aggregator addresses
     tokensAddresses.forEach((tokenAddress) => {

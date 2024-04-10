@@ -26,7 +26,6 @@ import {
   MAX_TIME_DIFF_FOR_PRICING,
 } from './helpers/constants';
 import { AnswerUpdated } from '../types/templates/OffchainAggregator/AccessControlledOffchainAggregator';
-import { getFXOracle } from './helpers/misc';
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
     if (PRICING_ASSETS[i] == asset) return true;
@@ -372,7 +371,7 @@ export function setWrappedTokenPrice(pool: Pool, poolId: string, block_number: B
 
 export function handleAnswerUpdated(event: AnswerUpdated): void {
   const aggregatorAddress = event.address;
-  let answer = event.params.current;
+  const answer = event.params.current;
   const tokenAddressesToUpdate: Address[] = [];
 
   // Check if the aggregator is under FX_ASSET_AGGREGATORS first (FXPoolFactory version)
@@ -388,9 +387,6 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
     for (let i = 0; i < oracle.tokens.length; i++) {
       const tokenAddress = Address.fromBytes(oracle.tokens[i]);
       const tokenExists = tokenAddressesToUpdate.includes(tokenAddress);
-        oracle.tokens[i].toHexString(),
-        tokenExists.toString(),
-      ]);
       if (!tokenExists) {
         tokenAddressesToUpdate.push(tokenAddress);
       }
