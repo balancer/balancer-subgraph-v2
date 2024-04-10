@@ -402,7 +402,10 @@ type ProtocolIdData @entity {
   name: String!
 }
 
+# FXOracle entity where the id is the Chainlink aggregator address
 type FXOracle @entity {
   id: ID! # FX oracle aggregator address
   tokens: [Bytes!]! # token addresses using this oracle
+  divisor: String # some oracles require conversion
+  decimals: Int
 }
