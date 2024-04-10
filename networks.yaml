@@ -810,3 +810,6 @@ sei-devnet:
   Chest:
     address: "0xD4ddE9EDA4F87a56a558A6c6F4600b2846227946"
     startBlock: 11761198
+  PoolParty: 
+    address: "0xB27306af76Ef18cD66a9c9602BB2dd511441b3f5"
+    startBlock: 14722379
