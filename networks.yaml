@@ -796,8 +796,8 @@ testnet3:
   OfficialPoolsRegister:
     address: "0x93406dF225C16e6B9764f7c9A29B722AB0b98a10"
     startBlock: 89404
-sei-testnet:
-  network: sei-testnet
+sei-devnet:
+  network: sei-devnet
   Vault:
     address: "0x7ccBebeb88696f9c8b061f1112Bb970158e29cA5"
     startBlock: 10613759

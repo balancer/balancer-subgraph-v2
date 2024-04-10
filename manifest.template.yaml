@@ -83,6 +83,7 @@ dataSources:
           handler: handleSwapEvent
         - event: PoolBalanceChanged(indexed bytes32,indexed address,address[],int256[],uint256[])
           handler: handleBalanceChange
+          topic0: '0xe5ce249087ce04f05a957192435400fd97868dba0e6a4b4c049abf8af80dae78'
         - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256,int256)
           handler: handleBalanceManage
         - event: InternalBalanceChanged(indexed address,indexed address,int256)
