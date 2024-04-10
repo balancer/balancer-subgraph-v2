@@ -26,7 +26,7 @@ import {
   MAX_TIME_DIFF_FOR_PRICING,
 } from './helpers/constants';
 import { AnswerUpdated } from '../types/templates/OffchainAggregator/AccessControlledOffchainAggregator';
-
+import { getFXOracle } from './helpers/misc';
 export function isPricingAsset(asset: Address): boolean {
   for (let i: i32 = 0; i < PRICING_ASSETS.length; i++) {
     if (PRICING_ASSETS[i] == asset) return true;
@@ -388,19 +388,25 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
     for (let i = 0; i < oracle.tokens.length; i++) {
       const tokenAddress = Address.fromBytes(oracle.tokens[i]);
       const tokenExists = tokenAddressesToUpdate.includes(tokenAddress);
+        oracle.tokens[i].toHexString(),
+        tokenExists.toString(),
+      ]);
       if (!tokenExists) {
         tokenAddressesToUpdate.push(tokenAddress);
       }
     }
+  } else {
+    log.warning('Oracle not found: {}', [aggregatorAddress.toHexString()]);
   }
 
   // Update all tokens using this aggregator
   for (let i = 0; i < tokenAddressesToUpdate.length; i++) {
     const tokenAddress = tokenAddressesToUpdate[i];
+
     const token = Token.load(tokenAddress.toHexString());
     if (token == null) {
       log.warning('Token with address {} not found', [tokenAddress.toHexString()]);
-      return;
+      continue;
     }
 
     // All tokens we track have oracles with 8 decimals
@@ -419,7 +425,6 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
       const updatedAnswer = answer
         .times(BigInt.fromString('10').pow(oracle.decimals as u8))
         .div(BigInt.fromString(oracle.divisor!));
-      log.info('Converted Oracle answer from {} to {}', [answer.toString(), updatedAnswer.toString()]);
       token.latestFXPrice = scaleDown(updatedAnswer, 8);
     } else {
       token.latestFXPrice = scaleDown(answer, 8);

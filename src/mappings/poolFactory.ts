@@ -22,7 +22,8 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum, log } from '@graphprotocol/graph-ts';
+
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
@@ -696,6 +697,11 @@ function handleNewFXPool(event: ethereum.Event, permissionless: boolean): void {
   // Create templates for each token Offchain Aggregator
   let tokensAddresses: Address[] = changetype<Address[]>(tokens);
 
+  log.info('handleNewFXPool NEW POOL poolAddress {}; permissionless {};', [
+    poolAddress.toHexString(),
+    permissionless.toString(),
+  ]);
+
   if (!permissionless) {
     // For FXPoolFactory, use hardcoded aggregator addresses
     tokensAddresses.forEach((tokenAddress) => {
@@ -740,13 +746,14 @@ function handleNewFXPool(event: ethereum.Event, permissionless: boolean): void {
       // oracle returns the price in troy ounces. We need to convert the price to grams
       const gramPerTroyOunceCall = OunceToGramOracle.bind(oracleCall.value).try_GRAM_PER_TROYOUNCE();
       if (!gramPerTroyOunceCall.reverted) {
-        // VNXAU oracle (deprecated)
+        // VNXAUGramOracle.sol oracle convertor (deprecated)
         oracle.decimals = BigInt.fromString('8').toI32();
         oracle.divisor = gramPerTroyOunceCall.value.toString();
       } else {
+        // AggregatorConverter (current version)
+        // if the Oracle contract has a DIVISOR and DECIMALS function, it is an AggregatorConverter contract
         const aggregatorConverterDivisorCall = AggregatorConverter.bind(oracleCall.value).try_DIVISOR();
         if (!aggregatorConverterDivisorCall.reverted) {
-          // AggregatorConverter (current version)
           const divisor = aggregatorConverterDivisorCall.value;
           const aggregatorConverterDecimalsCall = AggregatorConverter.bind(oracleCall.value).try_DECIMALS();
           if (!aggregatorConverterDecimalsCall.reverted) {
