@@ -254,7 +254,7 @@
     "name": "jellyToken",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IJellyToken",
         "name": "",
         "type": "address"
       }
@@ -431,19 +431,6 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "vestingPeriod",
-    "outputs": [
-      {
-        "internalType": "uint48",
-        "name": "",
-        "type": "uint48"
       }
     ],
     "stateMutability": "view",

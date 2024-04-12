@@ -1603,7 +1603,7 @@ dataSources:
         - name: Minter
           file: ./abis/Minter.json
       eventHandlers:
-        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,uint256,indexed uint256)
+        - event: JellyMinted(indexed address,address,uint256,uint256,uint256,indexed uint256)
           handler: handleJellyMinted
         - event: MintingStarted(indexed address,indexed uint256)
           handler: handleMintingStarted
@@ -1659,12 +1659,10 @@ dataSources:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
       eventHandlers:
-        - event: Claimed(address,uint256,uint256)
+        - event: Claimed(address,uint96,uint256)
           handler: handleClaimed
-        - event: EpochAdded(uint256,bytes32,string)
+        - event: EpochAdded(uint96,bytes32,string)
           handler: handleEpochAdded
-        - event: EpochRemoved(uint256)
-          handler: handleEpochRemoved
     {{/if}}
   {{#if StakingRewardDistribution}}
   - kind: ethereum/contract
@@ -1689,13 +1687,11 @@ dataSources:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
       eventHandlers:
-        - event: Claimed(address,uint256,address,uint256)
+        - event: Claimed(address,uint256,address,uint96)
           handler: handleClaimed
-        - event: EpochAdded(uint256,bytes32,string)
+        - event: EpochAdded(uint96,bytes32,string)
           handler: handleEpochAdded
-        - event: EpochRemoved(uint256)
-          handler: handleEpochRemoved
-        - event: Deposited(address,uint256,uint256)
+        - event: Deposited(address,uint256,uint96)
           handler: handleDeposited
     {{/if}}
   {{#if RewardVesting}}
@@ -2342,7 +2338,7 @@ templates:
         - name: Minter
           file: ./abis/Minter.json
       eventHandlers:
-        - event: JellyMinted(indexed address,address,address,indexed uint256,uint256,uint256,uint256,indexed uint256)
+        - event: JellyMinted(indexed address,address,uint256,uint256,uint256,indexed uint256)
           handler: handleJellyMinted
         - event: MintingStarted(indexed address,indexed uint256)
           handler: handleMintingStarted
@@ -2389,12 +2385,10 @@ templates:
         - name: LPRewardDistribution
           file: ./abis/LPRewardDistribution.json
       eventHandlers:
-        - event: Claimed(address,uint256,uint256)
+        - event: Claimed(address,uint96,uint256)
           handler: handleClaimed
-        - event: EpochAdded(uint256,bytes32,string)
+        - event: EpochAdded(uint96,bytes32,string)
           handler: handleEpochAdded
-        - event: EpochRemoved(uint256)
-          handler: handleEpochRemoved
   - kind: ethereum/contract
     name: StakingRewardDistribution
     network: {{network}}
@@ -2415,13 +2409,11 @@ templates:
         - name: StakingRewardDistribution
           file: ./abis/StakingRewardDistribution.json
       eventHandlers:
-        - event: Claimed(address,uint256,address,uint256)
+        - event: Claimed(address,uint256,address,uint96)
           handler: handleClaimed
-        - event: EpochAdded(uint256,bytes32,string)
+        - event: EpochAdded(uint96,bytes32,string)
           handler: handleEpochAdded
-        - event: EpochRemoved(uint256)
-          handler: handleEpochRemoved
-        - event: Deposited(address,uint256,uint256)
+        - event: Deposited(address,uint256,uint96)
           handler: handleDeposited
   - kind: ethereum/contract
     name: RewardVesting

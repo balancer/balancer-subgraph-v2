@@ -2,7 +2,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IJellyToken",
         "name": "_token",
         "type": "address"
       },
@@ -76,9 +76,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "week",
-        "type": "uint256"
+        "internalType": "uint96",
+        "name": "epoch",
+        "type": "uint96"
       },
       {
         "indexed": false,
@@ -108,9 +108,9 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint96",
         "name": "epoch",
-        "type": "uint256"
+        "type": "uint96"
       },
       {
         "indexed": false,
@@ -126,19 +126,6 @@
       }
     ],
     "name": "EpochAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "epoch",
-        "type": "uint256"
-      }
-    ],
-    "name": "EpochRemoved",
     "type": "event"
   },
   {
@@ -215,9 +202,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint96",
         "name": "_epochId",
-        "type": "uint256"
+        "type": "uint96"
       },
       {
         "internalType": "uint256",
@@ -243,9 +230,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256[]",
+        "internalType": "uint96[]",
         "name": "_epochIds",
-        "type": "uint256[]"
+        "type": "uint96[]"
       },
       {
         "internalType": "uint256[]",
@@ -308,9 +295,9 @@
     "name": "createEpoch",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint96",
         "name": "epochId",
-        "type": "uint256"
+        "type": "uint96"
       }
     ],
     "stateMutability": "nonpayable",
@@ -321,9 +308,9 @@
     "name": "epoch",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint96",
         "name": "",
-        "type": "uint256"
+        "type": "uint96"
       }
     ],
     "stateMutability": "view",
@@ -377,19 +364,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_epochId",
-        "type": "uint256"
-      }
-    ],
-    "name": "removeEpoch",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "_vestingContract",
         "type": "address"
@@ -405,7 +379,7 @@
     "name": "token",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IJellyToken",
         "name": "",
         "type": "address"
       }

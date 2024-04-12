@@ -1,11 +1,19 @@
-import { Claimed as ClaimedEvent, EpochAdded as EpochAddedEvent, EpochRemoved as EpochRemovedEvent } from '../types/templates/LPRewardDistribution/LPRewardDistribution';
-import { LPMerkleTree, LPRewardDistributionSnapshot, UserLPRewardDistributionMetaData, UserClaimedLPRewardDistribution } from '../types/schema';
+import {
+  Claimed as ClaimedEvent,
+  EpochAdded as EpochAddedEvent,
+} from '../types/templates/LPRewardDistribution/LPRewardDistribution';
+import {
+  LPMerkleTree,
+  LPRewardDistributionSnapshot,
+  UserLPRewardDistributionMetaData,
+  UserClaimedLPRewardDistribution,
+} from '../types/schema';
 import { UserLPRewardDistributionMetaData as UserLPRewardDistributionMetaDataTemplate } from '../types/templates';
-import { log, store, Bytes, Address, BigInt, dataSource } from '@graphprotocol/graph-ts'
+import { log, store, Bytes, Address, BigInt, dataSource } from '@graphprotocol/graph-ts';
 import { getDistributionData, UserData } from './helpers/rewardDistribution';
 
 export function handleClaimed(event: ClaimedEvent): void {
-  let snapshotId = event.params.week;
+  let snapshotId = event.params.epoch;
   let address = event.params.claimant;
   let amountToClaim = event.params.balance;
 
@@ -45,15 +53,15 @@ export function handleMetaData(content: Bytes): void {
 
   let distributionsData: UserData[] = getDistributionData(content);
   if (distributionsData.length == 0) {
-    log.warning("There is a problem with geting data from ipfs", []);
+    log.warning('There is a problem with geting data from ipfs', []);
     return;
   }
 
   for (let index = 0; index < distributionsData.length; index++) {
     let distribution = distributionsData[index];
-    log.warning("Distribution LP data to save {} {}", [distribution.amount, distribution.address]);
+    log.warning('Distribution LP data to save {} {}', [distribution.amount, distribution.address]);
     let address = changetype<Address>(Address.fromHexString(distribution.address));
-    let key = dataSource.stringParam() + "-" + address.toHexString();
+    let key = dataSource.stringParam() + '-' + address.toHexString();
     let userRewardDistributionMetadata = new UserLPRewardDistributionMetaData(key);
     userRewardDistributionMetadata.epoch = BigInt.fromString(distribution.epoch);
     userRewardDistributionMetadata.ipfsCid = dataSource.stringParam();
@@ -61,15 +69,4 @@ export function handleMetaData(content: Bytes): void {
     userRewardDistributionMetadata.value = BigInt.fromString(distribution.amount);
     userRewardDistributionMetadata.save();
   }
-}
-
-export function handleEpochRemoved(event: EpochRemovedEvent): void {
-  let snapshotId = event.params.epoch;
-  let snapshot = LPRewardDistributionSnapshot.load(snapshotId.toString());
-  if (snapshot == null) {
-    log.warning("There is no snapshot with epoch {}", [snapshotId.toString()]);
-    return;
-  }
-
-  store.remove("LPRewardDistributionSnapshot", snapshot.id);
 }

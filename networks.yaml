@@ -813,3 +813,15 @@ sei-devnet:
   PoolParty: 
     address: "0xB27306af76Ef18cD66a9c9602BB2dd511441b3f5"
     startBlock: 14722379
+  LPRewardDistribution:
+    address: "0xace1D3cAE5dD3824FfbC16a83912Ab6EcDb2C383"
+    startBlock: 15096306
+  StakingRewardDistribution:
+    address: "0x1D926c4a6Fc6b5A84d396Edd8CB5a9946f7dd4D8"
+    startBlock: 15096434
+  Minter:
+    address: "0x836Ab44f6879A81f20d6aD8356796396Fe17591D"
+    startBlock: 15120418
+  RewardVesting:
+    address: "0xB6616EDf640925B9CAf25AEA60803Dc80f2Fb43E"
+    startBlock: 15096592

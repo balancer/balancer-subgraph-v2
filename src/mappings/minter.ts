@@ -8,28 +8,18 @@ export function handleJellyMinted(event: JellyMinted): void {
     log.warning('Minter {} does not exist', [event.address.toHexString()]);
     return;
   }
-  let tokenMintLpRewards = new TokenMint(event.transaction.hash.toHexString() + '-LP');
+  let tokenMintLpRewards = new TokenMint(
+    event.transaction.hash.toHexString() + event.params.stakingRewardsContract.toHexString()
+  );
   tokenMintLpRewards.minter = minter.id;
   tokenMintLpRewards.amount = event.params.mintedAmount.div(BigInt.fromString('2'));
   tokenMintLpRewards.timestamp = event.block.timestamp;
   tokenMintLpRewards.mintInitiator = event.params.sender;
-  tokenMintLpRewards.benefactor = event.params.lpRewardsContract;
+  tokenMintLpRewards.benefactor = event.params.stakingRewardsContract;
   tokenMintLpRewards.epoch = event.params.epochId;
   tokenMintLpRewards.save();
 
-  let tokenMintStakingRewards = new TokenMint(event.transaction.hash.toHexString() + '-Staking');
-  tokenMintStakingRewards.minter = minter.id;
-  tokenMintStakingRewards.amount = event.params.mintedAmount.div(BigInt.fromString('2'));
-  tokenMintStakingRewards.timestamp = event.block.timestamp;
-  tokenMintStakingRewards.mintInitiator = event.params.sender;
-  tokenMintStakingRewards.benefactor = event.params.stakingRewardsContract;
-  tokenMintStakingRewards.epoch = event.params.epochId;
-  tokenMintStakingRewards.save();
-
   minter.lastMintedTimestamp = event.params.mintingPeriod;
-  if (minter.benfactors.indexOf(event.params.lpRewardsContract) == -1) {
-    minter.benfactors.push(event.params.lpRewardsContract);
-  }
   if (minter.benfactors.indexOf(event.params.stakingRewardsContract) == -1) {
     minter.benfactors.push(event.params.stakingRewardsContract);
   }
