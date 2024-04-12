@@ -838,6 +838,9 @@ base:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0c6052254551EAe3ECac77B01DFcf1025418828f"
     startBlock: 1206531
+  GyroEV2PoolFactory:
+    address: "0x15e86Be6084C6A5a8c17732D398dFbC2Ec574CEC"
+    startBlock: 13035219
 fantom:
   network: fantom
   # graft:
