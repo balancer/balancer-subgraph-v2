@@ -811,8 +811,8 @@ sei-devnet:
     address: "0xD4ddE9EDA4F87a56a558A6c6F4600b2846227946"
     startBlock: 11761198
   PoolParty: 
-    address: "0x91bcba1EBB358425C240dE142Bf9a98f1Eae9c31"
-    startBlock: 15654409
+    address: "0xe222807681584f0444D7D2008cc0039Fb745BEB8"
+    startBlock: 15673830
   LPRewardDistribution:
     address: "0xace1D3cAE5dD3824FfbC16a83912Ab6EcDb2C383"
     startBlock: 15096306
