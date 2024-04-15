@@ -1,11 +1,11 @@
 mainnet:
   network: mainnet
   graft:
-    # rETH/weETH pool creation to fix USD metrics
-    block: 18774976
+    # Apr-11-2024 02:34:11 PM +UTC
+    block: 19633000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYacPMeFA5359vDGknEc8aPAieiXHUa8ksfJ6H7FnzRrB
+    base: QmX6XKG5dSUf2FjKpeAdVPjbZSZ5qptnGGegHcwk4367Ph
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
@@ -244,12 +244,12 @@ polygon:
     block: 54559455
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmfFmtcLKRugnPe8HFmmvdtUgM6gvUSSsFXGeCTX6sH4Zg
+    base: Qmd6J5P1KYqwUmFupQ98Le7tGstDv3uUhHAwAzyPiicixw
   graft_pruned:
     # FXPoolDeployerTracker start block
     block: 54559455
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: QmfFmtcLKRugnPe8HFmmvdtUgM6gvUSSsFXGeCTX6sH4Zg
+    base: Qmd6J5P1KYqwUmFupQ98Le7tGstDv3uUhHAwAzyPiicixw
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -380,7 +380,7 @@ arbitrum:
     block: 191573392
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmZewqKt12daEoy7P9SjDfsGheVq8VqPj1ytVr9usKaBtq
+    base: Qmdwyva2Qn28ZA1NDffAajmWKG8MgruNFZH5BKs2ZWMX4b
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -483,6 +483,9 @@ arbitrum:
   FXPoolDeployer:
     address: "0x0bd5EC16658346eeCd5dE8c704a38Efe02B5DA69"
     startBlock: 183603903
+  Gyro2V2PoolFactory:
+    address: "0x7a36527A02d96693b0AF2b70421F952816a4a088"
+    startBlock: 194366254
 bnb:
   network: bsc
   Vault:
@@ -580,11 +583,11 @@ gnosis:
 optimism:
   network: optimism
   graft:
-    # Mar-18-2024 09:52:57 PM +UTC
-    block: 117600000
+    # Apr-11-2024 03:19:37 PM +UTC
+    block: 118625000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmYF2scyywkphqPgue1M4Q6kgwsMtETnhmJXq44SCguqe3
+    base: QmdDQKt3Q8AaWHmTKGLFXxsgrEikNSofqMu7LqYtTGntKh
   EventEmitter:
     address: "0x082990116f256E078572a1b69772115d2cF6b0a2"
     startBlock: 99124541
@@ -835,6 +838,9 @@ base:
   TempLiquidityBootstrappingPoolFactory:
     address: "0x0c6052254551EAe3ECac77B01DFcf1025418828f"
     startBlock: 1206531
+  GyroEV2PoolFactory:
+    address: "0x15e86Be6084C6A5a8c17732D398dFbC2Ec574CEC"
+    startBlock: 13035219
 fantom:
   network: fantom
   # graft:

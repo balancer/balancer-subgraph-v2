@@ -1763,6 +1763,10 @@ dataSources:
           file: ./abis/Assimilator.json
         - name: ChainlinkPriceFeed
           file: ./abis/ChainlinkPriceFeed.json
+        - name: AggregatorConverter
+          file: ./abis/AggregatorConverter.json
+        - name: OunceToGramOracle
+          file: ./abis/OunceToGramOracle.json
       eventHandlers:
         - event: NewFXPool(indexed address,indexed bytes32,indexed address)
           handler: handleNewFXPoolV2
@@ -2425,6 +2429,10 @@ templates:
           file: ./abis/Assimilator.json
         - name: ChainlinkPriceFeed
           file: ./abis/ChainlinkPriceFeed.json
+        - name: AggregatorConverter
+          file: ./abis/AggregatorConverter.json
+        - name: OunceToGramOracle
+          file: ./abis/OunceToGramOracle.json
       eventHandlers:
         - event: NewFXPool(indexed address,indexed bytes32,indexed address)
           handler: handleNewFXPoolV2
