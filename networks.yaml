@@ -799,11 +799,11 @@ testnet3:
 sei-devnet:
   network: sei-devnet
   Vault:
-    address: "0xA77ac562a5F6CEb8ea59036FC868Fe909d33fBfC"
-    startBlock: 15663486
+    address: "0x7ccBebeb88696f9c8b061f1112Bb970158e29cA5"
+    startBlock: 10613759
   WeightedPoolV4Factory:
-    address: "0xfAB2075Cde2542f956c17fF181765B7d0677ceA3"
-    startBlock: 15664230
+    address: "0x848Ea834Ff33794140BF0aB270204F3C98FA57C3"
+    startBlock: 10614424
   OfficialPoolsRegister:
     address: "0x3e337229D5534F90b9EDB4B64D3b4A397f4FeB2d"
     startBlock: 12152803
