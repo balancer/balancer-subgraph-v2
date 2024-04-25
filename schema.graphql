@@ -531,3 +531,26 @@ type PoolPartyBurner @entity {
   beneficiary: Bytes!
   jellyAmount: BigInt!
 }
+
+type GovernanceProposal @entity {
+  id: ID!
+  proposer: Bytes!
+  targets: [String!]!
+  values: [BigInt!]!
+  calldatas: [Bytes!]!
+  voteStart: BigInt!
+  voteEnd: BigInt!
+  description: String!
+  voteFor: BigInt!
+  voteAgainst: BigInt!
+  voteAbstain: BigInt!
+  executed: Boolean!
+}
+
+type GovernanceVote @entity {
+  id: ID!
+  proposal: GovernanceProposal!
+  voter: Bytes!
+  support: BigInt!
+  weight: BigInt!
+}

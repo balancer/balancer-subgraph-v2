@@ -1747,6 +1747,33 @@ dataSources:
         - event: BuyWithUsd(uint256,uint256,address)
           handler: handleBuyWithUsd
     {{/if}}
+  {{#if JellyGovernor}}
+  - kind: ethereum/contract
+    name: JellyGovernor
+    network: {{network}}
+    source:
+      address: '{{JellyGovernor.address}}'
+      abi: JellyGovernor
+      startBlock: {{JellyGovernor.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/governor.ts
+      entities:
+        - GovernanceProposal
+        - GovernanceVote
+      abis:
+        - name: JellyGovernor
+          file: ./abis/JellyGovernor.json
+      eventHandlers:
+        - event: ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)
+          handler: handleProposalCreated
+        - event: ProposalExecuted(uint256)
+          handler: handleProposalExecuted
+        - event: VoteCastWithParams(indexed address,uint256,uint8,uint256,string,bytes)
+          handler: handleVoteCast
+    {{/if}}
 templates:
   - kind: ethereum/contract
     name: WeightedPool
@@ -2485,4 +2512,27 @@ templates:
           file: ./abis/PoolParty.json
       eventHandlers:
         - event: BuyWithUsd(uint256,uint256,address)
-          handler: handleBuyWithUsd        
+          handler: handleBuyWithUsd    
+  - kind: ethereum/contract
+    name: JellyGovernor
+    network: {{network}}
+    source:
+      abi: JellyGovernor
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/governor.ts
+      entities:
+        - GovernanceProposal
+        - GovernanceVote
+      abis:
+        - name: JellyGovernor
+          file: ./abis/JellyGovernor.json
+      eventHandlers:
+        - event: ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,string)
+          handler: handleProposalCreated
+        - event: ProposalExecuted(uint256)
+          handler: handleProposalExecuted
+        - event: VoteCastWithParams(indexed address,uint256,uint8,uint256,string,bytes)
+          handler: handleVoteCast
