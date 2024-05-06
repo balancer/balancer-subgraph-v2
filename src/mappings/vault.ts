@@ -253,6 +253,8 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     }
   }
 
+  pool.save();
+
   // Managed, StablePhantom and ComposableStable pools only emit the PoolBalanceChanged event
   // with a non-zero value for the BPT amount when the pool is initialized,
   // when the amount of BPT informed in the event corresponds to the "excess" BPT that was preminted
@@ -267,6 +269,9 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
       }
     }
     pool.totalShares = pool.totalShares.minus(scaledPreMintedBpt);
+
+    pool.save();
+
     // This amount will also be transferred to the vault,
     // causing the vault's 'user shares' to incorrectly increase,
     // so we need to negate it. We do so by processing a mock transfer event
@@ -287,8 +292,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     );
     handleTransfer(mockEvent);
   }
-
-  pool.save();
 
   updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
 }
