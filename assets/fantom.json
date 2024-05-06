@@ -25,6 +25,10 @@
     {
       "address": "0xf1648C50d2863f780c57849D812b4B7686031A3D",
       "symbol": "lzWBTC"
+    },
+    {
+      "address": "0xd7028092c830b5c8fce061af2e593413ebbc1fc1",
+      "symbol": "sFTMx"
     }
   ]
 }
