@@ -2,10 +2,10 @@ mainnet:
   network: mainnet
   graft:
     # Apr-11-2024 02:34:11 PM +UTC
-    block: 19633000
+    # block: 19633000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmX6XKG5dSUf2FjKpeAdVPjbZSZ5qptnGGegHcwk4367Ph
+    # base: QmX6XKG5dSUf2FjKpeAdVPjbZSZ5qptnGGegHcwk4367Ph
   EventEmitter:
     address: "0x1ACfEEA57d2ac674d7E65964f155AB9348A6C290"
     startBlock: 16419620
