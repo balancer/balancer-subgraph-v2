@@ -1,0 +1,61 @@
+{
+    "stableAssets": [
+      {
+        "symbol": "jUSDT",
+        "address": "0xe6C02C9D8B0cab886946f09F641afE9F8aCD92ca"
+      },
+      {
+        "symbol": "jUSDC",
+        "address": "0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981"
+      },
+      {
+        "symbol": "USDC",
+        "address": "0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981"
+      }
+    ],
+    "pricingAssets": [
+      {
+        "address": "0x57ee725beeb991c70c53f9642f36755ec6eb2139",
+        "symbol": "WSEI"
+      },
+      {
+        "address": "0x9e7A8e558Ce582511f4104465a886b7bEfBC146b",
+        "symbol": "JLY"
+      }
+    ],
+    "whitelistedAssets": [
+      {
+        "symbol": "JLY",
+        "address": "0x9e7A8e558Ce582511f4104465a886b7bEfBC146b"
+      },
+      {
+        "symbol": "jBTC",
+        "address": "0xD0A4a86B62c01C3d6B3Bbd39c08e0dBd302c3b70"
+      },
+      {
+        "symbol": "WSEI",
+        "address": "0x57ee725beeb991c70c53f9642f36755ec6eb2139"
+      },
+      {
+        "symbol": "jETH",
+        "address": "0x5ca70a668c1875764D87c738d62FdF7e0c227091"
+      },
+      {
+        "symbol": "jUSDT",
+        "address": "0xe6C02C9D8B0cab886946f09F641afE9F8aCD92ca"
+      },
+      {
+        "symbol": "jUSDC",
+        "address": "0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981"
+      },
+      {
+        "symbol": "jGOLD",
+        "address": "0xC001bE9FaD650D669a20EBD159c2B6CECb0ff293"
+      },
+      {
+        "symbol": "jTSLA",
+        "address": "0xF8504bd3662a6A0719e8C22d1DFF182836fefb04"
+      }
+    ]
+  }
+  
