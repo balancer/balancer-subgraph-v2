@@ -87,8 +87,6 @@ function createWeightedLikePool(event: PoolCreated, poolType: string, poolTypeVe
   let tokens = getPoolTokens(poolId);
   if (tokens == null) return null;
 
-  pool.poolAllowed = !tokens.some((token) => !assets.whitelistedAssets.includes(Address.fromBytes(token)));
-
   pool.tokensList = tokens;
 
   if (poolType == PoolType.Managed) {

@@ -18,7 +18,6 @@ type Pool @entity {
   address: Bytes!
   poolType: String
   poolTypeVersion: Int
-  poolAllowed: Boolean
   factory: Bytes
   strategyType: Int!
   oracleEnabled: Boolean!

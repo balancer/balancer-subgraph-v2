@@ -9,7 +9,6 @@ class Assets {
   public pricingAssets: Address[];
   public fxAssets: Address[];
   public fxAggregators: Address[];
-  public whitelistedAssets: Address[];
 }
 
 {{#each stableAssets}}
@@ -34,12 +33,6 @@ export const assets: Assets = {
   ],
   fxAggregators: [
     {{#each fxAggregators}}
-    Address.fromString('{{address}}'), // {{symbol}}
-    {{/each}}
-  ],
-
-  whitelistedAssets: [
-    {{#each whitelistedAssets}}
     Address.fromString('{{address}}'), // {{symbol}}
     {{/each}}
   ],
