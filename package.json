@@ -4,6 +4,7 @@
   "scripts": {
     "create": "graph create balancer-labs/balancer-v2 --node https://api.thegraph.com/deploy/",
     "create:local": "graph create balancer-labs/balancer-v2 --node http://127.0.0.1:8020",
+    "create:production": "graph create jelly/verse --node http://127.0.0.1:8020",
     "create:testnet3": "graph create jelly/testnet3 --node http://127.0.0.1:8020",
     "codegen": "yarn generate-manifests && graph codegen --output-dir src/types/",
     "build": "graph build",
@@ -13,6 +14,7 @@
     "deploy:local": "graph deploy balancer-labs/balancer-v2  subgraph.sei-devnet.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:sepolia": "graph deploy balancer-labs/balancer-v2 subgraph.sepolia.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:sei": "graph deploy balancer-labs/balancer-v2 subgraph.sei-devnet.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy:sei:production": "graph deploy jelly/verse subgraph.sei.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:testnet3": "graph deploy jelly/testnet3 subgraph.testnet3.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "deploy:jelly": "graph deploy --studio jelly-sei subgraph.sei-devnet.full.yaml",
     "deploy:hosted:sepolia": "graph deploy --product hosted-service kaliman93/jelly-reward-distribution subgraph.sepolia.yaml",
