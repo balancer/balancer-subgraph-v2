@@ -580,6 +580,9 @@ gnosis:
   ProtocolIdRegistry:
     address: "0x6B5dA774890Db7B7b96C6f44e6a4b0F657399E2e"
     startBlock: 26691522
+  GyroEV2PoolFactory:
+    address: "0x5d3Be8aaE57bf0D1986Ff7766cC9607B6cC99b89"
+    startBlock: 33939985
 optimism:
   network: optimism
   graft:
