@@ -831,32 +831,32 @@ sei-devnet:
 sei:
   network: sei
   Vault:
-    address: "0xe69f4aEAE31B1ed8fC54A3b98482739fC1802FaC"
-    startBlock: 21602692
+    address: "0xF4f2576C364c9fAb45b9745a9214c43Bb7e3fED6"
+    startBlock: 23166375
   WeightedPoolV4Factory:
-    address: "0x5A857486b9d6067669DfDEAe3486E9F539bf4362"
-    startBlock: 21602692
+    address: "0xf0f2d09f782650Af8603E0dB450287b221F39F4A"
+    startBlock: 23167448
   ComposableStablePoolFactory:
-    address: "0xf9392ae11B1aAE7d51B56192465B5C2Aab9C6b85"
-    startBlock: 22968240
+    address: "0x9bb03ae297a36EfCa6243823E80f1b931953dc7C"
+    startBlock: 23167517
   OfficialPoolsRegister:
-    address: "0xd9E79b6F5C30b1ABa8a68Bb9c386b0df54C824b2"
-    startBlock: 21636290
+    address: "0x5Ca923cace8C93A59d9d16cE48b5faE361A321b1"
+    startBlock: 23244008
   Chest:
-    address: "0xaeBC43d0eD6bD53ee605bF6aD8F628170bb05d2b"
-    startBlock: 21635579
+    address: "0x5F411D22180136aD3E1A3c93376246CC722F4100"
+    startBlock: 23244008
   LPRewardDistribution:
-    address: "0xC86f15Bf5D95C087db8d9Bf8B541eB7E463D5343"
-    startBlock: 21636137
+    address: "0xF41C2dd18b5F69dED77F79EE357e208f13b7D3B5"
+    startBlock: 23243990
   StakingRewardDistribution:
-    address: "0x42627176B3198f3956fA28B2CeE75d792A74F440"
-    startBlock: 21636212
+    address: "0x827B978b45CBBe7f2cd0b1393801290768e9A516"
+    startBlock: 23243994
   Minter:
-    address: "0x40BeDff3b0BE0ce08443a7bDDc7683D435abEBcC"
-    startBlock: 21636529
+    address: "0x8Fa8B840480dD642a23B9cF57C6F8378f8929602"
+    startBlock: 23244026
   RewardVesting:
-    address: "0x4C60928e8a6df53C442b03B2f90a20FeBb176280"
-    startBlock: 21636472
+    address: "0x9d4983a2e64C85f68403D8C775788Eacb2c4F46F"
+    startBlock: 23244030
   JellyGovernor:
-    address: "0x2a5565390B339f0A2169b4c836CbaaB121534590"
-    startBlock: 21635689
+    address: "0x66db7506b3B5238b8F97B96625B707F14d7bec83"
+    startBlock: 23243985
