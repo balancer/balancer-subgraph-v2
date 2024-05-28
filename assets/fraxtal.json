@@ -1,0 +1,14 @@
+{
+  "stableAssets": [
+    {
+      "address": "0xDcc0F2D8F90FDe85b10aC1c8Ab57dc0AE946A543",
+      "symbol": "USDC"
+    }
+  ],
+  "pricingAssets": [
+    {
+      "address": "0xfc00000000000000000000000000000000000006",
+      "symbol": "wfrxETH"
+    }
+  ]
+}
