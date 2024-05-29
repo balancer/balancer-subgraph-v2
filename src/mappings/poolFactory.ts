@@ -22,7 +22,7 @@ import {
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, ethereum, log } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';

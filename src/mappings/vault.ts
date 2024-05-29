@@ -31,7 +31,6 @@ import {
   getTradePairSnapshot,
   getTradePair,
   getBalancerSnapshot,
-  bytesToAddress,
   getPoolShare,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';

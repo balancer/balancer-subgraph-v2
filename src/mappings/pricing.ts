@@ -420,6 +420,7 @@ export function handleAnswerUpdated(event: AnswerUpdated): void {
     } else if (oracle && oracle.divisor !== null && oracle.decimals) {
       const updatedAnswer = answer
         .times(BigInt.fromString('10').pow(oracle.decimals as u8))
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         .div(BigInt.fromString(oracle.divisor!));
       token.latestFXPrice = scaleDown(updatedAnswer, 8);
     } else {
