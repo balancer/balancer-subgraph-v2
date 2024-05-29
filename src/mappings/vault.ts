@@ -273,24 +273,11 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
     pool.save();
 
     // This amount will also be transferred to the vault,
-    // causing the vault's 'user shares' to incorrectly increase,
-    // so we need to negate it. We do so by processing a mock transfer event
-    // from the vault to the zero address
-    const mockEvent = new Transfer(
-      bytesToAddress(pool.address),
-      event.logIndex,
-      event.transactionLogIndex,
-      event.logType,
-      event.block,
-      event.transaction,
-      [
-        new ethereum.EventParam('from', ethereum.Value.fromAddress(VAULT_ADDRESS)),
-        new ethereum.EventParam('to', ethereum.Value.fromAddress(ZERO_ADDRESS)),
-        new ethereum.EventParam('value', ethereum.Value.fromUnsignedBigInt(preMintedBpt)),
-      ],
-      event.receipt
-    );
-    handleTransfer(mockEvent);
+    // causing the vault's 'user shares' to incorrectly
+    // increase, so we need to subtract it.
+    const vaultPoolShare = getPoolShare(poolId, VAULT_ADDRESS);
+    vaultPoolShare.balance = vaultPoolShare.balance.minus(tokenToDecimal(preMintedBpt, 18));
+    vaultPoolShare.save();
   }
 
   updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
