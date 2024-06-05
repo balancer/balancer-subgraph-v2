@@ -1,25 +1,17 @@
 {
     "stableAssets": [
       {
-        "symbol": "jUSDT",
-        "address": "0xe6C02C9D8B0cab886946f09F641afE9F8aCD92ca"
-      },
-      {
-        "symbol": "jUSDC",
-        "address": "0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981"
-      },
-      {
         "symbol": "USDC",
-        "address": "0xAd149B2C60C07cDB93728c4ceB4C08E9D100b981"
+        "address": "0x3894085Ef7Ff0f0aeDf52E2A2704928d1Ec074F1"
       }
     ],
     "pricingAssets": [
       {
-        "address": "0x57ee725beeb991c70c53f9642f36755ec6eb2139",
+        "address": "0xE30feDd158A2e3b13e9badaeABaFc5516e95e8C7",
         "symbol": "WSEI"
       },
       {
-        "address": "0x9e7A8e558Ce582511f4104465a886b7bEfBC146b",
+        "address": "0xd1a7CD7AC45f7775097E9E4845fE071bC06a95B5",
         "symbol": "JLY"
       }
     ]
