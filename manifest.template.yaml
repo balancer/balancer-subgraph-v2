@@ -1744,8 +1744,8 @@ dataSources:
         - name: PoolParty
           file: ./abis/PoolParty.json
       eventHandlers:
-        - event: BuyWithUsd(uint256,uint256,address)
-          handler: handleBuyWithUsd
+        - event: BuyWithSei(uint256,uint256,address)
+          handler: handleBuyWithSei
     {{/if}}
   {{#if JellyGovernor}}
   - kind: ethereum/contract
@@ -2511,8 +2511,8 @@ templates:
         - name: PoolParty
           file: ./abis/PoolParty.json
       eventHandlers:
-        - event: BuyWithUsd(uint256,uint256,address)
-          handler: handleBuyWithUsd    
+        - event: BuyWithSei(uint256,uint256,address)
+          handler: handleBuyWithSei   
   - kind: ethereum/contract
     name: JellyGovernor
     network: {{network}}

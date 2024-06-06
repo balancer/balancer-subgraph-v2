@@ -1,20 +1,20 @@
 import { PoolPartyBurner } from '../types/schema';
-import { BuyWithUsd } from '../types/templates/PoolParty/PoolParty';
+import { BuyWithSei } from '../types/templates/PoolParty/PoolParty';
 
-export function handleBuyWithUsd(event: BuyWithUsd): void {
+export function handleBuyWithSei(event: BuyWithSei): void {
   let userId = event.params.buyer;
 
   let poolPartyBurner = PoolPartyBurner.load(userId.toHexString());
   if (poolPartyBurner == null) {
     let newPoolPartyBurner = new PoolPartyBurner(userId.toHexString());
     newPoolPartyBurner.beneficiary = userId;
-    newPoolPartyBurner.usdAmount = event.params.usdAmount;
+    newPoolPartyBurner.seiAmount = event.params.seiAmount;
     newPoolPartyBurner.jellyAmount = event.params.jellyAmount;
 
     newPoolPartyBurner.save();
     return;
   }
-  poolPartyBurner.usdAmount = poolPartyBurner.usdAmount.plus(event.params.usdAmount);
+  poolPartyBurner.seiAmount = poolPartyBurner.seiAmount.plus(event.params.seiAmount);
   poolPartyBurner.jellyAmount = poolPartyBurner.jellyAmount.plus(event.params.jellyAmount);
   poolPartyBurner.save();
 }
