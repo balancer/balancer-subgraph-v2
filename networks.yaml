@@ -857,3 +857,6 @@ sei:
   JellyGovernor:
     address: "0xE401e19B5D6239d8cfb6b2Ed1A9Fc209242Ab9ae"
     startBlock: 81251971
+  PoolParty: 
+    address: "0xcc11c2b7508a922319D49FA11DbC33C9b29e0934"
+    startBlock: 82060839
