@@ -526,6 +526,9 @@ bnb:
     startBlock: 27339771
 gnosis:
   network: gnosis
+  graft:
+    block: 33759936
+    base: "QmSBvRxXZbusTtbLUPRreeo1GDigfEYPioYVeWZqHRMZpV"
   EventEmitter:
     address: "0xd8bf95b44772213905a8a74881862347acbabc48"
     startBlock: 26892431
@@ -582,7 +585,7 @@ gnosis:
     startBlock: 26691522
   GyroEV2PoolFactory:
     address: "0x5d3Be8aaE57bf0D1986Ff7766cC9607B6cC99b89"
-    startBlock: 33939985
+    startBlock: 33759936
 optimism:
   network: optimism
   graft:
