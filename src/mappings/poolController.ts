@@ -56,7 +56,7 @@ import {
   hexToBigInt,
   getBalancerSnapshot,
 } from './helpers/misc';
-import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
+import { ONE_BD, ProtocolFeeType, VAULT_ADDRESS, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
 import { getPoolTokenManager, getPoolTokens } from './helpers/pools';
 import {
@@ -678,11 +678,21 @@ export function handleTransfer(event: Transfer): void {
     poolShareFrom.save();
   }
 
-  if (poolShareTo !== null && poolShareTo.balance.notEqual(ZERO_BD) && poolShareToBalance.equals(ZERO_BD)) {
+  if (
+    poolShareTo !== null &&
+    poolShareTo.balance.notEqual(ZERO_BD) &&
+    poolShareToBalance.equals(ZERO_BD) &&
+    poolShareTo.userAddress != VAULT_ADDRESS.toHex()
+  ) {
     pool.holdersCount = pool.holdersCount.plus(BigInt.fromI32(1));
   }
 
-  if (poolShareFrom !== null && poolShareFrom.balance.equals(ZERO_BD) && poolShareFromBalance.notEqual(ZERO_BD)) {
+  if (
+    poolShareFrom !== null &&
+    poolShareFrom.balance.equals(ZERO_BD) &&
+    poolShareFromBalance.notEqual(ZERO_BD) &&
+    poolShareFrom.userAddress != VAULT_ADDRESS.toHex()
+  ) {
     pool.holdersCount = pool.holdersCount.minus(BigInt.fromI32(1));
   }
 
