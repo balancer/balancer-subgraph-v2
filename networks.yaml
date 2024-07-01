@@ -244,12 +244,12 @@ polygon:
     block: 54559455
     # this will be the base of the unpruned deployment, so make sure it has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: Qmd6J5P1KYqwUmFupQ98Le7tGstDv3uUhHAwAzyPiicixw
+    base: QmUqS6BAVQgvstEsVrxuwsu1DwQdfAdj3Q6gz2j3DbUYQ9
   graft_pruned:
     # FXPoolDeployerTracker start block
     block: 54559455
     # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: Qmd6J5P1KYqwUmFupQ98Le7tGstDv3uUhHAwAzyPiicixw
+    base: QmUqS6BAVQgvstEsVrxuwsu1DwQdfAdj3Q6gz2j3DbUYQ9
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
@@ -377,10 +377,10 @@ arbitrum:
   network: arbitrum-one
   graft:
     # FXPoolDeployerTracker start block
-    block: 191573392
+    # block: 191573392
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: Qmdwyva2Qn28ZA1NDffAajmWKG8MgruNFZH5BKs2ZWMX4b
+    # base: Qmdwyva2Qn28ZA1NDffAajmWKG8MgruNFZH5BKs2ZWMX4b
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
@@ -527,8 +527,8 @@ bnb:
 gnosis:
   network: gnosis
   graft:
-    block: 33759936
-    base: "QmSBvRxXZbusTtbLUPRreeo1GDigfEYPioYVeWZqHRMZpV"
+    # block: 33759936
+    # base: "QmSBvRxXZbusTtbLUPRreeo1GDigfEYPioYVeWZqHRMZpV"
   EventEmitter:
     address: "0xd8bf95b44772213905a8a74881862347acbabc48"
     startBlock: 26892431
@@ -590,10 +590,10 @@ optimism:
   network: optimism
   graft:
     # Apr-11-2024 03:19:37 PM +UTC
-    block: 118625000
+    # block: 118625000
     # always make sure the base subgraph has not been pruned
     # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmdDQKt3Q8AaWHmTKGLFXxsgrEikNSofqMu7LqYtTGntKh
+    # base: QmdDQKt3Q8AaWHmTKGLFXxsgrEikNSofqMu7LqYtTGntKh
   EventEmitter:
     address: "0x082990116f256E078572a1b69772115d2cF6b0a2"
     startBlock: 99124541

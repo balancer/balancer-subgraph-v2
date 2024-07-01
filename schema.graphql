@@ -24,6 +24,8 @@ type Pool @entity {
   symbol: String
   name: String
 
+  isInitialized: Boolean
+
   "Indicates if a pool can be swapped against. Combines multiple sources, including offchain curation"
   swapEnabled: Boolean!
 
