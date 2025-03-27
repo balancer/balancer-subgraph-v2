@@ -959,3 +959,6 @@ sonic:
   GyroEV2PoolFactory:
     address: "0x5364296D19d453D73f84a94e78681A430e620c5f"
     startBlock: 5143640
+  Gyro3PoolFactory:
+    address: "0x05d8c43b2c66978dbfa6d8ef6e2b58ffcca3971e"
+    startBlock: 14441220
