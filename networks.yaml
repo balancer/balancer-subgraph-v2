@@ -841,6 +841,9 @@ base:
   GyroEV2PoolFactory:
     address: "0x15e86Be6084C6A5a8c17732D398dFbC2Ec574CEC"
     startBlock: 13035219
+  Gyro3V2PoolFactory:
+    address: "0xA74D5bB4AbE3cb874536AdcA265f166a059Cfa67"
+    startBlock: 33244020
 fantom:
   network: fantom
   # graft:
