@@ -12,7 +12,6 @@ import {
   newPoolEntity,
   createPoolTokenEntity,
   scaleDown,
-  getBalancerSnapshot,
   tokenToDecimal,
   stringToBytes,
   bytesToAddress,
@@ -27,7 +26,7 @@ import { BigInt, Address, Bytes, ethereum, log } from '@graphprotocol/graph-ts';
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
 import { ProtocolIdRegistered } from '../types/ProtocolIdRegistry/ProtocolIdRegistry';
-import { Balancer, Pool, PoolContract, ProtocolIdData } from '../types/schema';
+import { Balancer, Pool, PoolContract, ProtocolIdData, Token } from '../types/schema';
 import { KassandraPoolCreated } from '../types/ManagedKassandraPoolControllerFactory/ManagedKassandraPoolControllerFactory';
 import { NewFXPoolDeployer } from '../types/FXPoolDeployerTracker/FXPoolDeployerTracker';
 
@@ -42,7 +41,6 @@ import { StablePhantomPoolV2 as StablePhantomPoolV2Template } from '../types/tem
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
 import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
-import { ManagedPool as ManagedPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
@@ -63,7 +61,7 @@ import { Assimilator } from '../types/FXPoolDeployer/Assimilator';
 import { ChainlinkPriceFeed } from '../types/FXPoolDeployer/ChainlinkPriceFeed';
 import { OunceToGramOracle } from '../types/templates/FXPoolDeployer/OunceToGramOracle';
 import { AggregatorConverter } from '../types/templates/FXPoolDeployer/AggregatorConverter';
-import { Transfer } from '../types/Vault/ERC20';
+import { ERC20, Transfer } from '../types/Vault/ERC20';
 import { handleTransfer, setPriceRateProvider } from './poolController';
 import { ComposableStablePool } from '../types/ComposableStablePoolFactory/ComposableStablePool';
 
@@ -161,12 +159,6 @@ export function handleNewInvestmentPool(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.Investment);
   if (pool == null) return;
   InvestmentPoolTemplate.create(event.params.pool);
-}
-
-export function handleNewManagedPoolV2(event: PoolCreated): void {
-  const pool = createWeightedLikePool(event, PoolType.Managed, 2);
-  if (pool == null) return;
-  ManagedPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewManagedKassandraPool(event: KassandraPoolCreated): void {
@@ -772,13 +764,7 @@ function findOrInitializeVault(): Balancer {
   // if no vault yet, set up blank initial
   vault = new Balancer('2');
   vault.poolCount = 0;
-  vault.totalLiquidity = ZERO_BD;
-  vault.totalSwapVolume = ZERO_BD;
-  vault.totalSwapFee = ZERO_BD;
   vault.totalSwapCount = ZERO;
-
-  // set up protocol fees collector
-  vault.protocolFeesCollector = getProtocolFeeCollector();
 
   return vault;
 }
@@ -810,10 +796,6 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     let vault = findOrInitializeVault();
     vault.poolCount += 1;
     vault.save();
-
-    let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
-    vaultSnapshot.poolCount += 1;
-    vaultSnapshot.save();
   }
 
   let poolContract = PoolContract.load(poolAddress.toHexString());
@@ -836,6 +818,15 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
     if (!assetManager) continue;
 
     createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
+
+    // Handle BPT
+    if (tokensAddresses[i] === pool.address) {
+      let bpt = Token.load(pool.address.toHexString());
+      if (bpt !== null) {
+        bpt.pool = pool.id;
+        bpt.save();
+      }
+    }
   }
 }
 

@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:14
+    ports:
+      - "5434:5432"
+    command:
+      [
+        "postgres",
+        "-cshared_preload_libraries=pg_stat_statements",
+        "-cmax_connections=200",
+      ]
+    environment:
+      POSTGRES_USER: graph-node
+      POSTGRES_PASSWORD: let-me-in
+      POSTGRES_DB: graph-node
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  ipfs:
+    image: ipfs/kubo:latest
+    ports:
+      - "5001:5001"
+      - "8080:8080"
+    command: daemon
+    volumes:
+      - ipfs_data:/data/ipfs
+
+  graph-node:
+    image: graphprotocol/graph-node
+    depends_on:
+      - postgres
+      - ipfs
+    ports:
+      - "8000:8000" # GraphQL endpoint
+      - "8020:8020" # Admin (deploy)
+      - "8030:8030" # Status API
+    environment:
+      postgres_host: postgres
+      postgres_user: graph-node
+      postgres_pass: let-me-in
+      postgres_db: graph-node
+      ipfs: "ipfs:5001"
+      ethereum: "mainnet:https://lb.drpc.org/ogrpc?network=ethereum&dkey=AqE6WN_rjEghpXA5G1Meef-5siiudm0R7493hlDYfw4q"
+      # ethereum: "mainnet:https://mainnet.infura.io/v3/978eeafc4ba34908a9a839ac470207ff"
+      GRAPH_LOG: debug
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  postgres_data:
+  ipfs_data:

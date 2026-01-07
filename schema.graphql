@@ -1,19 +1,11 @@
 # Vault
-type Balancer @entity {
+type Balancer @entity(immutable: false) {
   id: ID!
   poolCount: Int!
   pools: [Pool!] @derivedFrom(field: "vaultID")
-  snapshots: [BalancerSnapshot!] @derivedFrom(field: "vault")
-
-  totalLiquidity: BigDecimal!
   totalSwapCount: BigInt!
-  totalSwapVolume: BigDecimal!
-  totalSwapFee: BigDecimal!
-  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
-  protocolFeesCollector: Bytes # TODO: make mandatory at next full sync
 }
-
-type Pool @entity {
+type Pool @entity(immutable: false) {
   id: ID!
   address: Bytes!
   poolType: String
@@ -38,12 +30,7 @@ type Pool @entity {
   isPaused: Boolean
 
   totalWeight: BigDecimal
-  totalSwapVolume: BigDecimal!
-  totalSwapFee: BigDecimal!
-  totalLiquidity: BigDecimal!
-  totalLiquiditySansBPT: BigDecimal # TODO: make mandatory at next full sync
   totalShares: BigDecimal!
-  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
   createTime: Int!
   swapsCount: BigInt!
   holdersCount: BigInt!
@@ -58,7 +45,6 @@ type Pool @entity {
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
   snapshots: [PoolSnapshot!] @derivedFrom(field: "pool")
-  historicalValues: [PoolHistoricalLiquidity!] @derivedFrom(field: "poolId")
 
   # LiquidityBootstrappingPool Only
   weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
@@ -143,7 +129,7 @@ type PoolContract @entity(immutable: true) {
   pool: Pool!
 }
 
-type PoolToken @entity {
+type PoolToken @entity(immutable: false) {
   id: ID!
   poolId: Pool
   token: Token!
@@ -151,15 +137,14 @@ type PoolToken @entity {
   symbol: String!
   name: String!
   decimals: Int!
-  index: Int # TODO: make mandatory at next full sync
+  index: Int!
   address: String!
-  oldPriceRate: BigDecimal # TODO: make mandatory at next full sync
+  oldPriceRate: BigDecimal!
   priceRate: BigDecimal!
   balance: BigDecimal!
-  paidProtocolFees: BigDecimal # TODO: make mandatory at next full sync
+  paidProtocolFees: BigDecimal!
   cashBalance: BigDecimal!
   managedBalance: BigDecimal!
-  managements: [ManagementOperation!] @derivedFrom(field: "poolTokenId")
 
   # WeightedPool Only
   weight: BigDecimal
@@ -171,7 +156,7 @@ type PoolToken @entity {
   circuitBreaker: CircuitBreaker
 }
 
-type PriceRateProvider @entity {
+type PriceRateProvider @entity(immutable: false) {
   id: ID!
   poolId: Pool!
   token: PoolToken!
@@ -182,7 +167,7 @@ type PriceRateProvider @entity {
   cacheExpiry: Int
 }
 
-type CircuitBreaker @entity {
+type CircuitBreaker @entity(immutable: true) {
   id: ID!
   pool: Pool!
   token: PoolToken!
@@ -191,26 +176,10 @@ type CircuitBreaker @entity {
   upperBoundPercentage: BigDecimal!
 }
 
-type PoolShare @entity {
+type PoolShare @entity(immutable: false) {
   id: ID!
-  userAddress: User!
+  userAddress: Bytes!
   poolId: Pool!
-  balance: BigDecimal!
-}
-
-type User @entity {
-  id: ID!
-  sharesOwned: [PoolShare!] @derivedFrom(field: "userAddress")
-  swaps: [Swap!] @derivedFrom(field: "userAddress")
-  userInternalBalances: [UserInternalBalance!]
-    @derivedFrom(field: "userAddress")
-}
-
-type UserInternalBalance @entity {
-  id: ID!
-  userAddress: User
-  token: Bytes!
-  tokenInfo: Token
   balance: BigDecimal!
 }
 
@@ -253,9 +222,8 @@ type Swap @entity(immutable: true) {
   tokenOutSym: String!
   tokenAmountIn: BigDecimal!
   tokenAmountOut: BigDecimal!
-  valueUSD: BigDecimal!
   poolId: Pool!
-  userAddress: User!
+  userAddress: Bytes!
   timestamp: Int!
   block: BigInt
   tx: Bytes!
@@ -271,42 +239,11 @@ type JoinExit @entity(immutable: true) {
   type: InvestType!
   sender: Bytes!
   amounts: [BigDecimal!]!
-  valueUSD: BigDecimal
   pool: Pool!
-  user: User!
+  user: Bytes!
   timestamp: Int!
   tx: Bytes!
   block: BigInt
-}
-
-type LatestPrice @entity {
-  id: ID!
-  asset: Bytes!
-  pricingAsset: Bytes! # address of stable asset
-  poolId: Pool! # last pool which set price
-  price: BigDecimal! # all the latest prices
-  block: BigInt! # last block that prices were updated
-}
-
-type PoolHistoricalLiquidity @entity {
-  id: ID!
-  poolId: Pool!
-  poolTotalShares: BigDecimal!
-  poolLiquidity: BigDecimal! # total value, priced in the stable asset - ie USD
-  poolShareValue: BigDecimal!
-  pricingAsset: Bytes! # address of stable asset
-  block: BigInt!
-}
-
-type TokenPrice @entity {
-  id: ID! # address of token + address of stablecoin-poolId
-  poolId: Pool!
-  asset: Bytes!
-  amount: BigDecimal!
-  pricingAsset: Bytes! # address of stable asset
-  price: BigDecimal!
-  block: BigInt!
-  timestamp: Int!
 }
 
 enum OperationType {
@@ -315,95 +252,36 @@ enum OperationType {
   Update
 }
 
-type ManagementOperation @entity(immutable: true) {
-  id: ID!
-  type: OperationType!
-  cashDelta: BigDecimal!
-  managedDelta: BigDecimal!
-  poolTokenId: PoolToken!
-  timestamp: Int!
-}
-
-type PoolSnapshot @entity {
+type PoolSnapshot @entity(immutable: false) {
   id: ID!
   pool: Pool!
   amounts: [BigDecimal!]!
   totalShares: BigDecimal!
-  swapVolume: BigDecimal!
-  protocolFee: BigDecimal # TODO: make mandatory at next full sync
-  swapFees: BigDecimal!
-  liquidity: BigDecimal!
   swapsCount: BigInt!
   holdersCount: BigInt!
   timestamp: Int!
 }
 
-type Token @entity {
+type Token @entity(immutable: false) {
   id: ID!
   symbol: String
   name: String
   decimals: Int!
   address: String!
-  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
   totalBalanceNotional: BigDecimal!
-  totalVolumeUSD: BigDecimal! # total volume in fiat (usd)
-  totalVolumeNotional: BigDecimal!
   totalSwapCount: BigInt!
-  latestPrice: LatestPrice # latest price of token, updated when pool liquidity changes
-  latestUSDPrice: BigDecimal # latest price of token in USD, updated when pool liquidity changes
-  latestUSDPriceTimestamp: BigInt # timestamp at which the latestUSDPrice was updated
   latestFXPrice: BigDecimal # latest "off-chain" price of token in USD, only available if token has an offchain price aggregator
   pool: Pool # pool entity associated with the token, if it is a Balancer pool
   fxOracleDecimals: Int # only available if token has an FX oracle
 }
 
-type TokenSnapshot @entity {
-  id: ID! # token address + dayId
-  token: Token!
-  timestamp: Int! # timestamp representing the start of day in UTC
-  totalBalanceUSD: BigDecimal! # total balance of tokens across balancer
-  totalBalanceNotional: BigDecimal! # underlying asset balance
-  totalVolumeUSD: BigDecimal! # amount of volume the token has moved on this day
-  totalVolumeNotional: BigDecimal! # underyling asset volume
-  totalSwapCount: BigInt!
-}
-
-type TradePair @entity {
-  "Token Address - Token Address"
-  id: ID!
-  token0: Token!
-  token1: Token!
-  totalSwapVolume: BigDecimal!
-  totalSwapFee: BigDecimal!
-}
-
-type TradePairSnapshot @entity {
-  id: ID!
-  pair: TradePair!
-  timestamp: Int!
-  totalSwapVolume: BigDecimal!
-  totalSwapFee: BigDecimal!
-}
-
-type BalancerSnapshot @entity {
-  id: ID!
-  vault: Balancer!
-  timestamp: Int!
-  poolCount: Int!
-  totalLiquidity: BigDecimal!
-  totalSwapCount: BigInt!
-  totalSwapVolume: BigDecimal!
-  totalSwapFee: BigDecimal!
-  totalProtocolFee: BigDecimal # TODO: make mandatory at next full sync
-}
-
-type ProtocolIdData @entity {
+type ProtocolIdData @entity(immutable: false) {
   id: ID!
   name: String!
 }
 
 # FXOracle entity where the id is the Chainlink aggregator address
-type FXOracle @entity {
+type FXOracle @entity(immutable: false) {
   id: ID! # FX oracle aggregator address
   tokens: [Bytes!]! # token addresses using this oracle
   divisor: String # some oracles require conversion
