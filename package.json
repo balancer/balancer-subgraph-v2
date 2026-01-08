@@ -16,6 +16,7 @@
     "update-addresses": "ts-node ./scripts/update-addresses-subgraph.ts",
     "update-addresses:goerli": "npm run update-addresses goerli",
     "update-addresses:local": "npm run update-addresses dockerParity",
+    "fetch-block": "ts-node ./scripts/fetch-latest-block.ts",
     "sync": "npm run import-abis && npm run update-addresses && npm run codegen && npm run build",
     "sync:local": "npm run import-abis && npm run update-addresses dockerParity && npm run codegen && npm run build"
   },

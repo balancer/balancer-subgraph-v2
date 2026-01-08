@@ -6,7 +6,7 @@ mainnet:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 12272146
-    storeEventsFrom: "23817625"
+    storeEventsFrom: "24189887"
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 12272146
@@ -64,7 +64,6 @@ mainnet:
   ManagedPoolV2Factory:
     address: "0xBF904F9F340745B4f0c4702c7B6Ab1e808eA6b93"
     startBlock: 17046230
-  # hack to make the types be generated - codegen uses mainnet manifest by default
   ManagedKassandraPoolControllerFactory:
     address: "0x0000000000000000000000000000000000000000"
     startBlock: 17046230
@@ -234,23 +233,13 @@ goerli:
     startBlock: 8566340
 polygon:
   network: matic
-  graft:
-    # FXPoolDeployerTracker start block
-    block: 54559455
-    # this will be the base of the unpruned deployment, so make sure it has not been pruned
-    # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: Qmd6J5P1KYqwUmFupQ98Le7tGstDv3uUhHAwAzyPiicixw
-  graft_pruned:
-    # FXPoolDeployerTracker start block
-    block: 54559455
-    # this will be the base of the pruned deployment, so it is ok if it is a pruned subgraph
-    base: Qmd6J5P1KYqwUmFupQ98Le7tGstDv3uUhHAwAzyPiicixw
   EventEmitter:
     address: "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8"
     startBlock: 38152461
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
+    storeEventsFrom: "81377622"
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 15832998
@@ -370,18 +359,13 @@ polygon:
     startBlock: 39769528
 arbitrum:
   network: arbitrum-one
-  graft:
-    # FXPoolDeployerTracker start block
-    block: 191573392
-    # always make sure the base subgraph has not been pruned
-    # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: Qmdwyva2Qn28ZA1NDffAajmWKG8MgruNFZH5BKs2ZWMX4b
   EventEmitter:
     address: "0x8f32D631093B5418d0546f77442c5fa66187E59D"
     startBlock: 53475240
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832
+    storeEventsFrom: "419192078"
   WeightedPoolFactory:
     address: "0x7dFdEF5f355096603419239CE743BfaF1120312B"
     startBlock: 222863
@@ -486,6 +470,7 @@ bnb:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 22895868
+    storeEventsFrom: "74496272"
   WeightedPoolV2Factory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22895868
@@ -527,6 +512,7 @@ gnosis:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 24821598
+    storeEventsFrom: "44059701"
   WeightedPoolV2Factory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 25414470
@@ -577,18 +563,13 @@ gnosis:
     startBlock: 26691522
 optimism:
   network: optimism
-  graft:
-    # Apr-11-2024 03:19:37 PM +UTC
-    block: 118625000
-    # always make sure the base subgraph has not been pruned
-    # it should be possible to run time travel queries on it going back to the vault's startBlock
-    base: QmdDQKt3Q8AaWHmTKGLFXxsgrEikNSofqMu7LqYtTGntKh
   EventEmitter:
     address: "0x082990116f256E078572a1b69772115d2cF6b0a2"
     startBlock: 99124541
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
+    storeEventsFrom: "146137864"
   WeightedPoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 7005512
@@ -681,6 +662,7 @@ avalanche:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 26386141
+    storeEventsFrom: "75305492"
   ComposableStablePoolV4Factory:
     address: "0x3B1eb8EB7b43882b385aB30533D9A2BeF9052a98"
     startBlock: 29221425
@@ -736,6 +718,7 @@ sepolia:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 3418831
+    storeEventsFrom: "10002700"
   WeightedPoolV4Factory:
     address: "0x7920BFa1b2041911b354747CA7A6cDD2dfC50Cfd"
     startBlock: 3424893
@@ -777,6 +760,7 @@ polygon-zkevm:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 203079
+    storeEventsFrom: "28665522"
   WeightedPoolV4Factory:
     address: "0x03F3Fb107e74F2EAC9358862E91ad3c692712054"
     startBlock: 219385
@@ -821,6 +805,7 @@ base:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 1196036
+    storeEventsFrom: "40542579"
   WeightedPoolV4Factory:
     address: "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4"
     startBlock: 1204869
@@ -838,12 +823,10 @@ base:
     startBlock: 13035219
 fantom:
   network: fantom
-  # graft:
-  #   block: 65629000
-  #   base: QmYsfRRojKnUBbF383mrXh3qE9zyjkwDQqZ4QtPfkijohT
   Vault:
     address: "0x20dd72Ed959b6147912C2e529F0a0C651c33c9ce"
     startBlock: 17433594
+    storeEventsFrom: "119334136"
   WeightedPoolFactory:
     address: "0x60467cb225092cE0c989361934311175f437Cf53"
     startBlock: 16897200
