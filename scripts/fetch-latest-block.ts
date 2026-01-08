@@ -75,6 +75,8 @@ async function updateAllNetworks(): Promise<void> {
   const fileContent = await fs.readFile(networksFilePath, 'utf-8');
   const networks: Record<string, any> = yaml.load(fileContent);
 
+  let updatedContent = fileContent;
+
   for (const network of Object.keys(networks)) {
     if (!networks[network].Vault) {
       console.log(`${network}: Vault not defined, skipping`);
@@ -87,12 +89,31 @@ async function updateAllNetworks(): Promise<void> {
       continue;
     }
 
-    networks[network].Vault.storeEventsFrom = blockNumber.toString();
+    const vaultAddress = networks[network].Vault.address;
+    const vaultStartBlock = networks[network].Vault.startBlock;
+
+    // Create regex pattern to find the Vault section for this network
+    // Match the Vault address and startBlock, then look for storeEventsFrom
+    const vaultPattern = new RegExp(
+      `(  Vault:\\s+address: "${vaultAddress}"\\s+startBlock: ${vaultStartBlock}\\s+)(storeEventsFrom: "[0-9]+"\\s+)`,
+      'g'
+    );
+
+    const vaultPatternNoStore = new RegExp(
+      `(  Vault:\\s+address: "${vaultAddress}"\\s+startBlock: ${vaultStartBlock}\\s+)`,
+      'g'
+    );
+
+    if (vaultPattern.test(updatedContent)) {
+      updatedContent = updatedContent.replace(vaultPattern, `$1storeEventsFrom: "${blockNumber}"\n  `);
+    } else {
+      updatedContent = updatedContent.replace(vaultPatternNoStore, `$1storeEventsFrom: "${blockNumber}"\n  `);
+    }
+
     console.log(`${network}: Updated to "${blockNumber}"`);
   }
 
-  const updatedYaml = yaml.dump(networks, { lineWidth: -1, quotingType: '"', forceQuotes: false });
-  await fs.writeFile(networksFilePath, updatedYaml);
+  await fs.writeFile(networksFilePath, updatedContent);
 }
 
 updateAllNetworks();
