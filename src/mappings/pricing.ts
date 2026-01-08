@@ -1,40 +1,8 @@
-import { Address, Bytes, BigInt, BigDecimal, log, dataSource } from '@graphprotocol/graph-ts';
-import { Pool, Balancer, Token, FXOracle } from '../types/schema';
-import {
-  ZERO_BD,
-  PRICING_ASSETS,
-  USD_STABLE_ASSETS,
-  ONE_BD,
-  ZERO_ADDRESS,
-  MIN_POOL_LIQUIDITY,
-} from './helpers/constants';
-import { hasVirtualSupply, isComposableStablePool, isLinearPool, isFXPool, PoolType } from './helpers/pools';
-import {
-  bytesToAddress,
-  createPoolSnapshot,
-  getToken,
-  getTokenPriceId,
-  loadPoolToken,
-  scaleDown,
-} from './helpers/misc';
-import { AaveLinearPool } from '../types/AaveLinearPoolFactory/AaveLinearPool';
-import {
-  FX_ASSET_AGGREGATORS,
-  MAX_POS_PRICE_CHANGE,
-  MAX_NEG_PRICE_CHANGE,
-  MAX_TIME_DIFF_FOR_PRICING,
-} from './helpers/constants';
+import { Address, BigInt, log } from '@graphprotocol/graph-ts';
+import { Token, FXOracle } from '../types/schema';
+import { scaleDown } from './helpers/misc';
+import { FX_ASSET_AGGREGATORS } from './helpers/constants';
 import { AnswerUpdated } from '../types/templates/OffchainAggregator/AccessControlledOffchainAggregator';
-
-export function updatePoolLiquidity(poolId: string, block_number: BigInt, timestamp: BigInt): boolean {
-  let pool = Pool.load(poolId);
-  if (pool == null) return false;
-
-  // Create or update pool daily snapshot
-  createPoolSnapshot(pool, timestamp.toI32());
-
-  return true;
-}
 
 export function handleAnswerUpdated(event: AnswerUpdated): void {
   const aggregatorAddress = event.address;

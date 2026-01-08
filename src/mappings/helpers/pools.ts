@@ -157,22 +157,6 @@ export function getPoolTokens(poolId: Bytes): Bytes[] | null {
   return tokens;
 }
 
-export function getPoolTokenManager(poolId: Bytes, tokenAddress: Bytes): Address | null {
-  let token = changetype<Address>(tokenAddress);
-
-  let vaultContract = Vault.bind(VAULT_ADDRESS);
-  let managersCall = vaultContract.try_getPoolTokenInfo(poolId, token);
-
-  if (managersCall.reverted) {
-    log.warning('Failed to get pool token info: {} {}', [poolId.toHexString(), token.toHexString()]);
-    return null;
-  }
-
-  let assetManager = managersCall.value.value3;
-
-  return assetManager;
-}
-
 export function setPriceRateProviders(poolId: string, poolAddress: Address, tokensList: Bytes[]): void {
   let poolContract = WeightedPoolV2.bind(poolAddress);
 

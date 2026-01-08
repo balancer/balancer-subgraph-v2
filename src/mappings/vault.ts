@@ -1,31 +1,18 @@
 import { BigInt, BigDecimal, Address, log, ethereum, dataSource } from '@graphprotocol/graph-ts';
 import { Swap as SwapEvent, PoolBalanceChanged, PoolBalanceManaged } from '../types/Vault/Vault';
-import { Balancer, Pool, Swap, JoinExit, Token, PoolContract } from '../types/schema';
+import { Pool, Swap, JoinExit } from '../types/schema';
 import {
   tokenToDecimal,
-  getTokenPriceId,
   scaleDown,
   scaleUp,
-  getTokenDecimals,
   loadPoolToken,
   getToken,
-  uptickSwapsForToken,
   updateTokenBalances,
   bytesToAddress,
   getPoolShare,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
-import { updatePoolLiquidity } from './pricing';
-import {
-  MIN_POOL_LIQUIDITY,
-  MIN_SWAP_VALUE_USD,
-  SWAP_IN,
-  SWAP_OUT,
-  VAULT_ADDRESS,
-  ZERO,
-  ZERO_ADDRESS,
-  ZERO_BD,
-} from './helpers/constants';
+import { SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import {
   hasVirtualSupply,
   isVariableWeightPool,
@@ -166,8 +153,6 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   }
 
   pool.save();
-
-  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
 }
 
 function handlePoolExited(event: PoolBalanceChanged): void {
@@ -232,44 +217,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
     token.totalBalanceNotional = tokenTotalBalanceNotional;
     token.save();
   }
-
-  updatePoolLiquidity(poolId, event.block.number, event.block.timestamp);
-}
-
-/************************************
- ********** INVESTMENTS *************
- ************************************/
-export function handleBalanceManage(event: PoolBalanceManaged): void {
-  let poolId = event.params.poolId;
-  let pool = Pool.load(poolId.toHex());
-  if (pool == null) {
-    log.warning('Pool not found in handleBalanceManage: {}', [poolId.toHexString()]);
-    return;
-  }
-
-  let tokenAddress: Address = event.params.token;
-
-  let cashDelta = event.params.cashDelta;
-  let managedDelta = event.params.managedDelta;
-
-  let poolToken = loadPoolToken(poolId.toHexString(), tokenAddress);
-  if (poolToken == null) {
-    throw new Error('poolToken not found');
-  }
-
-  let cashDeltaAmount = tokenToDecimal(cashDelta, poolToken.decimals);
-  let managedDeltaAmount = tokenToDecimal(managedDelta, poolToken.decimals);
-  let deltaAmount = cashDeltaAmount.plus(managedDeltaAmount);
-
-  poolToken.balance = poolToken.balance.plus(deltaAmount);
-  poolToken.cashBalance = poolToken.cashBalance.plus(cashDeltaAmount);
-  poolToken.managedBalance = poolToken.managedBalance.plus(managedDeltaAmount);
-  poolToken.save();
-
-  let token = getToken(tokenAddress);
-  const tokenTotalBalanceNotional = token.totalBalanceNotional.plus(deltaAmount);
-  token.totalBalanceNotional = tokenTotalBalanceNotional;
-  token.save();
 }
 
 /************************************
@@ -410,16 +357,6 @@ export function handleSwapEvent(event: SwapEvent): void {
   pool.swapsCount = pool.swapsCount.plus(BigInt.fromI32(1));
   pool.save();
 
-  // update vault total swap volume
-  let vault = Balancer.load('2') as Balancer;
-  vault.totalSwapCount = vault.totalSwapCount.plus(BigInt.fromI32(1));
-  vault.save();
-
-  // update swap counts for token
-  // updates token snapshots as well
-  uptickSwapsForToken(tokenInAddress, event);
-  uptickSwapsForToken(tokenOutAddress, event);
-
   // update volume and balances for the tokens
   // updates token snapshots as well
   updateTokenBalances(tokenInAddress, tokenAmountIn, SWAP_IN, event);
@@ -428,10 +365,4 @@ export function handleSwapEvent(event: SwapEvent): void {
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
   }
-
-  // Capture price
-  // TODO: refactor these if statements using a helper function
-  let blockNumber = event.block.number;
-
-  updatePoolLiquidity(poolId.toHex(), blockNumber, event.block.timestamp);
 }

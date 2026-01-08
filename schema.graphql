@@ -3,7 +3,6 @@ type Balancer @entity(immutable: false) {
   id: ID!
   poolCount: Int!
   pools: [Pool!] @derivedFrom(field: "vaultID")
-  totalSwapCount: BigInt!
 }
 type Pool @entity(immutable: false) {
   id: ID!
@@ -44,7 +43,6 @@ type Pool @entity(immutable: false) {
   joinsExits: [JoinExit!] @derivedFrom(field: "pool")
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
-  snapshots: [PoolSnapshot!] @derivedFrom(field: "pool")
 
   # LiquidityBootstrappingPool Only
   weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
@@ -71,7 +69,6 @@ type Pool @entity(immutable: false) {
   mustAllowlistLPs: Boolean
   managementAumFee: BigDecimal
   totalAumFeeCollectedInBPT: BigDecimal
-  circuitBreakers: [CircuitBreaker!] @derivedFrom(field: "pool")
 
   # LinearPool Only
   mainIndex: Int
@@ -133,7 +130,6 @@ type PoolToken @entity(immutable: false) {
   id: ID!
   poolId: Pool
   token: Token!
-  assetManager: Bytes!
   symbol: String!
   name: String!
   decimals: Int!
@@ -143,17 +139,12 @@ type PoolToken @entity(immutable: false) {
   priceRate: BigDecimal!
   balance: BigDecimal!
   paidProtocolFees: BigDecimal!
-  cashBalance: BigDecimal!
-  managedBalance: BigDecimal!
 
   # WeightedPool Only
   weight: BigDecimal
 
   # ComposableStablePool Only
   isExemptFromYieldProtocolFee: Boolean
-
-  # ManagedPool Only
-  circuitBreaker: CircuitBreaker
 }
 
 type PriceRateProvider @entity(immutable: false) {
@@ -165,15 +156,6 @@ type PriceRateProvider @entity(immutable: false) {
   lastCached: Int
   cacheDuration: Int
   cacheExpiry: Int
-}
-
-type CircuitBreaker @entity(immutable: true) {
-  id: ID!
-  pool: Pool!
-  token: PoolToken!
-  bptPrice: BigDecimal!
-  lowerBoundPercentage: BigDecimal!
-  upperBoundPercentage: BigDecimal!
 }
 
 type PoolShare @entity(immutable: false) {
@@ -252,16 +234,6 @@ enum OperationType {
   Update
 }
 
-type PoolSnapshot @entity(immutable: false) {
-  id: ID!
-  pool: Pool!
-  amounts: [BigDecimal!]!
-  totalShares: BigDecimal!
-  swapsCount: BigInt!
-  holdersCount: BigInt!
-  timestamp: Int!
-}
-
 type Token @entity(immutable: false) {
   id: ID!
   symbol: String
@@ -269,7 +241,6 @@ type Token @entity(immutable: false) {
   decimals: Int!
   address: String!
   totalBalanceNotional: BigDecimal!
-  totalSwapCount: BigInt!
   latestFXPrice: BigDecimal # latest "off-chain" price of token in USD, only available if token has an offchain price aggregator
   pool: Pool # pool entity associated with the token, if it is a Balancer pool
   fxOracleDecimals: Int # only available if token has an FX oracle

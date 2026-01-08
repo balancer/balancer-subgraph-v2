@@ -1,13 +1,10 @@
-import { BigDecimal, Address, BigInt, ethereum, Bytes } from '@graphprotocol/graph-ts';
-import { Pool, PoolToken, PoolShare, PoolSnapshot, PriceRateProvider, Token, FXOracle } from '../../types/schema';
+import { BigDecimal, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { Pool, PoolToken, PoolShare, PriceRateProvider, Token, FXOracle } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { WeightedPool } from '../../types/Vault/WeightedPool';
 import { Swap as SwapEvent, Vault } from '../../types/Vault/Vault';
-import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_ADDRESS, ZERO_BD } from './constants';
+import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO_ADDRESS, ZERO_BD } from './constants';
 import { PoolType, getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
-
-const DAY = 24 * 60 * 60;
 
 export function bytesToAddress(address: Bytes): Address {
   return Address.fromString(address.toHexString());
@@ -112,12 +109,7 @@ export function loadPoolToken(poolId: string, tokenAddress: Address): PoolToken 
   return PoolToken.load(getPoolTokenId(poolId, tokenAddress));
 }
 
-export function createPoolTokenEntity(
-  pool: Pool,
-  tokenAddress: Address,
-  tokenIndex: i32,
-  assetManagerAddress: Address
-): void {
+export function createPoolTokenEntity(pool: Pool, tokenAddress: Address, tokenIndex: i32): void {
   let poolTokenId = getPoolTokenId(pool.id, tokenAddress);
 
   let token = ERC20.bind(tokenAddress);
@@ -156,14 +148,11 @@ export function createPoolTokenEntity(
   let _token = getToken(tokenAddress);
   poolToken.poolId = pool.id;
   poolToken.address = tokenAddress.toHexString();
-  poolToken.assetManager = assetManagerAddress;
   poolToken.name = name;
   poolToken.symbol = symbol;
   poolToken.decimals = decimals;
   poolToken.balance = ZERO_BD;
   poolToken.paidProtocolFees = ZERO_BD;
-  poolToken.cashBalance = ZERO_BD;
-  poolToken.managedBalance = ZERO_BD;
   poolToken.priceRate = ONE_BD;
   poolToken.oldPriceRate = ONE_BD;
   poolToken.token = _token.id;
@@ -211,39 +200,6 @@ export function getTokenPriceId(
     .concat(block.toString());
 }
 
-export function createPoolSnapshot(pool: Pool, timestamp: i32): void {
-  let dayTimestamp = timestamp - (timestamp % DAY); // Todays Timestamp
-
-  let poolId = pool.id;
-  if (pool == null || !pool.tokensList) return;
-
-  let snapshotId = poolId + '-' + dayTimestamp.toString();
-  let snapshot = PoolSnapshot.load(snapshotId);
-
-  if (!snapshot) {
-    snapshot = new PoolSnapshot(snapshotId);
-  }
-
-  let tokens = pool.tokensList;
-  let amounts = new Array<BigDecimal>(tokens.length);
-  for (let i = 0; i < tokens.length; i++) {
-    let token = tokens[i];
-    let tokenAddress = Address.fromString(token.toHexString());
-    let poolToken = loadPoolToken(poolId, tokenAddress);
-    if (poolToken == null) continue;
-
-    amounts[i] = poolToken.balance;
-  }
-
-  snapshot.pool = poolId;
-  snapshot.amounts = amounts;
-  snapshot.totalShares = pool.totalShares;
-  snapshot.swapsCount = pool.swapsCount;
-  snapshot.holdersCount = pool.holdersCount;
-  snapshot.timestamp = dayTimestamp;
-  snapshot.save();
-}
-
 export function createToken(tokenAddress: Address): Token {
   let erc20token = ERC20.bind(tokenAddress);
   let token = new Token(tokenAddress.toHexString());
@@ -264,7 +220,6 @@ export function createToken(tokenAddress: Address): Token {
   token.symbol = symbol;
   token.decimals = decimals;
   token.totalBalanceNotional = ZERO_BD;
-  token.totalSwapCount = ZERO;
   token.address = tokenAddress.toHexString();
   token.save();
   return token;
@@ -278,13 +233,6 @@ export function getToken(tokenAddress: Address): Token {
     token = createToken(tokenAddress);
   }
   return token;
-}
-
-export function uptickSwapsForToken(tokenAddress: Address, event: ethereum.Event): void {
-  let token = getToken(tokenAddress);
-  // update the overall swap count for the token
-  token.totalSwapCount = token.totalSwapCount.plus(BigInt.fromI32(1));
-  token.save();
 }
 
 export function updateTokenBalances(

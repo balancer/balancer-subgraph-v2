@@ -10,7 +10,6 @@ import {
   ManagementAumFeePercentageChanged,
   MustAllowlistLPsSet,
   GradualSwapFeeUpdateScheduled,
-  CircuitBreakerSet,
   ProtocolFeePercentageCacheUpdated as EncodedProtocolFeePercentageCacheUpdated,
   TokenAdded,
   TokenRemoved,
@@ -35,9 +34,7 @@ import {
   GradualWeightUpdate,
   AmpUpdate,
   SwapFeeUpdate,
-  CircuitBreaker,
   PoolContract,
-  Balancer,
   PoolToken,
 } from '../types/schema';
 
@@ -51,13 +48,11 @@ import {
   computeCuratedSwapEnabled,
   createPoolTokenEntity,
   bytesToAddress,
-  getProtocolFeeCollector,
-  createPoolSnapshot,
   hexToBigInt,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
-import { getPoolTokenManager, getPoolTokens } from './helpers/pools';
+import { getPoolTokens } from './helpers/pools';
 import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
@@ -103,28 +98,6 @@ export function handleManagementAumFeeCollected(event: ManagementAumFeeCollected
   pool.save();
 }
 
-export function handleCircuitBreakerSet(event: CircuitBreakerSet): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  // ID for PoolToken and CircuitBreaker is built in the same way
-  let id = getPoolTokenId(poolContract.pool, event.params.token);
-  let circuitBreaker = new CircuitBreaker(id);
-  circuitBreaker.pool = poolContract.pool;
-  circuitBreaker.token = id;
-  circuitBreaker.bptPrice = scaleDown(event.params.bptPrice, 18);
-  circuitBreaker.lowerBoundPercentage = scaleDown(event.params.lowerBoundPercentage, 18);
-  circuitBreaker.upperBoundPercentage = scaleDown(event.params.upperBoundPercentage, 18);
-  circuitBreaker.save();
-
-  let poolToken = PoolToken.load(id);
-  if (!poolToken) return;
-
-  poolToken.circuitBreaker = id;
-  poolToken.save();
-}
-
 export function handleTokenAdded(event: TokenAdded): void {
   let poolAddress = event.address;
   let poolContract = PoolContract.load(poolAddress.toHexString());
@@ -139,13 +112,9 @@ export function handleTokenAdded(event: TokenAdded): void {
   pool.save();
 
   let tokenAdded = event.params.token;
-
-  let assetManager = getPoolTokenManager(poolIdBytes, tokenAdded);
-  if (!assetManager) return;
-
   let tokenAddedId = tokens.indexOf(tokenAdded);
 
-  createPoolTokenEntity(pool, tokenAdded, tokenAddedId, assetManager);
+  createPoolTokenEntity(pool, tokenAdded, tokenAddedId);
 }
 
 export function handleTokenRemoved(event: TokenRemoved): void {

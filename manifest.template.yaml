@@ -17,6 +17,8 @@ specVersion: 0.0.2
 repository: https://github.com/balancer-labs/balancer-subgraph-v2
 schema:
   file: ./schema.graphql
+indexerHints:
+  prune: never
 dataSources:
   {{#if EventEmitter}}
   - kind: ethereum/contract
@@ -81,8 +83,6 @@ dataSources:
           handler: handleSwapEvent
         - event: PoolBalanceChanged(indexed bytes32,indexed address,address[],int256[],uint256[])
           handler: handleBalanceChange
-        - event: PoolBalanceManaged(indexed bytes32,indexed address,indexed address,int256,int256)
-          handler: handleBalanceManage
   {{#if WeightedPoolFactory}}
   - kind: ethereum/contract
     name: WeightedPoolFactory

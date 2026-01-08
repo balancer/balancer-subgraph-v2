@@ -1,27 +1,18 @@
 import { ZERO_BD, ZERO, FX_ASSET_AGGREGATORS, VAULT_ADDRESS, ZERO_ADDRESS, ProtocolFeeType } from './helpers/constants';
-import {
-  getPoolTokenManager,
-  getPoolTokens,
-  isManagedPool,
-  isMetaStableDeprecated,
-  PoolType,
-  setPriceRateProviders,
-} from './helpers/pools';
+import { getPoolTokens, isManagedPool, isMetaStableDeprecated, PoolType, setPriceRateProviders } from './helpers/pools';
 
 import {
   newPoolEntity,
   createPoolTokenEntity,
   scaleDown,
   tokenToDecimal,
-  stringToBytes,
   bytesToAddress,
-  getProtocolFeeCollector,
   getToken,
   getFXOracle,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, ethereum, log } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
@@ -764,7 +755,6 @@ function findOrInitializeVault(): Balancer {
   // if no vault yet, set up blank initial
   vault = new Balancer('2');
   vault.poolCount = 0;
-  vault.totalSwapCount = ZERO;
 
   return vault;
 }
@@ -812,12 +802,7 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   let tokensAddresses = changetype<Address[]>(tokens);
 
   for (let i: i32 = 0; i < tokens.length; i++) {
-    let poolId = stringToBytes(pool.id);
-    let assetManager = getPoolTokenManager(poolId, tokens[i]);
-
-    if (!assetManager) continue;
-
-    createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
+    createPoolTokenEntity(pool, tokensAddresses[i], i);
 
     // Handle BPT
     if (tokensAddresses[i] === pool.address) {
