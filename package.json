@@ -14,10 +14,10 @@
     "generate-assets": "ts-node ./scripts/generate-assets",
     "generate-manifests": "ts-node ./scripts/generate-manifests",
     "update-addresses": "ts-node ./scripts/update-addresses-subgraph.ts",
-    "update-addresses:goerli": "yarn update-addresses goerli",
-    "update-addresses:local": "yarn update-addresses dockerParity",
-    "sync": "yarn import-abis && yarn update-addresses && yarn codegen && yarn build",
-    "sync:local": "yarn import-abis && yarn update-addresses dockerParity && yarn codegen && yarn build"
+    "update-addresses:goerli": "npm run update-addresses goerli",
+    "update-addresses:local": "npm run update-addresses dockerParity",
+    "sync": "npm run import-abis && npm run update-addresses && npm run codegen && npm run build",
+    "sync:local": "npm run import-abis && npm run update-addresses dockerParity && npm run codegen && npm run build"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.9",
