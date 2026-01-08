@@ -1,4 +1,4 @@
-import { Address, BigDecimal, BigInt, Bytes, log, store } from '@graphprotocol/graph-ts';
+import { Address, BigDecimal, BigInt, log } from '@graphprotocol/graph-ts';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { PausedStateChanged, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
 import {
@@ -6,16 +6,6 @@ import {
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
-import {
-  ManagementAumFeePercentageChanged,
-  MustAllowlistLPsSet,
-  GradualSwapFeeUpdateScheduled,
-  ProtocolFeePercentageCacheUpdated as EncodedProtocolFeePercentageCacheUpdated,
-  TokenAdded,
-  TokenRemoved,
-  JoinExitEnabledSet,
-  ManagementAumFeeCollected,
-} from '../types/templates/ManagedPool/ManagedPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
@@ -28,15 +18,7 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { ParametersSet } from '../types/templates/FXPool/FXPool';
-import {
-  Pool,
-  PriceRateProvider,
-  GradualWeightUpdate,
-  AmpUpdate,
-  SwapFeeUpdate,
-  PoolContract,
-  PoolToken,
-} from '../types/schema';
+import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, SwapFeeUpdate, PoolContract } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -46,13 +28,10 @@ import {
   loadPriceRateProvider,
   getPoolShare,
   computeCuratedSwapEnabled,
-  createPoolTokenEntity,
-  bytesToAddress,
   hexToBigInt,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
-import { getPoolTokens } from './helpers/pools';
 import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
@@ -60,86 +39,6 @@ import {
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2V2Pool';
 import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { Transfer } from '../types/Vault/ERC20';
-
-/************************************
- ********** MANAGED POOLS ***********
- ************************************/
-
-export function handleMustAllowlistLPsSet(event: MustAllowlistLPsSet): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.mustAllowlistLPs = event.params.mustAllowlistLPs;
-  pool.save();
-}
-
-export function handleJoinExitEnabledSet(event: JoinExitEnabledSet): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.joinExitEnabled = event.params.joinExitEnabled;
-  pool.save();
-}
-
-export function handleManagementAumFeeCollected(event: ManagementAumFeeCollected): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  let bptCollected = scaleDown(event.params.bptAmount, 18);
-  let totalCollected = pool.totalAumFeeCollectedInBPT ? pool.totalAumFeeCollectedInBPT : ZERO_BD;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  pool.totalAumFeeCollectedInBPT = totalCollected!.plus(bptCollected);
-  pool.save();
-}
-
-export function handleTokenAdded(event: TokenAdded): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  let poolIdBytes = Bytes.fromHexString(poolContract.pool);
-  let tokens = getPoolTokens(poolIdBytes);
-  if (tokens == null) return;
-  pool.tokensList = tokens;
-  pool.save();
-
-  let tokenAdded = event.params.token;
-  let tokenAddedId = tokens.indexOf(tokenAdded);
-
-  createPoolTokenEntity(pool, tokenAdded, tokenAddedId);
-}
-
-export function handleTokenRemoved(event: TokenRemoved): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  let poolIdBytes = Bytes.fromHexString(poolContract.pool);
-  let tokens = getPoolTokens(poolIdBytes);
-  if (tokens == null) return;
-  pool.tokensList = tokens;
-  pool.save();
-
-  for (let i: i32 = 0; i < pool.tokensList.length; i++) {
-    let tokenAdress = bytesToAddress(pool.tokensList[i]);
-    let poolToken = loadPoolToken(pool.id, tokenAdress) as PoolToken;
-    poolToken.index = i;
-    poolToken.save();
-  }
-
-  let poolTokenRemovedId = getPoolTokenId(poolContract.pool, event.params.token);
-  store.remove('PoolToken', poolTokenRemovedId);
-}
 
 /************************************
  *********** PROTOCOL FEE ***********
@@ -162,33 +61,6 @@ export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercen
   } else if (feeType == ProtocolFeeType.Aum) {
     pool.protocolAumFeeCache = feePercentage;
   }
-
-  pool.save();
-}
-
-// For Managed Pools, the feeCache is encoded into bytes as follows:
-// [  8 bytes |    8 bytes    |     8 bytes     |     8 bytes    ]
-// [  unused  | AUM fee cache | Yield fee cache | Swap fee cache ]
-// [MSB                                                       LSB]
-export function handleEncodedProtocolFeePercentageCacheUpdated(event: EncodedProtocolFeePercentageCacheUpdated): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  // Convert to hex and remove the 0x prefix
-  const feeCache = event.params.feeCache.toHex().slice(2);
-
-  // Each byte represents 2 hex digits
-  // Thus each fee is represented by 16 chars
-  let encodedAumFee = feeCache.slice(16, 32);
-  let encodedYieldFee = feeCache.slice(32, 48);
-  let encodedSwapFee = feeCache.slice(48, 64);
-
-  pool.protocolAumFeeCache = scaleDown(hexToBigInt(encodedAumFee), 18);
-  pool.protocolYieldFeeCache = scaleDown(hexToBigInt(encodedYieldFee), 18);
-  pool.protocolSwapFeeCache = scaleDown(hexToBigInt(encodedSwapFee), 18);
 
   pool.save();
 }
@@ -384,28 +256,6 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
   );
 }
 
-export function handleGradualSwapFeeUpdateScheduled(event: GradualSwapFeeUpdateScheduled): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  const startSwapFee = scaleDown(event.params.startSwapFeePercentage, 18);
-  const endSwapFee = scaleDown(event.params.endSwapFeePercentage, 18);
-
-  const swapFeeUpdateID = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
-  createSwapFeeUpdate(
-    swapFeeUpdateID,
-    pool,
-    event.block.timestamp.toI32(),
-    event.params.startTime,
-    event.params.endTime,
-    startSwapFee,
-    endSwapFee
-  );
-}
-
 export function createSwapFeeUpdate(
   _id: string,
   _pool: Pool,
@@ -436,17 +286,6 @@ export function handleManagementFeePercentageChanged(event: ManagementFeePercent
 
   let pool = Pool.load(poolContract.pool) as Pool;
   pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
-  pool.save();
-}
-
-export function handleManagementAumFeePercentageChanged(event: ManagementAumFeePercentageChanged): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  pool.managementAumFee = scaleDown(event.params.managementAumFeePercentage, 18);
   pool.save();
 }
 

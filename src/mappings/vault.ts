@@ -356,8 +356,8 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   // update volume and balances for the tokens
   // updates token snapshots as well
-  updateTokenBalances(tokenInAddress, tokenAmountIn, SWAP_IN, event);
-  updateTokenBalances(tokenOutAddress, tokenAmountOut, SWAP_OUT, event);
+  updateTokenBalances(tokenInAddress, tokenAmountIn, SWAP_IN);
+  updateTokenBalances(tokenOutAddress, tokenAmountOut, SWAP_OUT);
 
   if (swap.tokenAmountOut == ZERO_BD || swap.tokenAmountIn == ZERO_BD) {
     return;
