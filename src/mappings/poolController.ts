@@ -28,7 +28,6 @@ import {
   loadPriceRateProvider,
   getPoolShare,
   computeCuratedSwapEnabled,
-  hexToBigInt,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
