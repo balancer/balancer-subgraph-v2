@@ -52,7 +52,7 @@ import { Assimilator } from '../types/FXPoolDeployer/Assimilator';
 import { ChainlinkPriceFeed } from '../types/FXPoolDeployer/ChainlinkPriceFeed';
 import { OunceToGramOracle } from '../types/templates/FXPoolDeployer/OunceToGramOracle';
 import { AggregatorConverter } from '../types/templates/FXPoolDeployer/AggregatorConverter';
-import { ERC20, Transfer } from '../types/Vault/ERC20';
+import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer, setPriceRateProvider } from './poolController';
 import { ComposableStablePool } from '../types/ComposableStablePoolFactory/ComposableStablePool';
 

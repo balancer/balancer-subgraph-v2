@@ -1,7 +1,7 @@
 import { BigDecimal, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 import { Pool, PoolToken, PoolShare, PriceRateProvider, Token, FXOracle } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
-import { Swap as SwapEvent, Vault } from '../../types/Vault/Vault';
+import { Vault } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO_ADDRESS, ZERO_BD } from './constants';
 import { PoolType, getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
@@ -235,12 +235,7 @@ export function getToken(tokenAddress: Address): Token {
   return token;
 }
 
-export function updateTokenBalances(
-  tokenAddress: Address,
-  notionalBalance: BigDecimal,
-  swapDirection: i32,
-  event: SwapEvent
-): void {
+export function updateTokenBalances(tokenAddress: Address, notionalBalance: BigDecimal, swapDirection: i32): void {
   let token = getToken(tokenAddress);
 
   if (swapDirection == SWAP_IN) {

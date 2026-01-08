@@ -1,5 +1,5 @@
 import { BigInt, BigDecimal, Address, log, ethereum, dataSource } from '@graphprotocol/graph-ts';
-import { Swap as SwapEvent, PoolBalanceChanged, PoolBalanceManaged } from '../types/Vault/Vault';
+import { Swap as SwapEvent, PoolBalanceChanged } from '../types/Vault/Vault';
 import { Pool, Swap, JoinExit } from '../types/schema';
 import {
   tokenToDecimal,
@@ -18,13 +18,10 @@ import {
   isVariableWeightPool,
   isStableLikePool,
   PoolType,
-  isLinearPool,
-  isFXPool,
   isComposableStablePool,
   isManagedPool,
 } from './helpers/pools';
 import { calculateInvariant, AMP_PRECISION, updateAmpFactor } from './helpers/stable';
-import { USDC_ADDRESS } from './helpers/assets';
 import { Transfer } from '../types/Vault/ERC20';
 import { handleTransfer } from './poolController';
 
