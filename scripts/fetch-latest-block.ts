@@ -48,7 +48,7 @@ async function fetchBlockNumber(rpcUrl: string): Promise<number | null> {
     }
 
     return parseInt(data.result, 16);
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -73,7 +73,8 @@ async function getLatestBlock(network: string): Promise<number | null> {
 async function updateAllNetworks(): Promise<void> {
   const networksFilePath = path.resolve(__dirname, '../networks.yaml');
   const fileContent = await fs.readFile(networksFilePath, 'utf-8');
-  const networks: Record<string, any> = yaml.load(fileContent);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const networks: Record<string, any> = yaml.load(fileContent) as Record<string, any>;
 
   let updatedContent = fileContent;
 
