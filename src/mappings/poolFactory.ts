@@ -31,7 +31,6 @@ import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templat
 import { StablePhantomPoolV2 as StablePhantomPoolV2Template } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
-import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
@@ -144,12 +143,6 @@ export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.LiquidityBootstrapping);
   if (pool == null) return;
   LiquidityBootstrappingPoolTemplate.create(event.params.pool);
-}
-
-export function handleNewInvestmentPool(event: PoolCreated): void {
-  const pool = createWeightedLikePool(event, PoolType.Investment);
-  if (pool == null) return;
-  InvestmentPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewManagedKassandraPool(event: KassandraPoolCreated): void {

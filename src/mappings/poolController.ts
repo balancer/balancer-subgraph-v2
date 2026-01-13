@@ -5,7 +5,6 @@ import {
   GradualWeightUpdateScheduled,
   SwapEnabledSet,
 } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
-import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
@@ -272,20 +271,6 @@ export function createSwapFeeUpdate(
   swapFeeUpdate.startSwapFeePercentage = _startSwapFeePercentage;
   swapFeeUpdate.endSwapFeePercentage = _endSwapFeePercentage;
   swapFeeUpdate.save();
-}
-
-/************************************
- ********* MANAGEMENT FEES **********
- ************************************/
-
-export function handleManagementFeePercentageChanged(event: ManagementFeePercentageChanged): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
-  pool.save();
 }
 
 /************************************
