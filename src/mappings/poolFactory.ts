@@ -796,15 +796,6 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
 
   for (let i: i32 = 0; i < tokens.length; i++) {
     createPoolTokenEntity(pool, tokensAddresses[i], i);
-
-    // Handle BPT
-    if (tokensAddresses[i] === pool.address) {
-      let bpt = Token.load(pool.address.toHexString());
-      if (bpt !== null) {
-        bpt.pool = pool.id;
-        bpt.save();
-      }
-    }
   }
 }
 
