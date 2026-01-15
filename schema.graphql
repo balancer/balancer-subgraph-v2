@@ -185,16 +185,6 @@ type AmpUpdate @entity(immutable: true) {
   endAmp: BigInt!
 }
 
-type SwapFeeUpdate @entity(immutable: true) {
-  id: ID!
-  pool: Pool!
-  scheduledTimestamp: Int!
-  startTimestamp: BigInt!
-  endTimestamp: BigInt!
-  startSwapFeePercentage: BigDecimal!
-  endSwapFeePercentage: BigDecimal!
-}
-
 type Swap @entity(immutable: true) {
   id: ID!
   caller: Bytes!
