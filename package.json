@@ -7,73 +7,29 @@
     "codegen": "npm run generate-manifests subgraph.polygon.yaml && graph codegen --output-dir src/types/",
     "build": "graph build",
     "lint": "eslint --max-warnings 0 . --ext .ts",
-    "test": "jest ./test/*.test.ts",
     "deploy": "graph deploy balancer-labs/v2-smol --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy:local": "graph deploy balancer-labs/v2-smol subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "import-abis": "ts-node ./scripts/update-abis.ts",
     "generate-assets": "ts-node ./scripts/generate-assets",
     "generate-manifests": "ts-node ./scripts/generate-manifests",
     "update-addresses": "ts-node ./scripts/update-addresses-subgraph.ts",
-    "update-addresses:goerli": "npm run update-addresses goerli",
-    "update-addresses:local": "npm run update-addresses dockerParity",
     "fetch-block": "ts-node ./scripts/fetch-latest-block.ts",
-    "sync": "npm run import-abis && npm run update-addresses && npm run codegen && npm run build",
-    "sync:local": "npm run import-abis && npm run update-addresses dockerParity && npm run codegen && npm run build"
+    "sync": "npm run import-abis && npm run update-addresses && npm run codegen && npm run build"
   },
   "devDependencies": {
-    "@apollo/client": "^3.3.9",
-    "@babel/core": "^7.12.13",
-    "@babel/preset-env": "^7.12.13",
-    "@babel/preset-typescript": "^7.12.13",
     "@graphprotocol/graph-cli": "^0.98.0",
-    "@graphprotocol/graph-ts": "0.34.0",
-    "@types/jest": "^26.0.20",
+    "@graphprotocol/graph-ts": "0.38.2",
     "@types/node": "^16.4.1",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
-    "apollo-client": "^2.6.10",
     "assemblyscript": "0.19.10",
-    "babel-jest": "^26.6.3",
     "eslint": "^7.9.0",
-    "eslint-plugin-mocha-no-only": "^1.1.1",
     "eslint-plugin-prettier": "^3.1.4",
-    "fs-extra": "^10.0.0",
     "glob": "^7.1.6",
     "handlebars": "^4.7.7",
-    "jest": "^26.6.3",
     "js-yaml": "^4.0.0",
-    "path": "^0.12.7",
     "prettier": "^2.1.2",
-    "ts-jest": "^26.5.0",
     "ts-node": "^10.1.0",
     "typescript": "^4.0.2"
-  },
-  "dependencies": {
-    "@assemblyscript/loader": "^0.17.5",
-    "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0",
-    "global": "^4.4.0",
-    "node-fetch": "^2.6.7"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.test.json"
-      }
-    },
-    "preset": "ts-jest"
-  },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "node": "current"
-          }
-        },
-        "@babel/preset-typescript"
-      ]
-    ]
   }
 }

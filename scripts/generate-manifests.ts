@@ -1,13 +1,13 @@
 import yaml = require('js-yaml');
 
 import Handlebars = require('handlebars');
-import fs = require('fs-extra');
+import fs = require('fs');
 import path = require('path');
 
 const generateManifests = async (): Promise<void> => {
   const networksFilePath = path.resolve(__dirname, '../networks.yaml');
   const networks: Record<string, Record<string, unknown>> = yaml.load(
-    await fs.readFile(networksFilePath, { encoding: 'utf-8' })
+    fs.readFileSync(networksFilePath, { encoding: 'utf-8' })
   );
 
   const template = fs.readFileSync('manifest.template.yaml').toString();

@@ -1,6 +1,5 @@
-import fetch from 'node-fetch';
 import yaml = require('js-yaml');
-import fs = require('fs-extra');
+import fs = require('fs');
 import path = require('path');
 
 const RPC_URLS: Record<string, string[]> = {
@@ -72,7 +71,7 @@ async function getLatestBlock(network: string): Promise<number | null> {
 
 async function updateAllNetworks(): Promise<void> {
   const networksFilePath = path.resolve(__dirname, '../networks.yaml');
-  const fileContent = await fs.readFile(networksFilePath, 'utf-8');
+  const fileContent = fs.readFileSync(networksFilePath, 'utf-8');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const networks: Record<string, any> = yaml.load(fileContent) as Record<string, any>;
 
@@ -114,7 +113,7 @@ async function updateAllNetworks(): Promise<void> {
     console.log(`${network}: Updated to "${blockNumber}"`);
   }
 
-  await fs.writeFile(networksFilePath, updatedContent);
+  fs.writeFileSync(networksFilePath, updatedContent);
 }
 
 updateAllNetworks();

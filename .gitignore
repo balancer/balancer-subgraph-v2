@@ -10,3 +10,4 @@ data/ipfs
 data/postgres
 *.js
 subgraph*.yaml
+.claude

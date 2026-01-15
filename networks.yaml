@@ -6,7 +6,7 @@ mainnet:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 12272146
-    storeEventsFrom: "24189918"
+    storeEventsFrom: "24239051"
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 12272146
@@ -239,7 +239,7 @@ polygon:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 15832990
-    storeEventsFrom: "81377810"
+    storeEventsFrom: "81673692"
   WeightedPoolFactory:
     address: "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9"
     startBlock: 15832998
@@ -365,7 +365,7 @@ arbitrum:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 222832
-    storeEventsFrom: "419193582"
+    storeEventsFrom: "421563491"
   WeightedPoolFactory:
     address: "0x7dFdEF5f355096603419239CE743BfaF1120312B"
     startBlock: 222863
@@ -470,7 +470,7 @@ bnb:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 22895868
-    storeEventsFrom: "74496772"
+    storeEventsFrom: "75383985"
   WeightedPoolV2Factory:
     address: "0xC128a9954e6c874eA3d62ce62B468bA073093F25"
     startBlock: 22895868
@@ -512,7 +512,7 @@ gnosis:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 24821598
-    storeEventsFrom: "44059773"
+    storeEventsFrom: "44175009"
   WeightedPoolV2Factory:
     address: "0xf302f9F50958c5593770FDf4d4812309fF77414f"
     startBlock: 25414470
@@ -569,7 +569,7 @@ optimism:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 7003431
-    storeEventsFrom: "146138051"
+    storeEventsFrom: "146434290"
   WeightedPoolFactory:
     address: "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca"
     startBlock: 7005512
@@ -662,7 +662,7 @@ avalanche:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 26386141
-    storeEventsFrom: "75305806"
+    storeEventsFrom: "75794688"
   ComposableStablePoolV4Factory:
     address: "0x3B1eb8EB7b43882b385aB30533D9A2BeF9052a98"
     startBlock: 29221425
@@ -718,7 +718,7 @@ sepolia:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 3418831
-    storeEventsFrom: "10002729"
+    storeEventsFrom: "10048049"
   WeightedPoolV4Factory:
     address: "0x7920BFa1b2041911b354747CA7A6cDD2dfC50Cfd"
     startBlock: 3424893
@@ -760,7 +760,7 @@ polygon-zkevm:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 203079
-    storeEventsFrom: "28665638"
+    storeEventsFrom: "28850633"
   WeightedPoolV4Factory:
     address: "0x03F3Fb107e74F2EAC9358862E91ad3c692712054"
     startBlock: 219385
@@ -805,7 +805,7 @@ base:
   Vault:
     address: "0xBA12222222228d8Ba445958a75a0704d566BF2C8"
     startBlock: 1196036
-    storeEventsFrom: "40542766"
+    storeEventsFrom: "40839005"
   WeightedPoolV4Factory:
     address: "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4"
     startBlock: 1204869
@@ -826,7 +826,7 @@ fantom:
   Vault:
     address: "0x20dd72Ed959b6147912C2e529F0a0C651c33c9ce"
     startBlock: 17433594
-    storeEventsFrom: "119334290"
+    storeEventsFrom: "119504494"
   WeightedPoolFactory:
     address: "0x60467cb225092cE0c989361934311175f437Cf53"
     startBlock: 16897200
