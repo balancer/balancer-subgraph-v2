@@ -1,4 +1,3 @@
-import yaml = require('js-yaml');
 import fs = require('fs');
 import path = require('path');
 
@@ -19,7 +18,7 @@ const RPC_URLS: Record<string, string[]> = {
   sepolia: ['https://rpc.ankr.com/eth_sepolia', 'https://ethereum-sepolia.publicnode.com'],
   'polygon-zkevm': ['https://zkevm-rpc.com', 'https://rpc.ankr.com/polygon_zkevm'],
   base: ['https://mainnet.base.org', 'https://base.publicnode.com', 'https://rpc.ankr.com/base'],
-  fantom: ['https://rpcapi.fantom.network', 'https://rpc.ankr.com/fantom', 'https://fantom.publicnode.com'],
+  sonic: ['https://rpc.soniclabs.com', 'https://sonic.drpc.org', 'https://sonic-json-rpc.stakely.io'],
 };
 
 interface JsonRpcResponse {
@@ -70,12 +69,10 @@ async function getLatestBlock(network: string): Promise<number | null> {
 }
 
 async function updateAllNetworks(): Promise<void> {
-  const networksFilePath = path.resolve(__dirname, '../networks.yaml');
+  const networksFilePath = path.resolve(__dirname, '../networks.json');
   const fileContent = fs.readFileSync(networksFilePath, 'utf-8');
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const networks: Record<string, any> = yaml.load(fileContent) as Record<string, any>;
-
-  let updatedContent = fileContent;
+  const networks: Record<string, any> = JSON.parse(fileContent) as Record<string, any>;
 
   for (const network of Object.keys(networks)) {
     if (!networks[network].Vault) {
@@ -89,31 +86,14 @@ async function updateAllNetworks(): Promise<void> {
       continue;
     }
 
-    const vaultAddress = networks[network].Vault.address;
-    const vaultStartBlock = networks[network].Vault.startBlock;
-
-    // Create regex pattern to find the Vault section for this network
-    // Match the Vault address and startBlock, then look for storeEventsFrom
-    const vaultPattern = new RegExp(
-      `(  Vault:\\s+address: "${vaultAddress}"\\s+startBlock: ${vaultStartBlock}\\s+)(storeEventsFrom: "[0-9]+"\\s+)`,
-      'g'
-    );
-
-    const vaultPatternNoStore = new RegExp(
-      `(  Vault:\\s+address: "${vaultAddress}"\\s+startBlock: ${vaultStartBlock}\\s+)`,
-      'g'
-    );
-
-    if (vaultPattern.test(updatedContent)) {
-      updatedContent = updatedContent.replace(vaultPattern, `$1storeEventsFrom: "${blockNumber}"\n  `);
-    } else {
-      updatedContent = updatedContent.replace(vaultPatternNoStore, `$1storeEventsFrom: "${blockNumber}"\n  `);
-    }
+    // Update the storeEventsFrom field directly in the networks object
+    networks[network].Vault.storeEventsFrom = blockNumber.toString();
 
     console.log(`${network}: Updated to "${blockNumber}"`);
   }
 
-  fs.writeFileSync(networksFilePath, updatedContent);
+  // Write the updated networks object back to the JSON file
+  fs.writeFileSync(networksFilePath, JSON.stringify(networks, null, 2) + '\n');
 }
 
 updateAllNetworks();

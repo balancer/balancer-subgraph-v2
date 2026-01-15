@@ -1,12 +1,10 @@
-import yaml = require('js-yaml');
-
 import Handlebars = require('handlebars');
 import fs = require('fs');
 import path = require('path');
 
 const generateManifests = async (): Promise<void> => {
-  const networksFilePath = path.resolve(__dirname, '../networks.yaml');
-  const networks: Record<string, Record<string, unknown>> = yaml.load(
+  const networksFilePath = path.resolve(__dirname, '../networks.json');
+  const networks: Record<string, Record<string, unknown>> = JSON.parse(
     fs.readFileSync(networksFilePath, { encoding: 'utf-8' })
   );
 
