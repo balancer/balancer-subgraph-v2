@@ -2030,8 +2030,6 @@ templates:
           handler: handleSwapFeePercentageChange
         - event: SwapEnabledSet(bool)
           handler: handleSwapEnabledSet
-        - event: GradualWeightUpdateScheduled(uint256,uint256,uint256[],uint256[])
-          handler: handleGradualWeightUpdateScheduled
         - event: PausedStateChanged(bool)
           handler: handlePausedStateChanged
   - kind: ethereum/contract

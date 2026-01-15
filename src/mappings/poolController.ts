@@ -1,10 +1,7 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { PausedStateChanged, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
-import {
-  GradualWeightUpdateScheduled,
-  SwapEnabledSet,
-} from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
+import { SwapEnabledSet } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
@@ -17,7 +14,7 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, GradualWeightUpdate, AmpUpdate, PoolContract } from '../types/schema';
+import { Pool, PriceRateProvider, AmpUpdate, PoolContract } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -150,26 +147,6 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
   pool.swapEnabledInternal = true;
   pool.swapEnabled = computeCuratedSwapEnabled(pool.isPaused, pool.swapEnabledCurationSignal, true);
   pool.save();
-}
-
-/************************************
- ********** WEIGHT UPDATES **********
- ************************************/
-
-export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateScheduled): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
-  let weightUpdate = new GradualWeightUpdate(id);
-  weightUpdate.poolId = poolContract.pool;
-  weightUpdate.scheduledTimestamp = event.block.timestamp.toI32();
-  weightUpdate.startTimestamp = event.params.startTime;
-  weightUpdate.endTimestamp = event.params.endTime;
-  weightUpdate.startWeights = event.params.startWeights;
-  weightUpdate.endWeights = event.params.endWeights;
-  weightUpdate.save();
 }
 
 /************************************

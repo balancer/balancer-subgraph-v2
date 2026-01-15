@@ -44,9 +44,6 @@ type Pool @entity(immutable: false) {
   swaps: [Swap!] @derivedFrom(field: "poolId")
   shares: [PoolShare!] @derivedFrom(field: "poolId")
 
-  # LiquidityBootstrappingPool Only
-  weightUpdates: [GradualWeightUpdate!] @derivedFrom(field: "poolId")
-
   # StablePool Only
   amp: BigInt
   latestAmpUpdate: AmpUpdate
@@ -163,16 +160,6 @@ type PoolShare @entity(immutable: false) {
   userAddress: Bytes!
   poolId: Pool!
   balance: BigDecimal!
-}
-
-type GradualWeightUpdate @entity(immutable: true) {
-  id: ID!
-  poolId: Pool!
-  scheduledTimestamp: Int!
-  startTimestamp: BigInt!
-  endTimestamp: BigInt!
-  startWeights: [BigInt!]!
-  endWeights: [BigInt!]!
 }
 
 type AmpUpdate @entity(immutable: true) {
