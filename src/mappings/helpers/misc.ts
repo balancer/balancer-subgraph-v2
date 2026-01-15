@@ -5,7 +5,6 @@ import { Vault } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO_ADDRESS, ZERO_BD } from './constants';
 import { PoolType, getPoolAddress, isComposableStablePool } from './pools';
 import { ComposableStablePool } from '../../types/ComposableStablePoolFactory/ComposableStablePool';
-import { WeightedPool } from '../../types/templates/WeightedPool/WeightedPool';
 
 export function bytesToAddress(address: Bytes): Address {
   return Address.fromString(address.toHexString());
@@ -217,11 +216,10 @@ export function createToken(tokenAddress: Address): Token {
   if (!maybeSymbol.reverted) symbol = maybeSymbol.value;
   if (!maybeDecimals.reverted) decimals = maybeDecimals.value;
 
-  let pool = WeightedPool.bind(tokenAddress);
-  let isPoolCall = pool.try_getPoolId();
-  if (!isPoolCall.reverted) {
-    let poolId = isPoolCall.value;
-    token.pool = poolId.toHexString();
+  // Check if the token is a pool
+  let poolModel = Pool.load(tokenAddress.toHexString());
+  if (poolModel != null) {
+    token.pool = poolModel.id;
   }
 
   token.name = name;
