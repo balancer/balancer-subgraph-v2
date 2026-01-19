@@ -157,9 +157,13 @@ type PriceRateProvider @entity(immutable: false) {
 
 type PoolShare @entity(immutable: false) {
   id: ID!
-  userAddress: Bytes!
+  userAddress: User!
   poolId: Pool!
   balance: BigDecimal!
+}
+
+type User @entity(immutable: true) {
+  id: ID!
 }
 
 type AmpUpdate @entity(immutable: true) {
@@ -182,7 +186,7 @@ type Swap @entity(immutable: true) {
   tokenAmountIn: BigDecimal!
   tokenAmountOut: BigDecimal!
   poolId: Pool!
-  userAddress: Bytes!
+  userAddress: User!
   timestamp: Int!
   block: BigInt
   tx: Bytes!
@@ -199,7 +203,7 @@ type JoinExit @entity(immutable: true) {
   sender: Bytes!
   amounts: [BigDecimal!]!
   pool: Pool!
-  user: Bytes!
+  user: User!
   timestamp: Int!
   tx: Bytes!
   block: BigInt

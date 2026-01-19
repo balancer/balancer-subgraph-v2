@@ -1,5 +1,5 @@
 import { BigDecimal, Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { Pool, PoolToken, PoolShare, PriceRateProvider, Token, FXOracle } from '../../types/schema';
+import { Pool, PoolToken, PoolShare, PriceRateProvider, Token, User, FXOracle } from '../../types/schema';
 import { ERC20 } from '../../types/Vault/ERC20';
 import { Vault } from '../../types/Vault/Vault';
 import { ONE_BD, SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO_ADDRESS, ZERO_BD } from './constants';
@@ -77,10 +77,12 @@ export function getPoolShare(poolId: string, lpAddress: Address): PoolShare {
 }
 
 export function createPoolShareEntity(poolId: string, lpAddress: Address): PoolShare {
+  createUserEntity(lpAddress);
+
   let id = getPoolShareId(getPoolAddress(poolId), lpAddress);
   let poolShare = new PoolShare(id);
 
-  poolShare.userAddress = lpAddress;
+  poolShare.userAddress = lpAddress.toHex();
   poolShare.poolId = poolId;
   poolShare.balance = ZERO_BD;
   poolShare.save();
@@ -198,6 +200,14 @@ export function getTokenPriceId(
     .concat(stableTokenAddress.toHexString())
     .concat('-')
     .concat(block.toString());
+}
+
+export function createUserEntity(address: Address): void {
+  let addressHex = address.toHex();
+  if (User.load(addressHex) == null) {
+    let user = new User(addressHex);
+    user.save();
+  }
 }
 
 export function createToken(tokenAddress: Address): Token {
