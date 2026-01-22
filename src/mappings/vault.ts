@@ -10,7 +10,6 @@ import {
   updateTokenBalances,
   bytesToAddress,
   getPoolShare,
-  createUserEntity,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 import { SWAP_IN, SWAP_OUT, VAULT_ADDRESS, ZERO, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
@@ -84,7 +83,7 @@ function handlePoolJoined(event: PoolBalanceChanged): void {
   join.type = 'Join';
   join.amounts = joinAmounts;
   join.pool = event.params.poolId.toHexString();
-  join.user = event.params.liquidityProvider.toHexString();
+  join.user = event.params.liquidityProvider;
   join.timestamp = blockTimestamp;
   join.tx = transactionHash;
   join.block = event.block.number;
@@ -184,7 +183,7 @@ function handlePoolExited(event: PoolBalanceChanged): void {
   exit.type = 'Exit';
   exit.amounts = exitAmounts;
   exit.pool = event.params.poolId.toHexString();
-  exit.user = event.params.liquidityProvider.toHexString();
+  exit.user = event.params.liquidityProvider;
   exit.timestamp = blockTimestamp;
   exit.tx = transactionHash;
   exit.block = event.block.number;
@@ -221,7 +220,6 @@ function handlePoolExited(event: PoolBalanceChanged): void {
  ************** SWAPS ***************
  ************************************/
 export function handleSwapEvent(event: SwapEvent): void {
-  createUserEntity(event.transaction.from);
   let poolId = event.params.poolId;
 
   let pool = Pool.load(poolId.toHexString());
@@ -338,7 +336,7 @@ export function handleSwapEvent(event: SwapEvent): void {
   swap.tokenAmountOut = tokenAmountOut;
 
   swap.caller = event.transaction.from;
-  swap.userAddress = event.transaction.from.toHex();
+  swap.userAddress = event.transaction.from;
   swap.poolId = poolId.toHex();
 
   swap.timestamp = blockTimestamp;
