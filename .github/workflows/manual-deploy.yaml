@@ -1,0 +1,49 @@
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      network:
+        description: "Choose network"
+        required: true
+        default: "mainnet"
+        type: choice
+        options:
+          - mainnet
+          - polygon
+          - arbitrum
+          - gnosis
+          - optimism
+          - avalanche
+          - polygon-zkevm
+          - base
+          - sonic
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: graph
+    env:
+      DEPLOY_KEY: ${{ secrets.ORMI_DEPLOY_KEY }}
+      NETWORK: ${{ inputs.network }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install
+        run: npm ci
+      - name: Assets
+        run: npm run generate-assets
+      - name: Codegen
+        run: npm run codegen
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        run: |
+          npx graph deploy "v2-$NETWORK-smol" "subgraph.$NETWORK.yaml" \
+          --node 'https://api.subgraph.ormilabs.com/deploy' \
+          --ipfs 'https://api.subgraph.ormilabs.com/ipfs' \
+          --deploy-key "$DEPLOY_KEY" \
+          --version-label "$(git rev-parse --short HEAD)"

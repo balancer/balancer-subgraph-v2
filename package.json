@@ -4,16 +4,16 @@
   "scripts": {
     "create": "graph create balancer-labs/v2-smol --node https://api.thegraph.com/deploy/",
     "create:local": "graph create balancer-labs/v2-smol --node http://localhost:8020",
-    "codegen": "npm run generate-manifests subgraph.polygon.yaml && graph codegen --output-dir src/types/",
-    "build": "graph build",
+    "codegen": "npm run generate-manifests && graph codegen subgraph.mainnet.yaml --output-dir src/types/",
+    "build": "graph build subgraph.mainnet.yaml",
     "lint": "eslint --max-warnings 0 . --ext .ts",
     "deploy": "graph deploy balancer-labs/v2-smol --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "deploy:local": "graph deploy balancer-labs/v2-smol subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy:local": "graph deploy balancer-labs/v2-smol subgraph.mainnet.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "import-abis": "ts-node ./scripts/update-abis.ts",
     "generate-assets": "ts-node ./scripts/generate-assets",
     "generate-manifests": "ts-node ./scripts/generate-manifests",
     "update-addresses": "ts-node ./scripts/update-addresses-subgraph.ts",
-    "fetch-block": "ts-node ./scripts/fetch-latest-block.ts",
+    "update-block-numbers": "ts-node ./scripts/update-block-numbers.ts",
     "sync": "npm run import-abis && npm run update-addresses && npm run codegen && npm run build"
   },
   "devDependencies": {
