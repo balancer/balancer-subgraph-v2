@@ -42,6 +42,8 @@ NETWORKS=(
   "polygon-zkevm"
   "base"
   "sonic"
+  "frax"
+  "mode"
 )
 
 echo "${GREEN}Deploying subgraphs to networks with version ${VERSION}...${NC}"

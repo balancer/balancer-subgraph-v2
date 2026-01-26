@@ -19,6 +19,8 @@ const RPC_URLS: Record<string, string[]> = {
   'polygon-zkevm': ['https://zkevm-rpc.com', 'https://rpc.ankr.com/polygon_zkevm'],
   base: ['https://mainnet.base.org', 'https://base.publicnode.com', 'https://rpc.ankr.com/base'],
   sonic: ['https://rpc.soniclabs.com', 'https://sonic.drpc.org', 'https://sonic-json-rpc.stakely.io'],
+  mode: ['https://mainnet.mode.network', 'https://mode.drpc.org', 'https://1rpc.io/mode'],
+  frax: ['https://rpc.frax.com', 'https://rpc.fraxtal.com'],
 };
 
 interface JsonRpcResponse {

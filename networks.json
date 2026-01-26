@@ -8,7 +8,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 12272146,
-      "storeEventsFrom": "24291312"
+      "storeEventsFrom": "24318465"
     },
     "WeightedPoolFactory": {
       "address": "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9",
@@ -184,7 +184,7 @@
     }
   },
   "polygon": {
-    "network": "matic",
+    "network": "polygon",
     "EventEmitter": {
       "address": "0xcdcECFa416EE3022030E707dC3EA13a8997D74c8",
       "startBlock": 38152461
@@ -192,7 +192,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 15832990,
-      "storeEventsFrom": "81988426"
+      "storeEventsFrom": "82152011"
     },
     "WeightedPoolFactory": {
       "address": "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9",
@@ -360,7 +360,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 222832,
-      "storeEventsFrom": "424081533"
+      "storeEventsFrom": "425388621"
     },
     "WeightedPoolFactory": {
       "address": "0x7dFdEF5f355096603419239CE743BfaF1120312B",
@@ -504,7 +504,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 24821598,
-      "storeEventsFrom": "44293459"
+      "storeEventsFrom": "44356555"
     },
     "WeightedPoolV2Factory": {
       "address": "0xf302f9F50958c5593770FDf4d4812309fF77414f",
@@ -580,7 +580,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 7003431,
-      "storeEventsFrom": "146749024"
+      "storeEventsFrom": "146912610"
     },
     "WeightedPoolFactory": {
       "address": "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca",
@@ -704,7 +704,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 26386141,
-      "storeEventsFrom": "76314677"
+      "storeEventsFrom": "76576851"
     },
     "ComposableStablePoolV4Factory": {
       "address": "0x3B1eb8EB7b43882b385aB30533D9A2BeF9052a98",
@@ -764,7 +764,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 3418831,
-      "storeEventsFrom": "10099756"
+      "storeEventsFrom": "10126955"
     },
     "WeightedPoolV4Factory": {
       "address": "0x7920BFa1b2041911b354747CA7A6cDD2dfC50Cfd",
@@ -820,7 +820,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 203079,
-      "storeEventsFrom": "29047022"
+      "storeEventsFrom": "29149599"
     },
     "WeightedPoolV4Factory": {
       "address": "0x03F3Fb107e74F2EAC9358862E91ad3c692712054",
@@ -880,7 +880,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 1196036,
-      "storeEventsFrom": "41153739"
+      "storeEventsFrom": "41317325"
     },
     "WeightedPoolV4Factory": {
       "address": "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4",
@@ -908,7 +908,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 368300,
-      "storeEventsFrom": "60930556"
+      "storeEventsFrom": "61185799"
     },
     "WeightedPoolV4Factory": {
       "address": "0x22f5b7FDD99076f1f20f8118854ce3984544D56d",
@@ -925,6 +925,54 @@
     "Gyro3PoolFactory": {
       "address": "0x05d8c43b2c66978dbfa6d8ef6e2b58ffcca3971e",
       "startBlock": 14441220
+    }
+  },
+  "frax": {
+    "network": "frax",
+    "Vault": {
+      "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+      "startBlock": 4708596,
+      "storeEventsFrom": "31306643"
+    },
+    "WeightedPoolV4Factory": {
+      "address": "0x9dA18982a33FD0c7051B19F0d7C76F2d5E7e017c",
+      "startBlock": 4713337
+    },
+    "ComposableStablePoolV6Factory": {
+      "address": "0x4bdCc2fb18AEb9e2d281b0278D946445070EAda7",
+      "startBlock": 4713656
+    },
+    "TempLiquidityBootstrappingPoolFactory": {
+      "address": "0x956CCab09898C0AF2aCa5e6C229c3aD4E93d9288",
+      "startBlock": 4708781
+    },
+    "ManagedPoolV2Factory": {
+      "address": "0x7A2535f5fB47b8e44c02Ef5D9990588313fe8F05",
+      "startBlock": 4713444
+    }
+  },
+  "mode": {
+    "network": "mode",
+    "Vault": {
+      "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+      "startBlock": 8110317,
+      "storeEventsFrom": "34628207"
+    },
+    "WeightedPoolV4Factory": {
+      "address": "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68",
+      "startBlock": 8115586
+    },
+    "ComposableStablePoolV6Factory": {
+      "address": "0x5DbAd78818D4c8958EfF2d5b95b28385A22113Cd",
+      "startBlock": 8115909
+    },
+    "TempLiquidityBootstrappingPoolFactory": {
+      "address": "0xE42FFA682A26EF8F25891db4882932711D42e467",
+      "startBlock": 8115232
+    },
+    "ManagedPoolV2Factory": {
+      "address": "0x7A2535f5fB47b8e44c02Ef5D9990588313fe8F05",
+      "startBlock": 8115674
     }
   }
 }

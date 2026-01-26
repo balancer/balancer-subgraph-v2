@@ -18,6 +18,8 @@ on:
           - polygon-zkevm
           - base
           - sonic
+          - frax
+          - mode
 
 jobs:
   deploy:
