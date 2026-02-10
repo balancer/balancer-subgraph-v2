@@ -566,6 +566,10 @@
       "address": "0xDF9B5B00Ef9bca66e9902Bd813dB14e4343Be025",
       "startBlock": 27434722
     },
+    "GyroEV2PoolFactory": {
+      "address": "0x5d3be8aae57bf0d1986ff7766cc9607b6cc99b89",
+      "startBlock": 33759936
+    },
     "ProtocolIdRegistry": {
       "address": "0x6B5dA774890Db7B7b96C6f44e6a4b0F657399E2e",
       "startBlock": 26691522
@@ -757,6 +761,10 @@
     "FXPoolDeployerTracker": {
       "address": "0x7ff7B43CEAc9a1163cCB525ac9Dc1dE9A8837b4B",
       "startBlock": 43049862
+    },
+    "GyroEV2PoolFactory": {
+      "address": "0x41e9ac0bfed353c2de21a980da0ebb8a464d946a",
+      "startBlock": 50484541
     }
   },
   "sepolia": {
