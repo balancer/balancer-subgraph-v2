@@ -32,19 +32,27 @@ echo "${GREEN}Using git commit hash as version: ${VERSION}${NC}"
 echo ""
 
 # List of networks to deploy (excluding test networks)
-NETWORKS=(
-  "mainnet"
-  "polygon"
-  "arbitrum"
-  "gnosis"
-  "optimism"
-  "avalanche"
-  "polygon-zkevm"
-  "base"
-  "sonic"
-  "frax"
-  "mode"
-)
+# List of networks to deploy (excluding test networks)
+if [ -n "$1" ]; then
+  # Use the network provided as first argument
+  NETWORKS=("$1")
+  echo "${GREEN}Deploying to specific network: ${1}${NC}"
+else
+  # Deploy to all networks
+  NETWORKS=(
+    "mainnet"
+    "polygon"
+    "arbitrum"
+    "gnosis"
+    "optimism"
+    "avalanche"
+    "polygon-zkevm"
+    "base"
+    "sonic"
+    "frax"
+    "mode"
+  )
+fi
 
 echo "${GREEN}Deploying subgraphs to networks with version ${VERSION}...${NC}"
 echo ""
