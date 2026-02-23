@@ -3,6 +3,7 @@ type Balancer @entity(immutable: false) {
   id: ID!
   poolCount: Int!
   pools: [Pool!] @derivedFrom(field: "vaultID")
+  protocolFeesCollector: Bytes
 }
 type Pool @entity(immutable: false) {
   id: ID!

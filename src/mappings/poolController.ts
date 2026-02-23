@@ -14,7 +14,7 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { ParametersSet } from '../types/templates/FXPool/FXPool';
-import { Pool, PriceRateProvider, AmpUpdate, PoolContract } from '../types/schema';
+import { Pool, PriceRateProvider, AmpUpdate, PoolContract, Balancer } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -24,6 +24,7 @@ import {
   loadPriceRateProvider,
   getPoolShare,
   computeCuratedSwapEnabled,
+  getProtocolFeeCollector,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
@@ -371,6 +372,22 @@ export function handleTransfer(event: Transfer): void {
     poolShareTo.balance = poolShareTo.balance.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareTo.save();
     pool.totalShares = pool.totalShares.plus(tokenToDecimal(event.params.value, BPT_DECIMALS));
+
+    // mint of BPT to the fee collector means the pool is paying protocol fees
+    let vault = Balancer.load('2') as Balancer;
+    let protocolFeeCollector = vault.protocolFeesCollector;
+    if (!protocolFeeCollector) {
+      protocolFeeCollector = getProtocolFeeCollector();
+      vault.protocolFeesCollector = protocolFeeCollector;
+      vault.save();
+    }
+
+    if (protocolFeeCollector && poolShareTo.userAddress == protocolFeeCollector) {
+      let protocolFeePaid = tokenToDecimal(event.params.value, BPT_DECIMALS);
+      let totalProtocolFee = pool.totalProtocolFeePaidInBPT ? pool.totalProtocolFeePaidInBPT : ZERO_BD;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      pool.totalProtocolFeePaidInBPT = totalProtocolFee!.plus(protocolFeePaid);
+    }
   } else if (isBurn) {
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
     poolShareFrom.save();
