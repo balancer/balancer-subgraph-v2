@@ -8,7 +8,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 12272146,
-      "storeEventsFrom": "24520607"
+      "storeEventsFrom": "24533322"
     },
     "WeightedPoolFactory": {
       "address": "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9",
@@ -192,7 +192,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 15832990,
-      "storeEventsFrom": "83370989"
+      "storeEventsFrom": "83447586"
     },
     "WeightedPoolFactory": {
       "address": "0x8E9aa87E45e92bad84D5F8DD1bff34Fb92637dE9",
@@ -360,7 +360,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 222832,
-      "storeEventsFrom": "435175425"
+      "storeEventsFrom": "435790032"
     },
     "WeightedPoolFactory": {
       "address": "0x7dFdEF5f355096603419239CE743BfaF1120312B",
@@ -504,7 +504,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 24821598,
-      "storeEventsFrom": "44829396"
+      "storeEventsFrom": "44859335"
     },
     "WeightedPoolV2Factory": {
       "address": "0xf302f9F50958c5593770FDf4d4812309fF77414f",
@@ -584,7 +584,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 7003431,
-      "storeEventsFrom": "148131615"
+      "storeEventsFrom": "148208212"
     },
     "WeightedPoolFactory": {
       "address": "0xdAE7e32ADc5d490a43cCba1f0c736033F2b4eFca",
@@ -708,7 +708,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 26386141,
-      "storeEventsFrom": "78805404"
+      "storeEventsFrom": "78954591"
     },
     "ComposableStablePoolV4Factory": {
       "address": "0x3B1eb8EB7b43882b385aB30533D9A2BeF9052a98",
@@ -772,7 +772,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 3418831,
-      "storeEventsFrom": "10321290"
+      "storeEventsFrom": "10333218"
     },
     "WeightedPoolV4Factory": {
       "address": "0x7920BFa1b2041911b354747CA7A6cDD2dfC50Cfd",
@@ -828,7 +828,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 203079,
-      "storeEventsFrom": "29903129"
+      "storeEventsFrom": "29950781"
     },
     "WeightedPoolV4Factory": {
       "address": "0x03F3Fb107e74F2EAC9358862E91ad3c692712054",
@@ -888,7 +888,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 1196036,
-      "storeEventsFrom": "42536331"
+      "storeEventsFrom": "42612927"
     },
     "WeightedPoolV4Factory": {
       "address": "0x4C32a8a8fDa4E24139B51b456B42290f51d6A1c4",
@@ -916,7 +916,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 368300,
-      "storeEventsFrom": "63562754"
+      "storeEventsFrom": "63690346"
     },
     "WeightedPoolV4Factory": {
       "address": "0x22f5b7FDD99076f1f20f8118854ce3984544D56d",
@@ -940,7 +940,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 4708596,
-      "storeEventsFrom": "32525649"
+      "storeEventsFrom": "32602246"
     },
     "WeightedPoolV4Factory": {
       "address": "0x9dA18982a33FD0c7051B19F0d7C76F2d5E7e017c",
@@ -964,7 +964,7 @@
     "Vault": {
       "address": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
       "startBlock": 8110317,
-      "storeEventsFrom": "35847213"
+      "storeEventsFrom": "35923810"
     },
     "WeightedPoolV4Factory": {
       "address": "0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68",
