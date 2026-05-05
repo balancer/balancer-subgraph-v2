@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ORMI_DEPLOY_KEY: ${{ secrets.ORMI_DEPLOY_KEY }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install
+        run: npm ci
+      - name: Assets
+        run: npm run generate-assets
+      - name: Codegen
+        run: npm run codegen
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        run: sh ./scripts/deploy.sh

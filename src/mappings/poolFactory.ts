@@ -1,28 +1,18 @@
 import { ZERO_BD, ZERO, FX_ASSET_AGGREGATORS, VAULT_ADDRESS, ZERO_ADDRESS, ProtocolFeeType } from './helpers/constants';
-import {
-  getPoolTokenManager,
-  getPoolTokens,
-  isManagedPool,
-  isMetaStableDeprecated,
-  PoolType,
-  setPriceRateProviders,
-} from './helpers/pools';
+import { getPoolTokens, isManagedPool, isMetaStableDeprecated, PoolType, setPriceRateProviders } from './helpers/pools';
 
 import {
   newPoolEntity,
   createPoolTokenEntity,
   scaleDown,
-  getBalancerSnapshot,
   tokenToDecimal,
-  stringToBytes,
   bytesToAddress,
-  getProtocolFeeCollector,
   getToken,
   getFXOracle,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
 
-import { BigInt, Address, Bytes, ethereum, log } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
 
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
@@ -41,8 +31,6 @@ import { StablePhantomPool as StablePhantomPoolTemplate } from '../types/templat
 import { StablePhantomPoolV2 as StablePhantomPoolV2Template } from '../types/templates';
 import { ConvergentCurvePool as CCPoolTemplate } from '../types/templates';
 import { LiquidityBootstrappingPool as LiquidityBootstrappingPoolTemplate } from '../types/templates';
-import { InvestmentPool as InvestmentPoolTemplate } from '../types/templates';
-import { ManagedPool as ManagedPoolTemplate } from '../types/templates';
 import { LinearPool as LinearPoolTemplate } from '../types/templates';
 import { Gyro2Pool as Gyro2PoolTemplate } from '../types/templates';
 import { Gyro3Pool as Gyro3PoolTemplate } from '../types/templates';
@@ -155,18 +143,6 @@ export function handleNewLiquidityBootstrappingPool(event: PoolCreated): void {
   const pool = createWeightedLikePool(event, PoolType.LiquidityBootstrapping);
   if (pool == null) return;
   LiquidityBootstrappingPoolTemplate.create(event.params.pool);
-}
-
-export function handleNewInvestmentPool(event: PoolCreated): void {
-  const pool = createWeightedLikePool(event, PoolType.Investment);
-  if (pool == null) return;
-  InvestmentPoolTemplate.create(event.params.pool);
-}
-
-export function handleNewManagedPoolV2(event: PoolCreated): void {
-  const pool = createWeightedLikePool(event, PoolType.Managed, 2);
-  if (pool == null) return;
-  ManagedPoolTemplate.create(event.params.pool);
 }
 
 export function handleNewManagedKassandraPool(event: KassandraPoolCreated): void {
@@ -772,13 +748,6 @@ function findOrInitializeVault(): Balancer {
   // if no vault yet, set up blank initial
   vault = new Balancer('2');
   vault.poolCount = 0;
-  vault.totalLiquidity = ZERO_BD;
-  vault.totalSwapVolume = ZERO_BD;
-  vault.totalSwapFee = ZERO_BD;
-  vault.totalSwapCount = ZERO;
-
-  // set up protocol fees collector
-  vault.protocolFeesCollector = getProtocolFeeCollector();
 
   return vault;
 }
@@ -810,10 +779,6 @@ function handleNewPool(event: PoolCreated, poolId: Bytes, swapFee: BigInt): Pool
     let vault = findOrInitializeVault();
     vault.poolCount += 1;
     vault.save();
-
-    let vaultSnapshot = getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
-    vaultSnapshot.poolCount += 1;
-    vaultSnapshot.save();
   }
 
   let poolContract = PoolContract.load(poolAddress.toHexString());
@@ -830,12 +795,7 @@ function handleNewPoolTokens(pool: Pool, tokens: Bytes[]): void {
   let tokensAddresses = changetype<Address[]>(tokens);
 
   for (let i: i32 = 0; i < tokens.length; i++) {
-    let poolId = stringToBytes(pool.id);
-    let assetManager = getPoolTokenManager(poolId, tokens[i]);
-
-    if (!assetManager) continue;
-
-    createPoolTokenEntity(pool, tokensAddresses[i], i, assetManager);
+    createPoolTokenEntity(pool, tokensAddresses[i], i);
   }
 }
 

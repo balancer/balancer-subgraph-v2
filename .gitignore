@@ -1,3 +1,4 @@
+.env
 build/
 node_modules/
 src/types/
@@ -9,3 +10,4 @@ data/ipfs
 data/postgres
 *.js
 subgraph*.yaml
+.claude

@@ -2,9 +2,11 @@ name: CI
 
 on:
   push:
-    branches: master
+    branches:
+      - master
   pull_request:
-    branches: "*"
+    branches:
+      - "*"
 
 jobs:
   build:
@@ -14,13 +16,13 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
       - name: Install
-        run: yarn --frozen-lockfile
+        run: npm ci
       - name: Codegen
-        run: yarn codegen
+        run: npm run codegen
       - name: Build
-        run: yarn build
+        run: npm run build
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -28,11 +30,11 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
       - name: Install
-        run: yarn --frozen-lockfile
+        run: npm ci
       - name: Lint
-        run: yarn lint
+        run: npm run lint
 
   abi-integrity:
     runs-on: ubuntu-latest
@@ -49,9 +51,9 @@ jobs:
           path: core
           ref: master
       - name: Install
-        run: cd subgraph && yarn --frozen-lockfile
+        run: cd subgraph && npm ci
       - name: import abis
-        run: cd subgraph && yarn import-abis
+        run: cd subgraph && npm run import-abis
       - name: check abis
         run: cd subgraph && git diff HEAD --exit-code
 env:

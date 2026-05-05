@@ -1,22 +1,7 @@
-import { Address, BigDecimal, BigInt, Bytes, log, store } from '@graphprotocol/graph-ts';
+import { Address, BigInt, log } from '@graphprotocol/graph-ts';
 import { OracleEnabledChanged } from '../types/templates/WeightedPool2Tokens/WeightedPool2Tokens';
 import { PausedStateChanged, SwapFeePercentageChanged } from '../types/templates/WeightedPool/WeightedPool';
-import {
-  GradualWeightUpdateScheduled,
-  SwapEnabledSet,
-} from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
-import { ManagementFeePercentageChanged } from '../types/templates/InvestmentPool/InvestmentPool';
-import {
-  ManagementAumFeePercentageChanged,
-  MustAllowlistLPsSet,
-  GradualSwapFeeUpdateScheduled,
-  CircuitBreakerSet,
-  ProtocolFeePercentageCacheUpdated as EncodedProtocolFeePercentageCacheUpdated,
-  TokenAdded,
-  TokenRemoved,
-  JoinExitEnabledSet,
-  ManagementAumFeeCollected,
-} from '../types/templates/ManagedPool/ManagedPool';
+import { SwapEnabledSet } from '../types/templates/LiquidityBootstrappingPool/LiquidityBootstrappingPool';
 import { TargetsSet } from '../types/templates/LinearPool/LinearPool';
 import {
   AmpUpdateStarted,
@@ -29,17 +14,7 @@ import {
   TokenRateProviderSet,
 } from '../types/templates/StablePhantomPoolV2/ComposableStablePool';
 import { ParametersSet } from '../types/templates/FXPool/FXPool';
-import {
-  Pool,
-  PriceRateProvider,
-  GradualWeightUpdate,
-  AmpUpdate,
-  SwapFeeUpdate,
-  CircuitBreaker,
-  PoolContract,
-  Balancer,
-  PoolToken,
-} from '../types/schema';
+import { Pool, PriceRateProvider, AmpUpdate, PoolContract, Balancer } from '../types/schema';
 
 import {
   tokenToDecimal,
@@ -49,16 +24,10 @@ import {
   loadPriceRateProvider,
   getPoolShare,
   computeCuratedSwapEnabled,
-  createPoolTokenEntity,
-  bytesToAddress,
   getProtocolFeeCollector,
-  createPoolSnapshot,
-  hexToBigInt,
-  getBalancerSnapshot,
 } from './helpers/misc';
 import { ONE_BD, ProtocolFeeType, ZERO_ADDRESS, ZERO_BD } from './helpers/constants';
 import { updateAmpFactor } from './helpers/stable';
-import { getPoolTokenManager, getPoolTokens } from './helpers/pools';
 import {
   ProtocolFeePercentageCacheUpdated,
   RecoveryModeStateChanged,
@@ -66,113 +35,6 @@ import {
 import { PausedLocally, UnpausedLocally } from '../types/templates/Gyro2Pool/Gyro2V2Pool';
 import { WeightedPoolV2 } from '../types/templates/WeightedPoolV2/WeightedPoolV2';
 import { Transfer } from '../types/Vault/ERC20';
-import { valueInUSD } from './pricing';
-
-/************************************
- ********** MANAGED POOLS ***********
- ************************************/
-
-export function handleMustAllowlistLPsSet(event: MustAllowlistLPsSet): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.mustAllowlistLPs = event.params.mustAllowlistLPs;
-  pool.save();
-}
-
-export function handleJoinExitEnabledSet(event: JoinExitEnabledSet): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.joinExitEnabled = event.params.joinExitEnabled;
-  pool.save();
-}
-
-export function handleManagementAumFeeCollected(event: ManagementAumFeeCollected): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  let bptCollected = scaleDown(event.params.bptAmount, 18);
-  let totalCollected = pool.totalAumFeeCollectedInBPT ? pool.totalAumFeeCollectedInBPT : ZERO_BD;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  pool.totalAumFeeCollectedInBPT = totalCollected!.plus(bptCollected);
-  pool.save();
-}
-
-export function handleCircuitBreakerSet(event: CircuitBreakerSet): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  // ID for PoolToken and CircuitBreaker is built in the same way
-  let id = getPoolTokenId(poolContract.pool, event.params.token);
-  let circuitBreaker = new CircuitBreaker(id);
-  circuitBreaker.pool = poolContract.pool;
-  circuitBreaker.token = id;
-  circuitBreaker.bptPrice = scaleDown(event.params.bptPrice, 18);
-  circuitBreaker.lowerBoundPercentage = scaleDown(event.params.lowerBoundPercentage, 18);
-  circuitBreaker.upperBoundPercentage = scaleDown(event.params.upperBoundPercentage, 18);
-  circuitBreaker.save();
-
-  let poolToken = PoolToken.load(id);
-  if (!poolToken) return;
-
-  poolToken.circuitBreaker = id;
-  poolToken.save();
-}
-
-export function handleTokenAdded(event: TokenAdded): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  let poolIdBytes = Bytes.fromHexString(poolContract.pool);
-  let tokens = getPoolTokens(poolIdBytes);
-  if (tokens == null) return;
-  pool.tokensList = tokens;
-  pool.save();
-
-  let tokenAdded = event.params.token;
-
-  let assetManager = getPoolTokenManager(poolIdBytes, tokenAdded);
-  if (!assetManager) return;
-
-  let tokenAddedId = tokens.indexOf(tokenAdded);
-
-  createPoolTokenEntity(pool, tokenAdded, tokenAddedId, assetManager);
-}
-
-export function handleTokenRemoved(event: TokenRemoved): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  let poolIdBytes = Bytes.fromHexString(poolContract.pool);
-  let tokens = getPoolTokens(poolIdBytes);
-  if (tokens == null) return;
-  pool.tokensList = tokens;
-  pool.save();
-
-  for (let i: i32 = 0; i < pool.tokensList.length; i++) {
-    let tokenAdress = bytesToAddress(pool.tokensList[i]);
-    let poolToken = loadPoolToken(pool.id, tokenAdress) as PoolToken;
-    poolToken.index = i;
-    poolToken.save();
-  }
-
-  let poolTokenRemovedId = getPoolTokenId(poolContract.pool, event.params.token);
-  store.remove('PoolToken', poolTokenRemovedId);
-}
 
 /************************************
  *********** PROTOCOL FEE ***********
@@ -195,33 +57,6 @@ export function handleProtocolFeePercentageCacheUpdated(event: ProtocolFeePercen
   } else if (feeType == ProtocolFeeType.Aum) {
     pool.protocolAumFeeCache = feePercentage;
   }
-
-  pool.save();
-}
-
-// For Managed Pools, the feeCache is encoded into bytes as follows:
-// [  8 bytes |    8 bytes    |     8 bytes     |     8 bytes    ]
-// [  unused  | AUM fee cache | Yield fee cache | Swap fee cache ]
-// [MSB                                                       LSB]
-export function handleEncodedProtocolFeePercentageCacheUpdated(event: EncodedProtocolFeePercentageCacheUpdated): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  // Convert to hex and remove the 0x prefix
-  const feeCache = event.params.feeCache.toHex().slice(2);
-
-  // Each byte represents 2 hex digits
-  // Thus each fee is represented by 16 chars
-  let encodedAumFee = feeCache.slice(16, 32);
-  let encodedYieldFee = feeCache.slice(32, 48);
-  let encodedSwapFee = feeCache.slice(48, 64);
-
-  pool.protocolAumFeeCache = scaleDown(hexToBigInt(encodedAumFee), 18);
-  pool.protocolYieldFeeCache = scaleDown(hexToBigInt(encodedYieldFee), 18);
-  pool.protocolSwapFeeCache = scaleDown(hexToBigInt(encodedSwapFee), 18);
 
   pool.save();
 }
@@ -316,26 +151,6 @@ export function handleUnpauseGyroPool(event: UnpausedLocally): void {
 }
 
 /************************************
- ********** WEIGHT UPDATES **********
- ************************************/
-
-export function handleGradualWeightUpdateScheduled(event: GradualWeightUpdateScheduled): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let id = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
-  let weightUpdate = new GradualWeightUpdate(id);
-  weightUpdate.poolId = poolContract.pool;
-  weightUpdate.scheduledTimestamp = event.block.timestamp.toI32();
-  weightUpdate.startTimestamp = event.params.startTime;
-  weightUpdate.endTimestamp = event.params.endTime;
-  weightUpdate.startWeights = event.params.startWeights;
-  weightUpdate.endWeights = event.params.endWeights;
-  weightUpdate.save();
-}
-
-/************************************
  *********** AMP UPDATES ************
  ************************************/
 
@@ -403,83 +218,6 @@ export function handleSwapFeePercentageChange(event: SwapFeePercentageChanged): 
   let pool = Pool.load(poolContract.pool) as Pool;
   const newSwapFee = scaleDown(event.params.swapFeePercentage, 18);
   pool.swapFee = newSwapFee;
-  pool.save();
-
-  const swapFeeUpdateID = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
-  createSwapFeeUpdate(
-    swapFeeUpdateID,
-    pool,
-    event.block.timestamp.toI32(),
-    event.block.timestamp,
-    event.block.timestamp,
-    newSwapFee,
-    newSwapFee
-  );
-}
-
-export function handleGradualSwapFeeUpdateScheduled(event: GradualSwapFeeUpdateScheduled): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  const startSwapFee = scaleDown(event.params.startSwapFeePercentage, 18);
-  const endSwapFee = scaleDown(event.params.endSwapFeePercentage, 18);
-
-  const swapFeeUpdateID = event.transaction.hash.toHexString().concat(event.transactionLogIndex.toString());
-  createSwapFeeUpdate(
-    swapFeeUpdateID,
-    pool,
-    event.block.timestamp.toI32(),
-    event.params.startTime,
-    event.params.endTime,
-    startSwapFee,
-    endSwapFee
-  );
-}
-
-export function createSwapFeeUpdate(
-  _id: string,
-  _pool: Pool,
-  _blockTimestamp: i32,
-  _startTimestamp: BigInt,
-  _endTimestamp: BigInt,
-  _startSwapFeePercentage: BigDecimal,
-  _endSwapFeePercentage: BigDecimal
-): void {
-  let swapFeeUpdate = new SwapFeeUpdate(_id);
-  swapFeeUpdate.pool = _pool.id;
-  swapFeeUpdate.scheduledTimestamp = _blockTimestamp;
-  swapFeeUpdate.startTimestamp = _startTimestamp;
-  swapFeeUpdate.endTimestamp = _endTimestamp;
-  swapFeeUpdate.startSwapFeePercentage = _startSwapFeePercentage;
-  swapFeeUpdate.endSwapFeePercentage = _endSwapFeePercentage;
-  swapFeeUpdate.save();
-}
-
-/************************************
- ********* MANAGEMENT FEES **********
- ************************************/
-
-export function handleManagementFeePercentageChanged(event: ManagementFeePercentageChanged): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-  pool.managementFee = scaleDown(event.params.managementFeePercentage, 18);
-  pool.save();
-}
-
-export function handleManagementAumFeePercentageChanged(event: ManagementAumFeePercentageChanged): void {
-  let poolAddress = event.address;
-  let poolContract = PoolContract.load(poolAddress.toHexString());
-  if (poolContract == null) return;
-
-  let pool = Pool.load(poolContract.pool) as Pool;
-
-  pool.managementAumFee = scaleDown(event.params.managementAumFeePercentage, 18);
   pool.save();
 }
 
@@ -644,27 +382,11 @@ export function handleTransfer(event: Transfer): void {
       vault.save();
     }
 
-    if (protocolFeeCollector && poolShareTo.userAddress == protocolFeeCollector.toHex()) {
+    if (protocolFeeCollector && poolShareTo.userAddress == protocolFeeCollector) {
       let protocolFeePaid = tokenToDecimal(event.params.value, BPT_DECIMALS);
       let totalProtocolFee = pool.totalProtocolFeePaidInBPT ? pool.totalProtocolFeePaidInBPT : ZERO_BD;
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       pool.totalProtocolFeePaidInBPT = totalProtocolFee!.plus(protocolFeePaid);
-
-      let protocolFeeUSD = valueInUSD(protocolFeePaid, poolAddress);
-      let totalProtocolFeeUSD = pool.totalProtocolFee ? pool.totalProtocolFee : ZERO_BD;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      pool.totalProtocolFee = totalProtocolFeeUSD!.plus(protocolFeeUSD);
-
-      // create or update pool's snapshot
-      createPoolSnapshot(pool, event.block.timestamp.toI32());
-
-      let vault = Balancer.load('2') as Balancer;
-      let vaultProtocolFee = vault.totalProtocolFee ? vault.totalProtocolFee : ZERO_BD;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      vault.totalProtocolFee = vaultProtocolFee!.plus(protocolFeeUSD);
-      vault.save();
-      // create or update balancer's vault snapshot
-      getBalancerSnapshot(vault.id, event.block.timestamp.toI32());
     }
   } else if (isBurn) {
     poolShareFrom.balance = poolShareFrom.balance.minus(tokenToDecimal(event.params.value, BPT_DECIMALS));
