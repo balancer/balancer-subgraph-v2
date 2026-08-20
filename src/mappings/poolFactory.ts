@@ -11,8 +11,14 @@ import {
   getFXOracle,
 } from './helpers/misc';
 import { updatePoolWeights } from './helpers/weighted';
+import {
+  EclpRawParams,
+  derivedParamsAreConsistent,
+  tauMatchesBounds,
+  tauVectorsAreNormalized,
+} from './helpers/gyroECLP';
 
-import { BigInt, Address, Bytes, ethereum } from '@graphprotocol/graph-ts';
+import { BigInt, Address, Bytes, ethereum, log } from '@graphprotocol/graph-ts';
 
 import { PoolCreated } from '../types/WeightedPoolFactory/WeightedPoolFactory';
 import { AaveLinearPoolCreated } from '../types/AaveLinearPoolV3Factory/AaveLinearPoolV3Factory';
@@ -555,6 +561,49 @@ function createGyroEPool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
   let poolAddress: Address = event.params.pool;
   let poolContract = GyroEV2Pool.bind(poolAddress);
 
+  let eParamsCall = poolContract.try_getECLPParams();
+
+  // The pool constructor checks only bounds on the derived params, never that they belong to the primary params.
+  // A pool that fails either half of that missing check misprices against what it advertises, so it is not
+  // indexed at all: no Pool, no PoolContract, no token entities and no bump to vault.poolCount, because
+  // handleNewPool below only runs once the checks have passed. The Vault handlers already log and return when a
+  // Pool is missing, so the pool's swaps and joins are skipped with it.
+  if (!eParamsCall.reverted) {
+    let checkParams = eParamsCall.value.value0;
+    let checkDerived = eParamsCall.value.value1;
+    let raw = new EclpRawParams(
+      checkParams.alpha,
+      checkParams.beta,
+      checkParams.c,
+      checkParams.s,
+      checkParams.lambda,
+      checkDerived.tauAlpha.x,
+      checkDerived.tauAlpha.y,
+      checkDerived.tauBeta.x,
+      checkDerived.tauBeta.y,
+      checkDerived.u,
+      checkDerived.v,
+      checkDerived.w,
+      checkDerived.z,
+      checkDerived.dSq
+    );
+
+    let reason = '';
+    if (!derivedParamsAreConsistent(raw)) {
+      reason = 'u, v, w, z and dSq are inconsistent with c, s, tauAlpha and tauBeta';
+    } else if (!tauVectorsAreNormalized(raw)) {
+      reason = 'tauAlpha or tauBeta is not a unit vector';
+    } else if (!tauMatchesBounds(raw)) {
+      reason = "tauAlpha or tauBeta does not correspond to the pool's alpha and beta";
+    }
+
+    if (reason != '') {
+      log.warning('GyroE pool {} not indexed: {}', [poolAddress.toHexString(), reason]);
+
+      return;
+    }
+  }
+
   let poolIdCall = poolContract.try_getPoolId();
   let poolId = poolIdCall.value;
 
@@ -565,7 +614,6 @@ function createGyroEPool(event: PoolCreated, poolTypeVersion: i32 = 1): void {
 
   pool.poolType = PoolType.GyroE;
   pool.poolTypeVersion = poolTypeVersion;
-  let eParamsCall = poolContract.try_getECLPParams();
 
   if (!eParamsCall.reverted) {
     const params = eParamsCall.value.value0;
